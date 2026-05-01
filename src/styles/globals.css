@@ -85,6 +85,17 @@ a {
     box-sizing: border-box;
 }
 
+@media (max-width: 767px) {
+
+    input,
+    textarea,
+    select,
+    .MuiInputBase-input,
+    .react-tel-input .form-control {
+        font-size: 16px !important;
+    }
+}
+
 :root {
     scroll-behavior: auto !important;
 }
