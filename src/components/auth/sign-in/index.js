@@ -1,6 +1,6 @@
 import { IconButton, NoSsr, styled, Typography, useTheme } from "@mui/material";
 import { Box, Stack } from "@mui/system";
-import React, { useEffect, useReducer, useState } from "react";
+import React, { useEffect, useReducer, useRef, useState } from "react";
 import { CustomStackFullWidth } from "styled-components/CustomStyles.style";
 
 import { t } from "i18next";
@@ -88,6 +88,7 @@ const SignIn = ({
   const [mainToken, setMainToken] = useState(null);
   const [isApiCalling, setIsApiCalling] = useState(false);
   const [isRemember, setIsRemember] = useState(false);
+  const initialLoginTypeSet = useRef(false);
   const theme = useTheme();
 
   const [state, loginDispatch] = useReducer(loginReducer, loginInitialState);
@@ -383,7 +384,10 @@ const onlyOtp =
   Number(centralize_login?.social_login_status) !== 1
 
   useEffect(() => {
-    getActiveLoginType(true)
+    if (centralize_login && !initialLoginTypeSet.current) {
+      getActiveLoginType(true)
+      initialLoginTypeSet.current = true;
+    }
   }, [centralize_login]);
 
   useEffect(() => {
