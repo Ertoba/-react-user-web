@@ -66,6 +66,13 @@ const CustomChildPaper = styled(Paper)(({ theme, is_previously_selected }) => ({
   },
 }));
 
+const ModuleSelectionIcon = styled(CustomImageContainer)(() => ({
+  "& img": {
+    filter:
+      "brightness(0) saturate(100%) invert(38%) sepia(80%) saturate(941%) hue-rotate(113deg) brightness(90%) contrast(96%)",
+  },
+}));
+
 const Shimmer = () => {
   const theme = useTheme();
   const isXSmall = useMediaQuery(theme.breakpoints.down("sm"));
@@ -289,12 +296,12 @@ export const ModuleSelection = ({
                               justifyContent="center"
                               spacing={1}
                             >
-                              <CustomImageContainer
+                              <ModuleSelectionIcon
                                 src={item?.icon_full_url}
                                 alt={moduleDisplayName}
                                 height={isXSmall ? "40px" : "100px"}
                                 width={isXSmall ? "40px" : "100px"}
-                                objectFit="cover"
+                                objectFit="contain"
                               />
                               <Typography
                                 fontSize={{ xs: "13px", sm: "16px" }}

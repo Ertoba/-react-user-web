@@ -1131,7 +1131,7 @@ export const georgian = {
   "Select a Payment Method to Proceed": "Select a Payment Method to Proceed",
   "Select a file or": "Select a file or",
   "Select a file or Drag & Drop here": "Select a file or Drag & Drop here",
-  "Select a type of module for your orders": "Select a type of module for your orders",
+  "Select a type of module for your orders": "აირჩიე სერვისის ტიპი შეკვეთისთვის",
   "Select an option": "აირჩიეთ ვარიანტი",
   "Select from saved addresses or pick from map": "Select from saved addresses or pick from map",
   "Select location first to start exploring shops & restaurants near you": "Select location first to start exploring shops & restaurants near you",
