@@ -1361,6 +1361,7 @@ export const english = {
   "Use": "Use",
   "Use Code : ": "Use Code : ",
   "Use Current Location": "Use Current Location",
+  "Use password instead": "Use password instead",
   "User Info": "User Info",
   "User Name": "User Name",
   "VAT": "VAT",

@@ -51,7 +51,7 @@ const OtpLogin = ({
                 value="remember"
                 color="primary"
                 onChange={rememberMeHandleChange}
-                isRemember={isRemember || false}
+                checked={isRemember || false}
 
               />
             }
@@ -108,7 +108,18 @@ const OtpLogin = ({
         </CustomStackFullWidth>
       </form>
       {!onlyOtp && (
-        <Typography onClick={getActiveLoginType} mt="1rem" sx={{ textDecoration: "underLine", cursor: 'pointer', color: theme => theme => theme.palette.primary.main }} textAlign="center">{("Go Back")}</Typography>
+        <Typography
+          onClick={getActiveLoginType}
+          mt="1rem"
+          sx={{
+            textDecoration: "underline",
+            cursor: "pointer",
+            color: (theme) => theme.palette.primary.main,
+          }}
+          textAlign="center"
+        >
+          {t("Use password instead")}
+        </Typography>
       )}
 
     </CustomStackFullWidth>

@@ -351,27 +351,40 @@ const SignIn = ({
     }
   }, [])
   const { centralize_login } = configData || {};
-  const getActiveLoginType = () => {
+  const getActiveLoginType = (preferOtp = false) => {
 
     if (centralize_login) {
       const { otp_login_status, manual_login_status, social_login_status } =
         centralize_login;
+      const otpEnabled = Number(otp_login_status) === 1;
+      const manualEnabled = Number(manual_login_status) === 1;
+      const socialEnabled = Number(social_login_status) === 1;
 
       loginDispatch({
         type: ACTIONS.setActiveLoginType,
-        payload: {
-          otp: otp_login_status === 1,
-          manual: manual_login_status === 1,
-          social: social_login_status === 1,
-        },
+        payload:
+          preferOtp && otpEnabled
+            ? {
+                otp: true,
+                manual: false,
+                social: false,
+              }
+            : {
+                otp: otpEnabled,
+                manual: manualEnabled,
+                social: socialEnabled,
+              },
       });
     }
   }
-const onlyOtp=centralize_login?.otp_login_status && !centralize_login?.manual_login_status && !centralize_login?.social_login_status
+const onlyOtp =
+  Number(centralize_login?.otp_login_status) === 1 &&
+  Number(centralize_login?.manual_login_status) !== 1 &&
+  Number(centralize_login?.social_login_status) !== 1
 
   useEffect(() => {
-    getActiveLoginType()
-  }, []);
+    getActiveLoginType(true)
+  }, [centralize_login]);
 
   useEffect(() => {
     getActiveLoginStatus(state, loginDispatch);
@@ -384,7 +397,7 @@ const onlyOtp=centralize_login?.otp_login_status && !centralize_login?.manual_lo
     validationSchema: Yup.object({
       phone: Yup.string()
         .required(t("Please give a phone number"))
-        .min(10, "Number must be 10 digits"),
+        .min(10, t("Phone number must be exactly 10 digits")),
     }),
     onSubmit: async (values, helpers) => {
       try {
@@ -530,7 +543,7 @@ const onlyOtp=centralize_login?.otp_login_status && !centralize_login?.manual_lo
               rememberMeHandleChange={rememberMeHandleChange}
               handleClose={handleClose}
               isRemember={isRemember}
-              getActiveLoginType={getActiveLoginType}
+              getActiveLoginType={() => getActiveLoginType(false)}
               onlyOtp={onlyOtp}
             />
           );
@@ -567,7 +580,7 @@ const onlyOtp=centralize_login?.otp_login_status && !centralize_login?.manual_lo
                 handleClick={handleClick}
                 rememberMeHandleChange={rememberMeHandleChange}
                 isRemember={isRemember}
-                getActiveLoginType={getActiveLoginType}
+                getActiveLoginType={() => getActiveLoginType(false)}
                 onlyOtp={onlyOtp}
               />
               {socialLoginSection}
