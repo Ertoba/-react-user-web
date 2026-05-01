@@ -53,6 +53,13 @@ const ModuleContainer = styled(Box)(({ theme, selected }) => ({
   },
 }));
 
+const ModuleIcon = styled(CustomImageContainer)(() => ({
+  "& img": {
+    filter:
+      "brightness(0) saturate(100%) invert(38%) sepia(80%) saturate(941%) hue-rotate(113deg) brightness(90%) contrast(96%)",
+  },
+}));
+
 export const zoneWiseModule = (data) => {
   let currentZoneIds = undefined;
   if (typeof window !== "undefined") {
@@ -151,7 +158,7 @@ const ModuleSelect = ({
                 id={item?.id}
                 onClick={() => handleModuleSelect(item)}
               >
-                <CustomImageContainer
+                <ModuleIcon
                   src={item?.icon_full_url}
                   width="36px"
                   height="36px"
