@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 480">
+  <path fill="#fff" d="M0 0h640v480H0z"/>
+  <path fill="#f00" d="M270 0h100v480H270zM0 190h640v100H0z"/>
+  <g fill="#f00">
+    <path d="M125 74h30v92h-30z"/>
+    <path d="M94 105h92v30H94z"/>
+    <path d="M485 74h30v92h-30z"/>
+    <path d="M454 105h92v30h-92z"/>
+    <path d="M125 314h30v92h-30z"/>
+    <path d="M94 345h92v30H94z"/>
+    <path d="M485 314h30v92h-30z"/>
+    <path d="M454 345h92v30h-92z"/>
+  </g>
+</svg>
