@@ -115,6 +115,16 @@ a {
     .react-tel-input .form-control::placeholder {
         font-size: 16px !important;
     }
+
+    .MuiInputBase-root input,
+    .MuiOutlinedInput-root input,
+    .MuiTextField-root input,
+    .MuiAutocomplete-input,
+    .MuiSelect-select,
+    [role="textbox"] {
+        font-size: 16px !important;
+        line-height: 1.4 !important;
+    }
 }
 
 :root {

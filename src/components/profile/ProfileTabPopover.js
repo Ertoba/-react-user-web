@@ -42,12 +42,18 @@ const ProfileTabPopover = (props) => {
   }
 
   const handleClick = (item) => {
-    router.push({
-      pathname: "/profile",
-      query: {
-        page: item?.name,
-      },
-    });
+    if (item?.id === 10 || item?.name === "track-order") {
+      router.push({
+        pathname: "/track-order",
+      });
+    } else {
+      router.push({
+        pathname: "/profile",
+        query: {
+          page: item?.name,
+        },
+      });
+    }
     onClose();
   };
   return (

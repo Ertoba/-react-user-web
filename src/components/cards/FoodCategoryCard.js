@@ -121,12 +121,15 @@ const FoodCategoryCard = (props) => {
               display: "-webkit-box",
               WebkitLineClamp: "1",
               WebkitBoxOrient: "vertical",
+              lineHeight: 1.15,
+              maxWidth: { xs: "64px", sm: "112px", md: "140px" },
+              textAlign: "center",
               transition: "all ease 0.3s",
               "&:hover": {
                 color: "primary.main",
               },
             }}
-            fontSize={{ xs: "13px", sm: "14px", md: "16px" }}
+            fontSize={{ xs: "8px", sm: "12px", md: "16px" }}
             fontWeight="500"
             component="h4"
           >

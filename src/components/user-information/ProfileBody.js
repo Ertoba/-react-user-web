@@ -11,6 +11,7 @@ import Coupons from "../coupons";
 import Chatting from "../chat/Chatting";
 import Settings from "../settings";
 import MyTrips from "components/home/module-wise-components/rental/components/my-trips/MyTrips";
+import TrackOrderInput from "components/track-order/TrackOrderInput";
 
 const ProfileBody = ({
   page,
@@ -82,6 +83,9 @@ const ProfileBody = ({
 
     if (page === "settings") {
       return <Settings configData={configData} />;
+    }
+    if (page === "track-order") {
+      return <TrackOrderInput configData={configData} />;
     }
   };
   return <Stack >{activeComponent()}</Stack>;

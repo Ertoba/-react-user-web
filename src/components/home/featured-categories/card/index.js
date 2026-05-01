@@ -66,14 +66,14 @@ const queryModule = router?.query?.module || router?.query?.module_id;
       <Stack
         alignItems="center"
         justifyContent="center"
-        spacing={1}
+        spacing={{ xs: 0.75, md: 1 }}
         onMouseEnter={() => setHover(true)}
         onMouseLeave={() => setHover(false)}
         sx={{
-          padding: ".5rem",
+          padding: { xs: ".45rem", md: ".5rem" },
           cursor: "pointer",
-          height: { xs: "130px", md: "155px" },
-          width: { xs: "100px", md: "124px" },
+          height: { xs: "152px", md: "155px" },
+          width: { xs: "112px", md: "124px" },
           backgroundColor: (theme) => theme.palette.background.paper,
           border: (theme) =>
             `1.5px solid ${alpha(theme.palette.neutral[400], 0.2)}`,
@@ -94,7 +94,7 @@ const queryModule = router?.query?.module || router?.query?.module_id;
         <Stack
           sx={{
             position: "relative",
-            height: { xs: "95px", md: "110px" },
+            height: { xs: "88px", md: "110px" },
             width: "100%",
             img: {
               width: "100%",
@@ -133,7 +133,7 @@ const queryModule = router?.query?.module || router?.query?.module_id;
         >
           <CustomBoxFullWidth
             sx={{
-              px: "10px",
+              px: { xs: "4px", md: "10px" },
               width: "100%",
               // Ensu"100%",
               // Ensure wrapper in flex can shrink and give a constrained width
@@ -147,14 +147,18 @@ const queryModule = router?.query?.module || router?.query?.module_id;
               textAlign="center"
               className={classes.singleLineEllipsis}
               sx={{
-                // Force the single-line ellipsis CSS here to be sure
-                display: "block",
+                display: "-webkit-box",
                 overflow: "hidden",
                 textOverflow: "ellipsis",
-                whiteSpace: "nowrap",
+                whiteSpace: { xs: "normal", md: "nowrap" },
+                WebkitLineClamp: { xs: 2, md: 1 },
+                WebkitBoxOrient: "vertical",
                 width: "100%",
+                minHeight: { xs: "28px", md: "20px" },
+                lineHeight: 1.2,
+                fontSize: { xs: "11px", md: "14px" },
               }}
-              maxHeight="20px"
+              maxHeight={{ xs: "32px", md: "20px" }}
               color={hover ? "primary.main" : "text.primary"}
             >
               {onlyshimmer ? (
