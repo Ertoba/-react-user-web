@@ -97,7 +97,7 @@ const Order = (props) => {
         shallow: true,
       });
     } else {
-      toast.error(no_review_plan);
+      toast.error(t(no_review_plan));
     }
   };
   const handleClickTrackOrder = (e) => {

@@ -816,7 +816,7 @@ let checkingFor = status ? status : "cart";
     if (token) {
       handleAddToCartOnDispatch(checkingFor);
     } else {
-      toast.error(not_logged_in_message);
+      toast.error(t(not_logged_in_message));
     }
   };
   const cartResetHandler = () => {

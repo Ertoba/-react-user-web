@@ -141,7 +141,7 @@ const OtherOrder = (props) => {
         onError: onErrorResponse,
       });
     } else {
-      toast.error(cod_exceeds_message);
+      toast.error(t(cod_exceeds_message));
     }
   };
   const activeTabPanel = () => {

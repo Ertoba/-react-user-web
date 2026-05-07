@@ -1201,7 +1201,7 @@ export const handleFailedOrderPlace = ({
     if (paymentFailedData?.maximum_cod_order_amount > paymentFailedData?.order_amount) {
       handlePayment(paymentMethodUpdateMutation);
     } else {
-      toast.error(cod_exceeds_message);
+      toast.error(t(cod_exceeds_message));
     }
 
   } else if (paymentMethod === "wallet") {

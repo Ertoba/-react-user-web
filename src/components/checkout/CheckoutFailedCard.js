@@ -109,7 +109,7 @@ const CheckoutFailedCard = ({ id, handleOrderDetailsClose, amount, setOpenPaymen
         onError: onErrorResponse,
       });
     } else {
-      toast.error(cod_exceeds_message);
+      toast.error(t(cod_exceeds_message));
     }
   };
 

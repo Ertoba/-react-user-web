@@ -191,7 +191,7 @@ const PrescriptionCheckout = ({ storeId ,page}) => {
       if (prescriptionImages.length > 0) {
         handlePlaceOrder();
       } else {
-        toast.error(prescription_image_error_text);
+        toast.error(t(prescription_image_error_text));
       }
     } else {
       toast.error(
