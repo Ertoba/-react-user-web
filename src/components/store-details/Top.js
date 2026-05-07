@@ -700,14 +700,14 @@ const Top = (props) => {
                       )}
 
                       <Box mt="10px">
-                        <Tooltip title={"Location"} arrow placement={"bottom"}>
+                        <Tooltip title={t("Location")} arrow placement={"bottom"}>
                           <RoundedIconButton onClick={openMapHandler}>
                             <DirectionsIcon color="primary" />
                           </RoundedIconButton>
                         </Tooltip>
                       </Box>
                       <Box mt="10px">
-                        <Tooltip title={"Location"} arrow placement={"bottom"}>
+                        <Tooltip title={t("Share")} arrow placement={"bottom"}>
                           <RoundedIconButton onClick={() => setOpenShareModel(true)}>
                             <ShareOutlinedIcon color="primary" />
                           </RoundedIconButton>

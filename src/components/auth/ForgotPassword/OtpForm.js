@@ -92,7 +92,7 @@ const OtpForm = ({ data, formSubmitHandler, isLoading,forgotPassword,reSendOtp ,
     <CustomStackFullWidth>
       <CustomStackFullWidth>
         <Stack alignItems="center" justifyContent="center">
-          <Typography fontSize="14px" marginTop="10px" color={alpha(theme.palette.neutral[400],.7)}>{t(`We’ve sent a verification code to ${data?.email}`)}</Typography>
+          <Typography fontSize="14px" marginTop="10px" color={alpha(theme.palette.neutral[400],.7)}>{t("We’ve sent a verification code to")} {data?.email}</Typography>
 
         </Stack>
         {configData?.demo && (

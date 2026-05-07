@@ -134,10 +134,7 @@ const OtpForm = ({
         />
         <Stack>
           <Typography textAlign="center" fontSize="12px" color="textSecondary">
-            {t(
-              `We’ve sent a verification code to ${maskSensitiveInfo(data)}
-                          `
-            )}
+            {t("We’ve sent a verification code to")} {maskSensitiveInfo(data)}
           </Typography>
 
           {configData?.demo && (
