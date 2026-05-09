@@ -60,7 +60,7 @@ const OfflineForm = ({
       ?.method_informations?.reduce((acc, item) => {
         if (item?.is_required === 1) {
           acc[item.customer_input] = Yup.string().required(
-            "This field is required"
+            t("This field is required")
           );
         }
         return acc;

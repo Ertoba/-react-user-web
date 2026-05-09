@@ -10,7 +10,7 @@ export const handleTokenExpire = (item, status) => {
       Router.push("/home", undefined, { shallow: true });
     }
   } else {
-    toast.error(item?.message, {
+    toast.error(t(item?.message), {
       id: "error",
     });
   }
@@ -22,7 +22,7 @@ export const onErrorResponse = (error) => {
   });
 };
 export const onSingleErrorResponse = (error) => {
-  toast.error(error?.response?.data?.message, {
+  toast.error(t(error?.response?.data?.message), {
     id: "error",
   });
   handleTokenExpire(error, error?.response?.status);

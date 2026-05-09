@@ -1,4 +1,5 @@
 import * as Yup from "yup";
+import { t } from "i18next";
 
 const PROFILE_IMAGE_TYPES = ["image/jpeg", "image/png", "image/webp", "image/gif"];
 const IDENTITY_IMAGE_TYPES =  ["image/jpeg", "image/png", "image/webp", "image/gif"];
@@ -14,45 +15,45 @@ const getFile = (value) => {
 const deliveryManValidationSchema = () => {
   return Yup.object().shape({
     f_name: Yup.string()
-      .required("First name is required")
-      .min(2, "First name must be at least 2 characters")
-      .max(50, "First name can't exceed 50 characters"),
+      .required(t("First name is required"))
+      .min(2, t("First name must be at least 2 characters"))
+      .max(50, t("First name can't exceed 50 characters")),
 
     l_name: Yup.string()
-      .required("Last name is required")
-      .min(2, "Last name must be at least 2 characters")
-      .max(50, "Last name can't exceed 50 characters"),
+      .required(t("Last name is required"))
+      .min(2, t("Last name must be at least 2 characters"))
+      .max(50, t("Last name can't exceed 50 characters")),
 
     email: Yup.string()
-      .email("Invalid email address")
-      .required("Email is required"),
+      .email(t("Invalid email address"))
+      .required(t("Email is required")),
 
-    phone: Yup.string().required("Phone number is required"),
+    phone: Yup.string().required(t("Phone number is required")),
 
     password: Yup.string()
-      .required("Password is required")
+      .required(t("Password is required"))
       .test(
         "password-requirements",
-        "Password requirements not met",
+        t("Password requirements not met"),
         function (value) {
           if (!value) return true;
 
           const errors = [];
 
           if (value.length < 8) {
-            errors.push("Password is too short - should be 8 characters minimum.");
+            errors.push(t("Password is too short - should be 8 characters minimum."));
           }
           if (!/[0-9]/.test(value)) {
-            errors.push("Password must contain at least one number.");
+            errors.push(t("Password must contain at least one number."));
           }
           if (!/[A-Z]/.test(value)) {
-            errors.push("Password must contain at least one uppercase letter.");
+            errors.push(t("Password must contain at least one uppercase letter."));
           }
           if (!/[a-z]/.test(value)) {
-            errors.push("Password must contain at least one lowercase letter.");
+            errors.push(t("Password must contain at least one lowercase letter."));
           }
           if (!/[!@#$%^&*(),.?":{}|<>+_=]/.test(value)) {
-            errors.push("Password must contain at least one special character.");
+            errors.push(t("Password must contain at least one special character."));
           }
 
           if (errors.length > 0) {
@@ -64,44 +65,44 @@ const deliveryManValidationSchema = () => {
       ),
 
     confirm_password: Yup.string()
-      .required("Confirm Password required")
-      .oneOf([Yup.ref("password"), null], "Passwords must match"),
+      .required(t("Confirm Password required"))
+      .oneOf([Yup.ref("password"), null], t("Passwords must match")),
 
     earning: Yup.number()
-      .typeError("Earning must be a number")
-      .required("Earning is required"),
+      .typeError(t("Earning must be a number"))
+      .required(t("Earning is required")),
 
-    zone_id: Yup.string().required("Zone selection is required"),
+    zone_id: Yup.string().required(t("Zone selection is required")),
 
-    vehicle_id: Yup.string().required("Vehicle selection is required"),
+    vehicle_id: Yup.string().required(t("Vehicle selection is required")),
 
     identity_type: Yup.string()
-      .required("Identity type is required")
-      .oneOf(["passport", "driving_license", "nid"], "Invalid identity type"),
+      .required(t("Identity type is required"))
+      .oneOf(["passport", "driving_license", "nid"], t("Invalid identity type")),
 
-    identity_number: Yup.string().required("Identity number is required"),
+    identity_number: Yup.string().required(t("Identity number is required")),
 
     image: Yup.mixed()
-      .required("Profile image is required")
-      .test("fileType", "Only JPG, JPEG, PNG, and WEBP images are allowed", (value) => {
+      .required(t("Profile image is required"))
+      .test("fileType", t("Only JPG, JPEG, PNG, and WEBP images are allowed"), (value) => {
         const file = getFile(value);
         if (!file) return false;
         return PROFILE_IMAGE_TYPES.includes(file.type);
       })
-      .test("fileSize", "Profile image must be less than 1MB", (value) => {
+      .test("fileSize", t("Profile image must be less than 1MB"), (value) => {
         const file = getFile(value);
         if (!file) return false;
         return file.size <= 1024 * 1024;
       }),
 
     identity_image: Yup.mixed()
-      .required("Identity image is required")
-      .test("fileType", "Only JPG, JPEG, and PNG images are allowed", (value) => {
+      .required(t("Identity image is required"))
+      .test("fileType", t("Only JPG, JPEG, and PNG images are allowed"), (value) => {
         const file = getFile(value);
         if (!file) return false;
         return IDENTITY_IMAGE_TYPES.includes(file.type);
       })
-      .test("fileSize", "Identity image must be less than 1MB", (value) => {
+      .test("fileSize", t("Identity image must be less than 1MB"), (value) => {
         const file = getFile(value);
         if (!file) return false;
         return file.size <= 1024 * 1024;

@@ -37,7 +37,7 @@ const OfflinePaymentEdit = (
     const validationSchema = Yup.object().shape({
         // Define validation rules for each field dynamically.
         ...trackOrderData?.offline_payment?.input?.reduce((acc, item) => {
-            acc[item.user_input] = Yup.string().required('This field is required');
+            acc[item.user_input] = Yup.string().required(t('This field is required'));
             return acc;
         }, {}),
     });
