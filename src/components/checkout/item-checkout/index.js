@@ -221,6 +221,8 @@ const ItemCheckout = (props) => {
 			enabled: Boolean(currentLatLng?.lat && currentLatLng?.lng),
 		}
 	);
+	const canFetchDistance =
+		orderType === "delivery" && GoogleApi.hasDistanceCoordinates(storeData, address);
 
 	const {
 		data: distanceData,
@@ -230,7 +232,7 @@ const ItemCheckout = (props) => {
 		["get-distancesss", storeData, address, orderType],
 		() => GoogleApi.distanceApi(storeData, address),
 		{
-			enabled: true,
+			enabled: canFetchDistance,
 			onError: onErrorResponse,
 		}
 	);
@@ -564,10 +566,10 @@ const ItemCheckout = (props) => {
 									: `${window.location.origin}/order?order_id=${response?.data?.order_id}&total=${response?.data?.total_ammount}`;
 								const url = `${newBaseUrl}/payment-mobile?order_id=${response?.data?.order_id
 									}&customer_id=${customerData?.data?.id ?? guest_id
-									}&callback=${callBackUrl},`;
+									}&payment_platform=web&callback=${encodeURIComponent(callBackUrl)}&payment_method=${paymentMethod}`;
 								localStorage.setItem("totalAmount", totalAmount);
 								dispatch(setClearCart());
-								Router.push(url);
+								window.location.assign(url);
 							} else if (paymentMethod === "wallet") {
 								toast.success(response?.data?.message);
 								setOrderId(response?.data?.order_id);
@@ -634,16 +636,15 @@ const ItemCheckout = (props) => {
 							const callBackUrl = token
 								? `${window.location.origin}/profile?page=${page}`
 								: `${window.location.origin}/home`;
+							const customerId = customerData?.data?.id ?? response?.data?.user_id ?? guest_id;
 							const url = `${baseUrl}/payment-mobile?order_id=${response?.data?.order_id
-								}&customer_id=${customerData?.data?.id ?? response?.data?.user_id
-									? response?.data?.user_id
-									: guest_id
-								}&payment_platform=${payment_platform}&callback=${callBackUrl}&payment_method=${paymentMethod}`;
+								}&customer_id=${customerId
+								}&payment_platform=${payment_platform}&callback=${encodeURIComponent(callBackUrl)}&payment_method=${paymentMethod}`;
 							localStorage.setItem("totalAmount", totalAmount);
 							dispatch(setGuestUserInfo(null));
 							dispatch(setOrderDetailsModal(true));
 							//dispatch(setClearCart());
-							Router.push(url, undefined, { shallow: true });
+							window.location.assign(url);
 						} else if (paymentMethod === "offline_payment") {
 							toast.success("Order is successful placed", {
 								id: paymentMethod,

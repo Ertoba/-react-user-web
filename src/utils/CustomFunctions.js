@@ -1222,8 +1222,8 @@ export const handleFailedOrderPlace = ({
     const page = "my-orders";
     const callBackUrl = `${window.location.origin}/profile?page=${page}`;
     const url = `${baseUrl}/payment-mobile?order_id=${orderId}&customer_id=${profileInfo?.id
-      }&payment_platform=${payment_platform}&callback=${callBackUrl}&payment_method=${paymentMethod}`;
+      }&payment_platform=${payment_platform}&callback=${encodeURIComponent(callBackUrl)}&payment_method=${paymentMethod}`;
 
-    router.push(url, undefined, { shallow: true });
+    window.location.assign(url);
   }
 };

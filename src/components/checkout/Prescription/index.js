@@ -97,7 +97,7 @@ const PrescriptionCheckout = ({ storeId ,page}) => {
     }
   );
   useEffect(() => {
-    storeData && address && refetchDistance();
+    GoogleApi.hasDistanceCoordinates(storeData, address) && refetchDistance();
   }, [storeData, address]);
   const { mutate: orderMutation, isLoading: orderLoading } = useMutation(
     "order-place",

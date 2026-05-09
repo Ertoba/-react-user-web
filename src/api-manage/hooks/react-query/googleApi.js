@@ -1,5 +1,19 @@
 import MainApi from "../../MainApi";
 
+const toCoordinate = (value) => {
+  const coordinate = Number(value);
+  return Number.isFinite(coordinate) ? coordinate : null;
+};
+
+const getLatitude = (location) => toCoordinate(location?.latitude ?? location?.lat);
+const getLongitude = (location) => toCoordinate(location?.longitude ?? location?.lng);
+
+export const hasDistanceCoordinates = (origin, destination) =>
+  getLatitude(origin) !== null &&
+  getLongitude(origin) !== null &&
+  getLatitude(destination) !== null &&
+  getLongitude(destination) !== null;
+
 export const GoogleApi = {
   placeApiAutocomplete: (search) => {
     if (search && search !== "") {
@@ -16,18 +30,18 @@ export const GoogleApi = {
       `/api/v1/config/get-zone-id?lat=${location.lat}&lng=${location.lng}`
     );
   },
-  distanceApi: (origin, destination) => {
-    if(!origin || !destination) {
-      throw new Error("Origin and destination must be provided");
+  hasDistanceCoordinates,
+  distanceApi: (origin, destination, mode = "WALK") => {
+    if (!hasDistanceCoordinates(origin, destination)) {
+      return Promise.resolve(null);
     }
+
     return MainApi.get(
-      `/api/v1/config/distance-api?origin_lat=${origin.latitude}&origin_lng=${
-        origin.longitude
-      }&destination_lat=${
-        destination.lat ? destination.lat : destination?.latitude
-      }&destination_lng=${
-        destination.lng ? destination.lng : destination?.longitude
-      }&mode=WALK`
+      `/api/v1/config/distance-api?origin_lat=${getLatitude(
+        origin
+      )}&origin_lng=${getLongitude(origin)}&destination_lat=${getLatitude(
+        destination
+      )}&destination_lng=${getLongitude(destination)}&mode=${mode}`
     );
   },
   geoCodeApi: (location) => {

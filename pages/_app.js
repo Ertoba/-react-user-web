@@ -23,6 +23,7 @@ import useScrollToTop from "../src/api-manage/hooks/custom-hooks/useScrollToTop"
 import { useEffect } from "react";
 import ModuleChecker from "../src/components/module-select/ModuleChecker";
 import App from "next/app";
+import Head from "next/head";
 
 Router.events.on("routeChangeStart", nProgress.start);
 Router.events.on("routeChangeError", nProgress.done);
@@ -69,6 +70,12 @@ function MyApp(props) {
 
   return (
     <>
+      <Head>
+        <meta
+          name="viewport"
+          content="width=device-width, initial-scale=1, viewport-fit=cover"
+        />
+      </Head>
       {useScrollToTop()}
       <CacheProvider value={emotionCache}>
         <QueryClientProvider client={queryClient}>

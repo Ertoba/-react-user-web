@@ -9,7 +9,6 @@ import { Box, Stack } from "@mui/system";
 import { useFormik } from "formik";
 import { t } from "i18next";
 import Image from "next/image";
-import Router from "next/router";
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import * as Yup from "yup";
@@ -87,7 +86,9 @@ const WalletBoxComponent = (props) => {
       onSuccess: async (response) => {
         setLoading(false);
         const url = response?.redirect_link;
-        Router.push(url);
+        if (url) {
+          window.location.assign(url);
+        }
       },
       onError: (error) => {
         error?.response?.data?.errors?.forEach((item) => {

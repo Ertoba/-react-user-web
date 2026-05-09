@@ -382,10 +382,11 @@ const ParcelCheckout = () => {
             const callBackUrl = token
               ? `${window.location.origin}/profile?page=${page}`
               : `${window.location.origin}/home`;
+            const customerId = profileInfo?.id ?? res?.user_id ?? guest_id;
             const url = `${baseUrl}/payment-mobile?order_id=${res?.order_id
-              }&customer_id=${profileInfo?.id ?? res?.user_id ? res?.user_id : guest_id
-              }&payment_platform=${payment_platform}&callback=${callBackUrl}&payment_method=${paymentMethod}`;
-            router.push(url, undefined, { shallow: true });
+              }&customer_id=${customerId
+              }&payment_platform=${payment_platform}&callback=${encodeURIComponent(callBackUrl)}&payment_method=${paymentMethod}`;
+            window.location.assign(url);
           } else if (paymentMethod === "wallet") {
             if (
               Number(profileInfo?.wallet_balance) < Number(parcelDeliveryFree())

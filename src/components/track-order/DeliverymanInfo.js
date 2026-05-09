@@ -33,6 +33,7 @@ const DeliverymanInfo = (props) => {
     ["get-distance", origin, destination],
     () => GoogleApi.distanceApi(origin, destination),
     {
+      enabled: GoogleApi.hasDistanceCoordinates(origin, destination),
       onError: onErrorResponse,
     }
   );
