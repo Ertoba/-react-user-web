@@ -712,7 +712,11 @@ const ItemCheckout = (props) => {
 
 	const storeCloseToast = () =>
 		toast.error(
-			t(`${getStoresOrRestaurants().slice(0, -1)} is closed. Try again later.`)
+			t(
+				getStoresOrRestaurants()?.toLowerCase?.().includes("restaurant")
+					? "Restaurant is closed. Try again later."
+					: "Store is closed. Try again later."
+			)
 		);
 	//totalAmount
 	const handlePlaceOrderBasedOnAvailability = () => {

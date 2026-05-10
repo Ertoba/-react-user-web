@@ -24,6 +24,7 @@ import { useEffect } from "react";
 import ModuleChecker from "../src/components/module-select/ModuleChecker";
 import App from "next/app";
 import Head from "next/head";
+import { installTranslatedToast } from "utils/serverMessageTranslator";
 
 Router.events.on("routeChangeStart", nProgress.start);
 Router.events.on("routeChangeError", nProgress.done);
@@ -52,6 +53,10 @@ function MyApp(props) {
 
   // Persist store
   let persistor = persistStore(store);
+
+  useEffect(() => {
+    installTranslatedToast();
+  }, []);
 
   // Version check
   useEffect(() => {
