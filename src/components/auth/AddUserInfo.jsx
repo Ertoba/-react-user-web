@@ -17,6 +17,7 @@ import { useSelector } from "react-redux";
 import { getGuestId } from "helper-functions/getToken";
 import { styled } from "@mui/system";
 import { getLanguage } from "helper-functions/getLanguage";
+import { miliLogoSrc } from "components/logo/brandAssets";
 export const CustomSignUpTextField = styled(TextField)(({ theme }) => ({
   "& .MuiInputBase-input": {
     padding: "12.5px 0px !important",
@@ -93,9 +94,9 @@ const AddUserInfo = ({ formSubmitHandler, loginInfo, isLoading, userInfo }) => {
       >
         <CustomStackFullWidth alignItems="center">
           <CustomImageContainer
-            src={configData?.logo_full_url}
-            maxWidth="300px"
-            height="50px"
+            src={miliLogoSrc}
+            maxWidth="360px"
+            height="74px"
             alt="Logo"
             objectfit="contain"
           />

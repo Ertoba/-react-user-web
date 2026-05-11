@@ -16,6 +16,7 @@ import DrawerMenu from "../top-navbar/drawer-menu/DrawerMenu";
 import MobileModuleSelection from "./mobile-module-select";
 import CustomLogo from "components/logo/CustomLogo";
 import { useRouter } from "next/router";
+import { miliLogoSrc } from "components/logo/brandAssets";
 
 const ModuleWiseNav = (props) => {
 	const {
@@ -37,7 +38,7 @@ const ModuleWiseNav = (props) => {
 		"customer_image_url",
 		configData
 	)}/${profileInfo?.image}`;
-	const favIcon = configData?.logo_full_url;
+	const favIcon = miliLogoSrc;
 	const lanDirection = getLanguage();
 	const dispatch = useDispatch();
 	useEffect(() => {

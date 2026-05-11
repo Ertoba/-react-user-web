@@ -1,8 +1,8 @@
 import { useRouter } from "next/router";
 import { styled } from "@mui/material";
-import CustomImageContainer from "../CustomImageContainer";
 import NextImage from "components/NextImage";
 import { getModuleId } from "helper-functions/getModuleId";
+import { miliLogoSrc } from "./brandAssets";
 
 export const Logo = styled("div")(({ height, width }) => ({
   maxWidth: width,
@@ -14,8 +14,6 @@ export const Logo = styled("div")(({ height, width }) => ({
     width: "100%",
     height: "100%",
     objectFit: "contain",
-    filter:
-      "brightness(0) saturate(100%) invert(38%) sepia(80%) saturate(941%) hue-rotate(113deg) brightness(90%) contrast(96%)",
   },
 }));
 const CustomLogo = ({ logoImg, atlText, height, width, objectFit }) => {
@@ -46,7 +44,7 @@ const CustomLogo = ({ logoImg, atlText, height, width, objectFit }) => {
 
     <Logo height={height} width={width} onClick={() => handleClick()}>
       <NextImage
-        src={logoImg}
+        src={logoImg || miliLogoSrc}
         alt={atlText}
         objectFit={objectFit ? objectFit : "contain"}
         loading="eager"

@@ -4,10 +4,9 @@ import { Typography } from "@mui/material";
 import { CustomStackFullWidth } from "../../styled-components/CustomStyles.style";
 import { Box } from "@mui/system";
 import { useRouter } from "next/router";
-import { getImageUrl } from "utils/CustomFunctions";
+import { miliLogoSrc } from "components/logo/brandAssets";
 
 const AuthHeader = ({ title, configData }) => {
-  const businessLogo = configData?.base_urls?.business_logo_url;
   let zoneid = undefined;
   if (typeof window !== "undefined") {
     zoneid = localStorage.getItem("zoneid");
@@ -26,10 +25,10 @@ const AuthHeader = ({ title, configData }) => {
     >
       <Box onClick={handleLogoClick}>
         <CustomImageContainer
-          maxWidth="300px"
-          height="50px"
-          objectfit="cover"
-          src={configData?.logo_full_url}
+          maxWidth="360px"
+          height="74px"
+          objectfit="contain"
+          src={miliLogoSrc}
         />
       </Box>
 

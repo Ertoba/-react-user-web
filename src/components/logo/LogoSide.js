@@ -1,5 +1,6 @@
 import CustomLogo from "./CustomLogo";
 import { Stack } from "@mui/system";
+import { miliLogoSrc } from "./brandAssets";
 
 const LogoSide = ({ configData, width, height, objectFit }) => {
   return (
@@ -11,7 +12,7 @@ const LogoSide = ({ configData, width, height, objectFit }) => {
     >
       <CustomLogo
         atlText="logo"
-        logoImg={configData?.logo_full_url}
+        logoImg={miliLogoSrc}
         width={width}
         height={height}
         objectFit={objectFit}

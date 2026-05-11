@@ -16,7 +16,7 @@ import SomeInfo from "./SomeInfo";
 import FooterBottomItems from "../FooterBottomItems";
 import { useRouter } from "next/router";
 import LocationViewOnMap from "../../Map/location-view/LocationViewOnMap";
-import { getImageUrl } from "utils/CustomFunctions";
+import { miliLogoSrc } from "components/logo/brandAssets";
 
 const FooterMiddle = (props) => {
   const { configData, landingPageData } = props;
@@ -36,7 +36,7 @@ const FooterMiddle = (props) => {
   const theme = useTheme();
   const isSmall = useMediaQuery(theme.breakpoints.down("sm"));
   let token;
-  const businessLogo = configData?.logo_full_url;
+  const businessLogo = miliLogoSrc;
   // console.log("landingPageData", landingPageData);
   return (
     <CustomStackFullWidth sx={{ py: { xs: "10px", sm: "3rem" } }}>
@@ -52,8 +52,6 @@ const FooterMiddle = (props) => {
               sx={{
                 img: {
                   transition: "all ease 0.5s",
-                  filter:
-                    "brightness(0) saturate(100%) invert(38%) sepia(80%) saturate(941%) hue-rotate(113deg) brightness(90%) contrast(96%)",
                 },
                 "&:hover": {
                   img: {
