@@ -135,7 +135,7 @@ const CustomPhoneInputManual = ({
             <CustomPhoneNumberInputStyled
               borderRadius={borderRadius}
               autoFormat={false}
-              placeholder={t("Enter phone number")}
+              placeholder="XXX-XXXXXX"
               value={value}
               enableSearchField
               enableSearch
