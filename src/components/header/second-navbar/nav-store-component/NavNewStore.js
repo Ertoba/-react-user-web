@@ -19,8 +19,14 @@ import { getCurrentModuleType } from "../../../../helper-functions/getCurrentMod
 
 const NavNewStore = () => {
   const { configData } = useSelector((state) => state.configData);
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const newText = t("New On");
+  const isGeorgian = ["ka", "ge"].some((lang) =>
+    (i18n?.language || "").toLowerCase().startsWith(lang)
+  );
+  const title = isGeorgian
+    ? t("New on Mili")
+    : `${newText} ${configData?.business_name || ""}`;
   const router = useRouter();
   const { data, refetch, isFetching } = useGetLatestStore();
   const { newStores } = useSelector((state) => state.storedData);
@@ -42,7 +48,7 @@ const NavNewStore = () => {
   return (
     <CustomStackFullWidth spacing={4}>
       <Typography variant="h7" fontWeight="500">
-        {`${newText} ${configData?.business_name}`}
+        {title}
       </Typography>
       <Stack width="100%" spacing={2.5}>
         {!isFetching ? (

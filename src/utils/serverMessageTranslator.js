@@ -13,6 +13,7 @@ const serverMessageKeys = {
   "order cancelled succesfully": "Order canceled successfully",
   "order cancelled successfully": "Order canceled successfully",
   "order canceled successfully": "Order canceled successfully",
+  unauthenticated: "Unauthenticated.",
   "successfully added": "Successfully added",
   "successfully removed": "Successfully removed",
   "address deleted successfully": "Address deleted successfully.",

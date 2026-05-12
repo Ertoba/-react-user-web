@@ -19,9 +19,15 @@ const Index = ({ configData, metaData }) => {
     image: `${metaData?.image || configData?.logo_full_url}`,
     robotsMeta: metaData?.robotsMeta || ''
   })
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const router = useRouter();
   const newText = t("New On");
+  const isGeorgian = ["ka", "ge"].some((lang) =>
+    (i18n?.language || "").toLowerCase().startsWith(lang)
+  );
+  const title = isGeorgian
+    ? t("New on Mili")
+    : `${newText} ${configData?.business_name || ""}`;
   return (
     <>
       <CssBaseline />
@@ -40,7 +46,7 @@ const Index = ({ configData, metaData }) => {
               configData={configData}
               t={t}
               storeType="latest"
-              title={`${newText} ${configData?.business_name} `}
+              title={title}
             />
           </CustomStackFullWidth>
         </CustomContainer>

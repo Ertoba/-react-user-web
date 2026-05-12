@@ -1,1 +1,1 @@
-export const miliLogoSrc = "/static/mili-logo.png";
+export const miliLogoSrc = "/static/mili-logo-green.png";
