@@ -96,7 +96,7 @@ const NewSortBy = ({ handleSortBy, newSort }) => {
         }}
       >
         {demoData?.map((option) => (
-          <Wrapper key={option} onClick={() => handleSelect(option?.value)}>
+          <Wrapper key={option.value} onClick={() => handleSelect(option?.value)}>
             {getContent(option?.name, "false")}
           </Wrapper>
         ))}
