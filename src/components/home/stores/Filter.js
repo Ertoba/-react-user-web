@@ -143,7 +143,7 @@ const Filter = (props) => {
 																}
 															/>
 														}
-														label={item?.label}
+														label={t(item?.label)}
 													/>
 												);
 											}
@@ -192,7 +192,7 @@ const Filter = (props) => {
 																}
 															/>
 														}
-														label={item?.label}
+														label={t(item?.label)}
 													/>
 												);
 											}
@@ -257,7 +257,7 @@ const Filter = (props) => {
 																		/>
 																	}
 																	label={
-																		item?.label
+																		t(item?.label)
 																	}
 																/>
 															);

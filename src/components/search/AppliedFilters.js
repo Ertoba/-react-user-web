@@ -11,6 +11,8 @@ import { useDispatch } from "react-redux";
 import { setFilterData } from "redux/slices/categoryIds";
 
 const FilterItem = ({ item, handleSelection }) => {
+  const { t } = useTranslation();
+
   return (
     <Box
       sx={{
@@ -24,7 +26,7 @@ const FilterItem = ({ item, handleSelection }) => {
         gap: "5px",
       }}
     >
-      <Typography variant="body2">{item?.label}</Typography>
+      <Typography variant="body2">{t(item?.label)}</Typography>
       <IconButton
         sx={{ borderRadius: "50%", padding: "3px" }}
         onClick={() => handleSelection(item)}

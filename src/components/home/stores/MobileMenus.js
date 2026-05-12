@@ -38,6 +38,7 @@ export const CustomRadioGroup = ({
   selectedValue,
   handleOnChange,
 }) => {
+  const { t } = useTranslation();
   const handleChange = (event) => {
     event.stopPropagation();
     handleOnChange?.(event.target.value);
@@ -66,7 +67,7 @@ export const CustomRadioGroup = ({
                     }}
                   />
                 }
-                label={item?.label}
+                label={t(item?.label)}
               />
             );
           })}

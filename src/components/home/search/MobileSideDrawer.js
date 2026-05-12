@@ -80,7 +80,7 @@ const MobileSideDrawer = (props) => {
                                   name={item?.label}
                                 />
                               }
-                              label={item?.label}
+                              label={t(item?.label)}
                             />
                           );
                         })}
@@ -106,7 +106,7 @@ const MobileSideDrawer = (props) => {
                                     name={item?.label}
                                   />
                                 }
-                                label={item?.label}
+                                label={t(item?.label)}
                               />
                             );
                           }
@@ -135,7 +135,7 @@ const MobileSideDrawer = (props) => {
                                   name={item?.label}
                                 />
                               }
-                              label={item?.label}
+                              label={t(item?.label)}
                             />
                           );
                         }

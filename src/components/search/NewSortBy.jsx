@@ -37,6 +37,8 @@ const NewSortBy = ({ handleSortBy, newSort }) => {
     { name: "Fast Delivery", value: "fast_delivery" },
     { name: "Distance", value: "nearby" },
   ];
+  const selectedSortLabel =
+    demoData.find((option) => option.value === newSort)?.name || "Sort by";
 
   const getContent = (label, showArrow) => {
     return (
@@ -75,7 +77,7 @@ const NewSortBy = ({ handleSortBy, newSort }) => {
   return (
     <div>
       <Wrapper border="true" onClick={handleClick}>
-        {getContent(newSort?.replace("_", " ") || "Sort by", "true")}
+        {getContent(selectedSortLabel, "true")}
       </Wrapper>
 
       <Popover
@@ -95,7 +97,7 @@ const NewSortBy = ({ handleSortBy, newSort }) => {
       >
         {demoData?.map((option) => (
           <Wrapper key={option} onClick={() => handleSelect(option?.value)}>
-            {getContent(` ${option?.name}`, "false")}
+            {getContent(option?.name, "false")}
           </Wrapper>
         ))}
       </Popover>
