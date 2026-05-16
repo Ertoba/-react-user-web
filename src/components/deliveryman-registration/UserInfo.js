@@ -18,6 +18,8 @@ import InputLabel from "@mui/material/InputLabel";
 import PeopleIcon from '@mui/icons-material/People';
 import { toast } from "react-hot-toast";
 
+const MAX_UPLOAD_FILE_SIZE = 5 * 1024 * 1024;
+
 const UserInfo = ({
   deliveryManFormik,
   image,
@@ -65,15 +67,15 @@ const UserInfo = ({
   });
 
   const singleFileUploadHandlerForImage = (value) => {
-    if (value.currentTarget.files[0].size > 1048576) {
-      toast.error(t("Image size must be less than 1MB"));
+    if (value.currentTarget.files[0].size > MAX_UPLOAD_FILE_SIZE) {
+      toast.error(t("Image size must be less than 5MB"));
       return;
     }
     setImage(value.currentTarget.files[0]);
   };
   const imageOnchangeHandlerForImage = (value) => {
-    if (value.size > 1048576) {
-      toast.error(t("Image size must be less than 1MB"));
+    if (value.size > MAX_UPLOAD_FILE_SIZE) {
+      toast.error(t("Image size must be less than 5MB"));
       return;
     }
     setImage(value);
@@ -302,12 +304,12 @@ const UserInfo = ({
                   {t("Profile Image")}
                 </InputLabel>
                 <Typography fontSize="10px" mb="1rem">
-                  {t("JPG, JPEG, PNG,WEBP Less Than 1MB (Ratio 2:1)")}
+                  {t("JPG, JPEG, PNG,WEBP Less Than 5MB (Ratio 2:1)")}
                 </Typography>
                 <ImageUploaderWithPreview
                   type="file"
                   labelText={t("Add Image")}
-                  hintText="Image format - jpg, png, jpeg, gif, webp Image Size - maximum size 2 MB Image Ratio - 1:1"
+                  hintText="Image format - jpg, png, jpeg, gif, webp Image Size - maximum size 5 MB Image Ratio - 1:1"
                   file={image}
                   onChange={singleFileUploadHandlerForImage}
                   imageOnChange={imageOnchangeHandlerForImage}

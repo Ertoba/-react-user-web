@@ -41,13 +41,13 @@ const ImageSection = ({
 							{t("Business Cover")}<span style={{ color: "red" }}>*</span>
 						</InputLabel>
 						<Typography fontSize="10px" mt={.25}>
-							{t("JPG, JPEG, PNG,WEBP  Less Than 1MB (Ratio 2:1)")}
+							{t("JPG, JPEG, PNG,WEBP Less Than 5MB (Ratio 2:1)")}
 						</Typography>
 					</Stack>
 					<ImageUploaderWithPreview
 						type="file"
 						labelText={t("Add Image")}
-						hintText="Image format - jpg, png, jpeg,Webp,gif Image Size - maximum size 2 MB Image Ratio - 1:1"
+						hintText="Image format - jpg, png, jpeg,Webp,gif Image Size - maximum size 5 MB Image Ratio - 1:1"
 						file={RestaurantJoinFormik.values.cover_photo}
 						onChange={singleFileUploadHandlerForCoverPhoto}
 						imageOnChange={imageOnchangeHandlerForCoverPhoto}
@@ -93,13 +93,13 @@ const ImageSection = ({
 							{t("Business Logo")}<span style={{ color: "red" }}>*</span>
 						</InputLabel>
 						<Typography fontSize="10px" mt={.25}>
-							{t("JPG, JPEG, PNG,WEBP Less Than 1MB (Ratio 1:1)")}
+							{t("JPG, JPEG, PNG,WEBP Less Than 5MB (Ratio 1:1)")}
 						</Typography>
 					</Stack>
 					<ImageUploaderWithPreview
 						type="file"
 						labelText={t("Add Image")}
-						hintText="Image format - jpg, png, jpeg, Webp, gif Image Size - maximum size 2 MB Image Ratio - 1:1"
+						hintText="Image format - jpg, png, jpeg, Webp, gif Image Size - maximum size 5 MB Image Ratio - 1:1"
 						file={RestaurantJoinFormik?.values?.logo}
 						onChange={singleFileUploadHandlerForImage}
 						imageOnChange={imageOnchangeHandlerForImage}

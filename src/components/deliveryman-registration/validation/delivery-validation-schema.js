@@ -3,6 +3,7 @@ import { t } from "i18next";
 
 const PROFILE_IMAGE_TYPES = ["image/jpeg", "image/png", "image/webp", "image/gif"];
 const IDENTITY_IMAGE_TYPES =  ["image/jpeg", "image/png", "image/webp", "image/gif"];
+const MAX_UPLOAD_FILE_SIZE = 5 * 1024 * 1024;
 
 const getFile = (value) => {
   if (!value) return null;
@@ -89,10 +90,10 @@ const deliveryManValidationSchema = () => {
         if (!file) return false;
         return PROFILE_IMAGE_TYPES.includes(file.type);
       })
-      .test("fileSize", t("Profile image must be less than 1MB"), (value) => {
+      .test("fileSize", t("Profile image must be less than 5MB"), (value) => {
         const file = getFile(value);
         if (!file) return false;
-        return file.size <= 1024 * 1024;
+        return file.size <= MAX_UPLOAD_FILE_SIZE;
       }),
 
     identity_image: Yup.mixed()
@@ -102,10 +103,10 @@ const deliveryManValidationSchema = () => {
         if (!file) return false;
         return IDENTITY_IMAGE_TYPES.includes(file.type);
       })
-      .test("fileSize", t("Identity image must be less than 1MB"), (value) => {
+      .test("fileSize", t("Identity image must be less than 5MB"), (value) => {
         const file = getFile(value);
         if (!file) return false;
-        return file.size <= 1024 * 1024;
+        return file.size <= MAX_UPLOAD_FILE_SIZE;
       }),
   });
 };

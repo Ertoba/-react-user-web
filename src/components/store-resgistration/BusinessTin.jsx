@@ -56,6 +56,7 @@ const BusinessTin = ({
 }) => {
   const theme = useTheme();
   const [open, setOpen] = useState(false);
+  const maxUploadFileSize = 5 * 1024 * 1024;
   const handleFileChange = (e) => {
     const selected = e.target.files[0];
 
@@ -70,7 +71,7 @@ const BusinessTin = ({
         return;
       }
 
-      if (selected.size < 1024 * 1024) {
+      if (selected.size <= maxUploadFileSize) {
         // Set state for UI feedback
         setFile(selected);
 
@@ -88,7 +89,7 @@ const BusinessTin = ({
           setPreview(null);
         }
       } else {
-        // alert(t("File must be less than 1MB"));
+        toast.error(t("File must be less than 5MB"));
       }
     }
   };
@@ -319,7 +320,7 @@ const BusinessTin = ({
                       color: (theme) => theme.palette.neutral[400],
                     }}
                   >
-                    ({t("pdf, doc, jpg. File size : max 2 MB")})
+                    ({t("pdf, doc, jpg. File size : max 5 MB")})
                   </Typography>
                 </Stack>
 

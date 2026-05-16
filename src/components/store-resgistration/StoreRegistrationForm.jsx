@@ -30,6 +30,8 @@ import { ActonButtonsSection } from "components/deliveryman-registration/CustomS
 import BusinessTin from "components/store-resgistration/BusinessTin";
 import { shadows } from "@mui/system";
 
+const MAX_UPLOAD_FILE_SIZE = 5 * 1024 * 1024;
+
 export const generateInitialValues = (languages, allData) => {
   const initialValues = {
     restaurant_name: {},
@@ -204,23 +206,23 @@ const StoreRegistrationForm = ({ setActiveStep, setFormValues }) => {
     RestaurantJoinFormik.setFieldValue("password", value);
   };
   const singleFileUploadHandlerForImage = (value) => {
-    if (value.currentTarget.files[0].size > 1048576) {
-      toast.error(t("Image size must be less than 1MB"));
+    if (value.currentTarget.files[0].size > MAX_UPLOAD_FILE_SIZE) {
+      toast.error(t("Image size must be less than 5MB"));
       return;
     }
     RestaurantJoinFormik.setFieldValue("logo", value.currentTarget.files[0]);
     //RestaurantJoinFormik.setFieldTouched("logo", true);
   };
   const imageOnchangeHandlerForImage = (value) => {
-    if (value.size > 1048576) {
-      toast.error(t("Image size must be less than 1MB"));
+    if (value.size > MAX_UPLOAD_FILE_SIZE) {
+      toast.error(t("Image size must be less than 5MB"));
       return;
     }
     RestaurantJoinFormik.setFieldValue("logo", value);
   };
   const singleFileUploadHandlerForCoverPhoto = (value) => {
-    if (value.currentTarget.files[0].size > 1048576) {
-      toast.error(t("Image size must be less than 1MB"));
+    if (value.currentTarget.files[0].size > MAX_UPLOAD_FILE_SIZE) {
+      toast.error(t("Image size must be less than 5MB"));
       return;
     }
     RestaurantJoinFormik.setFieldValue(
@@ -238,8 +240,8 @@ const StoreRegistrationForm = ({ setActiveStep, setFormValues }) => {
     RestaurantJoinFormik.setFieldValue("tin_certificate_image", value);
   };
   const imageOnchangeHandlerForCoverPhoto = (value) => {
-    if (value.size > 1048576) {
-      toast.error(t("Image size must be less than 1MB"));
+    if (value.size > MAX_UPLOAD_FILE_SIZE) {
+      toast.error(t("Image size must be less than 5MB"));
       return;
     }
     RestaurantJoinFormik.setFieldValue("cover_photo", value);

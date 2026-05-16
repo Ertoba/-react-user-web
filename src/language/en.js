@@ -462,6 +462,7 @@ export const english = {
   "File Upload": "File Upload",
   "File is required*": "File is required*",
   "File must be less than 1MB": "File must be less than 1MB",
+  "File must be less than 5MB": "File must be less than 5MB",
   "File too large (max 20MB)": "File too large (max 20MB)",
   "File upload": "file Upload",
   "Fill details": "Fill details",
@@ -576,6 +577,7 @@ export const english = {
   "If you're checking out": "If you're checking out",
   "Image Format - JPG, Pong, ZPEG, GIF Image Size - Maximum Size 2Mb Image Ratio - 1: 1": "Image Format - JPG, Pong, ZPEG, GIF Image Size - Maximum Size 2Mb Image Ratio - 1: 1",
   "Image size must be less than 1MB": "Image size must be less than 1MB",
+  "Image size must be less than 5MB": "Image size must be less than 5MB",
   "In Stock": "In Stock",
   "Included": "Included",
   "Incomplete": "Incomplete",
@@ -605,6 +607,9 @@ export const english = {
   "JPG, JPEG, PNG Less Than 1MB (Ratio 2:1)": "JPG, JPEG, PNG Less Than 1MB (Ratio 2:1)",
   "JPG, JPEG, PNG Less Than 1MB Ratio 1:1": "JPG, JPEG, PNG Less Than 1MB Ratio 1:1",
   "JPG, JPEG, PNG,WEBP Less Than 1MB (Ratio 2:1)": "JPG, JPEG, PNG,WEBP Less Than 1MB (Ratio 2:1)",
+  "JPG, JPEG, PNG,WEBP Less Than 5MB (Ratio 2:1)": "JPG, JPEG, PNG,WEBP Less Than 5MB (Ratio 2:1)",
+  "JPG, JPEG, PNG,WEBP Less Than 5MB (Ratio 1:1)": "JPG, JPEG, PNG,WEBP Less Than 5MB (Ratio 1:1)",
+  "JPG, JPEG, PNG, WEBP Less Than 5MB Ratio 1:1, Max 6 Images": "JPG, JPEG, PNG, WEBP Less Than 5MB Ratio 1:1, Max 6 Images",
   "Join": "Join",
   "Join Us!": "Join Us!",
   "Join as delivery man on": "Join as delivery man on",
@@ -1610,6 +1615,7 @@ export const english = {
   "partially paid amount": "partially paid amount",
   "payment_by is required": "payment_by is required",
   "pdf, doc, jpg. File size : max 2 MB": "pdf, doc, jpg. File size : max 2 MB",
+  "pdf, doc, jpg. File size : max 5 MB": "pdf, doc, jpg. File size : max 5 MB",
   "pending": "pending",
   "phone number required": "phone number required",
   "picked_up": "picked_up",
@@ -1662,5 +1668,7 @@ export const english = {
   "where you want to sent your password recovery OTP.": "where you want to sent your password recovery OTP.",
   "with affordable price.": "with affordable price.",
   "write something": "write something",
-  "you can rely on.": "you can rely on."
+  "you can rely on.": "you can rely on.",
+  "Profile image must be less than 5MB": "Profile image must be less than 5MB",
+  "Identity image must be less than 5MB": "Identity image must be less than 5MB"
 };

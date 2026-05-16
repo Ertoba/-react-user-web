@@ -27,6 +27,7 @@ import InfoIcon from "@mui/icons-material/Info";
 
 const acceptedFileInputFormat =
   "application/pdf,image/*,text/plain,.doc, .docx,.txt";
+const MAX_UPLOAD_FILE_SIZE = 5 * 1024 * 1024;
 const supportedFormatMultiImages = [
   "jpg",
   "jpeg",
@@ -134,14 +135,14 @@ const IdentityInfo = ({
               {t("Identity Image")}
             </InputLabel>
             <Typography fontSize="10px">
-            ({t("JPG, JPEG, PNG, WEBP Less Than 1MB Ratio 1:1, Max 6 Images")})
+            ({t("JPG, JPEG, PNG, WEBP Less Than 5MB Ratio 1:1, Max 6 Images")})
             </Typography>
           </Stack>
 
           <MultiFileUploader
             fileImagesHandler={fileImagesHandler}
             totalFiles={identityImage}
-            maxFileSize={1024 * 1024}
+            maxFileSize={MAX_UPLOAD_FILE_SIZE}
             supportedFileFormats={supportedFormatMultiImages}
             acceptedFileInputFormat={acceptedFileInputFormat}
           />

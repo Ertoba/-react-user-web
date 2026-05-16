@@ -10,11 +10,10 @@ const IMAGE_SUPPORTED_FORMATS = [
 	"image/png",
 	"image/webp",
 ];
+const MAX_UPLOAD_FILE_SIZE = 5 * 1024 * 1024;
 
 const ValidationSchemaForRestaurant = () => {
 	const { t } = useTranslation();
-
-	const FILE_SIZE = 1048576;
 
 	return Yup.object({
 		restaurant_name: Yup.object().test(
@@ -48,8 +47,8 @@ const ValidationSchemaForRestaurant = () => {
 			.required()
 			.test(
 				"fileSize",
-				"file too large",
-				(value) => value === null || (value && value.size <= FILE_SIZE)
+				t("Image size must be less than 5MB"),
+				(value) => value === null || (value && value.size <= MAX_UPLOAD_FILE_SIZE)
 			)
 			.test(
 				"fileFormat",
@@ -60,8 +59,8 @@ const ValidationSchemaForRestaurant = () => {
 			.required()
 			.test(
 				"fileSize",
-				"file too large",
-				(value) => value === null || (value && value.size <= FILE_SIZE)
+				t("Image size must be less than 5MB"),
+				(value) => value === null || (value && value.size <= MAX_UPLOAD_FILE_SIZE)
 			)
 			.test(
 				"fileFormat",
