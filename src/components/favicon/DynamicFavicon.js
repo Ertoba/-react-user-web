@@ -1,26 +1,33 @@
 import React from "react";
 import Head from "next/head";
-import placeholder from "../../../public/static/no-image-found.png";
-const DynamicFavicon = ({ configData }) => {
+import {
+  miliAppleTouchIconSrc,
+  miliFaviconSrc,
+} from "components/logo/brandAssets";
+
+const DynamicFavicon = () => {
+  const faviconHref = `${miliFaviconSrc}?v=20260529`;
+  const appleTouchIconHref = `${miliAppleTouchIconSrc}?v=20260529`;
+
   return (
     <Head>
       <link
         rel="apple-touch-icon"
         sizes="180x180"
-        href={configData?.fav_icon_full_url || placeholder}
+        href={appleTouchIconHref}
       />
-      <link rel="icon" href={configData?.fav_icon_full_url || placeholder} />
+      <link rel="icon" href={faviconHref} />
       <link
         rel="icon"
         type="image/png"
         sizes="32x32"
-        href={configData?.fav_icon_full_url || placeholder}
+        href={faviconHref}
       />
       <link
         rel="icon"
         type="image/png"
         sizes="16x16"
-        href={configData?.fav_icon_full_url || placeholder}
+        href={faviconHref}
       />
     </Head>
   );

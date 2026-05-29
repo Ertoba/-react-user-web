@@ -63,6 +63,17 @@ class CustomDocument extends Document {
             async
           />
           <meta name="theme-color" content="#111827" />
+          <link
+            rel="icon"
+            type="image/png"
+            href="/static/mili-customer-favicon-brand-20260529.png?v=20260529"
+          />
+          <link rel="shortcut icon" href="/favicon.ico?v=20260529" />
+          <link
+            rel="apple-touch-icon"
+            sizes="180x180"
+            href="/apple-touch-icon.png?v=20260529"
+          />
 
           {/* ✅ Analytics scripts */}
           {analyticsConfig.google_tag_manager && (
