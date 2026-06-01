@@ -23,6 +23,7 @@ import DeliveryManMapMarker from "../../parcel/DeliveryManMapMarker";
 import StoreIcon from "@mui/icons-material/Store";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
+import { googleMapsLoaderOptions } from "../googleMapsLoaderOptions";
 
 const containerStyle = {
   width: "100%",
@@ -111,10 +112,7 @@ const MapComponent = (props) => {
     }),
     []
   );
-  const { isLoaded } = useJsApiLoader({
-    id: "google-map-script",
-    googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAP_KEY,
-  });
+  const { isLoaded } = useJsApiLoader(googleMapsLoaderOptions);
 
   const onLoad = useCallback(function callback(map) {
     dispatch({ type: ACTION.setMap, payload: map });

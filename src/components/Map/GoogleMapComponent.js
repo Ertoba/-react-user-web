@@ -19,6 +19,7 @@ import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
 import { darkStyles, grayMapStyle } from "../mapColor.js";
 import ModalExtendShrink from "./ModalExtendShrink";
+import { googleMapsLoaderOptions } from "./googleMapsLoaderOptions";
 
 const GoogleMapComponent = ({
   setDisablePickButton,
@@ -57,6 +58,8 @@ const GoogleMapComponent = ({
           ? "350px"
           : "350px",
     paddingBottom: "0px",
+    position: "relative",
+    zIndex: 0,
   };
   const center = useMemo(
     () => ({
@@ -72,16 +75,14 @@ const GoogleMapComponent = ({
       streetViewControl: false,
       mapTypeControl: false,
       fullscreenControl: false,
-        disableDefaultUI: true,
+      disableDefaultUI: true,
+      gestureHandling: mapmodal ? "greedy" : "auto",
       styles: theme.palette.mode === "dark" ? darkStyles : grayMapStyle,
     }),
-    [theme.palette.mode]
+    [mapmodal, theme.palette.mode]
   );
 
-  const { isLoaded } = useJsApiLoader({
-    id: "google-map-script",
-    googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAP_KEY,
-  });
+  const { isLoaded } = useJsApiLoader(googleMapsLoaderOptions);
 
   const [isMounted, setIsMounted] = useState(false);
   const [mapSetup, setMapSetup] = useState(false);
@@ -190,6 +191,7 @@ const GoogleMapComponent = ({
         boxShadow: expanded ? "none" : "inset 0px 4px 4px rgba(0, 0, 0, 0.1)",
         p: "4px",
         position: "relative",
+        isolation: "isolate",
         width: expanded ? "100vw" : "100%",
         height: expanded ? "100dvh" : "auto",
       }}
