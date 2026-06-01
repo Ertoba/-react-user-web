@@ -9,10 +9,8 @@ import NextImage from "components/NextImage";
 const ImageWrapper = styled(CustomBoxFullWidth)(({ theme }) => ({
   position: "relative",
   borderRadius: "10px",
-  height: "318px",
-  [theme.breakpoints.down("sm")]: {
-    height: "110px",
-  },
+  aspectRatio: "5 / 1",
+  overflow: "hidden",
 }));
 const SinglePoster = ({ bannerData }) => {
   return (
@@ -24,10 +22,10 @@ const SinglePoster = ({ bannerData }) => {
           }
         }}>
           <NextImage
-            height={318}
-            width={1440}
+            height={464}
+            width={2320}
             src={bannerData?.bottom_section_banner_full_url}
-            objectFit="cover"
+            objectFit="contain"
           />
         </ImageWrapper>
       )}

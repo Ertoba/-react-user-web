@@ -9,21 +9,13 @@ import NextImage from "components/NextImage";
 
 export const BannerWrapper = styled(Box)(({ theme }) => ({
   width: "100%",
-  height: "360px",
+  aspectRatio: "5 / 1",
   position: "relative",
   marginTop: "20px",
   img:{
     width: "100%",
     height: "100%",
 
-  },
-  "&:hover": {
-    img: {
-      transform: "scale(1.02)",
-    },
-  },
-  [theme.breakpoints.down("sm")]: {
-    height: "120px",
   },
 }));
 export const ContentWrapper = styled(CustomStackFullWidth)(({ theme }) => ({
@@ -59,9 +51,9 @@ const PromotionalBanner = ({ bannerData }) => {
         <BannerWrapper>
           <NextImage
             src={bannerData?.bottom_section_banner_full_url}
-            height={360}
-            width={1440}
-            objectFit="cover"
+            height={464}
+            width={2320}
+            objectFit="contain"
           />
         </BannerWrapper>
       )}

@@ -290,14 +290,15 @@ const Top = (props) => {
                       onClick={() => handleBannerClick(banner?.default_link)}
                       sx={{
                         cursor: "pointer",
-                        borderBottomRightRadius: "10px"
+                        borderBottomRightRadius: "10px",
+                        aspectRatio: "5 / 1",
                       }}
                     >
                       <CustomImageContainer
                         src={banner?.image_full_url}
                         width="100%"
-                        height="122px"
-                        objectFit="cover"
+                        height="100%"
+                        objectfit="contain"
                         borderRadius="10px"
                       />
                     </Stack>
@@ -829,14 +830,16 @@ const Top = (props) => {
                           sx={{
                             cursor: "pointer",
                             width: "100%",
-                            borderTopRightRadius: "10%", borderBottomRightRadius: "10%"
+                            borderTopRightRadius: "10%",
+                            borderBottomRightRadius: "10%",
+                            aspectRatio: "5 / 1",
                           }}
                         >
                           <CustomImageContainer
                             src={banner?.image_full_url}
                             width="100%"
-                            height="251px"
-                            objectFit="cover"
+                            height="100%"
+                            objectfit="contain"
                             borderRadius="10px"
                           />
                         </Stack>

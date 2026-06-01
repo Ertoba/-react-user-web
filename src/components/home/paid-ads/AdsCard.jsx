@@ -8,7 +8,6 @@ import {
   IconButton, Skeleton,
   Tooltip,
   Typography,
-  useMediaQuery,
   useTheme,
 } from "@mui/material";
 import { Box, Stack } from "@mui/system";
@@ -30,19 +29,13 @@ import useTextEllipsis from "api-manage/hooks/custom-hooks/useTextEllipsis";
 const AdsCard = (props) => {
   const {
     item,
-    itemLength,
     activeSlideData,
     onlyShimmer,
-    index,
-    sliderRef,
-    data,
   } = props;
   const router = useRouter();
   const theme = useTheme();
   const dispatch = useDispatch();
-  const isSmall = useMediaQuery(theme.breakpoints.down("md"));
   const [playing, setPlaying] = useState(false);
-  const [ended, setEnded] = useState(false);
   const { wishLists } = useSelector((state) => state.wishList);
   const [isWishlisted, setIsWishlisted] = useState(false);
   const { mutate: addFavoriteMutation } = useAddStoreToWishlist();
@@ -97,80 +90,12 @@ const AdsCard = (props) => {
     });
   };
 
-  const slideHandler = () => {
-    if (!activeSlideData) return;
-
-    // Handle the case when there are more than 3 slides
-    if (itemLength > 3 || isSmall) {
-      if (
-        !ended &&
-        item?.id === activeSlideData?.id &&
-        activeSlideData?.add_type === "video_promotion"
-      ) {
-        setPlaying(true);
-      }
-      return;
-    }
-
-    // Handle the case when there are 3 or fewer slides
-    if (index === 0 && item.add_type === "video_promotion") {
-      setPlaying(true);
-      return;
-    }
-
-    if (index === 1 && item.add_type === "video_promotion") {
-      if (ended || data[0]?.add_type !== "video_promotion") {
-        setPlaying(true);
-      }
-      return;
-    }
-
-    if (index === 2 && item.add_type === "video_promotion") {
-      if (
-        ended ||
-        (data[1]?.add_type !== "video_promotion" &&
-          data[0]?.add_type !== "video_promotion")
-      ) {
-        setPlaying(true);
-      }
-    }
-  };
-
   useEffect(() => {
-    if (data) {
-      slideHandler();
-    }
-  }, [itemLength, activeSlideData, index]);
-
-  useEffect(() => {
-    // Handle autoplay state based on video end
-    if (ended && sliderRef.current) {
-      sliderRef.current.slickPlay();
-    }
-  }, [ended]);
-
-  useEffect(() => {
-    if (ended && data?.length > 0) {
-      const nextSlide = sliderRef.current?.innerSlider?.state?.currentSlide + 1;
-      if (nextSlide < itemLength) {
-        const nextSlideChildren = sliderRef?.current?.props?.children;
-        if (nextSlideChildren && nextSlideChildren[nextSlide]) {
-          const nextItem =
-            nextSlideChildren[nextSlide]?.props?.children?.props?.item;
-          if (nextItem?.add_type === "video_promotion") {
-            sliderRef?.current?.slickNext();
-          } else {
-            setPlaying(false);
-          }
-        } else {
-          setPlaying(false);
-        }
-      } else {
-        setPlaying(false);
-      }
-      setEnded(false);
-    }
-  }, [ended, index, itemLength, sliderRef]);
+    setPlaying(
+      item?.add_type === "video_promotion" &&
+        item?.id === activeSlideData?.id
+    );
+  }, [activeSlideData?.id, item?.add_type, item?.id]);
   const handleClick = (e) => {
     e.stopPropagation();
     handleStoreRedirect(item?.store, router);
@@ -281,10 +206,7 @@ const AdsCard = (props) => {
             </Stack>
           ) : (
             <VideoPlayerWithCenteredControl
-              ended={ended}
-              setEnded={setEnded}
               playing={playing}
-              setPlaying={setPlaying}
               video={item?.video_attachment_full_url}
               isMargin={true}
             />

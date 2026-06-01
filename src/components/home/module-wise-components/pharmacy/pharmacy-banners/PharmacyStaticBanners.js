@@ -102,7 +102,7 @@ const PharmacyStaticBanners = () => {
                               alt={item?.title}
                               height="100%"
                               width="100%"
-                              objectFit="cover"
+                              objectfit="contain"
                               borderRadius="10px"
                               bg="#ddd"
                           />

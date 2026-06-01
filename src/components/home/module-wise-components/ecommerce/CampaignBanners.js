@@ -21,18 +21,9 @@ const BannersWrapper = styled(Box)(({ theme }) => ({
   cursor: "pointer",
   borderRadius: "10px",
   width: "100%",
-  height: "230px",
+  aspectRatio: "3 / 1",
   position: "relative",
   overflow: "hidden",
-  "&:hover img": {
-    transform: "scale(1.1)",
-  },
-  [theme.breakpoints.down("md")]: {
-    height: "200px",
-  },
-  [theme.breakpoints.down("sm")]: {
-    height: "150px",
-  },
 }));
 
 const CampaignBanners = () => {
@@ -186,7 +177,7 @@ const CampaignBanners = () => {
                     alt={item?.title}
                     height="100%"
                     width="100%"
-                    objectfit="cover"
+                    objectfit="contain"
                     borderRadius="10px"
                   />
                 </BannersWrapper>

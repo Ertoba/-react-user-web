@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { handleStoreRedirect } from "helper-functions/handleStoreRedirect";
 
-import { Grid, Skeleton, styled, useMediaQuery, useTheme } from "@mui/material";
+import { Grid, Skeleton, styled } from "@mui/material";
 import { Box } from "@mui/system";
 import { useRouter } from "next/router";
 import { useDispatch, useSelector } from "react-redux";
@@ -26,34 +26,17 @@ export const BannersWrapper = styled(Box)(({ theme }) => ({
   cursor: "pointer",
   borderRadius: "10px",
   width: "100%",
-  height: "234px",
+  aspectRatio: "3 / 1",
   position: "relative",
   overflow: "hidden",
   img: {
     width: '100%',
     height: '100%',
   },
-
-
-  "&:hover": {
-    img: {
-      transform: "scale(1.04)",
-    },
-  },
-
-  [theme.breakpoints.down("md")]: {
-    height: "200px",
-  },
-  [theme.breakpoints.down("sm")]: {
-    height: "150px",
-  },
 }));
 
 const Banners = ({ feature }) => {
   const router = useRouter();
-  const theme = useTheme()
-  const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
-  const isExtraSmallScreen = useMediaQuery(theme.breakpoints.down("xs"));
   const { selectedModule } = useSelector((state) => state.utilsData);
   const { banners } = useSelector((state) => state.storedData);
   const { data, refetch: refetchBannerData, isFetched } = useGetBanners(feature);
@@ -234,9 +217,9 @@ const Banners = ({ feature }) => {
                     <NextImage
                       src={item?.image_full_url}
                       alt={item?.title}
-                      height={isExtraSmallScreen ? "150" : isSmallScreen ? "200" : "234"}
-                      width={624}
-                      objectFit="cover"
+                      height={300}
+                      width={900}
+                      objectFit="contain"
                       borderRadius="10px"
                     />
                   </BannersWrapper>
