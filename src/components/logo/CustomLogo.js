@@ -47,9 +47,10 @@ const CustomLogo = ({ logoImg, atlText, height, width, objectFit }) => {
         src={logoImg || miliLogoSrc}
         alt={atlText}
         objectFit={objectFit ? objectFit : "contain"}
-        loading="eager"
-        width={100}
-        height={70}
+        placeholder="empty"
+        priority
+        width={160}
+        height={48}
       />
     </Logo>
   );
