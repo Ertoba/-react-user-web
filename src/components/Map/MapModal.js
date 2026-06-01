@@ -113,8 +113,7 @@ const MapModal = ({
       setPredictions(tempData);
     }
   }, [places]);
-  const { data: geoCodeResults, refetch: refetchCurrentLocation } =
-    useGetGeoCode(location, geoLocationEnable);
+  const { data: geoCodeResults } = useGetGeoCode(location, geoLocationEnable);
   useEffect(() => {
     if (geoCodeResults) {
       setCurrentLactionValue({
@@ -175,7 +174,7 @@ const MapModal = ({
         lng: coords.longitude,
       });
     }
-  }, []);
+  }, [coords]);
 
   const handleLocationSelection = (value) => {
     setPlaceId(value?.place_id);
@@ -436,8 +435,6 @@ const MapModal = ({
                     setLoadingCurrentLocation={setLoadingCurrentLocation}
                     setLocationEnabled={setLocationEnabled}
                     setLocation={setLocation}
-                    coords={coords}
-                    refetchCurrentLocation={refetchCurrentLocation}
                     setRerenderMap={setRerenderMap}
                     isLoadingCurrentLocation={isLoadingCurrentLocation}
                     isGeolocationEnabled={isGeolocationEnabled}

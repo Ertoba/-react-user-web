@@ -2,7 +2,6 @@ import React, {
   useCallback,
   useEffect,
   useMemo,
-  useRef,
   useState,
 } from "react";
 import { GoogleMap, useJsApiLoader } from "@react-google-maps/api";
@@ -59,13 +58,12 @@ const GoogleMapComponent = ({
           : "350px",
     paddingBottom: "0px",
   };
-  const mapRef = useRef(GoogleMap);
   const center = useMemo(
     () => ({
       lat: parseFloat(location?.lat),
       lng: parseFloat(location?.lng),
     }),
-    [location?.lng, location?.lng]
+    [location?.lat, location?.lng]
   );
 
   const options = useMemo(
@@ -198,7 +196,7 @@ const GoogleMapComponent = ({
     >
       <Stack
         position="absolute"
-        zIndex={1}
+        zIndex={5}
         left={left ? left : "15px"}
         bottom={bottom ? bottom : "6%"}
         direction="column"
@@ -234,7 +232,7 @@ const GoogleMapComponent = ({
       {(!mapmodal || expanded) && (
         <Stack
           position="absolute"
-          zIndex={2}
+          zIndex={5}
           sx={{
             right: { xs: "10px", sm: "12px" },
             top: expanded ? { xs: "10px", sm: "12px" } : undefined,
@@ -323,40 +321,40 @@ const GoogleMapComponent = ({
           }
         }}
         options={options}
-      >
-        {!locationLoading ? (
-          <img
-            src={pickMarker.src}
-            style={{
-              zIndex: 3,
-              position: "absolute",
-              marginTop: -63,
-              marginLeft: -32,
-              left: "50%",
-              top: "50%",
-              height: "60px",
-              width: "45px",
-              pointerEvents: "none",
-            }}
-            alt="map"
-          />
-        ) : (
-          <Stack
-            alignItems="center"
-            style={{
-              zIndex: 3,
-              position: "absolute",
-              marginTop: -37,
-              marginLeft: -11,
-              left: "50%",
-              top: "50%",
-              minHeight: "300px",
-            }}
-          >
-            <CircularProgress />
-          </Stack>
-        )}
-      </GoogleMap>
+      />
+      {!locationLoading ? (
+        <img
+          src={pickMarker.src}
+          style={{
+            zIndex: 4,
+            position: "absolute",
+            marginTop: -63,
+            marginLeft: -32,
+            left: "50%",
+            top: "50%",
+            height: "60px",
+            width: "45px",
+            pointerEvents: "none",
+          }}
+          alt="map"
+        />
+      ) : (
+        <Stack
+          alignItems="center"
+          style={{
+            zIndex: 4,
+            position: "absolute",
+            marginTop: -37,
+            marginLeft: -11,
+            left: "50%",
+            top: "50%",
+            minHeight: "300px",
+            pointerEvents: "none",
+          }}
+        >
+          <CircularProgress />
+        </Stack>
+      )}
     </Stack>
   );
 

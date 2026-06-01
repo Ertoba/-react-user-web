@@ -4,16 +4,15 @@ import GpsFixedIcon from "@mui/icons-material/GpsFixed";
 import { t } from "i18next";
 import AllowLocationDialog from "./AllowLocationDialog";
 import { IconButton } from "@mui/material";
+import { getFreshCurrentPosition } from "helper-functions/getFreshCurrentPosition";
 const UseCurrentLocation = ({
   isLoadingCurrentLocation,
   setLoadingCurrentLocation,
   setLocationEnabled,
   setLocation,
   zoneId,
-  refetchCurrentLocation,
   setRerenderMap,
   isGeolocationEnabled,
-  coords,
   fromMapModal
 }) => {
   const [openLocation, setOpenLocation] = useState(false);
@@ -36,14 +35,11 @@ const UseCurrentLocation = ({
         }}
         onClick={async (e) => {
           e.preventDefault();
-          if (coords) {
-            setLoadingCurrentLocation(true);
+          setLoadingCurrentLocation(true);
+          try {
+            const freshLocation = await getFreshCurrentPosition();
             setLocationEnabled(true);
-            setLocation({
-              lat: coords?.latitude,
-              lng: coords?.longitude,
-            });
-            setLoadingCurrentLocation(false);
+            setLocation(freshLocation);
             if(!fromMapModal){
               if (zoneId) {
                 localStorage.setItem("zoneid", zoneId);
@@ -51,10 +47,11 @@ const UseCurrentLocation = ({
                 // handleClose()
               }
             }
-            await refetchCurrentLocation();
             setRerenderMap((prevState) => !prevState);
-          } else {
+          } catch {
             setOpenLocation(true);
+          } finally {
+            setLoadingCurrentLocation(false);
           }
         }}
       >

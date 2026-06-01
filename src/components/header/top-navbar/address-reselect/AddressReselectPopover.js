@@ -6,11 +6,12 @@ import "simplebar-react/dist/simplebar.min.css";
 import CustomAlert from "../../../alert/CustomAlert";
 import { CustomButtonPrimary } from "styled-components/CustomButtons.style";
 import DeliveryAddress from "../../../checkout/delivery-address";
-import { useGeolocated } from "react-geolocated";
 import ControlPointOutlinedIcon from "@mui/icons-material/ControlPointOutlined";
 import useGetGeoCode from "../../../../api-manage/hooks/react-query/google-api/useGetGeoCode";
 import useGetZoneId from "../../../../api-manage/hooks/react-query/google-api/useGetZone";
 import dynamic from "next/dynamic";
+import toast from "react-hot-toast";
+import { getFreshCurrentPosition } from "helper-functions/getFreshCurrentPosition";
 const MapModal = dynamic(() => import("../../../Map/MapModal"));
 const AddressReselectPopover = (props) => {
   const { anchorEl, onClose, open, t, address, setAddress, token, currentLatLngForMar, ...other } =
@@ -22,57 +23,64 @@ const AddressReselectPopover = (props) => {
   const [showCurrentLocation, setShowCurrentLocation] = useState(false);
   const [geoLocationEnable, setGeoLocationEnable] = useState(false);
   const [zoneIdEnabled, setZoneIdEnabled] = useState(false);
-  const { coords } = useGeolocated({
-    positionOptions: {
-      enableHighAccuracy: false,
-    },
-    userDecisionTimeout: 5000,
-    isGeolocationEnabled: true,
-  });
+  const [isLoadingCurrentLocation, setLoadingCurrentLocation] = useState(false);
 
-  const handleAgreeLocation = () => {
-    // e.stopPropagation();
-    if (coords) {
-      setLocation({ lat: coords?.latitude, lng: coords?.longitude });
+  const handleAgreeLocation = async () => {
+    setLoadingCurrentLocation(true);
+    setShowCurrentLocation(false);
+    setCurrentLocation(undefined);
+    try {
+      const freshLocation = await getFreshCurrentPosition();
+      setLocation(freshLocation);
       setShowCurrentLocation(true);
       setGeoLocationEnable(true);
       setZoneIdEnabled(true);
-    }
-    setGeoLocationEnable(true);
-    setZoneIdEnabled(true);
-    window.location.reload();
-  };
-
-  const handleSetLocation = async () => {
-    if (currentLocation && location) {
-      localStorage.setItem("location", currentLocation);
-      localStorage.setItem("currentLatLng", JSON.stringify(location));
-      window.location.reload();
+    } catch {
+      toast.error(t("Please allow browser location permission"));
+    } finally {
+      setLoadingCurrentLocation(false);
     }
   };
-  const { data: geoCodeResults, isLoading: isLoadingGeoCode } = useGetGeoCode(
+  const { data: geoCodeResults, isFetching: isFetchingGeoCode } = useGetGeoCode(
     location,
     geoLocationEnable
   );
 
-  useEffect(() => {
-    handleSetLocation();
-  }, [currentLocation, location,address?.address]);
   useEffect(() => {
     if (geoCodeResults?.results && showCurrentLocation) {
       setCurrentLocation(geoCodeResults?.results[0]?.formatted_address);
     }
   }, [geoCodeResults, location]);
 
-  const { data: zoneData } = useGetZoneId(location, zoneIdEnabled);
+  const { data: zoneData, isFetching: isFetchingZone } = useGetZoneId(
+    location,
+    zoneIdEnabled
+  );
 
   useEffect(() => {
-    if (typeof window !== "undefined") {
-      if (zoneData) {
-        localStorage.setItem("zoneid", zoneData?.zone_id);
-      }
+    if (typeof window === "undefined" || !zoneData?.zone_id) {
+      return;
     }
-  }, [zoneData]);
+    localStorage.setItem("zoneid", zoneData.zone_id);
+    if (
+      showCurrentLocation &&
+      currentLocation &&
+      location &&
+      !isFetchingGeoCode &&
+      !isFetchingZone
+    ) {
+      localStorage.setItem("location", currentLocation);
+      localStorage.setItem("currentLatLng", JSON.stringify(location));
+      window.location.reload();
+    }
+  }, [
+    currentLocation,
+    isFetchingGeoCode,
+    isFetchingZone,
+    location,
+    showCurrentLocation,
+    zoneData,
+  ]);
   const handleCloseMapModal = () => {
     setOpenMapModal(false);
     onClose();
@@ -146,6 +154,7 @@ const AddressReselectPopover = (props) => {
          <Button
            fullWidth
               onClick={handleAgreeLocation}
+              disabled={isLoadingCurrentLocation}
               startIcon={
                 <ControlPointOutlinedIcon sx={{ color: theme.palette.primary.main }} />
               }

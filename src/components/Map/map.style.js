@@ -7,6 +7,7 @@ export const WrapperCurrentLocationPick = styled(Stack)(
     position: "absolute",
     right: isXSmall ? 16 : 25,
     bottom: isXSmall ? 20 : 80,
+    zIndex: 5,
   })
 );
 export const CustomBoxWrapper = styled(Box)(({ theme, expand }) => ({
