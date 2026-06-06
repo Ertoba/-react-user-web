@@ -1,4 +1,4 @@
-import { Grid, Stack, useMediaQuery, useTheme } from "@mui/material";
+import { Grid, Stack, Typography, useMediaQuery, useTheme } from "@mui/material";
 import { Box, alpha } from "@mui/system";
 import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -13,21 +13,21 @@ import AppLinks from "./AppLinks";
 import RouteLinks from "./RouteLinks";
 import SocialLinks from "./SocialLinks";
 import SomeInfo from "./SomeInfo";
-import FooterBottomItems from "../FooterBottomItems";
 import { useRouter } from "next/router";
 import LocationViewOnMap from "../../Map/location-view/LocationViewOnMap";
 import { miliLogoSrc } from "components/logo/brandAssets";
+import { useDispatch, useSelector } from "react-redux";
+import { setAllData } from "redux/slices/storeRegistrationData";
 
 const FooterMiddle = (props) => {
   const { configData, landingPageData } = props;
   const router = useRouter();
+  const dispatch = useDispatch();
+  const { selectedModule } = useSelector((state) => state.utilsData);
   const { t } = useTranslation();
   const [open, setOpen] = useState(false);
   const handleOpenCloseMap = () => {
     setOpen(!open);
-  };
-  const handleClickToRoute = (href) => {
-    router.push(href, undefined, { shallow: true });
   };
   let zoneid = undefined;
   if (typeof window !== "undefined") {
@@ -37,6 +37,81 @@ const FooterMiddle = (props) => {
   const isSmall = useMediaQuery(theme.breakpoints.down("sm"));
   let token;
   const businessLogo = miliLogoSrc;
+  const formatMobileFooterLink = (text) => t(text).toLocaleUpperCase("ka-GE");
+  const handleMobileFooterRoute = (href, value) => {
+    if (value === "restaurant_owner") {
+      dispatch(setAllData(null));
+      router.push(
+        {
+          pathname: href,
+          query: { active: "active" },
+        },
+        undefined,
+        { shallow: true }
+      );
+    } else {
+      router.push(href, undefined, { shallow: true });
+    }
+  };
+  const mobileFooterLinkSx = {
+    cursor: "pointer",
+    fontSize: "11px",
+    lineHeight: 1.32,
+    fontWeight: 700,
+    letterSpacing: 0,
+    textAlign: "left",
+    color: "inherit",
+    overflowWrap: "break-word",
+    "&:hover": {
+      color: theme.palette.primary.main,
+    },
+  };
+  const mobileLeftFooterLinks = [
+    configData?.toggle_store_registration && {
+      name: "Become a Vendor owner",
+      value: "restaurant_owner",
+      link: "/store-registration",
+    },
+    {
+      name: "Help & Support",
+      link: "/help-and-support",
+    },
+    {
+      name: selectedModule?.module_type === "rental" ? "Track Trip" : "Track Order",
+      link: "/track-order",
+    },
+    {
+      name: "Terms & Conditions",
+      link: "/terms-and-conditions",
+    },
+    configData?.refund_policy !== 0 && {
+      name: "Refund Policy",
+      link: "/refund-policy",
+    },
+    configData?.cancelation_policy !== 0 && {
+      name: "Cancellation Policy",
+      link: "/cancellation-policy",
+    },
+    configData?.shipping_policy !== 0 && {
+      name: "Shipping Policy",
+      link: "/shipping-policy",
+    },
+  ].filter(Boolean);
+  const mobileRightFooterLinks = [
+    configData?.toggle_dm_registration && {
+      name: "Become a delivery man",
+      value: "delivery_man",
+      link: "/deliveryman-registration",
+    },
+    {
+      name: "About Us",
+      link: "/about-us",
+    },
+    {
+      name: "Privacy Policy",
+      link: "/privacy-policy",
+    },
+  ].filter(Boolean);
   // console.log("landingPageData", landingPageData);
   return (
     <CustomStackFullWidth sx={{ py: { xs: "10px", sm: "3rem" } }}>
@@ -107,20 +182,42 @@ const FooterMiddle = (props) => {
             >
               <Grid container spacing={1}>
                 <Grid item xs={12} sm={6} md={3} align={isSmall && "center"}>
-                  <CustomStackFullWidth
-                    flexDirection={{ xs: "column", sm: "row" }}
-                    justifyContent="flex-start"
-                    gap={{ xs: "14px", sm: "10px" }}
-                    sx={{ px: { xs: "2px", sm: 0 } }}
-                  >
-                    <RouteLinks token={token} configData={configData} />
-                    {isSmall && (
-                      <FooterBottomItems
-                        handleClickToRoute={handleClickToRoute}
-                        configData={configData}
-                      />
+                  {isSmall ? (
+                    <Box
+                      sx={{
+                        display: "grid",
+                        gridTemplateColumns: "minmax(0, 1fr) minmax(0, 1fr)",
+                        columnGap: "22px",
+                        rowGap: "8px",
+                        width: "100%",
+                        px: "4px",
+                        alignItems: "start",
+                      }}
+                    >
+                      {[mobileLeftFooterLinks, mobileRightFooterLinks].map((links, columnIndex) => (
+                        <Stack key={columnIndex} spacing="9px" alignItems="stretch">
+                          {links.map((item) => (
+                            <Typography
+                              key={`${columnIndex}-${item.name}`}
+                              onClick={() => handleMobileFooterRoute(item.link, item.value)}
+                              sx={mobileFooterLinkSx}
+                            >
+                              {formatMobileFooterLink(item.name)}
+                            </Typography>
+                          ))}
+                        </Stack>
+                      ))}
+                    </Box>
+                  ) : (
+                    <CustomStackFullWidth
+                      flexDirection="row"
+                      justifyContent="flex-start"
+                      gap="10px"
+                      sx={{ px: 0 }}
+                    >
+                      <RouteLinks token={token} configData={configData} />
+                    </CustomStackFullWidth>
                     )}
-                  </CustomStackFullWidth>
                 </Grid>
                 <Grid
                   item
