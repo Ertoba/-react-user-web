@@ -1,5 +1,5 @@
 import { useTheme } from "@emotion/react";
-import { Typography } from "@mui/material";
+import { Typography, useMediaQuery } from "@mui/material";
 import React from "react";
 import {
   CustomStackFullWidth,
@@ -11,13 +11,31 @@ import Link from "next/link";
 const SomeInfo = (props) => {
   const { image, alt, title, info, t, href } = props;
   const theme = useTheme();
+  const isXsmall = useMediaQuery(theme.breakpoints.down("sm"));
+  const formattedTitle = isXsmall ? t(title).toLocaleUpperCase("ka-GE") : t(title);
+  const iconSize = isXsmall ? 38 : 50;
+  const titleSx = {
+    textTransform: isXsmall ? "uppercase" : "capitalize",
+    fontSize: { xs: "12px", sm: "inherit" },
+    lineHeight: { xs: 1.35, sm: "normal" },
+    fontWeight: { xs: 700, sm: "inherit" },
+    letterSpacing: 0,
+    textAlign: "center",
+  };
+  const infoSx = {
+    textAlign: "center",
+    fontSize: { xs: "11px", sm: "inherit" },
+    lineHeight: { xs: 1.35, sm: "normal" },
+    letterSpacing: 0,
+    maxWidth: { xs: "230px", sm: "none" },
+  };
   return (
     <>{href ? (
       <Link href={href}>
         <CustomStackFullWidth
           alignItems="center"
           justifyContent="center"
-          spacing={3}
+          spacing={isXsmall ? 1.2 : 3}
           sx={{
             cursor: "pointer",
             img: {
@@ -33,24 +51,20 @@ const SomeInfo = (props) => {
             },
           }}
         >
-          <CustomImageContainer src={image.src} alt={alt} height={50} width={50} />
+          <CustomImageContainer src={image.src} alt={alt} height={iconSize} width={iconSize} />
           <CustomStackFullWidth
             alignItems="center"
             justifyContent="center"
             spacing={1}
           >
             <CustomTypographyBold
-              sx={{
-                textTransform: "capitalize",
-              }}
+              sx={titleSx}
             >
-              {t(title)}
+              {formattedTitle}
             </CustomTypographyBold>
             <Typography
               variant="body2"
-              sx={{
-                textAlign: "center",
-              }}
+              sx={infoSx}
             >
               {info}
             </Typography>
@@ -61,7 +75,7 @@ const SomeInfo = (props) => {
       <CustomStackFullWidth
         alignItems="center"
         justifyContent="center"
-        spacing={3}
+        spacing={isXsmall ? 1.2 : 3}
         sx={{
           cursor: "pointer",
           img: {
@@ -77,24 +91,20 @@ const SomeInfo = (props) => {
           },
         }}
       >
-        <CustomImageContainer src={image.src} alt={alt} height={50} width={50} />
+        <CustomImageContainer src={image.src} alt={alt} height={iconSize} width={iconSize} />
         <CustomStackFullWidth
           alignItems="center"
           justifyContent="center"
           spacing={1}
         >
           <CustomTypographyBold
-            sx={{
-              textTransform: "capitalize",
-            }}
+            sx={titleSx}
           >
-            {t(title)}
+            {formattedTitle}
           </CustomTypographyBold>
           <Typography
             variant="body2"
-            sx={{
-              textAlign: "center",
-            }}
+            sx={infoSx}
           >
             {info}
           </Typography>

@@ -51,9 +51,32 @@ const RouteLinks = (props) => {
   const isXsmall = useMediaQuery(theme.breakpoints.down("sm"));
   console.log({ configData });
 
+  const formatFooterLink = (text) =>
+    isXsmall ? t(text).toLocaleUpperCase("ka-GE") : t(text);
+  const footerLinkSx = {
+    textAlign: "left",
+    cursor: "pointer",
+    fontSize: { xs: "11px", sm: "inherit" },
+    lineHeight: { xs: 1.35, sm: "normal" },
+    fontWeight: { xs: 600, sm: "inherit" },
+    letterSpacing: 0,
+    flex: { xs: "0 0 calc(50% - 8px)", sm: "initial" },
+    "&:hover": {
+      color: theme.palette.primary.main,
+    },
+  };
 
   return (
-    <CustomStackFullWidth spacing={2} alignItems={{ xs: "start" }}>
+    <CustomStackFullWidth
+      direction={{ xs: "row", sm: "column" }}
+      spacing={{ xs: 0, sm: 2 }}
+      alignItems={{ xs: "flex-start", sm: "start" }}
+      sx={{
+        flexWrap: { xs: "wrap", sm: "nowrap" },
+        columnGap: { xs: "16px", sm: 0 },
+        rowGap: { xs: "10px", sm: 0 },
+      }}
+    >
       {RouteLinksData.map((item, index) => {
         if (
           (!configData?.toggle_store_registration && item?.value === "restaurant_owner") ||
@@ -65,40 +88,24 @@ const RouteLinks = (props) => {
           <Typography
             key={index}
             onClick={() => handleClick(item.link, item.value)}
-            sx={{
-              textAlign: "left",
-              cursor: "pointer",
-              "&:hover": {
-                color: theme.palette.primary.main,
-              },
-            }}
+            sx={footerLinkSx}
           >
-            {t(item.name)}
+            {formatFooterLink(item.name)}
           </Typography>
         );
       })}
 
       <Typography
         onClick={() => handleClickToRoute("/about-us")}
-        sx={{
-          cursor: "pointer",
-          "&:hover": {
-            color: theme.palette.primary.main,
-          },
-        }}
+        sx={footerLinkSx}
       >
-        {t("About Us")}
+        {formatFooterLink("About Us")}
       </Typography>
       <Typography
         onClick={() => handleClickToRoute("/track-order")}
-        sx={{
-          cursor: "pointer",
-          "&:hover": {
-            color: theme.palette.primary.main,
-          },
-        }}
+        sx={footerLinkSx}
       >
-        {selectedModule?.module_type === "rental" ? t("Track Trip") : t("Track Order")}
+        {selectedModule?.module_type === "rental" ? formatFooterLink("Track Trip") : formatFooterLink("Track Order")}
       </Typography>
     </CustomStackFullWidth>
   );

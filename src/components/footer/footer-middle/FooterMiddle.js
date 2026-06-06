@@ -95,7 +95,7 @@ const FooterMiddle = (props) => {
             }}
           >
             <Box
-              padding={{ xs: "20px 8px", sm: "40px" }}
+              padding={{ xs: "18px 10px", sm: "40px" }}
               sx={{
                 backgroundColor:
                   getCurrentModuleType() === ModuleTypes?.FOOD
@@ -108,9 +108,10 @@ const FooterMiddle = (props) => {
               <Grid container spacing={1}>
                 <Grid item xs={12} sm={6} md={3} align={isSmall && "center"}>
                   <CustomStackFullWidth
-                    flexDirection="row"
-                    justifyContent="space-between"
-                    gap="10px"
+                    flexDirection={{ xs: "column", sm: "row" }}
+                    justifyContent="flex-start"
+                    gap={{ xs: "14px", sm: "10px" }}
+                    sx={{ px: { xs: "2px", sm: 0 } }}
                   >
                     <RouteLinks token={token} configData={configData} />
                     {isSmall && (

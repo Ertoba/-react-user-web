@@ -310,7 +310,7 @@ const Top = (props) => {
                 src={bannerCover}
                 width="100%"
                 height="100%"
-                objectFit="cover"
+                objectfit="contain"
                 borderRadius="10px"
               />
             )}{" "}
@@ -549,7 +549,7 @@ const Top = (props) => {
               src={bannerCover}
               width="100%"
               height="100%"
-              objectFit="cover"
+              objectfit="contain"
               borderRadius="10px"
             />
 
@@ -852,7 +852,7 @@ const Top = (props) => {
                       src={bannerCover}
                       width="100%"
                       height="251px"
-                      objectFit="cover"
+                      objectfit="contain"
                       borderTopRightRadius="10%"
                       borderBottomRightRadius="10%"
                     />
