@@ -11,7 +11,7 @@ import {
 import CloseIcon from "@mui/icons-material/Close";
 import MicIcon from "@mui/icons-material/Mic";
 import CustomModal from "../custom-component/CustomModal";
-import { t } from "i18next";
+import i18next, { t } from "i18next";
 
 const pulse = keyframes`
   0% {
@@ -72,6 +72,16 @@ const MicButtonWrapper = styled(Box)(({ theme }) => ({
     },
 }));
 
+const getSpeechLanguage = () => {
+    const storedLanguage =
+        typeof window !== "undefined" ? localStorage.getItem("language") : "";
+    const language = (storedLanguage || i18next.language || "").toLowerCase();
+
+    if (language.startsWith("ka") || language.startsWith("ge")) return "ka-GE";
+    if (language.startsWith("ru")) return "ru-RU";
+    return "en-US";
+};
+
 const VoiceSearchModal = ({ open, handleClose, onResult }) => {
     const theme = useTheme();
     const [isListening, setIsListening] = React.useState(false);
@@ -85,7 +95,7 @@ const VoiceSearchModal = ({ open, handleClose, onResult }) => {
             recognitionRef.current = new SpeechRecognition();
             recognitionRef.current.continuous = false;
             recognitionRef.current.interimResults = true;
-            recognitionRef.current.lang = "en-US"; // Default to English
+            recognitionRef.current.lang = getSpeechLanguage();
 
             recognitionRef.current.onstart = () => {
                 setIsListening(true);
@@ -125,10 +135,15 @@ const VoiceSearchModal = ({ open, handleClose, onResult }) => {
         if (open) {
             setPermissionDenied(false);
             if (recognitionRef.current) {
-                recognitionRef.current.start();
+                recognitionRef.current.lang = getSpeechLanguage();
+                try {
+                    recognitionRef.current.start();
+                } catch (_) {}
             }
         } else if (!open && recognitionRef.current) {
-            recognitionRef.current.stop();
+            try {
+                recognitionRef.current.stop();
+            } catch (_) {}
         }
     }, [open]);
 
@@ -137,7 +152,16 @@ const VoiceSearchModal = ({ open, handleClose, onResult }) => {
             <Typography fontSize="16px" sx={{ fontWeight: "400", color: theme.palette.neutral[600] }}>
                 {transcript || t("Tell me what you're looking for......")}
             </Typography>
-            <MicButtonWrapper onClick={() => open && recognitionRef.current && recognitionRef.current.start()}>
+            <MicButtonWrapper
+                onClick={() => {
+                    if (open && recognitionRef.current && !isListening) {
+                        recognitionRef.current.lang = getSpeechLanguage();
+                        try {
+                            recognitionRef.current.start();
+                        } catch (_) {}
+                    }
+                }}
+            >
                 <MicIcon sx={{ fontSize: "30px", color: theme.palette.common.white }} />
             </MicButtonWrapper>
         </>

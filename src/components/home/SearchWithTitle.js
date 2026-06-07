@@ -81,8 +81,15 @@ const SearchWithTitle = (props) => {
           sx={{
             fontSize: {
               md: ModuleTypes.RENTAL === "rental" && "30px !important",
-              color: moduleType === "parcel" ? "black" : "inherit"
             },
+            color:
+              moduleType === ModuleTypes.PARCEL
+                ? theme.palette.common.white
+                : "inherit",
+            textShadow:
+              moduleType === ModuleTypes.PARCEL
+                ? "0 1px 2px rgba(0,0,0,0.35)"
+                : "none",
             textTransform:
               ModuleTypes.RENTAL === "rental" ? "capitalize" : "initial",
           }}
@@ -92,7 +99,19 @@ const SearchWithTitle = (props) => {
         <Typography
           variant={isSmall ? "subtitle2" : "subtitle1"}
           textAlign="center"
-          sx={{ color: moduleType === "parcel" ? "black" : (theme) => theme.palette.mode === "dark" ? theme.palette.neutral[1000] : theme.palette.neutral[400] }}
+          sx={{
+            color:
+              moduleType === ModuleTypes.PARCEL
+                ? theme.palette.common.white
+                : (theme) =>
+                    theme.palette.mode === "dark"
+                      ? theme.palette.neutral[1000]
+                      : theme.palette.neutral[400],
+            textShadow:
+              moduleType === ModuleTypes.PARCEL
+                ? "0 1px 2px rgba(0,0,0,0.35)"
+                : "none",
+          }}
           fontWeight="400"
           lineHeight="18.75px"
           component="p"

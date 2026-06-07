@@ -1,15 +1,30 @@
 import { useTheme } from "@emotion/react";
 import { Card, Box, Tooltip, Typography } from "@mui/material";
 import { Stack, styled } from "@mui/system";
-import { PrimaryToolTip } from "components/cards/QuickView";
 import { useRouter } from "next/router";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { setParcelCategories } from "redux/slices/parcelCategoryData";
 import { CustomStackFullWidth } from "styled-components/CustomStyles.style";
 import { textWithEllipsis } from "styled-components/TextWithEllipsis";
-import CustomImageContainer from "../../CustomImageContainer";
 import NextImage from "components/NextImage";
 import useTextEllipsis from "api-manage/hooks/custom-hooks/useTextEllipsis";
+import InsertDriveFileOutlinedIcon from "@mui/icons-material/InsertDriveFileOutlined";
+import CardGiftcardOutlinedIcon from "@mui/icons-material/CardGiftcardOutlined";
+import MedicalServicesOutlinedIcon from "@mui/icons-material/MedicalServicesOutlined";
+import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
+import HandshakeOutlinedIcon from "@mui/icons-material/HandshakeOutlined";
+import RoomServiceOutlinedIcon from "@mui/icons-material/RoomServiceOutlined";
+
+export const getParcelIcon = (name = "") => {
+	const normalized = name.toLowerCase();
+	if (normalized.includes("დოკუმ") || normalized.includes("document")) return InsertDriveFileOutlinedIcon;
+	if (normalized.includes("საჩუქ") || normalized.includes("gift")) return CardGiftcardOutlinedIcon;
+	if (normalized.includes("მედ") || normalized.includes("medicine")) return MedicalServicesOutlinedIcon;
+	if (normalized.includes("სახლ") || normalized.includes("home")) return HomeOutlinedIcon;
+	if (normalized.includes("ბიზნეს") || normalized.includes("business")) return HandshakeOutlinedIcon;
+	if (normalized.includes("საკვ") || normalized.includes("food")) return RoomServiceOutlinedIcon;
+	return null;
+};
 
 const ParcelCard = styled(Card)(({ theme }) => ({
 	padding: "20px",
@@ -48,23 +63,39 @@ const ParcelCategoryCard = (props) => {
 	};
 	const classes = textWithEllipsis();
 	const { ref: textRef, isEllipsed } = useTextEllipsis(data?.name);
+	const Icon = getParcelIcon(data?.name);
 	return (
     <CustomStackFullWidth>
 			<ParcelCard {...props} onClick={handleClick} sx={{borderColor:props?.selected ? theme.palette.primary.main : ""}}>
 				<Stack direction="row" alignItems="center" gap={3}>
 					<Box
 						sx={{
+							width: "72px",
+							height: "72px",
+							flexShrink: 0,
+							display: "flex",
+							alignItems: "center",
+							justifyContent: "center",
+							borderRadius: "14px",
+							backgroundColor: "transparent",
+							color: theme.palette.primary.main,
 							img: {
 								width: "72px",
 								height: "72px",
-							}
+								objectFit: "contain",
+								backgroundColor: "transparent",
+							},
 						}}>
+						{Icon ? (
+							<Icon sx={{ fontSize: "54px" }} />
+						) : (
 							<NextImage
 								width={72}
 								height={72}
 								src={data?.image_full_url}
 								objectFit="contain"
 							/>
+						)}
 						</Box>
 						<Stack width="100%">
 							<Tooltip

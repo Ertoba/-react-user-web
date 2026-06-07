@@ -106,6 +106,14 @@ const ShopCategoryCard = (props) => {
                     variant="h7"
                     fontWeight="400"
                     className={classes.multiLineEllipsis}
+                    sx={{
+                      display: "block",
+                      overflow: "visible",
+                      textOverflow: "clip",
+                      WebkitLineClamp: "unset",
+                      wordBreak: "break-word",
+                      lineHeight: 1.25,
+                    }}
                     component="h4"
                   >
                     {onlyshimmer ? <Skeleton variant="text" width="70px" /> : item?.name}

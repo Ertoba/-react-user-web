@@ -27,7 +27,7 @@ const BrandCard = (props) => {
 					padding: "10px",
 					borderRadius: "4px",
 					":hover": {
-						boxShadow: horizontal ? "" : theme.shadows[14],
+						boxShadow: horizontal ? "" : `0 6px 14px ${alpha(theme.palette.neutral[1000], theme.palette.mode === "dark" ? 0.12 : 0.05)}`,
 					},
 					a: {
 						position: "absolute",
@@ -52,7 +52,7 @@ const BrandCard = (props) => {
 						borderRadius: horizontal ? "16px" : "12px",
 						backgroundColor: theme.palette.background.paper,
 						border: `1px solid ${alpha(theme.palette.neutral[400], theme.palette.mode === "dark" ? 0.35 : 0.22)}`,
-						boxShadow: `0 8px 18px ${alpha(theme.palette.neutral[1000], theme.palette.mode === "dark" ? 0.18 : 0.06)}`,
+						boxShadow: `0 4px 10px ${alpha(theme.palette.neutral[1000], theme.palette.mode === "dark" ? 0.1 : 0.035)}`,
 						overflow: "hidden",
 						img: {
 							maxWidth: "100%",
@@ -99,7 +99,7 @@ const BrandCard = (props) => {
 						sx={{ opacity: "0.8", fontSize: { xs: "10px", md: "14px" } }}
 						component="span"
 					>
-						{items_count} {t("Products")}
+						{items_count} {t("Product")}
 					</Typography>
 				</Box>
 			</Stack>

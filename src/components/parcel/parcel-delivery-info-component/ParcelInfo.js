@@ -11,20 +11,19 @@ import { useState, useEffect } from "react";
 import { Modal, Box, Grid, IconButton } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import useGetParcelCategory from "../../../api-manage/hooks/react-query/percel/usePercelCategory";
-import ParcelCategoryCard from "../parcel-category/ParcelCategoryCard";
+import ParcelCategoryCard, { getParcelIcon } from "../parcel-category/ParcelCategoryCard";
 import ParcelCategoryShimmer from "../parcel-category/ParcelCategoryShimmer";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { setParcelCategories } from "redux/slices/parcelCategoryData";
 
-const ParcelInfo = ({ parcelCategories, setReceiverLocation }) => {
+const ParcelInfo = ({ parcelCategories }) => {
   const theme = useTheme();
   const dispatch = useDispatch();
   const [open, setOpen] = useState(false);
    
   const [tempSelected, setTempSelected] = useState(parcelCategories);
-  const { parcelInfo } = useSelector((state) => state.parcelInfoData);
-  const { data, refetch, isFetched, isLoading } = useGetParcelCategory();
-  console.log("parcelCategories", parcelInfo);
+  const { data, refetch, isLoading } = useGetParcelCategory();
+  const SelectedParcelIcon = getParcelIcon(parcelCategories?.name);
   useEffect(() => {
     if (open) {
       refetch();
@@ -95,18 +94,41 @@ const ParcelInfo = ({ parcelCategories, setReceiverLocation }) => {
               <EditIcon fontSize="12px" />
               {t("Edit")}
             </Stack>
-            <CustomImageContainer
-              src={parcelCategories?.image_full_url}
-              height="100px"
-              width="100px"
-              objectfit="contain"
-            />
+            {SelectedParcelIcon ? (
+              <Box
+                sx={{
+                  width: "100px",
+                  height: "100px",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  color: theme.palette.primary.main,
+                  backgroundColor: "transparent",
+                }}
+              >
+                <SelectedParcelIcon sx={{ fontSize: "74px" }} />
+              </Box>
+            ) : (
+              <CustomImageContainer
+                src={parcelCategories?.image_full_url}
+                height="100px"
+                width="100px"
+                objectfit="contain"
+                bg="transparent"
+              />
+            )}
 
-            <Stack width="100%" justifyContent="center" alignItems="center">
-              <Typography fontSize="16px" fontWeight="700">
+            <Stack width="100%" justifyContent="center" alignItems="center" px={{ xs: 2, sm: 3 }}>
+              <Typography fontSize="16px" fontWeight="700" textAlign="center">
                 {parcelCategories?.name}
               </Typography>
-              <Typography>{parcelCategories?.description}</Typography>
+              <Typography
+                textAlign="center"
+                maxWidth="420px"
+                sx={{ mx: "auto", lineHeight: 1.6 }}
+              >
+                {parcelCategories?.description}
+              </Typography>
             </Stack>
           </Stack>
 
