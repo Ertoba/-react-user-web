@@ -136,17 +136,24 @@ const OtpForm = ({ data, formSubmitHandler, isLoading,forgotPassword,reSendOtp ,
                 value={otp}
                 onChange={setOtp}
                 numInputs={6}
-                renderInput={(props) => <input {...props}
-                                               style={{
-                                                 fontSize: '20px', // 👈 Change font size here
-                                                 width: '35px',
-                                                 height: '40px',
-                                                 textAlign: 'center',
-                                                 margin: '0 4px',
-                                                 border: "1px solid " + theme.palette.primary.main,
-                                                 borderRadius: '4px',
-                                               }}
-                />}
+                renderInput={(props) => (
+                  <input
+                    {...props}
+                    type="tel"
+                    inputMode="numeric"
+                    pattern="[0-9]*"
+                    autoComplete="one-time-code"
+                    style={{
+                      fontSize: '20px',
+                      width: '35px',
+                      height: '40px',
+                      textAlign: 'center',
+                      margin: '0 4px',
+                      border: "1px solid " + theme.palette.primary.main,
+                      borderRadius: '4px',
+                    }}
+                  />
+                )}
               />
             </Box>
 

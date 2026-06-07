@@ -196,7 +196,15 @@ const OtpForm = ({
                   }
                   numInputs={6}
                   onBlur={otpFormik.handleBlur("reset_token")}
-                  renderInput={(props) => <input {...props} />}
+                  renderInput={(props) => (
+                    <input
+                      {...props}
+                      type="tel"
+                      inputMode="numeric"
+                      pattern="[0-9]*"
+                      autoComplete="one-time-code"
+                    />
+                  )}
                   error={
                     otpFormik.touched.reset_token &&
                     Boolean(otpFormik.errors.reset_token)

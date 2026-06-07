@@ -63,7 +63,7 @@ const PharmacyFeaturedStoreCard = (props) => {
 				alt={data?.name}
 				height="100%"
 				width="100%"
-				obejctfit="contained"
+				objectfit="contain"
 				borderRadius="10px"
 			/>
 			<ContentWrapper hover={hover ? "true" : "false"}>
@@ -83,7 +83,7 @@ const PharmacyFeaturedStoreCard = (props) => {
 								alt={data?.name}
 								height="100%"
 								width="100%"
-								obejctfit="contained"
+								objectfit="contain"
 								borderRadius="37px"
 							/>
 						</Box>

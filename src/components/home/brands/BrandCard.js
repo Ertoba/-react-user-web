@@ -61,6 +61,7 @@ const BrandCard = (props) => {
 							width: "100%",
 							objectFit: "contain",
 							aspectRatio: "1",
+							borderRadius: horizontal ? "12px" : "8px",
 						},
 					}}
 					className="brand-card-image"
