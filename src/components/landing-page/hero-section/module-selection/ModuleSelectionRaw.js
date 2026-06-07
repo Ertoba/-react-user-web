@@ -49,13 +49,18 @@ const CardWrapper = styled(Stack)(({ theme }) => ({
     flex: "none",
   },
   "&:hover": {
-    backgroundColor: theme.palette.primary.main,
-    color: theme.palette.whiteContainer.main,
+    backgroundColor:
+      theme.palette.mode === "dark"
+        ? alpha(theme.palette.primary.main, 0.22)
+        : alpha(theme.palette.primary.main, 0.12),
+    borderColor: alpha(theme.palette.primary.main, 0.55),
+    color: theme.palette.text.primary,
+    boxShadow: `0px 10px 24px ${alpha(theme.palette.primary.main, 0.18)}`,
     ".text": {
-      color: theme.palette.whiteContainer.main,
+      color: theme.palette.text.secondary,
     },
     ".arrow": {
-      color: theme.palette.whiteContainer.main,
+      color: theme.palette.primary.main,
     },
   },
 }));

@@ -128,7 +128,7 @@ export const CardWrapper = styled(Card)(
         theme.palette.mode !== "dark"
           ? ` 0px 10px 20px 0px ${alpha(theme.palette.neutral[1000], 0.1)}`
           : "0px 10px 20px 0px rgba(88, 110, 125, 0.10)",
-      img: {
+      "img:not(.preserve-artwork-image)": {
         transform: "scale(1.05)",
       },
     },
@@ -255,6 +255,8 @@ const ProductCard = (props) => {
   const classes = textWithEllipsis();
   const { t } = useTranslation();
   const p_off = t("%");
+  const shouldPreserveProductArtwork =
+    (item?.module?.module_type || getCurrentModuleType()) !== ModuleTypes.FOOD;
   const { wishLists } = useSelector((state) => state.wishList);
   const [isWishlisted, setIsWishlisted] = useState(false);
   const { mutate: addFavoriteMutation } = useAddToWishlist();
@@ -1223,6 +1225,14 @@ const ProductCard = (props) => {
               <CustomCardMedia
                 horizontalcard={horizontalcard}
                 loveItem={loveItem}
+                sx={{
+                  backgroundColor: shouldPreserveProductArtwork
+                    ? alpha(
+                        theme.palette.neutral[400],
+                        theme.palette.mode === "dark" ? 0.12 : 0.06
+                      )
+                    : undefined,
+                }}
               >
                 {item?.module?.module_type === "pharmacy" && (
                   <Stack
@@ -1254,8 +1264,13 @@ const ProductCard = (props) => {
                   alt={item?.title}
                   height={horizontalcard ? "144" : "212"}
                   width={horizontalcard ? "131" : "195"}
-                  objectFit="cover"
+                  objectFit={shouldPreserveProductArtwork ? "contain" : "cover"}
                   borderRadius="3px"
+                  className={
+                    shouldPreserveProductArtwork
+                      ? "preserve-artwork-image"
+                      : undefined
+                  }
                 />
                 {item?.module?.module_type === "food" && (
                   <ProductsUnavailable product={item} />

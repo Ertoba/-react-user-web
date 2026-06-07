@@ -100,6 +100,8 @@ const SpecialCard = (props) => {
   const theme = useTheme()
   const isSmall = useMediaQuery(theme.breakpoints.down("md"));
   const { ref: textRef, isEllipsed } = useTextEllipsis(item?.name);
+  const shouldPreserveProductArtwork =
+    (item?.module?.module_type || getCurrentModuleType()) !== ModuleTypes.FOOD;
 
   const getModuleWiseItemName = () => {
     if (getCurrentModuleType() === ModuleTypes.FOOD) {
@@ -177,7 +179,7 @@ const SpecialCard = (props) => {
         height: "100%",
         "&:hover": {
           boxShadow: "0px 4px 20px rgba(0, 0, 0, 0.15)",
-          img: {
+          "img:not(.preserve-artwork-image)": {
             transform: "scale(1.05)",
           },
         },
@@ -198,6 +200,9 @@ const SpecialCard = (props) => {
         {<OrganicTag status={item?.organic} top="40px" />}
         {handleBadge()}
         <Box borderRadius="8px" overflow="hidden" height="100%" sx={{
+          backgroundColor: shouldPreserveProductArtwork
+            ? theme.palette.neutral[200]
+            : "transparent",
           img: {
             width: "100%",
             height: "100%",
@@ -208,7 +213,10 @@ const SpecialCard = (props) => {
             height={isSmall ? 140 : 180}
             alt={item?.name}
             width={210}
-            objectFit="cover"
+            objectFit={shouldPreserveProductArtwork ? "contain" : "cover"}
+            className={
+              shouldPreserveProductArtwork ? "preserve-artwork-image" : undefined
+            }
           />
         </Box>
         {item?.halal_tag_status && item?.is_halal ? (

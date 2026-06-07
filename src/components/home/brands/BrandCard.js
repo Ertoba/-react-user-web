@@ -1,6 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
 import { useTheme } from "@emotion/react";
-import { Typography, useMediaQuery } from "@mui/material";
+import { alpha, Typography, useMediaQuery } from "@mui/material";
 import { Box, Stack } from "@mui/system";
 import { t } from "i18next";
 import Link from "next/link";
@@ -38,14 +38,27 @@ const BrandCard = (props) => {
 				<Link href={`/search?brand_id=${id}&data_type=brand`} />
 				<Stack
 					sx={{
-						maxWidth: horizontal
-							? { xs: "200px" }
-							: { xs: "45px", md: "60px", lg: "70px" },
+						width: horizontal
+							? { xs: "124px", md: "132px" }
+							: { xs: "58px", md: "70px", lg: "78px" },
+						height: horizontal
+							? { xs: "124px", md: "132px" }
+							: { xs: "58px", md: "70px", lg: "78px" },
 						marginBottom: horizontal ? "10px" : "0",
+						flexShrink: 0,
+						alignItems: "center",
+						justifyContent: "center",
+						padding: horizontal ? "10px" : "6px",
+						borderRadius: horizontal ? "16px" : "12px",
+						backgroundColor: theme.palette.background.paper,
+						border: `1px solid ${alpha(theme.palette.neutral[400], theme.palette.mode === "dark" ? 0.35 : 0.22)}`,
+						boxShadow: `0 8px 18px ${alpha(theme.palette.neutral[1000], theme.palette.mode === "dark" ? 0.18 : 0.06)}`,
+						overflow: "hidden",
 						img: {
 							maxWidth: "100%",
 							transition: "all ease .3s",
-							height: "unset",
+							height: "100%",
+							width: "100%",
 							objectFit: "contain",
 							aspectRatio: "1",
 						},

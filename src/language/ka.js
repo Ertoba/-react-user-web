@@ -724,6 +724,7 @@ export const georgian = {
   "Need to order same medicine? don’t worry just click here": "გსურთ იგივე მედიკამენტის შეკვეთა? დააჭირეთ აქ",
   "New": "ახალი",
   "New Arrival": "ახალი ჩამოსვლა",
+  "New Arrivals": "ახლად დამატებული პროდუქტები",
   "New Arrival Restaurants": "ახალი რესტორნები",
   "New Arrival Stores": "ახალი მაღაზიები",
   "New On": "ახალი ზე",
