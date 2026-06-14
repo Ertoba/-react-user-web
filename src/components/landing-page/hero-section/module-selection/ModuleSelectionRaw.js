@@ -93,9 +93,40 @@ const ArrowWrapper = styled(Box)(({ theme }) => ({
   color: theme.palette.primary.main,
   transition: "color 0.3s ease",
 }));
+
+const getDisplayCount = (count) => {
+  const value = Number(count) || 0;
+  return value > 2 ? `${value - 1}+` : `${value}`;
+};
+
+const getModuleSummary = (item, t) => {
+  const moduleType = item?.module_type;
+  const moduleSlug = String(item?.slug || "").trim().toLowerCase();
+  const moduleName = String(item?.module_name || "").trim().toLowerCase();
+
+  if (moduleType === "parcel") return "";
+
+  if (moduleType === "ecommerce") {
+    return `${getDisplayCount(item?.items_count)} ${t("Product")}`;
+  }
+
+  const storeCount = getDisplayCount(item?.stores_count);
+
+  if (moduleType === "grocery") return `${storeCount} მარკეტი`;
+  if (moduleType === "pharmacy") return `${storeCount} აფთიაქი`;
+  if (moduleType === "food" && (moduleSlug === "ludi" || moduleName === "ლუდი")) {
+    return `${storeCount} ბარი`;
+  }
+  if (moduleType === "food") return `${storeCount} რესტორანი`;
+  if (moduleType === "rental") return `${storeCount} ${t("Providers")}`;
+
+  return `${storeCount} ${t("Stores")}`;
+};
+
 const Card = ({ item, handleClick }) => {
   const { t } = useTranslation();
   const moduleDisplayName = getModuleDisplayName(item, t);
+  const moduleSummary = getModuleSummary(item, t);
 
   return (
     <CardWrapper onClick={() => handleClick(item)}>
@@ -130,34 +161,10 @@ const Card = ({ item, handleClick }) => {
             sx={{
               fontSize: "12px",
               minHeight: "16px", // Reserve space even when empty
-              visibility: item?.module_type === "parcel" ? "hidden" : "visible"
+              visibility: moduleSummary ? "visible" : "hidden"
             }}
           >
-            {item?.module_type !== "parcel" && (
-              <>
-                {t("Over")} {" "}
-                {item?.module_type === "ecommerce" ? (
-                  <>
-                    {item?.items_count > 2
-                      ? item?.items_count - 1
-                      : item?.items_count}
-                    {item?.items_count > 2 && "+"} {t("Items")}
-                  </>
-                ) : (
-                  <>
-                    {item?.stores_count > 2
-                      ? item?.stores_count - 1
-                      : item?.stores_count}
-                    {item?.stores_count > 2 && "+"}{" "}
-                    {item?.module_type === "food"
-                      ? t("Restaurants")
-                      : item?.module_type === "rental"
-                        ? t("Providers")
-                        : t("Stores")}
-                  </>
-                )}
-              </>
-            )}
+            {moduleSummary}
           </Typography>
         </Stack>
       </LeftSection>
