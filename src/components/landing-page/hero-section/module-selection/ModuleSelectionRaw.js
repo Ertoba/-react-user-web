@@ -20,6 +20,7 @@ import { settings } from "./sliderSettings";
 import useGetModule from "api-manage/hooks/react-query/useGetModule";
 import { setModules } from "redux/slices/configData";
 import { getModuleDisplayName } from "helper-functions/getModuleDisplayName";
+import { isBeerModule } from "helper-functions/moduleTerminology";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import NextImage from "components/NextImage";
@@ -101,8 +102,6 @@ const getDisplayCount = (count) => {
 
 const getModuleSummary = (item, t) => {
   const moduleType = item?.module_type;
-  const moduleSlug = String(item?.slug || "").trim().toLowerCase();
-  const moduleName = String(item?.module_name || "").trim().toLowerCase();
 
   if (moduleType === "parcel") return "";
 
@@ -114,8 +113,8 @@ const getModuleSummary = (item, t) => {
 
   if (moduleType === "grocery") return `${storeCount} მარკეტი`;
   if (moduleType === "pharmacy") return `${storeCount} აფთიაქი`;
-  if (moduleType === "food" && (moduleSlug === "ludi" || moduleName === "ლუდი")) {
-    return `${storeCount} ბარი`;
+  if (moduleType === "food" && isBeerModule(item)) {
+    return `${storeCount} ${t("Bars")}`;
   }
   if (moduleType === "food") return `${storeCount} რესტორანი`;
   if (moduleType === "rental") return `${storeCount} ${t("Providers")}`;

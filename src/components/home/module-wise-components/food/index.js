@@ -22,9 +22,11 @@ import VisitAgain from "../../visit-again";
 import FeaturedCategoriesWithFilter from "../ecommerce/FeaturedCategoriesWithFilter";
 import TopOffersNearMe from "components/home/top-offers-nearme";
 import RecommendedStore from "components/home/recommended-store";
+import { isBeerModule } from "helper-functions/moduleTerminology";
 
 const FoodModule = (props) => {
   const { configData } = props;
+  const beerModule = isBeerModule();
   const token = getToken();
   const [isVisited, setIsVisited] = useState(false);
   const [storeData, setStoreData] = React.useState([]);
@@ -79,7 +81,7 @@ const FoodModule = (props) => {
       </Grid>
       <Grid item xs={12}>
         <CustomContainer>
-          <RecommendedStore/>
+          <RecommendedStore title={beerModule ? "Recommended Bars" : undefined} />
         </CustomContainer>
       </Grid>
       <Grid item xs={12}>
@@ -108,12 +110,12 @@ const FoodModule = (props) => {
       </Grid>
       <Grid item xs={12}>
         <CustomContainer>
-          <SpecialFoodOffers title="Special Food Offers" />
+          <SpecialFoodOffers title={beerModule ? "Popular Beer" : "Special Food Offers"} />
         </CustomContainer>
       </Grid>
       <Grid item xs={12}>
         <CustomContainer>
-          <TopOffersNearMe title="Top offers near me" />
+          <TopOffersNearMe title={beerModule ? "Best Bar Nearby" : "Top offers near me"} />
         </CustomContainer>
       </Grid>
 

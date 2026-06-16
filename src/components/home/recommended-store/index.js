@@ -27,7 +27,7 @@ const SliderWrapper = styled(CustomBoxFullWidth)(({ theme }) => ({
   },
 }));
 
-const RecommendedStore = () => {
+const RecommendedStore = ({ title }) => {
   const slider = useRef(null);
   const [isSliderHovered, setIsSliderHovered] = useState(false);
   const {
@@ -160,7 +160,7 @@ const RecommendedStore = () => {
           {popularIsLoading ? (
             <Skeleton variant="text" width="110px" />
           ) : (
-            <H2 text={t("Recommended Store")} component="h2" />
+            <H2 text={t(title || "Recommended Store")} component="h2" />
           )}
         </CustomStackFullWidth>
         {sliderItems}

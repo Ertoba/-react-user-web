@@ -23,6 +23,7 @@ import {
   setStoreSelectedItems,
   setStoreSelectedItems2,
 } from "redux/slices/categoryIds";
+import { isBeerModule } from "helper-functions/moduleTerminology";
 
 const SearchResult = (props) => {
   const {
@@ -177,21 +178,32 @@ const SearchResult = (props) => {
     }
   };
 
+  const beerModule = isBeerModule();
+  const itemTabName =
+    beerModule
+      ? "Beer"
+      : getCurrentModuleType() === "food"
+        ? "Foods"
+        : getCurrentModuleType() === "ecommerce"
+          ? "Items"
+          : getCurrentModuleType() === "pharmacy"
+            ? "Medicines"
+            : "Groceries";
+  const storeTabName = beerModule
+    ? "Bars"
+    : getCurrentModuleType() === "food"
+      ? "Restaurants"
+      : "Stores";
   const tabs = [
     {
-      name:
-        getCurrentModuleType() === "food"
-          ? "Foods"
-          : getCurrentModuleType() === "ecommerce"
-            ? "Items"
-            : getCurrentModuleType() === "pharmacy"
-              ? "Medicines"
-              : "Groceries",
+      name: itemTabName,
       value: "items",
+      countLabel: itemTabName,
     },
     {
-      name: getCurrentModuleType() === "food" ? "Restaurants" : "Stores",
+      name: storeTabName,
       value: "stores",
+      countLabel: storeTabName,
     },
   ];
 

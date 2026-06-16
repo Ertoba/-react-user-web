@@ -14,6 +14,7 @@ import Slider from "react-slick";
 
 import { useGetPopularStoreWithoutInfiniteScroll } from "api-manage/hooks/react-query/store/useGetPopularStore";
 import { getCurrentModuleType } from "helper-functions/getCurrentModuleType";
+import { isBeerModule } from "helper-functions/moduleTerminology";
 import { getStoreRedirectURL } from "helper-functions/handleStoreRedirect";
 import { ModuleTypes } from "helper-functions/moduleTypes";
 import { setNewArrivalStores } from "redux/slices/storedData";
@@ -82,6 +83,7 @@ const NewArrivalStores = () => {
     isLoading: popularIsLoading,
   } = useGetPopularStoreWithoutInfiniteScroll({ queryKey, type: "all" });
   const dispatch = useDispatch();
+  const beerModule = isBeerModule();
   useEffect(() => {
     if (newArrivalStores.length === 0) {
       refetch();
@@ -167,7 +169,7 @@ const NewArrivalStores = () => {
                 {isLoading ? (
                   <Skeleton variant="text" width="110px" />
                 ) : (
-                  <H2 text={t("New Arrival Restaurants")} component="h2" />
+                  <H2 text={t(beerModule ? "New Arrival Bars" : "New Arrival Restaurants")} component="h2" />
                 )}
               </CustomStackFullWidth>
               <SliderWrapper
@@ -236,7 +238,7 @@ const NewArrivalStores = () => {
                 {isLoading ? (
                   <Skeleton variant="text" width="110px" />
                 ) : (
-                  <H2 text={t("Best Store Nearby")} component="h2" />
+                  <H2 text={t(beerModule ? "Best Bar Nearby" : "Best Store Nearby")} component="h2" />
                 )}
                 <Menus
                   selectedMenuIndex={selectedMenuIndex}

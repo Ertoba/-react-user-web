@@ -16,6 +16,7 @@ import Radio from '@mui/material/Radio'
 import EmptyBoxSvg from "components/chat/EmptyBoxSvg";
 import EmptySearchResults from "components/EmptySearchResults";
 import { getModule } from "helper-functions/getLanguage";
+import { isBeerModule } from "helper-functions/moduleTerminology";
 export const CustomChip = styled(Chip)(({ theme, query, value, isSticky, color }) => ({
   padding: '10px 10px',
   alignItems: 'center',
@@ -53,6 +54,8 @@ const StoreList = ({ storeType, type, setType, data, sortby, setSortby, searchKe
   const { configData } = useSelector((state) => state.configData);
   const store_image_url = `${configData?.base_urls?.store_image_url}`;
   const [anchorEl, setAnchorEl] = useState(null)
+  const selectedOrCachedModule = selectedModule || getModule();
+  const beerModule = isBeerModule(selectedOrCachedModule);
 
   const iconColor = theme.palette.neutral[1000]
   const handlePopOverOpen = (event) => {
@@ -88,7 +91,7 @@ const StoreList = ({ storeType, type, setType, data, sortby, setSortby, searchKe
         justifyContent="flex-start"
       // alignItems="center"
       >
-        {selectedModule?.module_type === "food" && storeType !== 'top_offer_near_me' && (
+        {selectedModule?.module_type === "food" && !beerModule && storeType !== 'top_offer_near_me' && (
           <Grid item xs={12} sm={12} md={12} align="center">
             <CustomStackFullWidth alignItems="center" justifyContent="center">
               <GroupButtons setType={setType} type={type} />
@@ -115,7 +118,7 @@ const StoreList = ({ storeType, type, setType, data, sortby, setSortby, searchKe
                   </Box>}
                   onClick={(event) => handlePopOverOpen(event)}
                 />
-                {getModule()?.module_type === "food" && <>
+                {getModule()?.module_type === "food" && !beerModule && <>
                   <CustomChip
                     variant="outlined"
                     value={type === 'halal'}
@@ -141,7 +144,7 @@ const StoreList = ({ storeType, type, setType, data, sortby, setSortby, searchKe
               </Stack>
               <Stack width="100%" marginTop={{ xs: "1rem", sm: "1rem", md: "0rem" }}>
                 <CustomSearch
-                  label={t("Search for stores...")}
+                  label={t(beerModule ? "Search for bars..." : "Search for stores...")}
                   selectedValue={searchKey}
                   handleSearchResult={handleSearchResult}
                   type2
@@ -161,7 +164,7 @@ const StoreList = ({ storeType, type, setType, data, sortby, setSortby, searchKe
           })
         ) : (
           <Grid item xs={12} display="flex" justifyContent="center" alignItems="center">
-            <EmptySearchResults text="Stores not found!" />
+            <EmptySearchResults text={beerModule ? "Bars not found!" : "Stores not found!"} />
           </Grid>
         )}
       </Grid>

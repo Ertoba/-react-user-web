@@ -6,6 +6,7 @@ import SearchSuggestionsBottom from "../../search/SearchSuggestionsBottom";
 import { t } from "i18next";
 import { getCurrentModuleType } from "helper-functions/getCurrentModuleType";
 import { ModuleTypes } from "helper-functions/moduleTypes";
+import { isBeerModule } from "helper-functions/moduleTerminology";
 import { alpha } from "@mui/material";
 import useGetItemOrStore from "../../../api-manage/hooks/react-query/search/useGetItemOrStore";
 import { removeSpecialCharacters } from "utils/CustomFunctions";
@@ -166,7 +167,7 @@ const ManageSearch = ({
       return (
        
           <CustomSearch
-            label={t("Search foods and restaurants...")}
+            label={t(isBeerModule() ? "Search beer or bar..." : "Search foods and restaurants...")}
             handleSearchResult={handleKeyPress}
             selectedValue={searchQuery}
             setIsEmpty={setIsEmpty}

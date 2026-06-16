@@ -1,14 +1,5 @@
-import { t } from "i18next";
-import { getCurrentModuleType } from "helper-functions/getCurrentModuleType";
+import { getItemTerminology } from "helper-functions/moduleTerminology";
 
 export const getItemsOrFoods = () => {
-  const moduleType = getCurrentModuleType();
-
-  if (moduleType === "food") {
-    return t("foods");
-  } else if (moduleType === "rental") {
-    return t("Vehicles");
-  } else {
-    return t("items");
-  }
+  return getItemTerminology();
 };

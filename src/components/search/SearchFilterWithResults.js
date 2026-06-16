@@ -19,6 +19,7 @@ import { Stack } from "@mui/system";
 import FilterWithSideDrawer from "./FilterWithSideDrawer";
 import ProductCardShimmer from "./ProductCardShimmer";
 import CustomShimmerForBestFood from "./ProductCardShimmer";
+import { isBeerModule } from "helper-functions/moduleTerminology";
 
 const SearchFilterWithResults = ({
 	isNetworkCalling,
@@ -40,6 +41,7 @@ const SearchFilterWithResults = ({
 	const moduleId = JSON.parse(window.localStorage.getItem("module"))?.id;
 	const matches = useMediaQuery("(max-width:1100px)");
 	const matchesXs = useMediaQuery("(max-width:480px)");
+	const beerModule = isBeerModule();
 	return (
 		<CustomStackFullWidth spacing={1}>
 			{isNetworkCalling ? (
@@ -90,7 +92,7 @@ const SearchFilterWithResults = ({
 
 								{pageData?.products?.length === 0 && (
 									<CustomEmptyResult
-										label="No Items found"
+										label={beerModule ? "Beer not found!" : "No Items found"}
 										image={noData}
 									/>
 								)}
@@ -117,7 +119,7 @@ const SearchFilterWithResults = ({
 
 								{pageData?.stores?.length === 0 && (
 									<CustomEmptyResult
-										label="No store found"
+										label={beerModule ? "Bars not found!" : "No store found"}
 										image={noData}
 									/>
 								)}

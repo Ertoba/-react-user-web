@@ -7,20 +7,26 @@ import useGetSearch from "../../api-manage/hooks/react-query/search/useGetSearch
 import { useSelector } from "react-redux";
 import { getFilterChoices } from "./getFilterChoices";
 import SEO from "../seo";
+import {
+	getItemTerminologyKey,
+	getStoreTerminologyKey,
+} from "helper-functions/moduleTerminology";
 
-const tabsData = [
-	{
-		title: "Items",
-		value: "items",
-	},
-	{
-		title: "Stores",
-		value: "stores",
-	},
-];
 const ProductSearchPage = ({ configData }) => {
 	const router = useRouter();
-	const [currentTab, setCurrentTab] = useState(tabsData[0].value);
+	const tabsData = [
+		{
+			title: getItemTerminologyKey(),
+			value: "items",
+			countLabel: getItemTerminologyKey(),
+		},
+		{
+			title: getStoreTerminologyKey(),
+			value: "stores",
+			countLabel: getStoreTerminologyKey(),
+		},
+	];
+	const [currentTab, setCurrentTab] = useState("items");
 	const [searchValue, setSearchValue] = useState("");
 	const [page_limit, setPageLimit] = useState(50);
 	const [offset, setOffset] = useState(1);

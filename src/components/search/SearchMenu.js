@@ -80,7 +80,8 @@ const SearchMenu = (props) => {
 	}, []);
 	const found = t("Found");
 	const textHandler = () => {
-		return `${totalDataCount ?? 0} ${tabs[currentTab]?.value} ${found}`;
+		const label = t(tabs[currentTab]?.countLabel || tabs[currentTab]?.value || "");
+		return `${totalDataCount ?? 0} ${label} ${found}`;
 	};
 
 	return (

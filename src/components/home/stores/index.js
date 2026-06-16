@@ -27,6 +27,7 @@ import { useSelector } from "react-redux";
 import CustomPopover from "../../CustomPopover";
 import AllStores from "./AllStores";
 import MobileMenus from "./MobileMenus";
+import { getStoresOrRestaurants } from "helper-functions/getStoresOrRestaurants";
 
 const menus = [
   { label: t("All"), value: "all" },
@@ -116,7 +117,7 @@ const Stores = (props) => {
   const { configData } = useSelector((state) => state.configData);
   const theme = useTheme();
   const isSmall = useMediaQuery(theme.breakpoints.down("md"));
-  const stores = t("Stores");
+  const stores = getStoresOrRestaurants();
   const handleSelectedMenuIndex = (value) => {
     setSelectedMenuIndex(value);
   };

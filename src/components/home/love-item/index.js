@@ -5,6 +5,7 @@ import { useTranslation } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
 import Slider from "react-slick";
 import { setYouWillLoveItems } from "redux/slices/storedData";
+import { isBeerModule } from "helper-functions/moduleTerminology";
 import "slick-carousel/slick/slick-theme.css";
 import "slick-carousel/slick/slick.css";
 import {
@@ -24,6 +25,7 @@ const LoveItem = (props) => {
   const [filteredData, setFilteredData] = useState([]);
   const [reRender, setReRender] = useState(false);
   const { t } = useTranslation();
+  const beerModule = isBeerModule();
   const theme = useTheme();
   const isSmall = useMediaQuery(theme.breakpoints.down("md"));
   const params = {
@@ -107,7 +109,10 @@ const LoveItem = (props) => {
             ) : (
                 <>
                   {data?.items?.length > 0 && (
-                      <H2 text="Item That You’ll Love" component="h2" />
+                      <H2
+                          text={beerModule ? t("Beer for you !") : "Item That You’ll Love"}
+                          component="h2"
+                      />
                   )}
                 </>
             )}

@@ -10,6 +10,7 @@ import StoreCard from "../cards/StoreCard";
 import EmptySearchResults from "../EmptySearchResults";
 import AppliedFilters from "./AppliedFilters";
 import DotSpin from "components/DotSpin";
+import { isBeerModule } from "helper-functions/moduleTerminology";
 
 // eslint-disable-next-line react/display-name
 const SideBarWithData = forwardRef((props, ref) => {
@@ -132,13 +133,14 @@ const SideBarWithData = forwardRef((props, ref) => {
   };
 
   const emptyHandler = () => {
+    const beerModule = isBeerModule();
     if (currentTab === 0) {
       if (!isFetchingNextPage && pageData?.pages[0]?.products?.length === 0) {
-        return <EmptySearchResults text="Items not found!" />;
+        return <EmptySearchResults text={beerModule ? "Beer not found!" : "Items not found!"} />;
       }
     } else {
       if (!isFetchingNextPage && pageData?.pages[0]?.stores?.length === 0) {
-        return <EmptySearchResults text="Stores not found!" />;
+        return <EmptySearchResults text={beerModule ? "Bars not found!" : "Stores not found!"} />;
       }
     }
   };
