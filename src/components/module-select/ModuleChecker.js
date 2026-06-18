@@ -3,10 +3,32 @@ import { useRouter } from "next/router";
 import { useDispatch } from "react-redux";
 import { setSelectedModule } from "redux/slices/utils";
 import useGetModule from "api-manage/hooks/react-query/useGetModule";
-import { getCurrentModuleId } from "helper-functions/getCurrentModuleType";
 import toast from "react-hot-toast";
 import { setModules } from "redux/slices/configData";
 import { getSavedModuleIdentifier, saveModuleParam } from "../../utils/moduleParamManager";
+
+const getQueryValue = (value) => (Array.isArray(value) ? value[0] : value);
+
+const getRouteModuleIdentifier = (router) =>
+  getQueryValue(router.query.module || router.query.module_id);
+
+const getStoredModule = () => {
+  if (typeof window === "undefined") return null;
+  try {
+    return JSON.parse(localStorage.getItem("module") || "null");
+  } catch {
+    return null;
+  }
+};
+
+const moduleMatchesIdentifier = (moduleItem, identifier) => {
+  if (!moduleItem || !identifier) return false;
+  const identifierString = String(identifier);
+  return (
+    String(moduleItem?.slug) === identifierString ||
+    String(moduleItem?.id) === identifierString
+  );
+};
 
 const ModuleChecker = () => {
   const router = useRouter();
@@ -22,13 +44,14 @@ const ModuleChecker = () => {
   useEffect(() => {
     if (!router.isReady || typeof window === "undefined") return;
 
-    const moduleFromUrl = router.query.module;
-    const legacyModuleId = router.query.module_id;
+    const moduleFromUrl = getQueryValue(router.query.module);
+    const legacyModuleId = getQueryValue(router.query.module_id);
+    const storedModule = getStoredModule();
 
     const storedIdentifier =
       getSavedModuleIdentifier() ||
-      JSON.parse(localStorage.getItem("module") || "null")?.slug ||
-      JSON.parse(localStorage.getItem("module") || "null")?.id;
+      storedModule?.slug ||
+      storedModule?.id;
 
     const identifierToUse = moduleFromUrl || legacyModuleId || storedIdentifier;
 
@@ -50,19 +73,28 @@ const ModuleChecker = () => {
 
   // Sync URL -> Storage
   useEffect(() => {
-    const moduleIdFromUrl = router.query.module || router.query.module_id;
-    const moduleIdFromStorage = getCurrentModuleId();
+    if (!router.isReady || typeof window === "undefined") return;
 
-    if (moduleIdFromUrl && !moduleIdFromStorage) {
+    const moduleIdFromUrl = getRouteModuleIdentifier(router);
+    const storedModule = getStoredModule();
+
+    if (moduleIdFromUrl && !moduleMatchesIdentifier(storedModule, moduleIdFromUrl)) {
       refetch();
     }
-  }, [router.query.module, router.query.module_id, refetch]);
+  }, [router.isReady, router.query.module, router.query.module_id, refetch]);
 
   useEffect(() => {
-    const moduleIdFromUrl = router.query.module || router.query.module_id;
-    const moduleIdFromStorage = getCurrentModuleId();
+    if (!router.isReady || typeof window === "undefined") return;
+
+    const moduleIdFromUrl = getRouteModuleIdentifier(router);
+    const storedModule = getStoredModule();
    
-    if (data && moduleIdFromUrl && !moduleIdFromStorage) {
+    if (
+      Array.isArray(data) &&
+      data.length > 0 &&
+      moduleIdFromUrl &&
+      !moduleMatchesIdentifier(storedModule, moduleIdFromUrl)
+    ) {
       const moduleIdStr = String(moduleIdFromUrl);
       const selectedModule = data.find(
         (item) =>
@@ -78,11 +110,11 @@ const ModuleChecker = () => {
         router.replace(
           { pathname: "/", query: {} },
           undefined,
-          { shallow: true }
+          { shallow: false }
         );
       }
     }
-  }, [data, router.query.module, router.query.module_id, dispatch]);
+  }, [data, router.isReady, router.query.module, router.query.module_id, dispatch, router]);
 
   return null;
 };

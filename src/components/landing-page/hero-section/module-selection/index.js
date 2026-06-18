@@ -11,7 +11,7 @@ import {
   useTheme,
 } from "@mui/material";
 import { useRouter } from "next/router";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
 import useGetModule from "../../../../api-manage/hooks/react-query/useGetModule";
@@ -39,6 +39,7 @@ import useDeleteAllCarts from "api-manage/hooks/react-query/useDeleteAllCarts";
 import toast from "react-hot-toast";
 import { getModuleId } from "helper-functions/getModuleId";
 import { getModuleDisplayName } from "helper-functions/getModuleDisplayName";
+import { saveModuleParam } from "../../../../utils/moduleParamManager";
 
 export const CustomPaper = styled(Paper)(({ theme }) => ({
   //minWidth: "500px",
@@ -112,6 +113,8 @@ export const ModuleSelection = ({
 }) => {
   const router = useRouter();
   const [openModal, setOpenModal] = useState(true);
+  const [isChangingModule, setIsChangingModule] = useState(false);
+  const pendingModuleRef = useRef(null);
   const { configData } = useSelector((state) => state.configData);
   const { cartList } = useSelector((state) => state.cart);
   const { selectedModule } = useSelector((state) => state.utilsData);
@@ -124,10 +127,28 @@ export const ModuleSelection = ({
   const pushHomeWithModule = (module) => {
     const moduleId = module?.slug || module?.id || getModuleId();
     if (moduleId) {
-      router.push({ pathname: "/home", query: { module: `${moduleId}` } });
-      return;
+      return router.replace(
+        { pathname: "/home", query: { module: `${moduleId}` } },
+        undefined,
+        { shallow: false, scroll: true }
+      );
     }
-    router.push("/home");
+    return router.replace("/home", undefined, { shallow: false, scroll: true });
+  };
+  const completeModuleChange = async (module, closeValue = module) => {
+    try {
+      await pushHomeWithModule(module);
+      if (module) {
+        dispatch(setSelectedModule(module));
+      }
+      setOpenModal(false);
+      closeModal?.(closeValue);
+    } catch (error) {
+      toast.error(t("Selected module is not available"));
+    } finally {
+      pendingModuleRef.current = null;
+      setIsChangingModule(false);
+    }
   };
   const cartListSuccessHandler = (res) => {
     if (res) {
@@ -147,9 +168,8 @@ export const ModuleSelection = ({
       }));
       dispatch(setCartList(tempCartLists));
     }
-    pushHomeWithModule();
-    setOpenModal(false);
-    closeModal?.();
+    const moduleToSelect = pendingModuleRef.current || selectedModule;
+    completeModuleChange(moduleToSelect);
   };
 
   const {
@@ -160,9 +180,8 @@ export const ModuleSelection = ({
 
   const bookingSuccess = (res) => {
     dispatch(setCartList(res));
-    pushHomeWithModule();
-    setOpenModal(false);
-    closeModal?.(selectedModule);
+    const moduleToSelect = pendingModuleRef.current || selectedModule;
+    completeModuleChange(moduleToSelect, moduleToSelect);
   };
   const {
     data: bookingLists,
@@ -187,42 +206,44 @@ export const ModuleSelection = ({
   };
 
   const handleItemOnClick = (item) => {
+    if (isChangingModule) return;
+    pendingModuleRef.current = item;
+    setIsChangingModule(true);
     localStorage.setItem("module", JSON.stringify(item));
-    dispatch(setSelectedModule(item));
+    saveModuleParam(item?.id, item?.slug);
     if (cartList?.carts?.length > 0 && item?.module_type === "rental") {
       const pickupZoneIds = cartList?.carts[0]?.provider?.pickup_zone_id;
       const targetZoneIds = Array.isArray(zoneId) ? zoneId : JSON.parse(zoneId);
       const inZone = targetZoneIds.some(id => pickupZoneIds?.includes(id.toString()));
       if (inZone) {
         toast.success(t("Location set successfully"));
-        pushHomeWithModule(item);
-        setOpenModal(false);
-        closeModal?.(item);
+        completeModuleChange(item);
       } else {
         mutate(null, {
           onSuccess: (res) => {
             dispatch(setCartList(res));
             toast.error(t("Your cart has been cleared as the selected zone does not support the previous pickup point."));
-            pushHomeWithModule(item);
-            setOpenModal(false);
-            closeModal?.();
+            completeModuleChange(item);
           },
           onError: (error) => {
+            pendingModuleRef.current = null;
+            setIsChangingModule(false);
             toast.error(error.response.data.message);
           }
         })
       }
     } else {
-      pushHomeWithModule(item);
-      setOpenModal(false);
-      closeModal?.(item);
+      completeModuleChange(item);
     }
   };
   const handleSingleModule = (data) => {
-    dispatch(setSelectedModule(data));
+    if (isChangingModule) return;
+    pendingModuleRef.current = data;
+    setIsChangingModule(true);
     localStorage.setItem("module", JSON.stringify(data));
+    saveModuleParam(data?.id, data?.slug);
     setOpenModuleSelection?.(false);
-    pushHomeWithModule(data);
+    completeModuleChange(data);
   };
   let currentZoneIds = undefined;
   if (typeof window !== "undefined") {

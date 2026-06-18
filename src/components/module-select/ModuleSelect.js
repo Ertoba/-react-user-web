@@ -1,12 +1,11 @@
 import { Skeleton, styled, Tooltip } from "@mui/material";
 import { Box, Stack } from "@mui/system";
 import React from "react";
-import { setSelectedModule } from "redux/slices/utils";
 import CustomImageContainer from "../CustomImageContainer";
 import { useSelector } from "react-redux";
 import { useRouter } from "next/router";
 import { setFeaturedCategories, setRecommendedStores } from "redux/slices/storedData";
-import { saveModuleParam, getModuleIdentifier } from "../../utils/moduleParamManager";
+import { getModuleIdentifier } from "../../utils/moduleParamManager";
 import { filterOutRiderShareModules } from "helper-functions/moduleFilter";
 
 const Container = styled(Stack)(({ theme }) => ({
@@ -93,16 +92,13 @@ const ModuleSelect = ({
   const handleModuleSelect = (item) => {
     dispatch(setFeaturedCategories([]));
     dispatch(setRecommendedStores([]))
-    dispatch(setSelectedModule(item));
-    moduleSelectHandler(item);
 
     // Get module identifier (slug if available, otherwise id)
     const moduleIdentifier = getModuleIdentifier(item);
 
-    // Save selected module to localStorage and cookie
-    saveModuleParam(item?.id, item?.slug);
-
-    const { module_id: legacyModuleId, ...restQuery } = router.query;
+    const restQuery = { ...router.query };
+    delete restQuery.module_id;
+    delete restQuery.search;
     const nextQuery = { ...restQuery, module: moduleIdentifier };
     const isModuleExist = existingModuleId?.includes(item?.id);
     if (
@@ -110,16 +106,10 @@ const ModuleSelect = ({
       !isModuleExist &&
       item.module_type !== "parcel" && item?.module !== "rental"
     ) {
-      router.push({ pathname: "/interest", query: nextQuery }, undefined, {
-        shallow: true,
-      });
+      moduleSelectHandler(item, { pathname: "/interest", query: nextQuery });
       return;
     }
-    router.replace(
-      { pathname: router.pathname, query: nextQuery },
-      undefined,
-      { shallow: true }
-    );
+    moduleSelectHandler(item);
   };
   console.log({ existingModuleId });
 

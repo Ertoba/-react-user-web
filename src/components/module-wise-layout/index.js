@@ -43,27 +43,26 @@ const ModuleWiseLayout = ({ configData, landingPageData }) => {
 		setRerender((prevState) => !prevState);
 	};
 
-	const moduleSelectHandler = async (item) => {
+	const moduleSelectHandler = async (item, targetRoute) => {
 		const moduleIdentifier = getModuleIdentifier(item);
+		if (!moduleIdentifier) return;
 		
 		// Save module to localStorage and cookie
 		saveModuleParam(item?.id, item?.slug);
 		
-		const { module_id: legacyModuleId, ...restQuery } = router.query;
-		const nextQuery = { ...restQuery, module: moduleIdentifier };
-		if (router.query.search) {
-			const { search, ...restQuery } = nextQuery;
-			await router.replace({ pathname: "/home", query: restQuery });
-		}
+		const restQuery = { ...router.query };
+		delete restQuery.module_id;
+		delete restQuery.search;
+		const nextRoute = targetRoute || {
+			pathname: "/home",
+			query: { ...restQuery, module: moduleIdentifier },
+		};
 		localStorage.setItem("module", JSON.stringify(item));
+		await router.replace(nextRoute, undefined, {
+			shallow: false,
+			scroll: true,
+		});
 		dispatch(setSelectedModule(item));
-		if (!router.query.search) {
-			router.replace(
-				{ pathname: router.pathname, query: nextQuery },
-				undefined,
-				{ shallow: true }
-			);
-		}
 	};
 
 	return (
