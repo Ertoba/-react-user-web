@@ -17,12 +17,22 @@ export const handleTokenExpire = (item, status) => {
 };
 
 export const onErrorResponse = (error) => {
+  if (error?.response?.status === 401) {
+    handleTokenExpire(error, error?.response?.status);
+    return;
+  }
+
   error?.response?.data?.errors?.forEach((item) => {
-    handleTokenExpire(item);
+    handleTokenExpire(item, error?.response?.status);
   });
 };
 export const onSingleErrorResponse = (error) => {
-  toast.error(t(error?.response?.data?.message), {
+  const message =
+    error?.response?.data?.message ||
+    error?.response?.data?.errors?.[0]?.message ||
+    error?.message;
+
+  toast.error(t(message), {
     id: "error",
   });
   handleTokenExpire(error, error?.response?.status);

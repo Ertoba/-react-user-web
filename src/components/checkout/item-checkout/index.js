@@ -147,6 +147,7 @@ const ItemCheckout = (props) => {
 	const [paymentMethodImage, setPaymentMethodImage] = useState("");
 	const isInitialCartRender = useRef(true);
 	const previousCartListRef = useRef(cartList);
+	const taxErrorToastRef = useRef(false);
 	const [changeAmount, setChangeAmount] = useState();
 	const [state, customDispatch] = useReducer(scheduleReducer, INITIAL_STATE);
 	const { profileInfo } = useSelector((state) => state.profileInfo);
@@ -188,6 +189,14 @@ const ItemCheckout = (props) => {
 		isLoading: offlineIsLoading,
 	} = useGetOfflinePaymentOptions();
 	const { mutate: taxMutate, data } = useGetTax();
+	const taxFallbackData = useMemo(
+		() => ({
+			tax_amount: Number(taxAmount) || 0,
+			tax_included: 0,
+			tax_status: "excluded",
+		}),
+		[taxAmount]
+	);
 
 	const passwordHandler = (value) => {
 		formik.setFieldValue("password", value);
@@ -306,6 +315,24 @@ const ItemCheckout = (props) => {
 		);
 		setTotalOrderAmount(total_order_amount);
 	}, [cartList, couponDiscount, taxAmount]);
+
+	const handleTaxMutationError = (error) => {
+		if (taxErrorToastRef.current) return;
+
+		if (error?.response?.status === 401) {
+			onErrorResponse(error);
+			taxErrorToastRef.current = true;
+			return;
+		}
+
+		const message =
+			error?.response?.data?.errors?.[0]?.message ||
+			error?.response?.data?.message ||
+			"Unable to calculate tax right now.";
+
+		toast.error(t(message), { id: "tax-error" });
+		taxErrorToastRef.current = true;
+	};
 
 	const handleOffineOrder = async (data) => {
 		const offlinePaymentData = {
@@ -529,7 +556,10 @@ const ItemCheckout = (props) => {
 			const carts = handleProductList(productList, totalQty);
 			const orderObject = handleOrderMutationObject(carts, productList);
 			taxMutate(orderObject, {
-				// onError: onErrorResponse,
+				onSuccess: () => {
+					taxErrorToastRef.current = false;
+				},
+				onError: handleTaxMutationError,
 			});
 		}
 	}, [cartList, campaignItemList, couponDiscount, storeData]);
@@ -1222,7 +1252,7 @@ const ItemCheckout = (props) => {
 										cartList={page === "campaign" ? campaignItemList : cartList}
 										storeData={storeData}
 										couponDiscount={couponDiscount}
-										taxAmount={data}
+										taxAmount={data ?? taxFallbackData}
 										distanceData={distanceData}
 										total_order_amount={total_order_amount}
 										configData={configData}
