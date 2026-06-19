@@ -145,7 +145,7 @@ const StoreRegistration = () => {
   return (
     <NoSsr>
       <CustomContainer>
-        <CustomStackFullWidth justify="center" mt={{ xs: "1rem", md: "1rem" }}>
+        <CustomStackFullWidth justify="center" mt={{ xs: ".5rem", md: "1rem" }}>
           <Typography fontSize={isSmallSize ? "18px" : "36px"} fontWeight="700" textAlign="center">
             {t("Vendor Application")}
           </Typography>

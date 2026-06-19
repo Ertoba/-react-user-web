@@ -376,7 +376,7 @@ const StoreRegistrationForm = ({ setActiveStep, setFormValues }) => {
   return (
     <CustomStackFullWidth
       sx={{
-        marginTop: "2rem",
+        marginTop: { xs: "1rem", md: "2rem" },
       }}
     >
       <form noValidate onSubmit={RestaurantJoinFormik.handleSubmit}>
@@ -393,8 +393,8 @@ const StoreRegistrationForm = ({ setActiveStep, setFormValues }) => {
             {t("Vendor Info")}
           </Typography>
 
-          <CustomStackFullWidth padding="1rem" mt=".5rem">
-            <Grid container spacing={3}>
+          <CustomStackFullWidth padding={{ xs: ".75rem", sm: "1rem" }} mt={{ xs: 0, sm: ".5rem" }}>
+            <Grid container spacing={{ xs: 2, md: 3 }}>
               <Grid item xs={12} md={6}>
                 <RestaurantDetailsForm
                   RestaurantJoinFormik={RestaurantJoinFormik}

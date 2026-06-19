@@ -14,6 +14,8 @@ const SearchWithTitle = (props) => {
   const moduleType = getCurrentModuleType();
   const { zoneid, token, searchQuery, name, query, currentTab } = props;
   const { configData } = useSelector((state) => state.configData);
+  const categoryName = Array.isArray(name) ? name[0] : name;
+  const isCategorySearch = query?.data_type === "category" && categoryName;
 
   const getBannerTexts1 = t("Get your car rental service with")
   const getBannerSubTexts = t("with affordable price.")
@@ -75,13 +77,20 @@ const SearchWithTitle = (props) => {
           variant={isSmall ? "h6" : "h5"}
           textAlign="center"
           fontWeight="600"
-          lineHeight="33.18px"
           component="h1"
 
           sx={{
-            fontSize: {
-              md: ModuleTypes.RENTAL === "rental" && "30px !important",
-            },
+            fontSize: isCategorySearch
+              ? { xs: "30px", sm: "34px", md: "38px" }
+              : {
+                  md: ModuleTypes.RENTAL === "rental" && "30px !important",
+                },
+            lineHeight: isCategorySearch
+              ? { xs: 1.28, md: 1.25 }
+              : { xs: 1.35, md: "33.18px" },
+            maxWidth: { xs: "92vw", md: "720px" },
+            overflowWrap: "break-word",
+            wordBreak: "normal",
             color:
               moduleType === ModuleTypes.PARCEL
                 ? theme.palette.common.white
@@ -94,7 +103,7 @@ const SearchWithTitle = (props) => {
               ModuleTypes.RENTAL === "rental" ? "capitalize" : "initial",
           }}
         >
-          {t(getBannerTexts().title)}
+          {isCategorySearch ? categoryName : t(getBannerTexts().title)}
         </Typography>
         <Typography
           variant={isSmall ? "subtitle2" : "subtitle1"}

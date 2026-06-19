@@ -32,7 +32,8 @@ const LangTab = (props) => {
         overflowX: "auto",
         overflowY: "hidden",
         whiteSpace: "nowrap",
-        height: "-webkit-fill-available",
+        height: "auto",
+        minHeight: "36px",
       }}
     >
       {tabs?.length > 0 &&
