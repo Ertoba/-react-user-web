@@ -47,7 +47,6 @@ const OrderCalculation = (props) => {
     origin,
     destination,
     zoneData,
-    deliveryFee,
     setDeliveryFee,
     extraCharge,
     walletBalance,
@@ -73,6 +72,33 @@ const OrderCalculation = (props) => {
   const theme = useTheme();
   let couponType = "coupon";
   const {data:surgePrice,mutate}=useGetSurgePrice()
+  const normalizedZoneData = zoneData?.data ?? zoneData;
+  const calculatedDeliveryFee = getDeliveryFees(
+    storeData,
+    configData,
+    cartList,
+    distanceData?.data,
+    couponDiscount,
+    couponType,
+    orderType,
+    normalizedZoneData,
+    origin,
+    destination,
+    tempExtraCharge,
+    surgePrice
+  );
+  const parsedDeliveryFee =
+    calculatedDeliveryFee === null ||
+    calculatedDeliveryFee === undefined ||
+    calculatedDeliveryFee === ""
+      ? null
+      : Number(calculatedDeliveryFee);
+  const resolvedDeliveryFee = Number.isFinite(parsedDeliveryFee)
+    ? parsedDeliveryFee
+    : null;
+  const isDeliveryOrder =
+    orderType === "delivery" || orderType === "schedule_order";
+
   useEffect(() => {
     if(storeData){
       const temData={
@@ -86,52 +112,44 @@ const OrderCalculation = (props) => {
       })
     }
     }, [storeData,orderType,scheduleAt]);
-  const handleDeliveryFee = () => {
-    let price = getDeliveryFees(
-      storeData,
-      configData,
-      cartList,
-      distanceData?.data,
-      couponDiscount,
-      couponType,
-      orderType,
-      zoneData,
-      origin,
-      destination,
-      tempExtraCharge,
-      surgePrice
-
-    );
-    const parsedPrice =
-      price === null || price === undefined || price === ""
-        ? Number.NaN
-        : Number(price);
-    const parsedDeliveryFee = Number(deliveryFee);
-    const resolvedPrice = Number.isFinite(parsedPrice)
-      ? parsedPrice
-      : Number.isFinite(parsedDeliveryFee)
-        ? parsedDeliveryFee
-        : 0;
-    const isDeliveryOrder =
-      orderType === "delivery" || orderType === "schedule_order";
-
-    setDeliveryFee(isDeliveryOrder ? resolvedPrice : 0);
-    if (resolvedPrice === 0) {
-      return <Typography>{t("Free")}</Typography>;
-    } else {
-      return (
-        <Stack
-          direction="row"
-          alignItems="center"
-          justifyContent="flex-end"
-          spacing={0.5}
-          width="100%"
-        >
-          <Typography>{"(+)"}</Typography>
-          <Typography>{storeData && getAmountWithSign(resolvedPrice)}</Typography>
-        </Stack>
-      );
+  useEffect(() => {
+    if (!isDeliveryOrder) {
+      setDeliveryFee(0);
+      return;
     }
+
+    if (resolvedDeliveryFee !== null) {
+      setDeliveryFee(resolvedDeliveryFee);
+    }
+  }, [isDeliveryOrder, resolvedDeliveryFee, setDeliveryFee]);
+
+  const handleDeliveryFee = () => {
+    if (!isDeliveryOrder) {
+      return <Typography>{t("Free")}</Typography>;
+    }
+
+    if (resolvedDeliveryFee === null) {
+      return <Skeleton variant="text" width="45px" />;
+    }
+
+    if (resolvedDeliveryFee === 0) {
+      return <Typography>{t("Free")}</Typography>;
+    }
+
+    return (
+      <Stack
+        direction="row"
+        alignItems="center"
+        justifyContent="flex-end"
+        spacing={0.5}
+        width="100%"
+      >
+        <Typography>{"(+)"}</Typography>
+        <Typography>
+          {storeData && getAmountWithSign(resolvedDeliveryFee)}
+        </Typography>
+      </Stack>
+    );
   };
 
   const handleCouponDiscount = () => {
@@ -171,7 +189,7 @@ const OrderCalculation = (props) => {
       orderType,
       freeDelivery,
       Number(deliveryTip),
-      zoneData,
+      normalizedZoneData,
       origin,
       destination,
       extraCharge,

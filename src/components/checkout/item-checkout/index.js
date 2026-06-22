@@ -1262,7 +1262,6 @@ const ItemCheckout = (props) => {
 										destination={address}
 										zoneData={zoneData}
 										extraCharge={extraCharge && extraCharge}
-										deliveryFee={deliveryFee}
 										setDeliveryFee={setDeliveryFee}
 										extraChargeLoading={extraChargeLoading}
 										walletBalance={customerData?.data?.wallet_balance}
