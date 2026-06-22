@@ -87,7 +87,13 @@ const DeliveryDetails = (props) => {
 					width="100%"
 					justifyContent={{ xs: "flex-start", md: "space-between" }}
 					gap={{ xs: "5px", md: "10px" }}
-					sx={{ flexWrap: { xs: "wrap", sm: "wrap", md: "nowrap" } }}
+					sx={{
+						flexWrap: { xs: "wrap", sm: "wrap", md: "nowrap" },
+						"& > .MuiButton-root": {
+							flex: "1 1 0",
+							minWidth: 0,
+						},
+					}}
 				>
 					{ isHomeDelivery && (
 						<DeliveryOptionButton
