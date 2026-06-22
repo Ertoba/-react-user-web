@@ -7,9 +7,13 @@ import SecondNavBar from "./second-navbar/SecondNavbar";
 import TopNavBar from "./top-navbar/TopNavBar";
 import useGetZoneId from "api-manage/hooks/react-query/google-api/useGetZone";
 import { useEffect, useState } from "react";
+import WebsiteTestModeBanner from "./WebsiteTestModeBanner";
 
-const HeaderComponent = () => {
-  const { configData } = useSelector((state) => state.configData);
+const HeaderComponent = ({ configData: initialConfigData }) => {
+  const { configData: runtimeConfigData } = useSelector(
+    (state) => state.configData
+  );
+  const configData = runtimeConfigData ?? initialConfigData;
 
   const theme = useTheme();
   const isSmall = useMediaQuery(theme.breakpoints.down("md"));
@@ -56,6 +60,7 @@ const HeaderComponent = () => {
           <Card sx={{ boxShadow: "none" }}>
             <TopNavBar configData={configData} />
           </Card>
+          <WebsiteTestModeBanner configData={configData} />
           <SecondNavBar configData={configData} />
         </NoSsr>
       </Box>

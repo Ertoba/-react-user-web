@@ -11,6 +11,10 @@ import HeaderComponent from "../header";
 import BottomNav from "../header/BottomNav";
 import { MainLayoutRoot } from "./LandingLayout";
 import useGetLandingPage from "api-manage/hooks/react-query/useGetLandingPage";
+import {
+	isWebsiteTestModeEnabled,
+	WEBSITE_TEST_MODE_BANNER_HEIGHT,
+} from "../header/WebsiteTestModeBanner";
 
 const MainLayout = ({ children, configData }) => {
 	const [rerenderUi, setRerenderUi] = useState(false);
@@ -55,7 +59,13 @@ const MainLayout = ({ children, configData }) => {
 	// 		}
 	// 	}
 	// }
-	const { landingPageData } = useSelector((state) => state.configData);
+	const { landingPageData, configData: runtimeConfigData } = useSelector(
+		(state) => state.configData
+	);
+	const effectiveConfigData = runtimeConfigData ?? configData;
+	const websiteTestModeOffset = isWebsiteTestModeEnabled(effectiveConfigData)
+		? `${WEBSITE_TEST_MODE_BANNER_HEIGHT}px`
+		: "0px";
 	const { data: landing, refetch: landingRefetch } = useGetLandingPage();
 	useEffect(() => {
 		if (!landingPageData) {
@@ -66,9 +76,15 @@ const MainLayout = ({ children, configData }) => {
 	return (
 		<MainLayoutRoot justifyContent="space-between" key={rerenderUi}>
 			<header>
-				<HeaderComponent />
+				<HeaderComponent configData={effectiveConfigData} />
 			</header>
-			<CustomStackFullWidth mt={isSmall ? "3.5rem" : "5.9rem"}>
+			<CustomStackFullWidth
+				mt={
+					isSmall
+						? `calc(3.5rem + ${websiteTestModeOffset})`
+						: `calc(5.9rem + ${websiteTestModeOffset})`
+				}
+			>
 				<CustomStackFullWidth sx={{ minHeight: "70vh" }}>
 					{children}
 				</CustomStackFullWidth>
