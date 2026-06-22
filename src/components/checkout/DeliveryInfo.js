@@ -77,7 +77,6 @@ const DeliveryInfo = ({
 	const [paymentMethodImage, setPaymentMethodImage] = useState("");
 	const [switchToWallet, setSwitchToWallet] = useState(false);
 	const [payableAmount, setPayableAmount] = useState(null);
-	const [changeAmount, setChangeAmount] = useState();
 	const token = getToken();
 	const { parcelInfo } = useSelector((state) => state.parcelInfoData);
 	const handleClick = () => {

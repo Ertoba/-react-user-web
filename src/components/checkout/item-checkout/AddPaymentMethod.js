@@ -58,8 +58,6 @@ const AddPaymentMethod = (props) => {
     switchToWallet,
     customerData,
     payableAmount,
-    changeAmount,
-    setChangeAmount,
   } = props;
   const [openModal, setOpenModel] = useState(false);
   const theme = useTheme();
@@ -94,8 +92,7 @@ const AddPaymentMethod = (props) => {
         isZoneDigital?.offline_payment &&
         offlinePaymentOptions?.length) ||
       usePartialPayment ||
-      switchToWallet ||
-      paymentMethod === "cash_on_delivery"
+      switchToWallet
   );
 
   const handleClick = () => {
@@ -275,8 +272,6 @@ const AddPaymentMethod = (props) => {
             switchToWallet={switchToWallet}
             customerData={customerData}
             payableAmount={payableAmount}
-            changeAmount={changeAmount}
-            setChangeAmount={setChangeAmount}
           />
         </CustomModal>
       )}

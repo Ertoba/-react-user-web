@@ -47,6 +47,7 @@ const OrderCalculation = (props) => {
     origin,
     destination,
     zoneData,
+    deliveryFee,
     setDeliveryFee,
     extraCharge,
     walletBalance,
@@ -101,10 +102,21 @@ const OrderCalculation = (props) => {
       surgePrice
 
     );
-console.log({price,zoneData});
+    const parsedPrice =
+      price === null || price === undefined || price === ""
+        ? Number.NaN
+        : Number(price);
+    const parsedDeliveryFee = Number(deliveryFee);
+    const resolvedPrice = Number.isFinite(parsedPrice)
+      ? parsedPrice
+      : Number.isFinite(parsedDeliveryFee)
+        ? parsedDeliveryFee
+        : 0;
+    const isDeliveryOrder =
+      orderType === "delivery" || orderType === "schedule_order";
 
-    setDeliveryFee(orderType !== "delivery" ? 0 : price);
-    if (price === 0) {
+    setDeliveryFee(isDeliveryOrder ? resolvedPrice : 0);
+    if (resolvedPrice === 0) {
       return <Typography>{t("Free")}</Typography>;
     } else {
       return (
@@ -116,7 +128,7 @@ console.log({price,zoneData});
           width="100%"
         >
           <Typography>{"(+)"}</Typography>
-          <Typography>{storeData && getAmountWithSign(price)}</Typography>
+          <Typography>{storeData && getAmountWithSign(resolvedPrice)}</Typography>
         </Stack>
       );
     }

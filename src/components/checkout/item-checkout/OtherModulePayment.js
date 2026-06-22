@@ -14,8 +14,6 @@ import {
   Typography,
   Box,
   IconButton,
-  Collapse,
-  TextField,
 } from "@mui/material";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import { t } from "i18next";
@@ -74,112 +72,6 @@ const OfflineButton = styled(Button)(({ theme, value, paymentMethod }) => ({
     background: theme.palette.primary.main,
   },
 }));
-export const BringChangeAmount = ({
-  changeAmount,
-  setChangeAmount,
-  theme,
-  expanded,
-  setExpanded,
-  paymentMethod,
-}) => {
-  return (
-    <Box
-      sx={{
-        borderRadius: "10px",
-        backgroundColor: theme.palette.customColor.ten,
-        width: "100%",
-        overflow: "hidden",
-      }}
-    >
-      {/* Expanded Content */}
-      <Collapse in={expanded}>
-        <Box
-          sx={{
-            padding: "16px",
-            backgroundColor:
-              theme.palette.mode === "dark"
-                ? "#46494DB3"
-                : alpha(theme.palette.neutral[300], 0.7),
-            opacity: paymentMethod === "cash_on_delivery" ? 1 : 0.4, // fade if not COD
-            pointerEvents:
-              paymentMethod === "cash_on_delivery" ? "auto" : "none", // disable if not COD
-          }}
-        >
-          <Stack
-            width="100%"
-            direction={{ xs: "column", md: "row" }}
-            justifyContent="space-between"
-            alignItems={{ xs: "flex-start", md: "center" }}
-            gap="10px"
-          >
-            <Stack>
-              <Typography
-                fontSize="12px"
-                color={theme.palette.neutral[1000]}
-                fontWeight="500"
-              >
-                {t("Bring Change Instruction")}
-              </Typography>
-              <Typography
-                fontSize="12px"
-                color={theme.palette.neutral[600]}
-                fontWeight="400"
-              >
-                {t("Insert amount if you need deliveryman to bring")}
-              </Typography>
-            </Stack>
-
-            <Stack>
-              <Typography
-                marginBottom="5px"
-                fontSize="12px"
-                color={theme.palette.neutral[1000]}
-                fontWeight="500"
-              >
-                {t("Change Amount ($)")}
-              </Typography>
-              <TextField
-                sx={{
-                  width: "100%",
-                  height: "33px",
-                  backgroundColor: theme.palette.neutral[100],
-                  borderRadius: "5px",
-                  "& .MuiInputBase-input.MuiOutlinedInput-input": {
-                    padding: "5.5px 14px",
-                  },
-                }}
-                value={changeAmount}
-                onChange={(e) => setChangeAmount(e.target.value)}
-              />
-            </Stack>
-          </Stack>
-        </Box>
-      </Collapse>
-
-      {/* Bottom Toggle Button */}
-      <Box
-        onClick={() => setExpanded(!expanded)}
-        sx={{
-          cursor: "pointer",
-          textAlign: "center",
-          py: 1,
-          backgroundColor: theme.palette.customColor.ten,
-        }}
-      >
-        <Typography
-          component="span"
-          sx={{
-            fontSize: "12px",
-            color: theme.palette.primary.main,
-            fontWeight: "600",
-          }}
-        >
-          {expanded ? t("See less") : t("See more")}
-        </Typography>
-      </Box>
-    </Box>
-  );
-};
 const OtherModulePayment = (props) => {
   const {
     paymentMethod,
@@ -200,8 +92,6 @@ const OtherModulePayment = (props) => {
     switchToWallet,
     customerData,
     payableAmount,
-    changeAmount,
-    setChangeAmount,
     failed,
     failedOrderPlace
   } = props;
@@ -212,7 +102,6 @@ const OtherModulePayment = (props) => {
   const token = getToken();
   const borderColor = theme.palette.neutral[400];
   const [openOfflineOptions, setOpenOfflineOptions] = useState(false);
-  const [expanded, setExpanded] = useState(false);
   const { offlineMethod } = useSelector((state) => state.offlinePayment);
   const [isCheckedOffline, setIsCheckedOffline] = useState(
     offlineMethod !== ""
@@ -251,13 +140,6 @@ const OtherModulePayment = (props) => {
     }
 
   };
-  useEffect(() => {
-    if (paymentMethod === "cash_on_delivery") {
-      setExpanded(true);
-    } else {
-      setExpanded(false)
-    }
-  }, [paymentMethod]);
   useEffect(() => {
     dispatch(setOfflineMethod(""));
     setIsCheckedOffline(false);
@@ -475,15 +357,6 @@ const OtherModulePayment = (props) => {
                 </Box>
               )}
             { }
-            {isZoneDigital?.cash_on_delivery && !failed &&
-              BringChangeAmount({
-                changeAmount,
-                setChangeAmount,
-                theme,
-                expanded,
-                setExpanded,
-                paymentMethod,
-              })}
           </CustomStackFullWidth>
           {isZoneDigital?.digital_payment &&
             paidBy !== "receiver" &&

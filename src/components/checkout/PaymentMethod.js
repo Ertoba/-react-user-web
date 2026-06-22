@@ -27,8 +27,6 @@ const PaymentMethod = ({
   switchToWallet,
   customerData,
   payableAmount,
-  changeAmount,
-  setChangeAmount,
   failed,
   failedOrderPlace,
   setOpen,
@@ -56,8 +54,6 @@ const PaymentMethod = ({
       ) : (
         <OtherModulePayment
           failed={ failed}
-          changeAmount={changeAmount}
-          setChangeAmount={setChangeAmount}
           setPaymentMethod={setPaymentMethod}
           paymentMethod={paymentMethod}
           zoneData={zoneData}

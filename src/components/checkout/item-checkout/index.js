@@ -148,7 +148,6 @@ const ItemCheckout = (props) => {
 	const isInitialCartRender = useRef(true);
 	const previousCartListRef = useRef(cartList);
 	const taxErrorToastRef = useRef(false);
-	const [changeAmount, setChangeAmount] = useState();
 	const [state, customDispatch] = useReducer(scheduleReducer, INITIAL_STATE);
 	const { profileInfo } = useSelector((state) => state.profileInfo);
 	const { guestUserInfo } = useSelector((state) => state.guestUserInfo);
@@ -533,7 +532,6 @@ const ItemCheckout = (props) => {
 				create_new_user: check ? 1 : 0,
 				password: formik.values.password,
 				is_guest: token ? 0 : 1,
-				bring_change_amount: changeAmount,
 			};
 		}
 	};
@@ -1132,8 +1130,6 @@ const ItemCheckout = (props) => {
 									switchToWallet={switchToWallet}
 									customerData={customerData}
 									payableAmount={payableAmount}
-									changeAmount={changeAmount}
-									setChangeAmount={setChangeAmount}
 								/>
 							)}
 
@@ -1266,6 +1262,7 @@ const ItemCheckout = (props) => {
 										destination={address}
 										zoneData={zoneData}
 										extraCharge={extraCharge && extraCharge}
+										deliveryFee={deliveryFee}
 										setDeliveryFee={setDeliveryFee}
 										extraChargeLoading={extraChargeLoading}
 										walletBalance={customerData?.data?.wallet_balance}
