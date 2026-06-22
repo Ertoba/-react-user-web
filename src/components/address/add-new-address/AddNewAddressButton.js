@@ -14,13 +14,19 @@ const AddNewAddressButton = ({
   fromModal,
   align,
   handleAddressModal,
+  singleLine,
 }) => {
   const theme = useTheme();
   const isSmall = useMediaQuery(theme.breakpoints.down("sm"));
   const dispatch = useDispatch();
 
   return (
-    <Box sx={{ marginInline: fromModal === "true" && "auto !important" }}>
+    <Box
+      sx={{
+        marginInline: fromModal === "true" && "auto !important",
+        flexShrink: singleLine ? 0 : "initial",
+      }}
+    >
       {parcel === "true" ? (
         <CustomIconButton onClick={() => dispatch(setOpenAddressModal(true))}>
           <Typography
@@ -70,7 +76,10 @@ const AddNewAddressButton = ({
                 fontWeight="600"
                 variant="contained"
                 sx={{
-                  width: { xs: "62px", sm: "inherit" },
+                  width: singleLine
+                    ? "auto"
+                    : { xs: "62px", sm: "inherit" },
+                  whiteSpace: singleLine ? "nowrap" : "normal",
                   color: (theme) => theme.palette.primary.main,
                 }}
               >

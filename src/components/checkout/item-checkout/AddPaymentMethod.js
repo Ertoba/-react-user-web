@@ -1,24 +1,32 @@
 import React, { useEffect, useState } from "react";
 import { CustomStackFullWidth } from "../../../styled-components/CustomStyles.style";
 import { Stack, styled } from "@mui/system";
-import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
-import { alpha, IconButton, Tooltip, Typography, Zoom } from "@mui/material";
+import {
+  alpha,
+  FormControl,
+  FormControlLabel,
+  IconButton,
+  Radio,
+  RadioGroup,
+  Tooltip,
+  Typography,
+  Zoom,
+} from "@mui/material";
 import { t } from "i18next";
-import InfoIcon from "@mui/icons-material/Info";
 import { DeliveryCaption } from "../CheckOut.style";
 import BorderColorIcon from "@mui/icons-material/BorderColor";
 import { useTheme } from "@emotion/react";
 import CustomModal from "../../modal";
 import PaymentMethod from "../PaymentMethod";
-import { useDispatch, useSelector } from "react-redux";
-import { setOfflineInfoStep } from "../../../redux/slices/offlinePaymentData";
+import { useDispatch } from "react-redux";
+import {
+  setOfflineInfoStep,
+  setOfflineMethod,
+} from "../../../redux/slices/offlinePaymentData";
 import CloseIcon from "@mui/icons-material/Close";
-import CustomImageContainer from "../../CustomImageContainer";
 import wallet from "../assets/wallet.png";
 import money from "../assets/money.png";
 import OfflinePaymentIcon from "../assets/OfflinePaymentIcon";
-import PaymentIcon from "@mui/icons-material/Payment";
-import { getAmountWithSign } from "helper-functions/CardHelpers";
 
 const PaymentMethodBox = styled(CustomStackFullWidth)(({ theme }) => ({
   borderRadius: "5px",
@@ -28,7 +36,6 @@ const PaymentMethodBox = styled(CustomStackFullWidth)(({ theme }) => ({
   padding: "15px",
   alignItems: "center",
   background: theme.palette.neutral[100],
-  cursor: "pointer",
 }));
 
 const AddPaymentMethod = (props) => {
@@ -55,12 +62,69 @@ const AddPaymentMethod = (props) => {
     setChangeAmount,
   } = props;
   const [openModal, setOpenModel] = useState(false);
-  const { offlineMethod } = useSelector((state) => state.offlinePayment);
-
   const theme = useTheme();
   const dispatch = useDispatch();
+  const digitalPaymentMethods = configData?.active_payment_method_list ?? [];
+  const canUseDigitalPayment = Boolean(
+    isZoneDigital?.digital_payment &&
+      configData?.digital_payment_info?.digital_payment &&
+      forprescription !== "true" &&
+      digitalPaymentMethods.length
+  );
+  const canUseCashOnDelivery = Boolean(
+    isZoneDigital?.cash_on_delivery && configData?.cash_on_delivery
+  );
+  const canUseWallet = Boolean(
+    configData?.customer_wallet_status === 1 &&
+      customerData?.data?.wallet_balance > 0
+  );
+  const primaryPaymentOptionCount = [
+    canUseDigitalPayment,
+    canUseCashOnDelivery,
+    canUseWallet,
+  ].filter(Boolean).length;
+  const selectedPrimaryPaymentMethod = digitalPaymentMethods.some(
+    (item) => item?.gateway === paymentMethod
+  )
+    ? "digital_payment"
+    : paymentMethod;
+  const hasAdditionalPaymentOptions = Boolean(
+    digitalPaymentMethods.length > 1 ||
+      (configData?.offline_payment_status === 1 &&
+        isZoneDigital?.offline_payment &&
+        offlinePaymentOptions?.length) ||
+      usePartialPayment ||
+      switchToWallet ||
+      paymentMethod === "cash_on_delivery"
+  );
+
   const handleClick = () => {
     setOpenModel(true);
+  };
+  const handlePrimaryPaymentChange = (event) => {
+    const selectedMethod = event.target.value;
+
+    dispatch(setOfflineMethod(""));
+    dispatch(setOfflineInfoStep(0));
+
+    if (selectedMethod === "digital_payment") {
+      const digitalMethod = digitalPaymentMethods[0];
+      if (!digitalMethod) return;
+
+      setPaymentMethod(digitalMethod.gateway);
+      setPaymentMethodImage(digitalMethod.gateway_image_full_url);
+      setSwitchToWallet(false);
+      return;
+    }
+
+    if (selectedMethod === "wallet") {
+      handlePartialPayment();
+      return;
+    }
+
+    setPaymentMethod("cash_on_delivery");
+    setPaymentMethodImage(money.src);
+    setSwitchToWallet(false);
   };
   useEffect(() => {
     if (paymentMethod?.match("offline_payment")) {
@@ -83,90 +147,82 @@ const AddPaymentMethod = (props) => {
       </DeliveryCaption>
       <PaymentMethodBox
         direction="row"
-        justifyContent="space-between"
-        onClick={handleClick}
-        sx={{ justifyContent: "space-between" }}
+        sx={{
+          justifyContent: "space-between",
+          gap: 1,
+          padding: { xs: "10px 12px", md: "15px" },
+        }}
       >
-        {paymentMethod || usePartialPayment ? (
-          <Stack direction="row" gap={1} alignItems="center">
-            {paymentMethod?.match("offline_payment") ? (
-              <OfflinePaymentIcon />
-            ) : (
-              <>
-                {usePartialPayment ? (
-                  <PaymentIcon style={{ width: "20px", height: "20px" }} />
-                ) : (
-                  <CustomImageContainer
-                    src={paymentMethodImage}
-                    width="auto"
-                    height="20px"
-                    alt="Payment Method Image"
-                    objectfit="contain"
-                  />
-                )}
-              </>
+        <FormControl fullWidth>
+          <RadioGroup
+            aria-labelledby="demo-row-radio-buttons-group-label"
+            value={selectedPrimaryPaymentMethod}
+            onChange={handlePrimaryPaymentChange}
+            sx={{
+              display: "grid",
+              gridTemplateColumns: {
+                xs: `repeat(${Math.max(
+                  Math.min(primaryPaymentOptionCount, 2),
+                  1
+                )}, minmax(0, 1fr))`,
+                sm: `repeat(${Math.max(
+                  primaryPaymentOptionCount,
+                  1
+                )}, minmax(0, 1fr))`,
+              },
+              width: "100%",
+            }}
+          >
+            {canUseDigitalPayment && (
+              <FormControlLabel
+                value="digital_payment"
+                control={<Radio size="small" />}
+                label={
+                  <Typography fontSize="12px" fontWeight="600" noWrap>
+                    {t("Digital Payment")}
+                  </Typography>
+                }
+                sx={{ margin: 0, minWidth: 0 }}
+              />
             )}
-            <Typography
-              fontSize="12px"
-              fontWeight="500"
-              component="span"
-              textTransform="capitalize"
-            >
-              {usePartialPayment
-                ? t("Paid By Wallet")
-                : paymentMethod === "offline_payment"
-                ? `${paymentMethod?.replaceAll("_", " ")} (${
-                    offlineMethod?.method_name
-                  })`
-                : t(paymentMethod?.replaceAll("_", " "))}{" "}
-              :{" "}
-              <Typography component="span" fontWeight="500" fontSize="12px">
-                {getAmountWithSign(
-                  usePartialPayment ? walletBalance : payableAmount
-                )}
-              </Typography>
-            </Typography>
-            {usePartialPayment && paymentMethod && (
-              <Typography
-                fontSize="12px"
-                fontWeight="500"
-                component="span"
-                textTransform="capitalize"
-                paddingInlineStart={{ xs: "0xp", md: "50px" }}
-              >
-                {paymentMethod === "offline_payment"
-                  ? `${t("offline payment")} (${offlineMethod?.method_name})`
-                  : t(paymentMethod.replaceAll("_", " "))}{" "}
-                {t("(Due)")} :{" "}
-                <Typography component="span" fontWeight="500" fontSize="12px">
-                  {getAmountWithSign(payableAmount - walletBalance)}
-                </Typography>
-              </Typography>
+            {canUseCashOnDelivery && (
+              <FormControlLabel
+                value="cash_on_delivery"
+                control={<Radio size="small" />}
+                label={
+                  <Typography fontSize="12px" fontWeight="600" noWrap>
+                    {t("Cash On Delivery")}
+                  </Typography>
+                }
+                sx={{ margin: 0, minWidth: 0 }}
+              />
             )}
-          </Stack>
-        ) : (
-          <Stack direction="row" alignItems="center" spacing={1}>
-            <PaymentIcon style={{ width: "20px", height: "20px" }} />
-            <Typography fontSize="12px" fontWeight="500">
-              {t("Select Payment Method")}
-            </Typography>
-            <Stack sx={{ cursor: "pointer" }}>
-              <Tooltip
-                arrow
-                placement="top"
-                TransitionComponent={Zoom}
-                title={t("Please select a payment method")}
-              >
-                <InfoIcon style={{ width: "16px", height: "16px" }} />
-              </Tooltip>
-            </Stack>
-          </Stack>
+            {canUseWallet && (
+              <FormControlLabel
+                value="wallet"
+                control={<Radio size="small" />}
+                label={
+                  <Typography fontSize="12px" fontWeight="600" noWrap>
+                    {t("Wallet")}
+                  </Typography>
+                }
+                sx={{ margin: 0, minWidth: 0 }}
+              />
+            )}
+          </RadioGroup>
+        </FormControl>
+        {hasAdditionalPaymentOptions && (
+          <Tooltip
+            arrow
+            placement="top"
+            TransitionComponent={Zoom}
+            title={t("Payment Methods")}
+          >
+            <IconButton onClick={handleClick} size="small" color="primary">
+              <BorderColorIcon sx={{ width: "18px", height: "18px" }} />
+            </IconButton>
+          </Tooltip>
         )}
-
-        <BorderColorIcon
-          style={{ width: "20px", height: "20px" }}
-          color="primary"
-        />
       </PaymentMethodBox>
       {openModal && (
         <CustomModal

@@ -119,6 +119,8 @@ const DeliveryAddress = ({
       <Stack
         direction="row"
         justifyContent="space-between"
+        alignItems="center"
+        gap={1}
         pt={{ xs: "18px", md: "0px" }}
         pb={{ xs: "8px", md: "0px" }}
       >
@@ -132,6 +134,7 @@ const DeliveryAddress = ({
             setAddress={setAddress}
             handleLatLng={handleLatLng}
             t={t}
+            singleLine
           />
         )}
 
@@ -175,13 +178,14 @@ const DeliveryAddress = ({
                 handleLatLng={handleLatLng}
               />
               <IconButton
-                sx={{ width: "150px" }}
+                sx={{ width: "auto", alignSelf: "center" }}
                 onClick={() => setOpenSaveAddress(true)}
               >
                 <Typography
                   fontSize="14px"
                   fontWeight="400"
                   color={theme.palette.primary.main}
+                  noWrap
                 >
                   {t("View Saved Address")}
                 </Typography>

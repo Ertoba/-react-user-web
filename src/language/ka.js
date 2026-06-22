@@ -430,7 +430,7 @@ export const georgian = {
   "Enjoy Off On All Foods": "ისარგებლეთ ფასდაკლებით ყველა საკვებზე",
   "Enter Identity Number": "შეიყვანეთ იდენტობის ნომერი",
   "Enter Your Code": "შეიყვანეთ კოდი",
-  "Enter Your Coupon..": "შეიყვანეთ კუპონი.",
+  "Enter Your Coupon..": "შეიყვანე ვაუჩერი",
   "Enter email": "შეიყვანეთ ელ-ფოსტა",
   "Enter first name": "შეიყვანეთ სახელი",
   "Enter last name": "შეიყვანეთ გვარი",
