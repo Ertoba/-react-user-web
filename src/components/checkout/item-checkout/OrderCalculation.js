@@ -35,6 +35,84 @@ import { CalculationGrid, TotalGrid } from "../CheckOut.style";
 import {useGetSurgePrice} from "api-manage/hooks/react-query/order-place/useGetSurgePrice";
 import {onErrorResponse} from "api-manage/api-error-response/ErrorResponses";
 
+const toFiniteNumber = (value) => {
+  const numberValue = Number(value);
+  return Number.isFinite(numberValue) ? numberValue : null;
+};
+
+const hasUsableDeliveryCharge = (pivot) => {
+  if (!pivot) return false;
+
+  if (pivot?.delivery_charge_type === "fixed") {
+    return toFiniteNumber(pivot?.fixed_shipping_charge) !== null;
+  }
+
+  return (
+    toFiniteNumber(pivot?.per_km_shipping_charge) !== null ||
+    toFiniteNumber(pivot?.minimum_shipping_charge) !== null ||
+    toFiniteNumber(pivot?.maximum_shipping_charge) !== null
+  );
+};
+
+const getZoneFixedShippingFallback = (zoneData) => {
+  if (!zoneData?.zone_data?.length) return null;
+
+  for (const zone of zoneData.zone_data) {
+    for (const moduleItem of zone?.modules ?? []) {
+      const fixedCharge = toFiniteNumber(
+        moduleItem?.pivot?.fixed_shipping_charge
+      );
+
+      if (fixedCharge !== null) {
+        return fixedCharge;
+      }
+    }
+  }
+
+  return null;
+};
+
+const getCheckoutZoneData = (zoneData, storeData) => {
+  if (!zoneData?.zone_data?.length || !storeData) return zoneData;
+
+  const fixedFallback = getZoneFixedShippingFallback(zoneData);
+  if (fixedFallback === null) return zoneData;
+
+  let patched = false;
+  const storeModuleId = toFiniteNumber(storeData?.module_id);
+  const storeModuleType =
+    storeData?.module?.module_type || storeData?.module_type;
+
+  const patchedZoneData = {
+    ...zoneData,
+    zone_data: zoneData.zone_data.map((zone) => ({
+      ...zone,
+      modules: (zone?.modules ?? []).map((moduleItem) => {
+        const moduleId = toFiniteNumber(moduleItem?.id);
+        const isCurrentModule =
+          (storeModuleId !== null && moduleId === storeModuleId) ||
+          (storeModuleType && moduleItem?.module_type === storeModuleType);
+
+        if (!isCurrentModule || hasUsableDeliveryCharge(moduleItem?.pivot)) {
+          return moduleItem;
+        }
+
+        patched = true;
+        return {
+          ...moduleItem,
+          pivot: {
+            ...moduleItem?.pivot,
+            delivery_charge_type: "fixed",
+            fixed_shipping_charge: fixedFallback,
+          },
+        };
+      }),
+    })),
+  };
+
+  return patched ? patchedZoneData : zoneData;
+};
+
 const OrderCalculation = (props) => {
   const {
     cartList,
@@ -73,6 +151,7 @@ const OrderCalculation = (props) => {
   let couponType = "coupon";
   const {data:surgePrice,mutate}=useGetSurgePrice()
   const normalizedZoneData = zoneData?.data ?? zoneData;
+  const checkoutZoneData = getCheckoutZoneData(normalizedZoneData, storeData);
   const calculatedDeliveryFee = getDeliveryFees(
     storeData,
     configData,
@@ -81,7 +160,7 @@ const OrderCalculation = (props) => {
     couponDiscount,
     couponType,
     orderType,
-    normalizedZoneData,
+    checkoutZoneData,
     origin,
     destination,
     tempExtraCharge,
@@ -128,10 +207,6 @@ const OrderCalculation = (props) => {
       return <Typography>{t("Free")}</Typography>;
     }
 
-    if (resolvedDeliveryFee === null) {
-      return <Skeleton variant="text" width="45px" />;
-    }
-
     if (resolvedDeliveryFee === 0) {
       return <Typography>{t("Free")}</Typography>;
     }
@@ -146,7 +221,9 @@ const OrderCalculation = (props) => {
       >
         <Typography>{"(+)"}</Typography>
         <Typography>
-          {storeData && getAmountWithSign(resolvedDeliveryFee)}
+          {storeData && resolvedDeliveryFee !== null
+            ? getAmountWithSign(resolvedDeliveryFee)
+            : ""}
         </Typography>
       </Stack>
     );
@@ -189,7 +266,7 @@ const OrderCalculation = (props) => {
       orderType,
       freeDelivery,
       Number(deliveryTip),
-      normalizedZoneData,
+      checkoutZoneData,
       origin,
       destination,
       extraCharge,
