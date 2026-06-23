@@ -22,6 +22,7 @@ import { HomeComponentsWrapper } from "../HomePageComponents";
 import { loveItemSettings } from "../love-item/loveItemSettings";
 import Menus from "./Menus";
 import { createEnhancedArrows } from "../../common/EnhancedSliderArrows";
+import { formatCategoryName } from "utils/georgianText";
 
 const BestReviewedItems = (props) => {
   const { title, info, bannerIsLoading } = props;
@@ -74,7 +75,7 @@ const BestReviewedItems = (props) => {
   useEffect(() => {
     if (data) {
       if (uniqueCategories?.length > 0) {
-        setMenu(["All", ...uniqueCategories?.map((item) => item.name)]);
+        setMenu(["All", ...uniqueCategories?.map((item) => formatCategoryName(item.name))]);
         
       }
       setFilteredData(bestReviewedItems.products);

@@ -32,19 +32,30 @@ const NextImage = ({
    objectFit,
    borderRadius,
    aspectRatio,
+   hidePlaceholderOnError = false,
    ...props
  }) => {
   const [currentSrc, setCurrentSrc] = useState(src || altSrc);
+  const [isHidden, setIsHidden] = useState(false);
 
   useEffect(() => {
     setCurrentSrc(src || altSrc);
+    setIsHidden(false);
   }, [src, altSrc]);
 
   const handleError = () => {
+    if (hidePlaceholderOnError) {
+      setIsHidden(true);
+      return;
+    }
     if (altSrc && currentSrc !== altSrc) {
       setCurrentSrc(altSrc);
     }
   };
+
+  if (isHidden) {
+    return null;
+  }
 
   // Conditionally create style object
   const style = {

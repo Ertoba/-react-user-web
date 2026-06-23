@@ -29,6 +29,7 @@ import {
 	CustomStackFullWidth,
 } from "styled-components/CustomStyles.style";
 import { not_logged_in_message } from "utils/toasterMessages";
+import { formatStoreName } from "utils/georgianText";
 import CustomImageContainer from "../CustomImageContainer";
 import CustomRatings from "../search/CustomRatings";
 import { RoundedIconButton } from "./product-details-section/ProductsThumbnailsSettings";
@@ -51,6 +52,7 @@ const StoreDetails = ({ storeDetails, storeImageBaseUrl }) => {
 	const { wishLists } = useSelector((state) => state.wishList);
 	const { mutate } = useWishListStoreDelete();
 	const { mutate: addFavoriteMutation } = useAddStoreToWishlist();
+	const storeDisplayName = formatStoreName(storeDetails?.name);
 
 	let token = undefined;
 	if (typeof window !== "undefined") {
@@ -141,7 +143,7 @@ const StoreDetails = ({ storeDetails, storeImageBaseUrl }) => {
 							</CustomBoxFullWidth>
 							<CustomStackFullWidth spacing={0.5}>
 								<Typography variant="h7" component="h2">
-									{storeDetails?.name}
+									{storeDisplayName}
 								</Typography>
 								<CustomStackFullWidth
 									direction="row"

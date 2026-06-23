@@ -81,6 +81,7 @@ import QuickView, { PrimaryToolTip } from "./QuickView";
 import SpecialCard, { FoodHalalHaram, FoodVegNonVegFlag } from "./SpecialCard";
 import NextImage from "components/NextImage";
 import useTextEllipsis from "api-manage/hooks/custom-hooks/useTextEllipsis";
+import { formatProductName, formatStoreName } from "utils/georgianText";
 
 export const CardWrapper = styled(Card)(
   ({
@@ -240,7 +241,9 @@ const ProductCard = (props) => {
     pharmaCommon,
     noRecommended,
   } = props;
-  const { ref: textRef, isEllipsed } = useTextEllipsis(item?.name);
+  const productDisplayName = formatProductName(item?.name);
+  const storeDisplayName = formatStoreName(item?.store_name);
+  const { ref: textRef, isEllipsed } = useTextEllipsis(productDisplayName);
   const [state, dispatch] = useReducer(reducer, initialState);
   const [openModal, setOpenModal] = React.useState(false);
   const [openLocationAlert, setOpenLocationAlert] = useState(false);
@@ -595,7 +598,7 @@ const ProductCard = (props) => {
           </Box>
         )}
         {isEllipsed ? (
-          <PrimaryToolTip text={item?.name} placement="bottom" arrow="false">
+          <PrimaryToolTip text={productDisplayName} placement="bottom" arrow="false">
             <Typography
               ref={textRef}
               variant={horizontalcard === "true" ? "subtitle2" : "h6"}
@@ -620,7 +623,7 @@ const ProductCard = (props) => {
               className="name"
               component="h3"
             >
-              {item?.name}
+              {productDisplayName}
             </Typography>
           </PrimaryToolTip>
         ) : (
@@ -648,7 +651,7 @@ const ProductCard = (props) => {
             className="name"
             component="h3"
           >
-            {item?.name}
+            {productDisplayName}
           </Typography>
         )}
         <Stack mt="5px">
@@ -716,14 +719,14 @@ const ProductCard = (props) => {
         )}
 
         {isEllipsed ? (
-          <PrimaryToolTip text={item?.name} placement="bottom" arrow="false">
+          <PrimaryToolTip text={productDisplayName} placement="bottom" arrow="false">
             <Box ref={textRef}>
-              <H3 text={item?.name} component="h3" />
+              <H3 text={productDisplayName} component="h3" />
             </Box>
           </PrimaryToolTip>
         ) : (
           <Box ref={textRef}>
-            <H3 text={item?.name} component="h3" />
+            <H3 text={productDisplayName} component="h3" />
           </Box>
         )}
         <CustomBoxFullWidth>
@@ -738,7 +741,7 @@ const ProductCard = (props) => {
               {item?.generic_name[0]}
             </Typography>
           ) : (
-            <Body2 text={item?.store_name} component="h4" />
+            <Body2 text={storeDisplayName} component="h4" />
           )}
         </CustomBoxFullWidth>
         {item?.unit_type ? (
@@ -808,7 +811,7 @@ const ProductCard = (props) => {
           spacing={0.8}
         >
           {isEllipsed ? (
-            <PrimaryToolTip text={item?.name} placement="bottom" arrow="false">
+            <PrimaryToolTip text={productDisplayName} placement="bottom" arrow="false">
               <Typography
                 ref={textRef}
                 variant={horizontalcard === "true" ? "subtitle2" : "h6"}
@@ -827,7 +830,7 @@ const ProductCard = (props) => {
                 className="name"
                 component="h3"
               >
-                {item?.name}
+                {productDisplayName}
               </Typography>
             </PrimaryToolTip>
           ) : (
@@ -849,7 +852,7 @@ const ProductCard = (props) => {
               className="name"
               component="h3"
             >
-              {item?.name}
+              {productDisplayName}
             </Typography>
           )}
           {configData?.toggle_veg_non_veg ? (
@@ -861,7 +864,7 @@ const ProductCard = (props) => {
           variant={isSmall ? "body2" : "body1"}
           component="h4"
         >
-          {item?.store_name}
+          {storeDisplayName}
         </Typography>
         {/* </CustomStackFullWidth> */}
         <CustomStackFullWidth
@@ -903,11 +906,11 @@ const ProductCard = (props) => {
         spacing={0.6}
         p={item?.module_type === "pharmacy" ? "5px 16px 16px 16px" : "1rem"}
       >
-        <Body2 text={item?.store_name} component="h4" />
+        <Body2 text={storeDisplayName} component="h4" />
 
 
         {isEllipsed ? (
-          <PrimaryToolTip text={item?.name} placement="bottom" arrow="false">
+          <PrimaryToolTip text={productDisplayName} placement="bottom" arrow="false">
             <Typography
               ref={textRef}
               className={classes.singleLineEllipsis}
@@ -915,7 +918,7 @@ const ProductCard = (props) => {
               fontWeight="500"
               component="h3"
             >
-              {item?.name}
+              {productDisplayName}
             </Typography>
           </PrimaryToolTip>
         ) : (
@@ -926,7 +929,7 @@ const ProductCard = (props) => {
             fontWeight="500"
             component="h3"
           >
-            {item?.name}
+            {productDisplayName}
           </Typography>
         )}
         <CustomStackFullWidth
@@ -954,16 +957,16 @@ const ProductCard = (props) => {
         // p="1rem"
         p="0 4px"
       >
-        <Body2 text={item?.store_name} />
+        <Body2 text={storeDisplayName} />
         {isEllipsed ? (
-          <PrimaryToolTip text={item?.name} placement="bottom" arrow="false">
+          <PrimaryToolTip text={productDisplayName} placement="bottom" arrow="false">
             <Box ref={textRef}>
-              <H3 text={item?.name} component="h3" />
+              <H3 text={productDisplayName} component="h3" />
             </Box>
           </PrimaryToolTip>
         ) : (
           <Box ref={textRef}>
-            <H3 text={item?.name} component="h3" />
+            <H3 text={productDisplayName} component="h3" />
           </Box>
         )}
         <CustomStackFullWidth
@@ -1032,16 +1035,16 @@ const ProductCard = (props) => {
         p="1rem"
 
       >
-        <Body2 paddingTop="5px" text={item?.store_name} component="h4" />
+        <Body2 paddingTop="5px" text={storeDisplayName} component="h4" />
         {isEllipsed ? (
-          <PrimaryToolTip text={item?.name} placement="bottom" arrow="false">
+          <PrimaryToolTip text={productDisplayName} placement="bottom" arrow="false">
             <Box ref={textRef}>
-              <H3 text={item?.name} component="h3" />
+              <H3 text={productDisplayName} component="h3" />
             </Box>
           </PrimaryToolTip>
         ) : (
           <Box ref={textRef}>
-            <H3 text={item?.name} component="h3" />
+            <H3 text={productDisplayName} component="h3" />
           </Box>
         )}
         <CustomStackFullWidth
@@ -1255,7 +1258,7 @@ const ProductCard = (props) => {
                     }}
                     component="h4"
                   >
-                    {item?.store_name}
+                    {storeDisplayName}
                   </Stack>
                 )}
                 {handleBadge()}

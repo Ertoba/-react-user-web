@@ -43,6 +43,7 @@ import {
   handleTotalAmountWithAddons,
 } from "utils/CustomFunctions";
 import Body2 from "components/typographies/Body2";
+import { formatProductName } from "utils/georgianText";
 
 const CartContent = (props) => {
   const { cartItem, imageBaseUrl } = props;
@@ -201,6 +202,7 @@ const CartContent = (props) => {
     }
   };
 console.log({cartItem});
+  const productDisplayName = formatProductName(cartItem?.name);
 
   return (
     <>
@@ -228,7 +230,7 @@ console.log({cartItem});
         </Stack>
         <Stack width="0px" flexGrow="1" justifyContent="center" spacing={0.2}>
           <Typography fontWeight="500" fontSize={{ xs: "12px", md: "14px" }}>
-            {cartItem?.name}
+            {productDisplayName}
           </Typography>
           {cartItem?.module_type === "pharmacy" && (
             <Typography

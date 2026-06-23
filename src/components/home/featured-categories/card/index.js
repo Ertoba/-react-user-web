@@ -17,6 +17,7 @@ import { textWithEllipsis } from "styled-components/TextWithEllipsis";
 import NextImage from "components/NextImage";
 import useTextEllipsis from "api-manage/hooks/custom-hooks/useTextEllipsis";
 import { useRouter } from "next/router";
+import { formatCategoryName, georgianCapsFontFamily } from "utils/georgianText";
 
 export const Card = styled(Box)(({ theme }) => ({
   display: "flex",
@@ -39,7 +40,8 @@ export const Card = styled(Box)(({ theme }) => ({
 const FeaturedItemCard = ({ image, title, id, onlyshimmer }) => {
   const router = useRouter();
   const [hover, setHover] = useState(false);
-  const { ref: textRef, isEllipsed } = useTextEllipsis(title);
+  const categoryDisplayTitle = formatCategoryName(title);
+  const { ref: textRef, isEllipsed } = useTextEllipsis(categoryDisplayTitle);
   const classes = textWithEllipsis();
   const theme = useTheme();
   const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
@@ -107,7 +109,7 @@ const queryModule = router?.query?.module || router?.query?.module_id;
           ) : (
             <NextImage
               src={image}
-              alt={title}
+              alt={categoryDisplayTitle}
               height={110}
               width={106}
               objectFit="cover"
@@ -117,7 +119,7 @@ const queryModule = router?.query?.module || router?.query?.module_id;
         </Stack>
 
         <Tooltip
-          title={isEllipsed ? title : ""}
+          title={isEllipsed ? categoryDisplayTitle : ""}
           placement="bottom"
           arrow
           componentsProps={{
@@ -150,21 +152,22 @@ const queryModule = router?.query?.module || router?.query?.module_id;
                 display: "-webkit-box",
                 overflow: "hidden",
                 textOverflow: "ellipsis",
-                whiteSpace: { xs: "normal", md: "nowrap" },
-                WebkitLineClamp: { xs: 2, md: 1 },
+                whiteSpace: "nowrap",
+                WebkitLineClamp: 1,
                 WebkitBoxOrient: "vertical",
                 width: "100%",
-                minHeight: { xs: "28px", md: "20px" },
-                lineHeight: 1.2,
-                fontSize: { xs: "11px", md: "14px" },
+                minHeight: { xs: "18px", md: "18px" },
+                lineHeight: 1.15,
+                fontSize: { xs: "9px", sm: "10px", md: "11px" },
+                fontFamily: georgianCapsFontFamily,
               }}
-              maxHeight={{ xs: "32px", md: "20px" }}
+              maxHeight={{ xs: "20px", md: "20px" }}
               color={hover ? "primary.main" : "text.primary"}
             >
               {onlyshimmer ? (
                 <Skeleton width="70px" variant="text" sx={{ mx: "auto" }} />
               ) : (
-                title
+                categoryDisplayTitle
               )}
             </Typography>
           </CustomBoxFullWidth>

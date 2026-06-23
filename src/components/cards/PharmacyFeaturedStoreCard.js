@@ -10,6 +10,7 @@ import { CustomBoxFullWidth } from "../../styled-components/CustomStyles.style";
 import CustomImageContainer from "../CustomImageContainer";
 import Body2 from "../typographies/Body2";
 import { handleStoreRedirect } from "helper-functions/handleStoreRedirect";
+import { formatStoreName } from "utils/georgianText";
 
 const Wrapper = styled(CustomBoxFullWidth)(({ theme, hover }) => ({
 	position: "relative",
@@ -48,6 +49,7 @@ const PharmacyFeaturedStoreCard = (props) => {
 	const [hover, setHover] = useState(false);
 	const { t } = useTranslation();
 	const router = useRouter();
+	const storeDisplayName = formatStoreName(data?.name);
 	const handleClick = () => {
 		 handleStoreRedirect(data, router);
 	};
@@ -60,7 +62,7 @@ const PharmacyFeaturedStoreCard = (props) => {
 		>
 			<CustomImageContainer
 				src={data?.cover_photo}
-				alt={data?.name}
+				alt={storeDisplayName}
 				height="100%"
 				width="100%"
 				objectfit="contain"
@@ -80,7 +82,7 @@ const PharmacyFeaturedStoreCard = (props) => {
 						>
 							<CustomImageContainer
 								src={data?.logo}
-								alt={data?.name}
+								alt={storeDisplayName}
 								height="100%"
 								width="100%"
 								objectfit="contain"
@@ -97,7 +99,7 @@ const PharmacyFeaturedStoreCard = (props) => {
 						>
 							<Stack alignItems="flex-start" spacing={1}>
 								<PrimaryToolTip
-									text={data?.name}
+									text={storeDisplayName}
 									placement="bottom"
 									arrow="false"
 								>
@@ -107,7 +109,7 @@ const PharmacyFeaturedStoreCard = (props) => {
 										maxHeight="20px"
 										component="h3"
 									>
-										{data?.name}
+										{storeDisplayName}
 									</Typography>
 								</PrimaryToolTip>
 								<Body2 text={data?.address} />

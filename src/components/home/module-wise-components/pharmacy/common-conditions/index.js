@@ -27,6 +27,7 @@ import H2 from "../../../../typographies/H2";
 import { HomeComponentsWrapper } from "../../../HomePageComponents";
 import { Next, Prev } from "../../../popular-items-nearby/SliderSettings";
 import { useQueryClient } from "react-query";
+import { formatCategoryName, georgianCapsFontFamily } from "utils/georgianText";
 
 const StyledCustomSlider = styled(SliderCustom)(({ theme, active }) => ({
 	color: active === "true" ? theme.palette.primary.main : "inherit",
@@ -233,7 +234,7 @@ const CommonConditions = (props) => {
 												key={index}
 												textAlign="flex-start"
 												onClick={() => handleClick(item.id, index)}
-												label={item?.name}
+												label={formatCategoryName(item?.name)}
 												sx={{
 													alignItems: "flex-start",
 													marginLeft: isSmall
@@ -246,6 +247,8 @@ const CommonConditions = (props) => {
 															? "primary.main"
 															: "text.secondary",
 													cursor: "pointer",
+													fontFamily: georgianCapsFontFamily,
+													whiteSpace: "nowrap",
 													[theme.breakpoints.down("md")]: {
 														padding: "0px 16px !important",
 														minHeight: "0px !important",

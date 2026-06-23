@@ -25,6 +25,7 @@ import { CustomOverLay } from "./Card.style";
 import QuickView, { PrimaryToolTip } from "./QuickView";
 import NextImage from "components/NextImage";
 import { handleStoreRedirect } from "helper-functions/handleStoreRedirect";
+import { formatStoreName } from "utils/georgianText";
 
 export const getModuleWiseData = () => {
 	switch (getCurrentModuleType()) {
@@ -117,6 +118,7 @@ const VisitAgainCard = (props) => {
 	const router = useRouter();
 	const { wishLists } = useSelector((state) => state.wishList);
 	const [isWishlisted, setIsWishlisted] = useState(false);
+	const storeDisplayName = formatStoreName(item?.name);
 
 
 	useEffect(() => {
@@ -215,7 +217,7 @@ const VisitAgainCard = (props) => {
 			>
 				<NextImage
 					src={imageUrl}
-					alt={item?.name}
+					alt={storeDisplayName}
 					height={isSmall ? 100 : 132}
 					width={261}
 					obejctFit="cover"
@@ -262,7 +264,7 @@ const VisitAgainCard = (props) => {
 				<Grid container spacing={1.5}>
 					<Grid item xs={8.5} md={9}>
 						<PrimaryToolTip
-							text={item?.name}
+							text={storeDisplayName}
 							placement="bottom"
 							arrow="false"
 						>
@@ -272,7 +274,7 @@ const VisitAgainCard = (props) => {
 								fontWeight="500"
 								component="h3"
 							>
-								{item?.name}
+								{storeDisplayName}
 							</Typography>
 						</PrimaryToolTip>
 						<Typography

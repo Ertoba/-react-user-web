@@ -26,6 +26,7 @@ import { PrimaryToolTip } from "./QuickView";
 import map from "./assets/map.png";
 import NextImage from "components/NextImage";
 import useTextEllipsis from "api-manage/hooks/custom-hooks/useTextEllipsis";
+import { formatStoreName } from "utils/georgianText";
 
 const CustomStyledStack = styled(CustomStackFullWidth)(({ theme }) => ({
   background: theme.palette.neutral[100],
@@ -107,7 +108,8 @@ const NearbyStoreCard = (props) => {
   const [isWishlisted, setIsWishlisted] = useState(false);
   const moduleId = JSON.parse(window.localStorage.getItem("module"))?.id;
   const classes = textWithEllipsis();
-  const { ref: textRef, isEllipsed } = useTextEllipsis(item?.name);
+  const storeDisplayName = formatStoreName(item?.name);
+  const { ref: textRef, isEllipsed } = useTextEllipsis(storeDisplayName);
   const { t } = useTranslation();
   const { mutate: addFavoriteMutation } = useAddStoreToWishlist();
   const reduxDispatch = useDispatch();
@@ -170,7 +172,7 @@ const NearbyStoreCard = (props) => {
       <CustomStyledBox>
         <NextImage
           src={item?.cover_photo_full_url}
-          alt={item?.name}
+          alt={storeDisplayName}
           height={100}
           width={281}
           borderRadius="10px 10px 0px 0px"
@@ -189,7 +191,7 @@ const NearbyStoreCard = (props) => {
           >
             <NextImage
               src={item?.logo_full_url}
-              alt={item?.name}
+              alt={storeDisplayName}
               height={65}
               width={95}
               objectfit="cover"
@@ -224,7 +226,7 @@ const NearbyStoreCard = (props) => {
           </CustomStackFullWidth>
         </CustomStackFullWidth>
         {isEllipsed ? (
-          <PrimaryToolTip text={item?.name} placement="bottom" arrow="false">
+          <PrimaryToolTip text={storeDisplayName} placement="bottom" arrow="false">
             <Typography
               ref={textRef}
               className={classes.singleLineEllipsis}
@@ -232,7 +234,7 @@ const NearbyStoreCard = (props) => {
               fontWeight="500"
               component="h3"
             >
-              {item?.name}
+              {storeDisplayName}
             </Typography>
           </PrimaryToolTip>
         ) : (
@@ -243,7 +245,7 @@ const NearbyStoreCard = (props) => {
             fontWeight="500"
             component="h3"
           >
-            {item?.name}
+            {storeDisplayName}
           </Typography>
         )}
         {/*<H3 text={item?.name} />*/}

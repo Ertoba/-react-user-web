@@ -29,6 +29,7 @@ import {
 	product_update_to_cart_message,
 	update_error_text,
 } from "utils/toasterMessages";
+import { formatProductName, formatStoreName } from "utils/georgianText";
 import useAddCartItem from "../../../api-manage/hooks/react-query/add-cart/useAddCartItem";
 import useCartItemUpdate from "../../../api-manage/hooks/react-query/add-cart/useCartItemUpdate";
 import CustomModal from "../../modal";
@@ -295,6 +296,8 @@ const ProductInformation = ({
 		} else toast.error(t(not_logged_in_message));
 	};
 	console.log({state});
+	const modalStoreDisplayName = formatStoreName(state.modalData[0]?.store_name);
+	const modalProductDisplayName = formatProductName(state.modalData[0]?.name);
 	
 
 	const topInformation = () => {
@@ -330,7 +333,7 @@ const ProductInformation = ({
 								}}
 								component="h2"
 							>
-								{state.modalData[0]?.store_name}
+								{modalStoreDisplayName}
 							</Typography>
 						</Link>
 					) : null
@@ -349,7 +352,7 @@ const ProductInformation = ({
 							fontWeight="600"
 							component="h1"
 						>
-							{state.modalData[0]?.name}
+							{modalProductDisplayName}
 						</Typography>
 						{state.modalData[0]?.stock > 0 &&
 							isVariationAvailable(state.modalData[0]) && <InStockTag />}

@@ -6,6 +6,7 @@ import { Box, Typography, useMediaQuery } from "@mui/material";
 import CampaignIcon from "@mui/icons-material/Campaign";
 import { useTheme } from "@emotion/react";
 import styled from "@emotion/styled";
+import { georgianCapsFontFamily, toGeorgianUpper } from "utils/georgianText";
 
 const BgBox = styled(Box)(({ theme, src }) => ({
   backgroundImage: `url(${src})`,
@@ -26,13 +27,14 @@ const normalStyle = {
 const StoreCustomMessage = ({ storeAnnouncement }) => {
   const theme = useTheme();
   const isSmall = useMediaQuery(theme.breakpoints.down("sm"));
-  let duration = (storeAnnouncement?.length * 24) / 100;
+  const announcementText = toGeorgianUpper(storeAnnouncement || "");
+  let duration = (announcementText?.length * 24) / 100;
   const translateX = isSmall
-    ? storeAnnouncement?.length * 3.5
-    : storeAnnouncement?.length * 1.3;
+    ? announcementText?.length * 3.5
+    : announcementText?.length * 1.3;
   const wordCount = isSmall
-    ? storeAnnouncement?.length > 35
-    : storeAnnouncement?.length > 110;
+    ? announcementText?.length > 35
+    : announcementText?.length > 110;
   // const wordCount = true;
 
   const animatedStyle = {
@@ -78,9 +80,10 @@ const StoreCustomMessage = ({ storeAnnouncement }) => {
             <Typography
               fontSize="16px"
               fontWeight="500"
-              textTransform="capitalize"
+              fontFamily={georgianCapsFontFamily}
+              textTransform="none"
             >
-              {storeAnnouncement}
+              {announcementText}
             </Typography>
           </Stack>
           {/* <StoreMessageSvg /> */}

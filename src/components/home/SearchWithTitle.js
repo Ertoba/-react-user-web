@@ -6,6 +6,7 @@ import { CustomStackFullWidth } from "styled-components/CustomStyles.style";
 import ManageSearch from "../header/second-navbar/ManageSearch";
 import TrackParcelFromHomePage from "../parcel/TrackParcelFromHomePage";
 import { useSelector } from "react-redux";
+import { georgianCapsFontFamily, toGeorgianUpper } from "utils/georgianText";
 
 const SearchWithTitle = (props) => {
   const theme = useTheme();
@@ -59,6 +60,11 @@ const SearchWithTitle = (props) => {
         };
     }
   };
+  const bannerTitle = isCategorySearch ? categoryName : t(getBannerTexts().title);
+  const displayBannerTitle =
+    moduleType === ModuleTypes.PARCEL || isCategorySearch
+      ? toGeorgianUpper(bannerTitle)
+      : bannerTitle;
 
   return (
     <CustomStackFullWidth
@@ -66,7 +72,7 @@ const SearchWithTitle = (props) => {
       justifyContent="center"
       spacing={isSmall ? 1 : 3}
       p={isSmall ? "25px" : "20px"}
-      mt={ModuleTypes.RENTAL === "rental" ? { xs: 0, sm: 2 } : 0}
+      mt={moduleType === ModuleTypes.RENTAL ? { xs: 0, sm: 2 } : 0}
     >
       <CustomStackFullWidth
         alignItems="center"
@@ -83,7 +89,7 @@ const SearchWithTitle = (props) => {
             fontSize: isCategorySearch
               ? { xs: "30px", sm: "34px", md: "38px" }
               : {
-                  md: ModuleTypes.RENTAL === "rental" && "30px !important",
+                  md: moduleType === ModuleTypes.RENTAL && "30px !important",
                 },
             lineHeight: isCategorySearch
               ? { xs: 1.28, md: 1.25 }
@@ -99,11 +105,15 @@ const SearchWithTitle = (props) => {
               moduleType === ModuleTypes.PARCEL
                 ? "0 1px 2px rgba(0,0,0,0.35)"
                 : "none",
+            fontFamily:
+              moduleType === ModuleTypes.PARCEL || isCategorySearch
+                ? georgianCapsFontFamily
+                : "inherit",
             textTransform:
-              ModuleTypes.RENTAL === "rental" ? "capitalize" : "initial",
+              moduleType === ModuleTypes.RENTAL ? "capitalize" : "initial",
           }}
         >
-          {isCategorySearch ? categoryName : t(getBannerTexts().title)}
+          {displayBannerTitle}
         </Typography>
         <Typography
           variant={isSmall ? "subtitle2" : "subtitle1"}

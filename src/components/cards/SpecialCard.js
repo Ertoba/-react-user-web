@@ -21,6 +21,7 @@ import { CustomOverLay } from "./Card.style";
 import QuickView, { PrimaryToolTip } from "./QuickView";
 import NextImage from "components/NextImage";
 import useTextEllipsis from "api-manage/hooks/custom-hooks/useTextEllipsis";
+import { formatProductName, formatStoreName } from "utils/georgianText";
 
 const VegNonVegFlag = styled(Box)(({ theme, veg, rounded }) => ({
   height: "14px",
@@ -99,7 +100,9 @@ const SpecialCard = (props) => {
   const [isHover, setIsHover] = useState(false);
   const theme = useTheme()
   const isSmall = useMediaQuery(theme.breakpoints.down("md"));
-  const { ref: textRef, isEllipsed } = useTextEllipsis(item?.name);
+  const productDisplayName = formatProductName(item?.name);
+  const storeDisplayName = formatStoreName(item?.store_name);
+  const { ref: textRef, isEllipsed } = useTextEllipsis(productDisplayName);
   const shouldPreserveProductArtwork =
     (item?.module?.module_type || getCurrentModuleType()) !== ModuleTypes.FOOD;
 
@@ -108,7 +111,7 @@ const SpecialCard = (props) => {
       return (
         <Stack direction="row" alignItems="center" spacing={0.8}>
           {isEllipsed ? (
-            <PrimaryToolTip text={item?.name} placement="bottom" arrow="false">
+            <PrimaryToolTip text={productDisplayName} placement="bottom" arrow="false">
               <Typography
                 ref={textRef}
                 className={classes.singleLineEllipsis}
@@ -118,7 +121,7 @@ const SpecialCard = (props) => {
                 flexGrow={1}
                 component="h3"
               >
-                {item?.name}
+                {productDisplayName}
               </Typography>
             </PrimaryToolTip>
           ) : (
@@ -131,7 +134,7 @@ const SpecialCard = (props) => {
               flexGrow={1}
               component="h3"
             >
-              {item?.name}
+              {productDisplayName}
             </Typography>
           )}
           {configData?.configData?.toggle_veg_non_veg ? (
@@ -142,7 +145,7 @@ const SpecialCard = (props) => {
     } else {
       return (
         isEllipsed ? (
-          <PrimaryToolTip text={item?.name} placement="bottom" arrow="false">
+          <PrimaryToolTip text={productDisplayName} placement="bottom" arrow="false">
             <Typography
               ref={textRef}
               className={classes.singleLineEllipsis}
@@ -150,7 +153,7 @@ const SpecialCard = (props) => {
               fontWeight="500"
               component="h3"
             >
-              {item?.name}
+              {productDisplayName}
             </Typography>
           </PrimaryToolTip>
         ) : (
@@ -161,7 +164,7 @@ const SpecialCard = (props) => {
             fontWeight="500"
             component="h3"
           >
-            {item?.name}
+            {productDisplayName}
           </Typography>
         )
       );
@@ -211,7 +214,7 @@ const SpecialCard = (props) => {
           <NextImage
             src={item?.image_full_url}
             height={isSmall ? 140 : 180}
-            alt={item?.name}
+            alt={productDisplayName}
             width={210}
             objectFit={shouldPreserveProductArtwork ? "contain" : "cover"}
             className={
@@ -262,7 +265,7 @@ const SpecialCard = (props) => {
       </CustomStackFullWidth>
       <CustomStackFullWidth mt="15px" sx={{ padding: "5px" }} spacing={0.5}>
         {getModuleWiseItemName()}
-        <Body2 text={item?.store_name} component="h4" />
+        <Body2 text={storeDisplayName} component="h4" />
       </CustomStackFullWidth>
       <CustomBoxFullWidth sx={{ padding: "0px 5px 5px 5px" }}>
         <Grid container>

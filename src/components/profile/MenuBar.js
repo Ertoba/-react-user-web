@@ -14,9 +14,15 @@ import Link from "next/link";
 import ListItemText from "@mui/material/ListItemText";
 import { menuData } from "../header/second-navbar/account-popover/menuData";
 import CustomImageContainer from "../CustomImageContainer";
+import { shouldShowProfileMenuItem } from "helper-functions/profileMenuVisibility";
+import { useSelector } from "react-redux";
 
 const MenuBar = (props) => {
   const { configData, t } = props;
+  const { configData: reduxConfigData, modules } = useSelector(
+    (state) => state.configData
+  );
+  const effectiveConfigData = configData || reduxConfigData;
   const router = useRouter();
   const activeRoute = (routeName, currentRoute) => {
     return routeName.toLowerCase() === currentRoute;
@@ -36,11 +42,7 @@ const MenuBar = (props) => {
         {t("Your Profile")}
       </Typography>
       {menuData.map((item, index) => {
-        if (
-          (configData?.customer_wallet_status === 0 && item?.id === 4) ||
-          (configData?.loyalty_point_status === 0 && item?.id === 5) ||
-          (configData?.ref_earning_status === 0 && item?.id === 6)
-        ) {
+        if (!shouldShowProfileMenuItem(item, effectiveConfigData, modules)) {
           return null;
         } else {
           return (

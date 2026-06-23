@@ -11,6 +11,7 @@ import { getModuleId } from "helper-functions/getModuleId";
 import CustomImageContainer from "../CustomImageContainer";
 import NextImage from "components/NextImage";
 import useTextEllipsis from "api-manage/hooks/custom-hooks/useTextEllipsis";
+import { formatCategoryName, georgianCapsFontFamily } from "utils/georgianText";
 
 const FeatureImageBox = styled(Stack)(({ theme }) => ({
   width: "100%",
@@ -32,7 +33,8 @@ const FoodCategoryCard = (props) => {
   const router = useRouter();
   const theme = useTheme()
   const isSmall = useMediaQuery(theme.breakpoints.down("md"));
-  const { ref: textRef, isEllipsed } = useTextEllipsis(name);
+  const categoryDisplayName = formatCategoryName(name);
+  const { ref: textRef, isEllipsed } = useTextEllipsis(categoryDisplayName);
   const queryModule = router?.query?.module || router?.query?.module_id;
     const moduleValue = Array.isArray(queryModule)
       ? queryModule[0]
@@ -85,7 +87,7 @@ const FoodCategoryCard = (props) => {
             </Stack>) : (
               <NextImage
                 src={categoryImageUrl}
-                alt={name}
+                alt={categoryDisplayName}
                 height={isSmall ? 56 : 120}
                 width={isSmall ? 56 : 120}
                 borderRadius="50%"
@@ -98,7 +100,7 @@ const FoodCategoryCard = (props) => {
           </Box>
         </Box>
         <Tooltip
-          title={isEllipsed ? name : ""}
+          title={isEllipsed ? categoryDisplayName : ""}
           placement="bottom"
           arrow
           componentsProps={{
@@ -125,15 +127,17 @@ const FoodCategoryCard = (props) => {
               maxWidth: { xs: "64px", sm: "112px", md: "140px" },
               textAlign: "center",
               transition: "all ease 0.3s",
+              whiteSpace: "nowrap",
+              fontFamily: georgianCapsFontFamily,
               "&:hover": {
                 color: "primary.main",
               },
             }}
-            fontSize={{ xs: "8px", sm: "12px", md: "16px" }}
+            fontSize={{ xs: "7px", sm: "9px", md: "11px" }}
             fontWeight="500"
             component="h4"
           >
-            {onlyshimmer ? <Skeleton variant="text" width="50px" /> : name}
+            {onlyshimmer ? <Skeleton variant="text" width="50px" /> : categoryDisplayName}
           </Typography>
         </Tooltip>
       </FeatureImageBox>

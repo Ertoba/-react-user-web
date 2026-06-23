@@ -10,11 +10,13 @@ import IconButton from "@mui/material/IconButton";
 import StarIcon from "@mui/icons-material/Star";
 import { getDateFormat } from "utils/CustomFunctions";
 import { ReadMore } from "components/store-details/ReadMore";
+import { formatStoreName } from "utils/georgianText";
 
 const ProductReviewCard = ({ review, storename }) => {
   const { configData } = useSelector((state) => state.configData);
   const [openModal, setOpenModal] = useState(false);
   const theme = useTheme();
+  const storeDisplayName = formatStoreName(storename);
   return (
     <>
       <CustomStackFullWidth
@@ -78,7 +80,7 @@ const ProductReviewCard = ({ review, storename }) => {
                   fontWeight="500"
                   color={theme.palette.text.primary}
                 >
-                  {storename}
+                  {storeDisplayName}
                 </Typography>
                 <Typography
                   fontSize="10px"

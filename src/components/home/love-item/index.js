@@ -18,6 +18,7 @@ import H2 from "../../typographies/H2";
 import { HomeComponentsWrapper } from "../HomePageComponents";
 import { loveItemSettings } from "./loveItemSettings";
 import Menus from "./Menus";
+import { formatCategoryName } from "utils/georgianText";
 
 const LoveItem = (props) => {
   const [menu, setMenu] = useState([]);
@@ -69,7 +70,7 @@ const LoveItem = (props) => {
   }, [data]);
   useEffect(() => {
     if (data?.total_size > 0) {
-      setMenu(["Recommended", ...uniqueCategories?.map((item) => item.name)]);
+      setMenu(["Recommended", ...uniqueCategories?.map((item) => formatCategoryName(item.name))]);
       setFilteredData(setYouWillLoveItems.products);
     }
   }, [setYouWillLoveItems.products]);

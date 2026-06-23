@@ -6,6 +6,7 @@ import { useRouter } from "next/router";
 import { useState } from "react";
 import NextImage from "components/NextImage";
 import useTextEllipsis from "api-manage/hooks/custom-hooks/useTextEllipsis";
+import { formatCategoryName, georgianCapsFontFamily } from "utils/georgianText";
 
 /* ===================== STYLES ===================== */
 
@@ -69,7 +70,8 @@ const TextWrapper = styled(Box)(({ theme }) => ({
 
 const PharmacyCategoryCard = ({ image, title, id, onlyshimmer }) => {
   const [hover, setHover] = useState(false);
-  const { ref: textRef, isEllipsed } = useTextEllipsis(title);
+  const categoryDisplayTitle = formatCategoryName(title);
+  const { ref: textRef, isEllipsed } = useTextEllipsis(categoryDisplayTitle);
   const router = useRouter();
   const queryModule = router?.query?.module || router?.query?.module_id;
   const moduleValue = Array.isArray(queryModule)
@@ -102,7 +104,7 @@ const PharmacyCategoryCard = ({ image, title, id, onlyshimmer }) => {
             ) : (
               <NextImage
                 src={image}
-                alt={title}
+                alt={categoryDisplayTitle}
                 fill
                 style={{ objectFit: "cover" }}
                 sizes="(max-width: 600px) 90px, 122px"
@@ -112,7 +114,7 @@ const PharmacyCategoryCard = ({ image, title, id, onlyshimmer }) => {
           </ImageWrapper>
 
           <Tooltip
-            title={isEllipsed ? title : ""}
+            title={isEllipsed ? categoryDisplayTitle : ""}
             placement="bottom"
             arrow
             componentsProps={{
@@ -133,13 +135,14 @@ const PharmacyCategoryCard = ({ image, title, id, onlyshimmer }) => {
                 component="h4"
                 noWrap
                 sx={{
-                  fontSize: { xs: "12px", md: "14px" },
+                  fontSize: { xs: "10px", md: "11px" },
                   lineHeight: "1.2",
                   maxWidth: "100%",
                   color: hover ? "primary.main" : "text.primary",
+                  fontFamily: georgianCapsFontFamily,
                 }}
               >
-                {onlyshimmer ? <Skeleton width="70px" /> : title}
+                {onlyshimmer ? <Skeleton width="70px" /> : categoryDisplayTitle}
               </Typography>
             </TextWrapper>
           </Tooltip>

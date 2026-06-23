@@ -29,6 +29,7 @@ import { ProductsApi } from "../../hooks/react-query/config/productsApi";
 import { addWishList, removeWishListFood } from "../../redux/slices/wishList";
 import { useWishListDelete } from "../../hooks/react-query/config/wish-list/useWishListDelete";
 import { RTL } from "../RTL/RTL";
+import { formatProductName, formatStoreName } from "utils/georgianText";
 
 const FoodCard = ({ product, productImageUrl }) => {
   const theme = useTheme();
@@ -49,6 +50,8 @@ const FoodCard = ({ product, productImageUrl }) => {
   const [openModal, setOpenModal] = React.useState(false);
   const { t } = useTranslation();
   const imageUrl = product?.image_full_url;
+  const productDisplayName = formatProductName(name);
+  const storeDisplayName = formatStoreName(restaurant_name);
   const { configData, token } = useSelector(
     (state) => state.configDataSettings
   );
@@ -126,7 +129,7 @@ const FoodCard = ({ product, productImageUrl }) => {
           restaurant_discount={restaurant_discount}
           image={`${imageUrl}`}
           height={170}
-          alt={name}
+          alt={productDisplayName}
           price={price}
           onClick={handleFoodDetailModal}
           available_time_ends={available_time_ends}
@@ -158,11 +161,11 @@ const FoodCard = ({ product, productImageUrl }) => {
               variant={isXSmall ? "h6" : "h5"}
               className="food-card-title-text"
             >
-              {name || name}
+              {productDisplayName}
             </FoodTitleTypography>
           </Box>
           <FoodSubTitleTypography variant="subtitle1">
-            {restaurant_name || restaurant_name}
+            {storeDisplayName}
           </FoodSubTitleTypography>
           <RatingWrapTypography variant="subtitle2">
             {avg_rating.toFixed(1)}

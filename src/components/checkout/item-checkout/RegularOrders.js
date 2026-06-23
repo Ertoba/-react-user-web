@@ -7,6 +7,7 @@ import { CustomStackFullWidth } from "../../../styled-components/CustomStyles.st
 import { handleProductValueWithOutDiscount } from "../../../utils/CustomFunctions";
 import CustomImageContainer from "../../CustomImageContainer";
 import VariationContent from "../../added-cart-view/VariationContent";
+import { formatProductName } from "utils/georgianText";
 import {
 	OrderFoodAmount,
 	OrderFoodName,
@@ -83,7 +84,7 @@ const RegularOrders = (props) => {
 								<Stack>
 									<Box>
 										<OrderFoodName>
-											{item.name}
+											{formatProductName(item.name)}
 										</OrderFoodName>
 										{item.is_prescription_required !==
 											0 && (

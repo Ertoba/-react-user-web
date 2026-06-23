@@ -60,32 +60,35 @@ const ImageTitleSection: React.FC<ImageTitleSectionProps> = ({
         >
             <Grid container spacing={4} alignItems="center">
                 {/* Left Grid - Col-8 with Image, Title, Subtitle in Row */}
-                <Grid item xs={12} md={8}>
+                <Grid item xs={12} md={dynamicImage ? 8 : 12}>
                     <Grid container spacing={3} alignItems="center">
                         {/* Image */}
-                        <Grid item xs={12} sm={4}
-                            sx={{
-                                "img": {
-                                    objectFit: "cover"
-                                }
-                            }}
-                        >
-                            <NextImage
-                                src={dynamicImage}
-                                alt={dynamicTitle}
-                                width={300}
-                                height={140}
-                                objectFit="cover"
-                                borderRadius={12}
-                                aspectRatio="auto"
-                                style={{
-                                    width: '100%',
+                        {dynamicImage ? (
+                            <Grid item xs={12} sm={4}
+                                sx={{
+                                    "img": {
+                                        objectFit: "cover"
+                                    }
                                 }}
-                            />
-                        </Grid>
+                            >
+                                <NextImage
+                                    src={dynamicImage}
+                                    alt={dynamicTitle}
+                                    width={300}
+                                    height={140}
+                                    objectFit="cover"
+                                    borderRadius={12}
+                                    aspectRatio="auto"
+                                    hidePlaceholderOnError
+                                    style={{
+                                        width: '100%',
+                                    }}
+                                />
+                            </Grid>
+                        ) : null}
 
                         {/* Title and Subtitle */}
-                        <Grid item xs={12} sm={8}>
+                        <Grid item xs={12} sm={dynamicImage ? 8 : 12}>
                             <Box>
                                 <Typography
                                     textAlign={{ xs: "center", md: "left" }}

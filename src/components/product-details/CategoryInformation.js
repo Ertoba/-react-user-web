@@ -4,6 +4,7 @@ import { CustomStackFullWidth } from "../../styled-components/CustomStyles.style
 import { Box, Stack } from "@mui/system";
 import { alpha, Typography } from "@mui/material";
 import { useTranslation } from "react-i18next";
+import { formatCategoryName } from "utils/georgianText";
 
 export const Tags = ({ item }) => {
   return (
@@ -38,7 +39,7 @@ const CategoryInformation = (props) => {
                 color="customColor.textGray"
                 key={index}
               >
-                {item?.name}
+                {formatCategoryName(item?.name)}
                 {categories?.length > 1 &&
                   categories?.length - 1 === index &&
                   ", "}
@@ -51,7 +52,7 @@ const CategoryInformation = (props) => {
       {tags?.length > 0 && (
         <Stack direction="row" alignItems="center" gap="10px" flexWrap="wrap">
           {tags.map((item, index) => {
-            return <Tags item={item?.name} key={index} />;
+            return <Tags item={formatCategoryName(item?.name)} key={index} />;
           })}
         </Stack>
       )}

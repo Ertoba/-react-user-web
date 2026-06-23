@@ -7,6 +7,7 @@ import {
 } from "../CheckOut.style";
 import CustomImageContainer from "../../CustomImageContainer";
 import { getAmountWithSign } from "helper-functions/CardHelpers";
+import { formatProductName } from "utils/georgianText";
 
 const CampaignOrders = ({ configData, campaignItemList, t }) => {
 	const productBaseUrl = configData?.base_urls?.campaign_image_url;
@@ -31,7 +32,7 @@ const CampaignOrders = ({ configData, campaignItemList, t }) => {
 						/>
 					</Grid>
 					<Grid item md={8} xs={8}>
-						<OrderFoodName>{item?.name}</OrderFoodName>
+						<OrderFoodName>{formatProductName(item?.name)}</OrderFoodName>
 						<OrderFoodSubtitle>
 							{t("Qty")} : {item?.quantity}
 						</OrderFoodSubtitle>

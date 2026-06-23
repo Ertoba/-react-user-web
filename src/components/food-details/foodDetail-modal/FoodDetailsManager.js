@@ -19,6 +19,7 @@ import CustomRatingBox from "../../CustomRatingBox";
 import { FoodHalalHaram, FoodVegNonVegFlag } from "../../cards/SpecialCard";
 import NotAvailableCard from "./NotAvailableCard";
 import React from "react";
+import { formatProductName, formatStoreName } from "utils/georgianText";
 
 const FoodDetailsManager = (props) => {
   const {
@@ -35,6 +36,10 @@ const FoodDetailsManager = (props) => {
 
     handleRouteToStore,
   } = props;
+  const storeDisplayName = formatStoreName(product?.store_name);
+  const productDisplayName = formatProductName(
+    modalData.length > 0 ? modalData[0]?.name : ""
+  );
   return (
     <Grid container direction="row">
       <Grid item xs={12} md={12} position="relative">
@@ -78,7 +83,7 @@ const FoodDetailsManager = (props) => {
                 color={theme.palette.whiteContainer.main}
                 onClick={handleRouteToStore}
               >
-                {product?.store_name}
+                {storeDisplayName}
               </Typography>
             ) : null}
           </Stack>
@@ -112,7 +117,7 @@ const FoodDetailsManager = (props) => {
               spacing={0.5}
             >
               <Typography fontSize="16px" fontWeight="500">
-                {modalData.length > 0 && modalData[0].name}
+                {productDisplayName}
               </Typography>
               {modalData.length > 0 &&
                 modalData[0]?.module?.module_type === "food" &&

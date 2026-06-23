@@ -25,6 +25,7 @@ import CustomImageContainer from "../../../CustomImageContainer";
 import PlaceIconComponent from "../../../PlaceIconComponent";
 import RatingStar from "../../../RatingStar";
 import { getImageUrl } from "utils/CustomFunctions";
+import { formatStoreName } from "utils/georgianText";
 const CardWrapper = styled(Paper)(({ theme }) => ({
   padding: "2rem 1rem",
   height: "100%",
@@ -73,6 +74,7 @@ const StoresInfoCard = (props) => {
   const theme = useTheme();
   const gray = theme.palette.neutral[400];
   const { wishLists } = useSelector((state) => state.wishList);
+  const storeDisplayName = formatStoreName(data?.name);
 
   let token = undefined;
   if (typeof window !== "undefined") {
@@ -150,7 +152,7 @@ const StoresInfoCard = (props) => {
             <ImageWrapper>
               <CustomImageContainer
                 src={data?.logo_full_url}
-                alt={data?.name}
+                alt={storeDisplayName}
                 height="100%"
                 width="100%"
                 objectFit="cover"
@@ -168,7 +170,7 @@ const StoresInfoCard = (props) => {
               className={classes.multiLineEllipsis}
               maxHeight="40px"
             >
-              {data?.name}
+              {storeDisplayName}
             </Typography>
             <Stack
               direction="row"

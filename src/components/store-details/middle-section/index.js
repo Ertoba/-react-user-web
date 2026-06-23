@@ -517,12 +517,14 @@ const MiddleSection = (props) => {
               justifyContent="center"
               alignItems="center"
             >
-              <Grid item xs={3} md={5} align="left">
+              <Grid item xs={5} md={5} align="left">
                 {getCurrentModuleType() === "pharmacy" ? (
                   <Typography
                     fontSize={{ xs: "13px", md: "15px" }}
                     textAlign="start"
                     fontWeight="600"
+                    noWrap
+                    sx={{ whiteSpace: "nowrap" }}
                   >
                     {t("All Items")}
                   </Typography>
@@ -531,12 +533,14 @@ const MiddleSection = (props) => {
                     fontSize={{ xs: "13px", md: "15px" }}
                     textAlign="start"
                     fontWeight="600"
+                    noWrap
+                    sx={{ whiteSpace: "nowrap" }}
                   >
                     {t("All Products")}{data?.pages[0]?.total_size &&` (${data?.pages[0]?.total_size})`}
                   </Typography>
                 )}
               </Grid>
-              <Grid item xs={9} md={7} container spacing={3}>
+              <Grid item xs={7} md={7} container spacing={3}>
                 {isSmall ? (
                   <Grid item xs={12}>
                     <CustomStackFullWidth

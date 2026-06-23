@@ -14,6 +14,7 @@ import AddWithIncrementDecrement from "./AddWithIncrementDecrement";
 import { CustomOverLay } from "./Card.style";
 import QuickView from "./QuickView";
 import { FoodHalalHaram } from "./SpecialCard";
+import { formatProductName, formatStoreName } from "utils/georgianText";
 
 export const Wrapper = styled(CustomStackFullWidth)(
   ({ theme, marginbottom }) => ({
@@ -44,6 +45,8 @@ export const CartWrapper = styled(Box)(({ theme }) => ({
 }));
 const VerticalCard = (props) => {
   const { item, marginbottom, imageBaseUrl } = props;
+  const productDisplayName = formatProductName(item?.name);
+  const storeDisplayName = formatStoreName(item?.store_name);
   const [isHover, setIsHover] = useState(false);
   const [showAddtocart, setShowAddtocart] = useState(true);
   const [isButtonClicked, setIsButtonClicked] = useState(false);
@@ -128,10 +131,10 @@ const VerticalCard = (props) => {
         )}
       </ImageWrapper>
       <Box sx={{ marginTop: "10px", marginBottom: "6px" }}>
-        <Body2 text={item?.store_name} />
+        <Body2 text={storeDisplayName} />
       </Box>
       <Box sx={{ marginBottom: "8px" }}>
-        <H3 text={item?.name} />
+        <H3 text={productDisplayName} />
       </Box>
       <Typography>{item?.unit_type}</Typography>
       <Box sx={{ marginTop: "8px", marginBottom: "10px" }}>

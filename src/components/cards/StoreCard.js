@@ -29,6 +29,7 @@ import FiberManualRecordIcon from "@mui/icons-material/FiberManualRecord";
 import ClosedNow from "components/closed-now";
 import NextImage from "components/NextImage";
 import useTextEllipsis from "api-manage/hooks/custom-hooks/useTextEllipsis";
+import { formatStoreName } from "utils/georgianText";
 const ContentSection = styled(Box)(({ theme }) => ({
   background: "",
   marginTop: "10px",
@@ -97,8 +98,9 @@ const StoreCard = (props) => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const router = useRouter();
-  const { ref: textRef, isEllipsed } = useTextEllipsis(item?.name);
-  const { ref: textRef2, isEllipsed: isEllipsed2 } = useTextEllipsis(item?.name);
+  const storeDisplayName = formatStoreName(item?.name);
+  const { ref: textRef, isEllipsed } = useTextEllipsis(storeDisplayName);
+  const { ref: textRef2, isEllipsed: isEllipsed2 } = useTextEllipsis(storeDisplayName);
 
   useEffect(() => {
     wishlistItemExistHandler();
@@ -163,7 +165,7 @@ const StoreCard = (props) => {
       onClick={() => handleClick()}
     >
       <ImageWrapper>
-        <NextImage alt={item?.name}
+        <NextImage alt={storeDisplayName}
           src={imageUrl}
           // alt={t("Background")}
           height={140}
@@ -218,7 +220,7 @@ const StoreCard = (props) => {
             }}
           >
             <Tooltip
-              title={item?.name || ""}
+              title={storeDisplayName || ""}
               arrow
               placement="bottom"
               disableHoverListener={!isEllipsed}
@@ -255,7 +257,7 @@ const StoreCard = (props) => {
                   }}
                   component="h3"
                 >
-                  {item?.name}
+                  {storeDisplayName}
                 </Typography>
               </CustomBoxFullWidth>
             </Tooltip>
@@ -345,7 +347,7 @@ const StoreCard = (props) => {
           <Grid container>
             <Grid item xs={9.5}>
               <Tooltip
-                title={item?.name || ""}
+                title={storeDisplayName || ""}
                 placement="bottom"
                 arrow
                 disableHoverListener={!isEllipsed2}
@@ -367,7 +369,7 @@ const StoreCard = (props) => {
                   fontWeight="500"
                   component="h3"
                 >
-                  {item?.name}
+                  {storeDisplayName}
                 </Typography>
               </Tooltip>
               {/*<H4 text={item?.name} />*/}

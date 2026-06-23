@@ -19,6 +19,7 @@ import H2 from "../../../typographies/H2";
 import { HomeComponentsWrapper } from "../../HomePageComponents";
 import { Next, Prev } from "../../popular-items-nearby/SliderSettings";
 import {useQueryClient} from "react-query";
+import { formatCategoryName, georgianCapsFontFamily } from "utils/georgianText";
 
 export const settings = {
   dots: false,
@@ -182,6 +183,10 @@ const FeaturedCategoriesWithFilter = (props) => {
                             ? "primary.main"
                             : "text.secondary",
                         cursor: "pointer",
+                        fontFamily: georgianCapsFontFamily,
+                        whiteSpace: "nowrap",
+                        minHeight: "auto",
+                        fontSize: { xs: "11px", md: "12px" },
                       }}
                       // variant={selected === index ? "16px" : "subtitle2"}
                       // lineHeight="16.59px"
@@ -195,7 +200,7 @@ const FeaturedCategoriesWithFilter = (props) => {
                       // }}
                       key={index}
                       onClick={() => handleClick(index, item?.id)}
-                      label={item?.name}
+                      label={formatCategoryName(item?.name)}
                     />
                   );
                 })}

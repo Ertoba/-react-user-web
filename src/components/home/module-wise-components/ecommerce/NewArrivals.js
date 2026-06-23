@@ -15,6 +15,7 @@ import ProductCard from "../../../cards/ProductCard";
 import H2 from "../../../typographies/H2";
 import { HomeComponentsWrapper } from "../../HomePageComponents";
 import TabMenu from "../../best-reviewed-items/TabMenu";
+import { formatCategoryName } from "utils/georgianText";
 
 const NewArrivals = ({ bannerData }) => {
   const [menu, setMenu] = useState([]);
@@ -32,7 +33,7 @@ const NewArrivals = ({ bannerData }) => {
 
   useEffect(() => {
     if (data) {
-      setMenu(["All", ...data?.categories?.map((item) => item.name)]);
+      setMenu(["All", ...data?.categories?.map((item) => formatCategoryName(item.name))]);
       setFilteredData(data?.products);
     }
   }, [data]);

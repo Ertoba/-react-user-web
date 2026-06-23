@@ -18,6 +18,7 @@ import { FoodVegNonVegFlag } from "../../../cards/SpecialCard";
 import { t } from "i18next";
 import CustomBadge from "../../../cards/CustomBadge";
 import { getAmountWithSign } from "helper-functions/CardHelpers";
+import { formatProductName } from "utils/georgianText";
 
 const Slide = ({ item }) => {
   const [dispatch] = useReducer();
@@ -25,12 +26,13 @@ const Slide = ({ item }) => {
   const theme = useTheme();
   const { configData } = useSelector((state) => state.configData);
   const imageBaseUrl = configData?.base_urls?.item_image_url;
+  const productDisplayName = formatProductName(item?.item?.name);
 
   const getModuleWiseItemName = () => {
     if (getCurrentModuleType() === ModuleTypes.FOOD) {
       return (
         <Stack direction="row" alignItems="center" spacing={0.8}>
-          <H4 text={item?.item?.name} />
+          <H4 text={productDisplayName} />
           <FoodVegNonVegFlag veg={item?.item?.veg == 0 ? false : true} />
         </Stack>
       );
@@ -44,12 +46,12 @@ const Slide = ({ item }) => {
         >
           {item?.item?.unit_type !== null ? (
             <H4
-              text={`${item?.item?.name.slice(0, 25)} (${
+              text={`${productDisplayName?.slice(0, 25)} (${
                 item?.item?.unit_type
               })`}
             />
           ) : (
-            <H4 text={`${item?.item?.name.slice(0, 25)}`} />
+            <H4 text={`${productDisplayName?.slice(0, 25)}`} />
           )}
         </Stack>
       );

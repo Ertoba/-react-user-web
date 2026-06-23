@@ -21,6 +21,7 @@ import { Taxi } from "components/header/second-navbar/SecondNavbar";
 import Box from "@mui/material/Box";
 import { getModule } from "helper-functions/getLanguage";
 import LocalTaxiIcon from "@mui/icons-material/LocalTaxi";
+import { hasActiveRentalModule } from "helper-functions/profileMenuVisibility";
 
 
 const styles = {
@@ -34,6 +35,7 @@ const BottomNav = () => {
   const { wishLists } = useSelector((state) => state.wishList);
   const { cartList } = useSelector((state) => state.cart);
   const { selectedModule } = useSelector((state) => state.utilsData);
+  const { modules } = useSelector((state) => state.configData);
   const totalWishList = wishLists?.item?.length + wishLists?.store?.length;
   const rentalTotalWishList =
     wishLists?.providers?.length + wishLists?.vehicles?.length;
@@ -100,7 +102,7 @@ const BottomNav = () => {
               icon={<HomeIcon />}
             />
 
-              {selectedModule?.module_type === "rental" ? (<CustomBottomNavigationAction
+              {selectedModule?.module_type === "rental" && hasActiveRentalModule(modules) ? (<CustomBottomNavigationAction
                   label={t("My Trips")}
                   value="my-trips"
                   icon={

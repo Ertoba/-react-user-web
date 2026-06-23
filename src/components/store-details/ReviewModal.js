@@ -33,6 +33,7 @@ import toast from "react-hot-toast";
 import { not_logged_in_message } from "utils/toasterMessages";
 import { useAddToWishlist } from "api-manage/hooks/react-query/wish-list/useAddWishList";
 import { useWishListDelete } from "api-manage/hooks/react-query/wish-list/useWishListDelete";
+import { formatProductName, formatStoreName } from "utils/georgianText";
 
 const BorderLinearProgress = styled(LinearProgress)(({ theme }) => ({
 	height: 8,
@@ -69,6 +70,7 @@ const RestaurantReviewModal = ({
 	const { wishLists } = useSelector((state) => state.wishList);
 	const { data, refetch, isLoading } = useGetStoreReviews(id);
 	const [isWishlisted, setIsWishlisted] = useState(false);
+	const restaurantDisplayName = formatStoreName(restaurantDetails?.name);
 	const { mutate: addFavoriteMutation } = useAddToWishlist();
 	const { mutate } = useWishListDelete();
 console.log({productData});
@@ -440,7 +442,7 @@ console.log({productData});
 											fontSize="10px"
 											fontWeight="400"
 										>
-											{review.item_name}
+											{formatProductName(review.item_name)}
 										</Typography>
 									</Stack>
 								</Grid>
@@ -467,7 +469,7 @@ console.log({productData});
 															.primary
 													}
 												>
-													{restaurantDetails?.name}
+													{restaurantDisplayName}
 												</Typography>
 												<Typography
 													fontSize="10px"

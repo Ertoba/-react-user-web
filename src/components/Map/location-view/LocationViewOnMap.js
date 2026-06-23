@@ -10,6 +10,7 @@ import DirectionsIcon from "@mui/icons-material/Directions";
 import { RoundedIconButton } from "components/product-details/product-details-section/ProductsThumbnailsSettings";
 import { useGeolocated } from "react-geolocated";
 import GpsFixedIcon from "@mui/icons-material/GpsFixed";
+import { formatStoreName } from "utils/georgianText";
 
 const LocationViewOnMap = (props) => {
   const {
@@ -24,6 +25,7 @@ const LocationViewOnMap = (props) => {
   const theme = useTheme();
   const [userLocation, setUserLocation] = useState({});
   const [rerenderMap, setRerenderMap] = useState(false);
+  const storeDisplayName = formatStoreName(storeDetails?.name);
   const { coords } = useGeolocated({
     positionOptions: {
       enableHighAccuracy: false,
@@ -91,7 +93,7 @@ const LocationViewOnMap = (props) => {
               <Stack mt="10px" direction="row" justifyContent="space-between">
                 <Stack>
                   <Typography fontSize="18px" fontWeight={500}>
-                    {storeDetails?.name}
+                    {storeDisplayName}
                   </Typography>
                   <Typography fontSize="14px" fontWeight={500}>
                     {address}

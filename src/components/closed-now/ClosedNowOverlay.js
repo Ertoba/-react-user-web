@@ -27,7 +27,8 @@ const ClosedNowOverlay = ({ borderRadius }) => {
         align="center"
         color={theme.palette.mode === "dark" ? theme.palette.neutral[1000] : theme.palette.neutral[100]}
         fontWeight="600"
-        fontSize="12px"
+        fontSize={{ xs: "6px", sm: "7px", md: "8px" }}
+        lineHeight={1.1}
       >
         {t("CLOSED NOW")}
       </Typography>

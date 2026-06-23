@@ -10,6 +10,7 @@ import { useRouter } from "next/router";
 import CustomDialogConfirm from "../custom-dialog/confirm/CustomDialogConfirm";
 import CustomModal from "../modal";
 import DeleteAccount from "../user-information/DeleteAccount";
+import { shouldShowProfileMenuItem } from "helper-functions/profileMenuVisibility";
 
 const StyledMenuItem = styled(MenuItem)(({ theme, page, menu }) => ({
   backgroundColor:
@@ -25,7 +26,7 @@ const StyledMenuItem = styled(MenuItem)(({ theme, page, menu }) => ({
 }));
 const ProfileTabPopover = (props) => {
   const { deleteUserHandler,isLoadingDelete,accountDeleteStatus,setAccountDeleteStatus, anchorEl, onClose, open, page, ...other } = props;
-  const { configData } = useSelector((state) => state.configData);
+  const { configData, modules } = useSelector((state) => state.configData);
   const [openModal, setOpenModal] = useState(false)
   const [deleteModal, setDeleteModal] = useState(false)
   const router = useRouter();
@@ -91,11 +92,7 @@ const ProfileTabPopover = (props) => {
         }}
       >
         {menuData?.map((menu, index) => {
-          if (
-            (configData?.customer_wallet_status === 0 && menu?.id === 4) ||
-            (configData?.loyalty_point_status === 0 && menu?.id === 5) ||
-            (configData?.ref_earning_status === 0 && menu?.id === 6)
-          ) {
+          if (!shouldShowProfileMenuItem(menu, configData, modules)) {
             return null;
           } else {
             return (

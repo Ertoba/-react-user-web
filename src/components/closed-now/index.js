@@ -35,7 +35,8 @@ const ClosedNow = (props) => {
 					align="center"
 					color={theme.palette.neutral[100]}
 					sx={{
-						fontSize: "10px",
+						fontSize: { xs: "6px", sm: "7px", md: "8px" },
+						lineHeight: 1.1,
 					}}
 				>
 					{t("Closed Now")}

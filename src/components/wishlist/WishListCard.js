@@ -37,6 +37,7 @@ import { getGuestId } from "helper-functions/getToken";
 import { onErrorResponse } from "api-manage/api-error-response/ErrorResponses";
 import useAddCartItem from "../../api-manage/hooks/react-query/add-cart/useAddCartItem";
 import Loading from "../custom-loading/Loading";
+import { formatProductName } from "utils/georgianText";
 
 const WishListCard = ({ item }) => {
   const theme = useTheme();
@@ -228,6 +229,7 @@ const WishListCard = ({ item }) => {
     e.stopPropagation();
     setOpenModal(true);
   };
+  const productDisplayName = formatProductName(item?.name);
   return (
     <>
       <CustomStackFullWidth
@@ -244,7 +246,7 @@ const WishListCard = ({ item }) => {
         />
         <Stack width="0px" flexGrow="1" justifyContent="center" spacing={0.5}>
           <Typography fontWeight="500" fontSize="14px">
-            {item?.name}
+            {productDisplayName}
           </Typography>
           <AmountWithDiscountedAmount item={item} />
           <Typography fontWeight="500" fontSize="16px"></Typography>

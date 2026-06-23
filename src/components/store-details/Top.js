@@ -44,6 +44,7 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { getImageUrl } from "utils/CustomFunctions";
 import StoreShare from "components/store-details/StoreShare";
+import { formatStoreName } from "utils/georgianText";
 
 const ContentWrapper = styled(CustomBoxFullWidth)(({ theme }) => ({
   position: "relative",
@@ -122,6 +123,7 @@ const Top = (props) => {
     Number(storeDetails?.avg_rating) > 0 ||
     Number(storeDetails?.rating_count) > 0 ||
     Number(storeDetails?.reviews_comments_count) > 0;
+  const storeDisplayName = formatStoreName(storeDetails?.name);
   const router = useRouter();
   const ACTION = {
     setViewMap: "setViewMap",
@@ -371,7 +373,7 @@ const Top = (props) => {
                         sx={{ color: "whiteContainer.main" }}
                         spacing={1}
                       >
-                        <H1 text={storeDetails?.name} textAlign="flex-start" />
+                        <H1 text={storeDisplayName} textAlign="flex-start" />
 
                         {hasStoreRatingOrReview && (
                           <Stack direction="row" alignItems="center" spacing={1}>
@@ -588,7 +590,7 @@ const Top = (props) => {
                     </Grid>
                     <Grid item xs={7} md={7.5} alignSelf="center">
                       <CustomStackFullWidth spacing={1}>
-                        <H1 text={storeDetails?.name} textAlign="flex-start" />
+                        <H1 text={storeDisplayName} textAlign="flex-start" />
 
                         {hasStoreRatingOrReview && (
                           <Stack direction="row" alignItems="center" spacing={1}>

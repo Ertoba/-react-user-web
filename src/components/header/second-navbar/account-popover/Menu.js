@@ -19,6 +19,7 @@ import { logoutSuccessFull } from "utils/toasterMessages";
 import { menuData } from "./menuData";
 import { useRouter } from "next/router";
 import { setWelcomeModal } from "redux/slices/utils";
+import { shouldShowProfileMenuItem } from "helper-functions/profileMenuVisibility";
 
 const Menu = ({ onClose, cartListRefetch }) => {
   const { t } = useTranslation();
@@ -70,13 +71,7 @@ const Menu = ({ onClose, cartListRefetch }) => {
     <Box>
       <MenuList>
         {menuData.map((item, index) => {
-          if (
-            (configData?.customer_wallet_status === 0 && item.id === 4) ||
-            (configData?.loyalty_point_status === 0 && item.id === 5) ||
-            (configData?.ref_earning_status === 0 && item.id === 6) || (
-              (!modules?.find((item) => item?.module_type === 'rental') && item.id === 3) || (modules?.find((item) => item?.module_type === 'rental')?.status === 0 && item.id === 3)
-            )
-          ) {
+          if (!shouldShowProfileMenuItem(item, configData, modules)) {
             return null;
           } else {
             if (item?.id !== 8) {

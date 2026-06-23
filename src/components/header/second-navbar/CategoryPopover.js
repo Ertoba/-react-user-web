@@ -7,6 +7,7 @@ import { CustomStackFullWidth } from "styled-components/CustomStyles.style";
 import ViewMore from "./ViewMore";
 import CustomDivider from "../../CustomDivider";
 import { getCurrentModuleType } from "helper-functions/getCurrentModuleType";
+import { formatCategoryName, georgianCapsFontFamily } from "utils/georgianText";
 
 const GridItem = ({
   category,
@@ -15,6 +16,7 @@ const GridItem = ({
   hasChildLength,
   index,
 }) => {
+  const categoryDisplayName = formatCategoryName(category?.name);
   return (
     <Box maxWidth="150px">
       <Typography
@@ -36,13 +38,14 @@ const GridItem = ({
           display: "-webkit-box",
           WebkitLineClamp: "1",
           WebkitBoxOrient: "vertical",
+          fontFamily: georgianCapsFontFamily,
           "&:hover": {
             color: "primary.main",
             letterSpacing: "0.03em",
           },
         }}
       >
-        {category?.name}
+        {categoryDisplayName}
       </Typography>
       {category?.childes?.length > 0 &&
         category?.childes?.slice(0, 5).map((item, index) => {
@@ -62,7 +65,7 @@ const GridItem = ({
               }}
               onClick={() => handleClickToSubCategory(item)}
             >
-              {item?.name}
+              {formatCategoryName(item?.name)}
             </Typography>
           );
         })}

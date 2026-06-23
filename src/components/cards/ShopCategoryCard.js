@@ -9,6 +9,7 @@ import CustomImageContainer from "../CustomImageContainer";
 import NextImage from "components/NextImage";
 import useTextEllipsis from "api-manage/hooks/custom-hooks/useTextEllipsis";
 import { useRouter } from "next/router";
+import { formatCategoryName, georgianCapsFontFamily } from "utils/georgianText";
 
 const Wrapper = styled(Box)(({ theme }) => ({
   backgroundColor: theme.palette.background.paper,
@@ -42,7 +43,8 @@ const ImageWrapper = styled(CustomBoxFullWidth)(({ theme }) => ({
 const ShopCategoryCard = (props) => {
   const router = useRouter();
   const { item, imageUrl, onlyshimmer } = props;
-  const { ref: textRef, isEllipsed } = useTextEllipsis(item?.name);
+  const categoryDisplayName = formatCategoryName(item?.name);
+  const { ref: textRef, isEllipsed } = useTextEllipsis(categoryDisplayName);
   const { t } = useTranslation();
   const classes = textWithEllipsis();
   console.log({ isEllipsed });
@@ -77,7 +79,7 @@ const ShopCategoryCard = (props) => {
           >
             <Grid item xs={12}>
               <Tooltip
-                title={isEllipsed ? item?.name : ""}
+                title={isEllipsed ? categoryDisplayName : ""}
 
                 placement="bottom"
                 arrow
@@ -108,15 +110,18 @@ const ShopCategoryCard = (props) => {
                     className={classes.multiLineEllipsis}
                     sx={{
                       display: "block",
-                      overflow: "visible",
-                      textOverflow: "clip",
-                      WebkitLineClamp: "unset",
-                      wordBreak: "break-word",
-                      lineHeight: 1.25,
+                      overflow: "hidden",
+                      textOverflow: "ellipsis",
+                      whiteSpace: "nowrap",
+                      WebkitLineClamp: 1,
+                      wordBreak: "normal",
+                      lineHeight: 1.15,
+                      fontSize: { xs: "10px", md: "12px" },
+                      fontFamily: georgianCapsFontFamily,
                     }}
                     component="h4"
                   >
-                    {onlyshimmer ? <Skeleton variant="text" width="70px" /> : item?.name}
+                    {onlyshimmer ? <Skeleton variant="text" width="70px" /> : categoryDisplayName}
                   </Typography>
                 </CustomBoxFullWidth>
               </Tooltip>

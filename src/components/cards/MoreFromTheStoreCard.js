@@ -22,6 +22,7 @@ import toast from "react-hot-toast";
 import { not_logged_in_message } from "../../utils/toasterMessages";
 import { t } from "i18next";
 import { getImageUrl } from "utils/CustomFunctions";
+import { formatProductName } from "utils/georgianText";
 
 const CustomWrapper = styled(Paper)(({ theme }) => ({
   borderRadius: "10px",
@@ -58,6 +59,7 @@ const MoreFromTheStoreCard = (props) => {
   const { mutate: addFavoriteMutation } = useAddStoreToWishlist();
   const { configData } = useSelector((state) => state.configData);
   const base_url = configData?.base_urls?.item_image_url;
+  const productDisplayName = formatProductName(item?.name);
   let token = undefined;
   if (typeof window !== "undefined") {
     token = localStorage.getItem("token");
@@ -119,7 +121,7 @@ const MoreFromTheStoreCard = (props) => {
           </ImageWrapper>
           <Stack spacing={0.5}>
             <Typography variant="body1" className={classes.multiLineEllipsis}>
-              {item?.name}
+              {productDisplayName}
             </Typography>
             <CustomStackFullWidth direction="row" alignItems="center">
               <CustomRatings
