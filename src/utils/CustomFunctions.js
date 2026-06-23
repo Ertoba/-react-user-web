@@ -654,16 +654,17 @@ export const cartItemsTotalAmount = (cartList) => {
 
 export const getInfoFromZoneData = (zoneData) => {
   let chargeInfo;
+  const normalizedZoneData = zoneData?.data ?? zoneData;
 
-   console.log("vvv",zoneData);
-  if (zoneData?.zone_data?.length > 0) {
-    zoneData?.zone_data?.forEach((item, index) => {
+   console.log("vvv",normalizedZoneData);
+  if (normalizedZoneData?.zone_data?.length > 0) {
+    normalizedZoneData?.zone_data?.forEach((item, index) => {
       if (item?.modules?.length > 0) {
         item?.modules?.forEach((moduleItem) => {
            console.log("vvv",moduleItem?.id,getCurrentModuleType(),getCurrentModuleId());
           if (
             moduleItem?.module_type === getCurrentModuleType() &&
-            moduleItem?.id === getCurrentModuleId()
+            Number(moduleItem?.id) === Number(getCurrentModuleId())
           ) {
              
             chargeInfo = {
@@ -717,6 +718,7 @@ export const getDeliveryFees = (
   extraCharge,
   surgePrice
 ) => {
+  const normalizedZoneData = zoneData?.data ?? zoneData;
   if (orderType === "delivery" || orderType === "schedule_order") {
     //convert m to km
     let convertedDistance = handleDistance(
@@ -760,8 +762,8 @@ export const getDeliveryFees = (
         }
       }
     } else {
-      if (zoneData?.zone_data?.length > 0) {
-        const chargeInfo = getInfoFromZoneData(zoneData);
+      if (normalizedZoneData?.zone_data?.length > 0) {
+        const chargeInfo = getInfoFromZoneData(normalizedZoneData);
         console.log({chargeInfo});
         
         if (chargeInfo?.pivot?.delivery_charge_type === "fixed") {
@@ -771,30 +773,35 @@ export const getDeliveryFees = (
           } else {
             return getDeliveryFeeByBadWeather(chargeInfo?.pivot?.fixed_shipping_charge + extraCharge, surgePrice);
           }
-        } else {
-          if (
-            chargeInfo?.pivot?.per_km_shipping_charge !== null &&
-            chargeInfo?.pivot?.per_km_shipping_charge >= 0
-          ) {
+        } else if (chargeInfo?.pivot) {
+          const perKmShippingCharge =
+            Number(chargeInfo?.pivot?.per_km_shipping_charge) || 0;
+          const minimumShippingCharge =
+            Number(chargeInfo?.pivot?.minimum_shipping_charge) || 0;
+          const maximumShippingCharge =
+            chargeInfo?.pivot?.maximum_shipping_charge === null ||
+            chargeInfo?.pivot?.maximum_shipping_charge === undefined
+              ? null
+              : Number(chargeInfo?.pivot?.maximum_shipping_charge);
             deliveryFee =
               convertedDistance *
-              (chargeInfo?.pivot?.per_km_shipping_charge || 0);
+              perKmShippingCharge;
             if ((isAdminFreeDeliveryEnabled && (isFreeDeliveryByAmount || isFreeDeliveryToAllStores)) ||
               orderType === "take_away") {
               return 0;
             } else if (
-              deliveryFee <= chargeInfo?.pivot?.minimum_shipping_charge
+              deliveryFee <= minimumShippingCharge
             ) {
               return getDeliveryFeeByBadWeather(
-                chargeInfo?.pivot?.minimum_shipping_charge + extraCharge,
+                minimumShippingCharge + extraCharge,
                 surgePrice
               );
             } else if (
-              deliveryFee >= chargeInfo?.pivot?.maximum_shipping_charge &&
-              chargeInfo?.pivot?.maximum_shipping_charge !== null
+              maximumShippingCharge !== null &&
+              deliveryFee >= maximumShippingCharge
             ) {
               return getDeliveryFeeByBadWeather(
-                chargeInfo?.pivot?.maximum_shipping_charge + extraCharge,
+                maximumShippingCharge + extraCharge,
                 surgePrice
               );
             } else {
@@ -803,7 +810,6 @@ export const getDeliveryFees = (
                 surgePrice
               );
             }
-          }
         }
 
       }
