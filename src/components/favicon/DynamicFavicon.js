@@ -6,8 +6,8 @@ import {
 } from "components/logo/brandAssets";
 
 const DynamicFavicon = () => {
-  const faviconHref = `${miliFaviconSrc}?v=20260529`;
-  const appleTouchIconHref = `${miliAppleTouchIconSrc}?v=20260529`;
+  const faviconHref = `${miliFaviconSrc}?v=20260731`;
+  const appleTouchIconHref = `${miliAppleTouchIconSrc}?v=20260731`;
 
   return (
     <Head>

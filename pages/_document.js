@@ -66,13 +66,16 @@ class CustomDocument extends Document {
           <link
             rel="icon"
             type="image/png"
-            href="/static/mili-customer-favicon-brand-20260529.png?v=20260529"
+            href="/static/mili-customer-favicon-brand-20260731.png?v=20260731"
           />
-          <link rel="shortcut icon" href="/favicon.ico?v=20260529" />
+          <link
+            rel="shortcut icon"
+            href="/static/mili-customer-favicon-brand-20260731.png?v=20260731"
+          />
           <link
             rel="apple-touch-icon"
             sizes="180x180"
-            href="/apple-touch-icon.png?v=20260529"
+            href="/apple-touch-icon.png?v=20260731"
           />
 
           {/* ✅ Analytics scripts */}
