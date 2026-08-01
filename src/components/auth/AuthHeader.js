@@ -25,10 +25,10 @@ const AuthHeader = ({ title, configData }) => {
     >
       <Box onClick={handleLogoClick}>
         <CustomImageContainer
-          maxWidth="300px"
-          smMaxWidth="220px"
-          height="58px"
-          smHeight="48px"
+          maxWidth="72px"
+          smMaxWidth="64px"
+          height="104px"
+          smHeight="92px"
           width="100%"
           objectfit="contain"
           src={miliLogoSrc}

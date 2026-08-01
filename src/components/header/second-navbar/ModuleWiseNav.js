@@ -111,7 +111,7 @@ const ModuleWiseNav = (props) => {
 			<CustomLogo
 				atlText="logo"
 				logoImg={favIcon}
-				width="150px"
+				width="42px"
 				height="40px"
 				objectFit="contain"
 				style={{ marginLeft: 0 }} // force left if needed

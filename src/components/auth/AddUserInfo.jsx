@@ -95,8 +95,8 @@ const AddUserInfo = ({ formSubmitHandler, loginInfo, isLoading, userInfo }) => {
         <CustomStackFullWidth alignItems="center">
           <CustomImageContainer
             src={miliLogoSrc}
-            maxWidth="360px"
-            height="74px"
+            maxWidth="72px"
+            height="104px"
             alt="Logo"
             objectfit="contain"
           />

@@ -7,14 +7,14 @@ const LogoSide = ({ configData, width, height, objectFit }) => {
     <Stack
       direction="row"
       alignItems="center"
-      width="150px"
+      width="48px"
       justifyContent="flex-start"
     >
       <CustomLogo
         atlText="logo"
         logoImg={miliLogoSrc}
-        width={width}
-        height={height}
+        width="42px"
+        height={height || "48px"}
         objectFit={objectFit}
       />
     </Stack>
