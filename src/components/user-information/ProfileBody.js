@@ -25,21 +25,22 @@ const ProfileBody = ({
   refetch,
   setEditAddress,
 }) => {
-  console.log({ orderId });
+  const profileComponent = () => (
+    <Profile
+      configData={configData}
+      editProfile={editProfile}
+      setEditProfile={setEditProfile}
+      addAddress={addAddress}
+      setAddAddress={setAddAddress}
+      editAddress={editAddress}
+      addressRefetch={refetch}
+      setEditAddress={setEditAddress}
+    />
+  );
+
   const activeComponent = () => {
     if (page === "profile-settings") {
-      return (
-        <Profile
-          configData={configData}
-          editProfile={editProfile}
-          setEditProfile={setEditProfile}
-          addAddress={addAddress}
-          setAddAddress={setAddAddress}
-          editAddress={editAddress}
-          addressRefetch={refetch}
-          setEditAddress={setEditAddress}
-        />
-      );
+      return profileComponent();
     }
     if (page === "my-orders" && !orderId) {
       return <MyOrders configData={configData} />;
@@ -72,7 +73,9 @@ const ProfileBody = ({
       return <LoyaltyPoints configData={configData} />;
     }
     if (page === "referral-code") {
-      return <ReferralCode configData={configData} />;
+      return Number(configData?.ref_earning_status) === 1
+        ? <ReferralCode configData={configData} />
+        : profileComponent();
     }
     if (page === "coupons") {
       return <Coupons configData={configData} />;
@@ -88,7 +91,7 @@ const ProfileBody = ({
       return <TrackOrderInput configData={configData} />;
     }
   };
-  return <Stack >{activeComponent()}</Stack>;
+  return <Stack>{activeComponent()}</Stack>;
 };
 
 export default ProfileBody;

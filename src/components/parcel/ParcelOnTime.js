@@ -22,6 +22,9 @@ const settings = {
 };
 const ParcelOnTime = () => {
   const { data, refetch, isLoading } = useGetOtherBanners();
+  const validBanners = (data?.banners ?? []).filter(
+    (item) => Boolean(item?.value_full_url)
+  );
   useEffect(() => {
     refetch();
   }, []);
@@ -32,17 +35,19 @@ const ParcelOnTime = () => {
         <Skeleton width="100%" height="370px" />
       ) : (
         <>
-          {data && (
+          {validBanners.length > 0 && (
             <BgBox>
               <SliderCustom>
                 <Slider {...settings}>
-                  {data?.banners?.map((item, index) => {
+                  {validBanners.map((item, index) => {
                     return (
                       <Stack key={index}>
                         <CustomImageContainer
                           src={item.value_full_url}
-                          objectfit="contain"
+                          width="100%"
+                          objectfit="cover"
                           aspectRatio="4/1"
+                          borderRadius="8px"
                         />
                       </Stack>
                     );

@@ -10,15 +10,24 @@ export const hasActiveRentalModule = (modules = []) =>
 export const shouldShowProfileMenuItem = (menuItem, configData, modules = []) => {
   if (!menuItem) return false;
 
-  if (configData?.customer_wallet_status === 0 && menuItem?.id === 4) {
+  if (
+    Number(configData?.customer_wallet_status) === 0 &&
+    menuItem?.name === "wallet"
+  ) {
     return false;
   }
 
-  if (configData?.loyalty_point_status === 0 && menuItem?.id === 5) {
+  if (
+    Number(configData?.loyalty_point_status) === 0 &&
+    menuItem?.name === "loyalty-points"
+  ) {
     return false;
   }
 
-  if (configData?.ref_earning_status === 0 && menuItem?.id === 6) {
+  if (
+    Number(configData?.ref_earning_status) === 0 &&
+    menuItem?.name === "referral-code"
+  ) {
     return false;
   }
 

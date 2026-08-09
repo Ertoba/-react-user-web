@@ -1,23 +1,17 @@
 import { useTheme } from "@emotion/react";
-import { Paper, Skeleton, Typography, useMediaQuery } from "@mui/material";
+import { Paper, Skeleton, Typography } from "@mui/material";
 import { Stack, alpha } from "@mui/system";
 import Router from "next/router";
 import { useTranslation } from "react-i18next";
-import { useSelector } from "react-redux";
-import CustomImageContainer from "../CustomImageContainer";
-import { getImageUrl } from "utils/CustomFunctions";
 
 const ProfileStatistics = ({
   value,
   title,
-  image,
+  icon,
   pathname,
   isLoading,
-  storage,
 }) => {
   const theme = useTheme();
-  const isSmall = useMediaQuery(theme.breakpoints.down("sm"));
-  const { configData } = useSelector((state) => state.configData);
   const { t } = useTranslation();
   const handleRoute = (value) => {
     if (title === "Days Since Joining") {
@@ -54,16 +48,15 @@ const ProfileStatistics = ({
     >
       <Stack justifyContent="center" alignItems="center" spacing={1.3}>
         <Stack
-          backgroundColor={theme.palette.primary.semiLight}
-          padding="4px"
+          backgroundColor={alpha(theme.palette.primary.main, 0.12)}
+          color={theme.palette.primary.main}
+          width="40px"
+          height="40px"
           borderRadius="50%"
+          alignItems="center"
+          justifyContent="center"
         >
-          <CustomImageContainer
-            src={image}
-            width="20px"
-            height="20px"
-            alt="join"
-          />
+          {icon}
         </Stack>
         <Stack
           flexGrow="wrap"

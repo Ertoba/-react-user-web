@@ -1,14 +1,14 @@
-import { Grid, useTheme } from "@mui/material";
+import { Grid } from "@mui/material";
 import React from "react";
+import CalendarMonthOutlinedIcon from "@mui/icons-material/CalendarMonthOutlined";
+import AccountBalanceWalletOutlinedIcon from "@mui/icons-material/AccountBalanceWalletOutlined";
+import Inventory2OutlinedIcon from "@mui/icons-material/Inventory2Outlined";
+import WorkspacePremiumOutlinedIcon from "@mui/icons-material/WorkspacePremiumOutlined";
 import { getAmountWithSign } from "../../helper-functions/CardHelpers";
-import loyaltyImage from "./asset/loyalty.png";
-import wallet from "./asset/newWallet.png";
-import orderImage from "./asset/order.png";
 
 import ProfileStatistics from "../profile/ProfileStatistics";
 
-const UserDashBoard = ({ data, configData, isLoading }) => {
-  const theme = useTheme();
+const UserDashBoard = ({ data, isLoading }) => {
   return (
     <Grid
       container
@@ -25,9 +25,8 @@ const UserDashBoard = ({ data, configData, isLoading }) => {
           isLoading={isLoading}
           value={data?.member_since_days}
           title="Days Since Joining"
-          image={data?.image_full_url}
+          icon={<CalendarMonthOutlinedIcon sx={{ fontSize: 24 }} />}
           pathname="profile-settings"
-          storage={data?.storage}
         />
       </Grid>
       <Grid item xs={6} sm={6} md={3}>
@@ -35,9 +34,8 @@ const UserDashBoard = ({ data, configData, isLoading }) => {
           isLoading={isLoading}
           value={getAmountWithSign(data?.wallet_balance)}
           title="Amount in Wallet"
-          image={wallet.src}
+          icon={<AccountBalanceWalletOutlinedIcon sx={{ fontSize: 24 }} />}
           pathname="wallet"
-          storage={data?.storage}
         />
       </Grid>
       <Grid item xs={6} sm={6} md={3}>
@@ -45,9 +43,8 @@ const UserDashBoard = ({ data, configData, isLoading }) => {
           isLoading={isLoading}
           value={data?.order_count}
           title="Total Orders"
-          image={orderImage.src}
+          icon={<Inventory2OutlinedIcon sx={{ fontSize: 24 }} />}
           pathname="my-orders"
-          storage={data?.storage}
         />
       </Grid>
       <Grid item xs={6} sm={6} md={3}>
@@ -55,9 +52,8 @@ const UserDashBoard = ({ data, configData, isLoading }) => {
           isLoading={isLoading}
           value={data?.loyalty_point}
           title="loyalty points"
-          image={loyaltyImage.src}
+          icon={<WorkspacePremiumOutlinedIcon sx={{ fontSize: 24 }} />}
           pathname="loyalty-points"
-          storage={data?.storage}
         />
       </Grid>
     </Grid>

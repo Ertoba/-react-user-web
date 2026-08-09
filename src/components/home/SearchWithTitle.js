@@ -87,24 +87,22 @@ const SearchWithTitle = (props) => {
 
           sx={{
             fontSize: isCategorySearch
-              ? { xs: "30px", sm: "34px", md: "38px" }
+              ? { xs: "22px", sm: "30px", md: "38px" }
               : {
                   md: moduleType === ModuleTypes.RENTAL && "30px !important",
                 },
             lineHeight: isCategorySearch
-              ? { xs: 1.28, md: 1.25 }
+              ? { xs: 1.35, md: 1.25 }
               : { xs: 1.35, md: "33.18px" },
+            pt: isCategorySearch ? "2px" : 0,
             maxWidth: { xs: "92vw", md: "720px" },
             overflowWrap: "break-word",
             wordBreak: "normal",
             color:
               moduleType === ModuleTypes.PARCEL
-                ? theme.palette.common.white
+                ? "#039D55 !important"
                 : "inherit",
-            textShadow:
-              moduleType === ModuleTypes.PARCEL
-                ? "0 1px 2px rgba(0,0,0,0.35)"
-                : "none",
+            textShadow: "none",
             fontFamily:
               moduleType === ModuleTypes.PARCEL || isCategorySearch
                 ? georgianCapsFontFamily
@@ -121,15 +119,12 @@ const SearchWithTitle = (props) => {
           sx={{
             color:
               moduleType === ModuleTypes.PARCEL
-                ? theme.palette.common.white
+                ? "#374151 !important"
                 : (theme) =>
                     theme.palette.mode === "dark"
                       ? theme.palette.neutral[1000]
                       : theme.palette.neutral[400],
-            textShadow:
-              moduleType === ModuleTypes.PARCEL
-                ? "0 1px 2px rgba(0,0,0,0.35)"
-                : "none",
+            textShadow: "none",
           }}
           fontWeight="400"
           lineHeight="18.75px"

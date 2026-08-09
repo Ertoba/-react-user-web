@@ -62,8 +62,6 @@ const Index = () => {
       } catch (error) {
         console.error("Error decoding token:", error);
       }
-    } else {
-      console.error("Token is missing.");
     }
   }, [token]);
   return (

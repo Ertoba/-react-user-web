@@ -21,19 +21,28 @@ const ParcelVideo = () => {
 	useEffect(() => {
 		refetch();
 	}, []);
+	const bannerContents = data?.banner_contents ?? [];
+	const hasVideo =
+		data?.banner_type === "video" && Boolean(data?.banner_video);
+	const hasVideoContent =
+		data?.banner_type === "video_content" &&
+		Boolean(data?.banner_video_content_full_url);
+	const hasImage = Boolean(data?.banner_image_full_url);
+	const hasMedia = hasVideo || hasVideoContent || hasImage;
+	const mediaColumnVisible = isLoading || hasMedia;
 
 	const steps = [
 		{
-			label: data?.banner_contents[0]?.value,
-			description: data?.banner_contents[1]?.value,
+			label: bannerContents[0]?.value,
+			description: bannerContents[1]?.value,
 		},
 		{
-			label: data?.banner_contents[2]?.value,
-			description: data?.banner_contents[3]?.value,
+			label: bannerContents[2]?.value,
+			description: bannerContents[3]?.value,
 		},
 		{
-			label: data?.banner_contents[4]?.value,
-			description: data?.banner_contents[5]?.value,
+			label: bannerContents[4]?.value,
+			description: bannerContents[5]?.value,
 		},
 	];
 
@@ -48,7 +57,7 @@ const ParcelVideo = () => {
 				{t("Easiest way to get services")}
 			</Typography>
 			<Grid container alignItems="center" spacing={2}>
-				<Grid item xs={12} sm={6} md={7}>
+				{mediaColumnVisible && <Grid item xs={12} sm={6} md={7}>
 					{" "}
 					{isLoading ? (
 						<Stack pt="1rem">
@@ -61,9 +70,9 @@ const ParcelVideo = () => {
 						</Stack>
 					) : (
 						<Stack>
-							{data?.banner_type === "video" ? (
+							{hasVideo ? (
 								<CustomVideoPlayer videoUrl={data?.banner_video} />
-							) : data?.banner_type === "video_content" ? (
+							) : hasVideoContent ? (
 								<CustomVideoPlayer
 									videoUrl={data?.banner_video_content_full_url}
 								/>
@@ -82,9 +91,15 @@ const ParcelVideo = () => {
 							)}
 						</Stack>
 					)}
-				</Grid>
-				<Grid item xs={12} sm={6} md={5} pl={{ xs: "5px" }}>
-					{data?.banner_contents?.length > 0 && (
+				</Grid>}
+				<Grid
+					item
+					xs={12}
+					sm={mediaColumnVisible ? 6 : 12}
+					md={mediaColumnVisible ? 5 : 12}
+					pl={{ xs: "5px" }}
+				>
+					{bannerContents.length > 0 && (
 						<ParcelInstruction
 							steps={steps}
 							theme={theme}

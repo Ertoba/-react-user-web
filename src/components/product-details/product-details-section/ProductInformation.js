@@ -1,4 +1,4 @@
-import { Skeleton, Typography, useTheme } from "@mui/material";
+import { Box, Skeleton, Typography, useTheme } from "@mui/material";
 import { Stack } from "@mui/system";
 import React, { useEffect, useReducer, useState } from "react";
 import { CustomStackFullWidth } from "styled-components/CustomStyles.style";
@@ -20,8 +20,6 @@ import { useTranslation } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
 import { setCart, setCartList } from "redux/slices/cart";
 import { addWishList } from "redux/slices/wishList";
-import SimpleBar from "simplebar-react";
-import "simplebar-react/dist/simplebar.min.css";
 import {
 	not_logged_in_message,
 	out_of_limits,
@@ -295,7 +293,6 @@ const ProductInformation = ({
 			});
 		} else toast.error(t(not_logged_in_message));
 	};
-	console.log({state});
 	const modalStoreDisplayName = formatStoreName(state.modalData[0]?.store_name);
 	const modalProductDisplayName = formatProductName(state.modalData[0]?.name);
 	
@@ -345,12 +342,19 @@ const ProductInformation = ({
 						direction="row"
 						alignItems="center"
 						spacing={1.5}
-						marginTop={{ xs: "25px", sm: "0px" }}
+						marginTop={{ xs: "12px", sm: "0px" }}
+						sx={{ overflow: "visible" }}
 					>
 						<Typography
 							fontSize={{ xs: "14px", sm: "18px" }}
 							fontWeight="600"
 							component="h1"
+							sx={{
+								lineHeight: { xs: 1.45, sm: 1.35 },
+								pt: "2px",
+								overflow: "visible",
+								overflowWrap: "break-word",
+							}}
 						>
 							{modalProductDisplayName}
 						</Typography>
@@ -478,7 +482,13 @@ const ProductInformation = ({
 		<>
 			{state.modalData.length > 0 && (
 				<CustomStackFullWidth spacing={2}>
-					<SimpleBar style={{ maxHeight: "315px" }}>
+					<Box
+						sx={{
+							maxHeight: { xs: "none", sm: "315px" },
+							overflowY: { xs: "visible", sm: "auto" },
+							overscrollBehavior: "contain",
+						}}
+					>
 						<>
 							{topInformation()}
 							<Stack
@@ -515,7 +525,7 @@ const ProductInformation = ({
 								)}
 							</Stack>
 						</>
-					</SimpleBar>
+					</Box>
 
 					<ProductInformationBottomSection
 						addToCard={addToCard}

@@ -6,8 +6,6 @@ import { useTranslation } from "react-i18next";
 import toast from "react-hot-toast";
 import { useTheme } from "@mui/material/styles";
 import { useRouter } from "next/router";
-import "simplebar-react/dist/simplebar.min.css";
-import SimpleBar from "simplebar-react";
 import StartPriceView from "./StartPriceView";
 import { handleProductVariationRequirementsToaster } from "./SomeHelperFuctions";
 import AddUpdateOrderToCart from "./AddUpdateOrderToCart";
@@ -877,7 +875,13 @@ console.log({ modalData });
             isWishlisted={isWishlisted}
             handleRouteToStore={handleRouteToStore}
           />
-          <SimpleBar style={{ maxHeight: "30vh " }}>
+          <Box
+            sx={{
+              maxHeight: { xs: "none", sm: "30vh" },
+              overflowY: { xs: "visible", sm: "auto" },
+              overscrollBehavior: "contain",
+            }}
+          >
             <Grid
               container
               justifyContent="space-between"
@@ -927,7 +931,7 @@ console.log({ modalData });
                 />
               )}
             </Stack>
-          </SimpleBar>
+          </Box>
           <Stack paddingX="1rem" pt=".5rem">
             <TotalAmountVisibility
               modalData={modalData}

@@ -18,6 +18,7 @@ import { useGetConversation } from "api-manage/hooks/react-query/chat/useGetConv
 import { useStoreMessage } from "api-manage/hooks/react-query/chat/useStoreMessage";
 import { useSearchList } from "api-manage/hooks/react-query/chat/useSearch";
 import PushNotificationLayout from "../PushNotificationLayout";
+import { miliLogoSrc } from "components/logo/brandAssets";
 
 const Chatting = ({ configData }) => {
 	const theme = useTheme();
@@ -68,7 +69,7 @@ const Chatting = ({ configData }) => {
 		setIsSidebarOpen((prevState) => !prevState);
 	};
 	const handleChatListOnSuccess = (res) => {
-		setChannelList(res.conversations);
+		setChannelList(res?.conversations ?? []);
 	};
 	const {
 		refetch: refetchChannelList,
@@ -76,9 +77,6 @@ const Chatting = ({ configData }) => {
 		isLoading: channelLoading,
 	} = useGetChannelList(handleChatListOnSuccess);
 
-	const handleConFetchOnSuccess = (res) => {
-		setConversationData(res.pages[0]);
-	};
 	const {
 		data,
 		isSuccess,
@@ -99,10 +97,10 @@ const Chatting = ({ configData }) => {
 		if (conversationId) {
 			setChannelId(conversationId);
 			setScrollBottom(true);
-			const tempReceiver =
-				channelList.length !== 0 &&
-				channelList.filter((item) => item.id == conversationId);
-			setReceiver(tempReceiver[0]);
+			const tempReceiver = channelList.find(
+				(item) => item.id == conversationId
+			);
+			setReceiver(tempReceiver);
 		}
 		if (type === "admin") {
 			setReceiverId(conversationId);
@@ -114,17 +112,15 @@ const Chatting = ({ configData }) => {
 	//from pages
 	useEffect(() => {
 		if (id && routeName && type) {
-			const tempReceiver =
-				channelList.length !== 0 &&
-				channelList.filter((item) => {
+			const tempReceiver = channelList.find((item) => {
 					if (type === "vendor") {
 						return item?.receiver?.vendor_id == id;
 					} else if (type === "delivery_man") {
 						return item?.sender?.deliveryman_id == id;
 					}
 				});
-			setReceiver(tempReceiver[0]);
-			setReceiverImage(tempReceiver[0]?.receiver?.image_full_url);
+			setReceiver(tempReceiver);
+			setReceiverImage(tempReceiver?.receiver?.image_full_url);
 			setChannelId(id);
 			setReceiverId(id);
 			setReceiverType(type);
@@ -144,7 +140,7 @@ const Chatting = ({ configData }) => {
 	}, [channelId]);
 
 	useEffect(() => {
-		setMessagesData([data]);
+		setMessagesData(data ? [data] : []);
 	}, [data]);
 	const handleChannelOnClick = async (value) => {
 		setReceiverId(null);
@@ -163,7 +159,7 @@ const Chatting = ({ configData }) => {
 			setChannelId(value.id);
 			setScrollBottom(true);
 			setReceiverType(value.receiver_type);
-			setReceiverName(value.receiver.f_name);
+			setReceiverName(value?.receiver?.f_name);
 			setReceiverImage(value?.receiver?.image_full_url);
 			setReceiver(value);
 			setIsSidebarOpen(false);
@@ -250,11 +246,11 @@ const Chatting = ({ configData }) => {
 			return receiver?.receiver?.image_full_url;
 		} else if (receiver?.receiver_type === "delivery_man") {
 			return receiver?.receiver?.image_full_url;
-		} else return configData?.logo_full_url;
+		} else return miliLogoSrc;
 	};
 	const userImage =
 		receiverType === "admin"
-			? configData?.logo_full_url
+			? miliLogoSrc
 			: deliveryInfo?.image_full_url
 			? deliveryInfo?.image_full_url
 			: receiverImage

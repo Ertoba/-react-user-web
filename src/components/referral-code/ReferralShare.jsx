@@ -1,42 +1,23 @@
-import styled from "@emotion/styled";
 import {
-  Button,
-  Dialog,
   IconButton,
-  Modal,
   Paper,
   Stack,
   Typography,
   useTheme,
 } from "@mui/material";
-import { Box } from "@mui/system";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import {
   EmailIcon,
   EmailShareButton,
-  FacebookIcon,
   FacebookMessengerIcon,
   FacebookMessengerShareButton,
-  FacebookShareButton,
-  HatenaIcon,
-  HatenaShareButton,
-  InstapaperIcon,
-  InstapaperShareButton,
   LineIcon,
   LineShareButton,
   LinkedinIcon,
   LinkedinShareButton,
   LivejournalIcon,
   LivejournalShareButton,
-  MailruIcon,
-  MailruShareButton,
-  OKIcon,
-  OKShareButton,
-  PinterestIcon,
-  PinterestShareButton,
-  PocketIcon,
-  PocketShareButton,
   RedditIcon,
   RedditShareButton,
   TelegramIcon,
@@ -45,14 +26,8 @@ import {
   TumblrShareButton,
   TwitterIcon,
   TwitterShareButton,
-  VKIcon,
-  VKShareButton,
-  WeiboIcon,
-  WeiboShareButton,
   WhatsappIcon,
   WhatsappShareButton,
-  WorkplaceIcon,
-  WorkplaceShareButton,
 } from "react-share";
 import {
   CodePreviewWrapper,
@@ -68,64 +43,61 @@ import CustomCopyWithTooltip from "../custom-copy-with-tooltip";
 import { SliderCustom } from "../../styled-components/CustomStyles.style";
 import Slider from "react-slick";
 import { referralSettings } from "./ReferralSettings";
+import { getReferralLink } from "helper-functions/referralLink";
 
 const ReferralShare = ({ referralCode, horizontal, size }) => {
-  const [currentUrl, setCurrentUrl] = useState(null);
+  const [referralLink, setReferralLink] = useState("");
   const [open, setOpen] = useState(false);
   const theme = useTheme();
   const { configData } = useSelector((state) => state.configData);
-  const { profileInfo } = useSelector((state) => state.profileInfo);
   const companyName = configData?.business_name;
-  const pinId = "patwary6am";
+  const iconSize = size || 40;
   useEffect(() => {
-    const code_url = `
-        ${companyName}
-        Referral code=${referralCode}
-        ${window.location.origin}`;
-
-    setCurrentUrl(code_url);
-  }, []);
-  const shareUrl = `${t("Hey there welcome to")} ${companyName}! ${t(
+    setReferralLink(getReferralLink(referralCode));
+  }, [referralCode]);
+  const shareMessage = `${t("Hey there welcome to")} ${companyName}! ${t(
     "If you're checking out"
   )} ${companyName} ${t(
     "for the first time, make sure to use the referral code"
   )} ${referralCode} ${t(
     "when you sign up. It's my way of welcoming you to this awesome e-commerce platform! Happy shopping on"
-  )} ${companyName}! ${currentUrl}`;
+  )} ${companyName}!`;
   const title = `${t("Hey there welcome to")} ${companyName}!`;
 
   return (
     <>
       <ReferralShareBox horizontal={horizontal}>
         <FacebookMessengerShareButton
-          url={shareUrl}
+          url={referralLink}
           appId={fb_app_id}
-          quote={shareUrl}
+          quote={shareMessage}
         >
-          <FacebookMessengerIcon size={size ? size : 40} round />
+          <FacebookMessengerIcon size={iconSize} round />
         </FacebookMessengerShareButton>
-        <TwitterShareButton url={shareUrl}>
-          <TwitterIcon size={size ? size : 40} round />
+        <TwitterShareButton url={referralLink} title={shareMessage}>
+          <TwitterIcon size={iconSize} round />
         </TwitterShareButton>
         <WhatsappShareButton
-          url={shareUrl}
+          url={referralLink}
           separator=":: "
-          title={title}
-          quote={shareUrl}
+          title={shareMessage}
         >
-          <WhatsappIcon size={size ? size : 40} round />
+          <WhatsappIcon size={iconSize} round />
         </WhatsappShareButton>
         <LinkedinShareButton
           title={title}
-          url={currentUrl}
-          source={currentUrl}
-          summary={shareUrl}
+          url={referralLink}
+          source={referralLink}
+          summary={shareMessage}
         >
-          <LinkedinIcon size={size ? size : 40} round />
+          <LinkedinIcon size={iconSize} round />
         </LinkedinShareButton>
-        <ShareButton size={`${size}px`} onClick={() => setOpen(true)}>
+        <ShareButton size={`${iconSize}px`} onClick={() => setOpen(true)}>
           <ShareIcon
-            sx={{ fontSize: `${size - 12}px`, color: theme.palette.info.main }}
+            sx={{
+              fontSize: `${Math.max(iconSize - 12, 18)}px`,
+              color: theme.palette.info.main,
+            }}
           />
         </ShareButton>
         <CustomModal openModal={open} setModalOpen={setOpen}>
@@ -151,65 +123,64 @@ const ReferralShare = ({ referralCode, horizontal, size }) => {
             <SliderCustom nopadding="true">
               <Slider {...referralSettings}>
                 <FacebookMessengerShareButton
-                  url={shareUrl}
+                  url={referralLink}
                   appId={fb_app_id}
-                  quote={shareUrl}
+                  quote={shareMessage}
                 >
-                  <FacebookMessengerIcon size={size ? size : 40} round />
+                  <FacebookMessengerIcon size={iconSize} round />
                 </FacebookMessengerShareButton>
-                <TwitterShareButton url={shareUrl}>
-                  <TwitterIcon size={size ? size : 40} round />
+                <TwitterShareButton url={referralLink} title={shareMessage}>
+                  <TwitterIcon size={iconSize} round />
                 </TwitterShareButton>
                 <WhatsappShareButton
-                  url={shareUrl}
+                  url={referralLink}
                   separator=":: "
-                  title={title}
-                  quote={shareUrl}
+                  title={shareMessage}
                 >
-                  <WhatsappIcon size={size ? size : 40} round />
+                  <WhatsappIcon size={iconSize} round />
                 </WhatsappShareButton>
                 <LinkedinShareButton
                   title={title}
-                  url={currentUrl}
-                  source={currentUrl}
-                  summary={shareUrl}
+                  url={referralLink}
+                  source={referralLink}
+                  summary={shareMessage}
                 >
-                  <LinkedinIcon size={size ? size : 40} round />
+                  <LinkedinIcon size={iconSize} round />
                 </LinkedinShareButton>
-                <TelegramShareButton url={shareUrl}>
-                  <TelegramIcon size={size ? size : 40} round />
+                <TelegramShareButton url={referralLink} title={shareMessage}>
+                  <TelegramIcon size={iconSize} round />
                 </TelegramShareButton>
                 <EmailShareButton
-                  url={currentUrl}
+                  url={referralLink}
                   subject={title}
-                  body={shareUrl}
+                  body={shareMessage}
                 >
-                  <EmailIcon size={size ? size : 40} round />
+                  <EmailIcon size={iconSize} round />
                 </EmailShareButton>
                 <RedditShareButton
                   title={title}
-                  url={shareUrl}
+                  url={referralLink}
                   windowWidth={660}
                   windowHeight={460}
                 >
-                  <RedditIcon size={size ? size : 40} round />
+                  <RedditIcon size={iconSize} round />
                 </RedditShareButton>
                 <TumblrShareButton
-                  url={String(window.location.origin)}
+                  url={referralLink}
                   title={title}
-                  caption={shareUrl}
+                  caption={shareMessage}
                 >
-                  <TumblrIcon size={size ? size : 40} round />
+                  <TumblrIcon size={iconSize} round />
                 </TumblrShareButton>
                 <LivejournalShareButton
-                  url={shareUrl}
+                  url={referralLink}
                   title={title}
-                  description={shareUrl}
+                  description={shareMessage}
                 >
-                  <LivejournalIcon size={size ? size : 40} round />
+                  <LivejournalIcon size={iconSize} round />
                 </LivejournalShareButton>
-                <LineShareButton url={shareUrl} title={title}>
-                  <LineIcon size={size ? size : 40} round />
+                <LineShareButton url={referralLink} title={shareMessage}>
+                  <LineIcon size={iconSize} round />
                 </LineShareButton>
               </Slider>
             </SliderCustom>
@@ -220,12 +191,12 @@ const ReferralShare = ({ referralCode, horizontal, size }) => {
               padding="5px"
             >
               <Typography fontWeight="600" color={theme.palette.primary.main}>
-                {profileInfo?.ref_code}{" "}
+                {referralLink}
               </Typography>
               <Stack padding="3px">
                 <CustomCopyWithTooltip
                   t={t}
-                  value={currentUrl}
+                  value={referralLink}
                   forModal={true}
                   companyName={companyName}
                   referralCode={referralCode}

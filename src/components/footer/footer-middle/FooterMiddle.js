@@ -1,10 +1,10 @@
 import { Grid, Stack, Typography, useMediaQuery, useTheme } from "@mui/material";
+import EmailOutlinedIcon from "@mui/icons-material/EmailOutlined";
+import LocationOnOutlinedIcon from "@mui/icons-material/LocationOnOutlined";
+import PhoneOutlinedIcon from "@mui/icons-material/PhoneOutlined";
 import { Box, alpha } from "@mui/system";
 import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
-import ractangle from "../../../../public/static/footer/Rectangle.svg";
-import magnifying from "../../../../public/static/footer/magnifying.svg";
-import phone from "../../../../public/static/footer/phone.svg";
 import { getCurrentModuleType } from "helper-functions/getCurrentModuleType";
 import { ModuleTypes } from "helper-functions/moduleTypes";
 import { CustomStackFullWidth } from "styled-components/CustomStyles.style";
@@ -231,8 +231,7 @@ const FooterMiddle = (props) => {
                   }}
                 >
                   <SomeInfo
-                    image={ractangle}
-                    alt="rantangle"
+                    icon={<EmailOutlinedIcon />}
                     title="Send us mails"
                     info={configData?.email}
                     t={t}
@@ -251,8 +250,7 @@ const FooterMiddle = (props) => {
                   }}
                 >
                   <SomeInfo
-                    image={phone}
-                    alt="Phone"
+                    icon={<PhoneOutlinedIcon />}
                     title="Contact us"
                     info={configData?.phone}
                     t={t}
@@ -272,8 +270,7 @@ const FooterMiddle = (props) => {
                 >
                   <Box onClick={handleOpenCloseMap}>
                     <SomeInfo
-                      image={magnifying}
-                      alt="magnifying"
+                      icon={<LocationOnOutlinedIcon />}
                       title="Find us here"
                       info={configData?.address}
                       t={t}
@@ -304,8 +301,7 @@ const FooterMiddle = (props) => {
             <Grid container spacing={2}>
               <Grid item xs={4}>
                 <SomeInfo
-                  image={ractangle}
-                  alt="rantangle"
+                  icon={<EmailOutlinedIcon />}
                   title="Send us mails"
                   info={configData?.email}
                   t={t}
@@ -314,8 +310,7 @@ const FooterMiddle = (props) => {
               </Grid>
               <Grid item xs={4}>
                 <SomeInfo
-                  image={phone}
-                  alt="Phone"
+                  icon={<PhoneOutlinedIcon />}
                   title="Contact us"
                   info={configData?.phone}
                   t={t}
@@ -325,8 +320,7 @@ const FooterMiddle = (props) => {
               <Grid item xs={4}>
                 <Box onClick={handleOpenCloseMap}>
                   <SomeInfo
-                    image={magnifying}
-                    alt="magnifying"
+                    icon={<LocationOnOutlinedIcon />}
                     title="Find us here"
                     info={configData?.address}
                     href={false}

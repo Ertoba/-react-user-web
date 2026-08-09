@@ -16,8 +16,12 @@ const Index = ({ configData, productDetailsData,  }) => {
 
 
   useEffect(() => {
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  }, []);
+    const frame = window.requestAnimationFrame(() => {
+      window.scrollTo({ top: 0, left: 0, behavior: "auto" });
+    });
+
+    return () => window.cancelAnimationFrame(frame);
+  }, [productDetailsData?.id]);
   useEffect(() => {
     if (configData) {
       dispatch(setConfigData(configData));

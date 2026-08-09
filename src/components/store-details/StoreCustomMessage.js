@@ -1,11 +1,8 @@
-import React from "react";
-import { CustomStackFullWidth } from "../../styled-components/CustomStyles.style";
-import StoreMessageSvg from "./assets/store_message.svg";
-import { alpha, Stack } from "@mui/system";
-import { Box, Typography, useMediaQuery } from "@mui/material";
+import React, { useEffect, useRef, useState } from "react";
 import CampaignIcon from "@mui/icons-material/Campaign";
-import { useTheme } from "@emotion/react";
-import styled from "@emotion/styled";
+import { Box, Stack, Typography, alpha, styled } from "@mui/material";
+import StoreMessageSvg from "./assets/store_message.svg";
+import { CustomStackFullWidth } from "../../styled-components/CustomStyles.style";
 import { georgianCapsFontFamily, toGeorgianUpper } from "utils/georgianText";
 
 const BgBox = styled(Box)(({ theme, src }) => ({
@@ -16,189 +13,129 @@ const BgBox = styled(Box)(({ theme, src }) => ({
   backgroundRepeat: "no-repeat",
   backgroundSize: "contain",
   border: `1px solid ${theme.palette.secondary.main}`,
-  // padding: "20px",
   display: "flex",
   alignItems: "center",
 }));
 
-const normalStyle = {
-  textAlign: "center",
-};
 const StoreCustomMessage = ({ storeAnnouncement }) => {
-  const theme = useTheme();
-  const isSmall = useMediaQuery(theme.breakpoints.down("sm"));
+  const containerRef = useRef(null);
+  const contentRef = useRef(null);
+  const [animation, setAnimation] = useState({
+    shouldAnimate: false,
+    duration: 8,
+  });
   const announcementText = toGeorgianUpper(storeAnnouncement || "");
-  let duration = (announcementText?.length * 24) / 100;
-  const translateX = isSmall
-    ? announcementText?.length * 3.5
-    : announcementText?.length * 1.3;
-  const wordCount = isSmall
-    ? announcementText?.length > 35
-    : announcementText?.length > 110;
-  // const wordCount = true;
 
-  const animatedStyle = {
-    width: "90%",
-    paddingInline: "10px",
-    whiteSpace: "nowrap",
-    animation: `scrollRightToLeft ${duration}s linear infinite`,
-    position: "absolute",
-    left: "95%",
-    transformOrigin: "top left",
-    "@keyframes scrollRightToLeft": {
-      "0%": {
-        transform: "translateX(0%)",
-      },
-      "100%": {
-        transform: `translateX(-${translateX}%)`,
-      },
-    },
-  };
+  useEffect(() => {
+    const container = containerRef.current;
+    const content = contentRef.current;
+
+    if (!container || !content || !announcementText) {
+      setAnimation({ shouldAnimate: false, duration: 8 });
+      return undefined;
+    }
+
+    const measure = () => {
+      const availableWidth = Math.max(container.clientWidth - 24, 0);
+      const contentWidth = content.scrollWidth;
+      setAnimation({
+        shouldAnimate: contentWidth > availableWidth,
+        duration: Math.max(8, contentWidth / 40),
+      });
+    };
+
+    measure();
+
+    if (typeof ResizeObserver === "undefined") {
+      window.addEventListener("resize", measure);
+      return () => window.removeEventListener("resize", measure);
+    }
+
+    const observer = new ResizeObserver(measure);
+    observer.observe(container);
+    observer.observe(content);
+
+    return () => observer.disconnect();
+  }, [announcementText]);
+
+  if (!announcementText) {
+    return null;
+  }
 
   return (
     <CustomStackFullWidth paddingBlock="10px">
       <BgBox src={StoreMessageSvg.src}>
-        <Stack
-          height="60px"
-          position="relative"
-          padding="0px"
-          justifyContent="center"
-          alignItems="center"
-          overflow="hidden"
-          width="100%"
+        <Box
+          ref={containerRef}
+          sx={{
+            height: { xs: 54, sm: 60 },
+            position: "relative",
+            overflow: "hidden",
+            width: "100%",
+          }}
         >
           <Stack
-            position="absolute"
+            ref={contentRef}
             direction="row"
-            spacing={{ xs: 1, md: 2 }}
-            sx={wordCount ? animatedStyle : normalStyle}
+            spacing={{ xs: 1, sm: 1.5 }}
+            alignItems="center"
+            sx={{
+              position: "absolute",
+              top: "50%",
+              left: animation.shouldAnimate ? "100%" : "50%",
+              width: "max-content",
+              maxWidth: "none",
+              whiteSpace: "nowrap",
+              transform: animation.shouldAnimate
+                ? "translateY(-50%)"
+                : "translate(-50%, -50%)",
+              animation: animation.shouldAnimate
+                ? "storeAnnouncementScroll " + animation.duration + "s linear infinite"
+                : "none",
+              px: 1.5,
+              "@keyframes storeAnnouncementScroll": {
+                "0%": {
+                  transform: "translate(0, -50%)",
+                },
+                "100%": {
+                  transform: "translate(-200%, -50%)",
+                },
+              },
+              "@media (prefers-reduced-motion: reduce)": {
+                animation: "none",
+                left: 1.5,
+                right: 1.5,
+                width: "auto",
+                whiteSpace: "normal",
+                transform: "translateY(-50%)",
+                justifyContent: "center",
+              },
+            }}
           >
             <CampaignIcon
               color="primary"
-              style={{ width: "30px", height: "30px" }}
+              sx={{
+                width: { xs: 24, sm: 30 },
+                height: { xs: 24, sm: 30 },
+                flexShrink: 0,
+              }}
             />
             <Typography
-              fontSize="16px"
-              fontWeight="500"
-              fontFamily={georgianCapsFontFamily}
-              textTransform="none"
+              sx={{
+                fontSize: { xs: "13px", sm: "16px" },
+                lineHeight: 1.35,
+                fontWeight: 500,
+                fontFamily: georgianCapsFontFamily,
+                letterSpacing: 0,
+              }}
             >
               {announcementText}
             </Typography>
           </Stack>
-          {/* <StoreMessageSvg /> */}
-        </Stack>
+        </Box>
       </BgBox>
     </CustomStackFullWidth>
   );
 };
 
 export default StoreCustomMessage;
-
-
-// import { CustomStackFullWidth } from "../../styled-components/CustomStyles.style";
-// import CustomContainer from "../container";
-// import StoreMessageSvg from "./assets/store_message.svg";
-// import { Stack, alpha } from "@mui/system";
-// import { Box, Typography } from "@mui/material";
-// import CampaignIcon from '@mui/icons-material/Campaign';
-// import { useTheme } from '@emotion/react';
-// import styled from '@emotion/styled';
-// import { useEffect, useState } from "react";
-
-// const BgBox = styled(Box)(({ theme, src }) => ({
-//     backgroundImage: `url(${src})`,
-//     backgroundPosition: "center",
-//     backgroundColor: alpha(theme.palette.secondary.main, 0.1),
-//     borderRadius: "8px",
-//     backgroundRepeat: "no-repeat",
-//     backgroundSize: "contain",
-//     border: `1px solid ${theme.palette.secondary.main}`,
-//     display: "flex",
-//     alignItems: "center",
-// }));
-
-// // const animatedStyle = {
-// //     width: "90%",
-// //     paddingInline: "10px",
-// //     whiteSpace: "nowrap",
-// //     position: "absolute",
-// //     left: "95%",
-// //     transformOrigin: "top left",
-// //     animation: "scrollRightToLeft 5s linear infinite",
-// //     "@keyframes scrollRightToLeft": {
-// //         "0%": {
-// //             transform: "translateX(0%)",
-// //         },
-// //         "100%": {
-// //             transform: "translateX(-200%)",
-// //         }
-// //     },
-// // };
-
-// const animatedStyle = {
-
-// }
-
-// const normalStyle = {
-//     textAlign: "center"
-// };
-
-
-// const StoreCustomMessage = ({ storeAnnouncement }) => {
-//     // const storeAnnouncement = "aaaaaaaaaa"
-//     // const storeAnnouncement = "here are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don't look even slightly believable"
-//     const theme = useTheme();
-//     const wordCount = storeAnnouncement?.length > 110 ? true : false;
-//     const [shouldAnimate, setShouldAnimate] = useState(wordCount);
-
-//     useEffect(() => {
-//         if (shouldAnimate) {
-//             const animationDuration = 35000; // 25 seconds
-//             setTimeout(() => {
-//                 setShouldAnimate(false); // Stop the animation after the specified time
-//             }, animationDuration);
-//         }
-//     }, [shouldAnimate]);
-
-//     return (
-//         <CustomStackFullWidth padding="20px">
-//             <BgBox src={StoreMessageSvg.src}>
-//                 <Stack
-//                     height="60px"
-//                     position="relative"
-//                     padding="0px"
-//                     justifyContent="center"
-//                     alignItems="center"
-//                     overflow="hidden"
-//                     width="100%"
-//                 >
-//                     <Stack
-//                         position="absolute"
-//                         direction="row"
-//                         spacing={{ xs: 1, md: 2 }}
-//                         // sx={wordCount ? animatedStyle : normalStyle}
-//                         sx={{
-//                             width: "100%",
-//                             whiteSpace: "nowrap",
-//                             overflowX: "auto",
-//                             cursor: "grab",
-//                             scrollbarWidth: "none",
-//                             "-ms-overflow-style": "none",
-//                             "&::-webkit-scrollbar": {
-//                                 display: "none"
-//                             }
-//                         }}
-//                     >
-//                         <CampaignIcon color="primary" style={{ width: "30px", height: "30px" }} />
-//                         <Typography fontSize="16px" fontWeight="500" textTransform="capitalize">
-//                             {storeAnnouncement}
-//                         </Typography>
-//                     </Stack>
-//                 </Stack>
-//             </BgBox>
-//         </CustomStackFullWidth>
-//     );
-// };
-
-// export default StoreCustomMessage;

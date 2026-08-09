@@ -2,13 +2,23 @@
 /* eslint-disable jsx-a11y/alt-text */
 import { useTheme } from "@emotion/react";
 import styled from "@emotion/styled";
-import { AddCircle, CheckCircle, InfoOutlined } from "@mui/icons-material";
-import { Button, OutlinedInput, Skeleton, Typography } from "@mui/material";
+import {
+  AccountBalanceWalletOutlined,
+  AddCircle,
+  CheckCircle,
+  InfoOutlined,
+} from "@mui/icons-material";
+import {
+  alpha,
+  Button,
+  OutlinedInput,
+  Skeleton,
+  Typography,
+} from "@mui/material";
 import Tooltip from "@mui/material/Tooltip";
 import { Box, Stack } from "@mui/system";
 import { useFormik } from "formik";
 import { t } from "i18next";
-import Image from "next/image";
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import * as Yup from "yup";
@@ -26,7 +36,6 @@ import {
 import CustomImageContainer from "../CustomImageContainer";
 import CustomModal from "../modal";
 import WalletBgSvg from "./WalletBgSvg";
-import walletIcon from "./assets/wallet-icon.png";
 import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
 import { getLanguage } from "../../helper-functions/getLanguage";
@@ -189,16 +198,18 @@ const WalletBoxComponent = (props) => {
           <Stack flexWrap="wrap" width="100%" position="relative">
             <Box
               sx={{
-                marginLeft: "-24px",
-                marginTop: "-35px",
+                width: "64px",
+                height: "64px",
+                borderRadius: "50%",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                color: theme.palette.primary.main,
+                backgroundColor: alpha(theme.palette.common.white, 0.18),
+                marginBottom: "10px",
               }}
             >
-              <Image
-                alt="wallet_image"
-                src={walletIcon.src}
-                width="110"
-                height="110"
-              />
+              <AccountBalanceWalletOutlined sx={{ fontSize: "34px" }} />
             </Box>
             <Stack>
               <Typography
@@ -206,7 +217,7 @@ const WalletBoxComponent = (props) => {
                 color={theme.palette.neutral[100]}
                 component="div"
                 mb={2}
-                mt="-25px"
+                mt="0"
               >
                 <Stack sx={{ alignItems: "center" }} direction="row" gap={1}>
                   <Box>{title}</Box>

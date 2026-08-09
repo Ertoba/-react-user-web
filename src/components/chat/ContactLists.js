@@ -1,6 +1,5 @@
 import { Box, List, Stack } from "@mui/material";
 import React from "react";
-import SimpleBar from "simplebar-react";
 import {
 	CustomListItem,
 	CustomStackFullWidth,
@@ -9,10 +8,9 @@ import InfoCard from "./InfoCard";
 
 import Skeleton from "@mui/material/Skeleton";
 import { t } from "i18next";
-import "simplebar-react/dist/simplebar.min.css";
-
 import { useSelector } from "react-redux";
 import { CustomTypography } from "../landing-page/hero-section/HeroSection.style";
+import { miliLogoSrc } from "components/logo/brandAssets";
 
 const ContactLists = ({
 	channelList,
@@ -73,7 +71,7 @@ const ContactLists = ({
 					userList={item}
 					selectedId={selectedId}
 					currentId={item.id}
-					adminImage={configData?.fav_icon}
+					adminImage={miliLogoSrc}
 				/>
 			);
 		} else {
@@ -83,16 +81,15 @@ const ContactLists = ({
 					messageTime={item.last_message_time}
 					last_message={item?.last_message}
 					receiver={
-						item?.sender?.f_name.concat(
-							" ",
-							item?.sender?.l_name
-						) || " "
+						[item?.sender?.f_name, item?.sender?.l_name]
+							.filter(Boolean)
+							.join(" ") || " "
 					}
 					unRead={item.unread_message_count}
 					userList={item}
 					selectedId={selectedId}
 					currentId={item.id}
-					adminImage={configData?.fav_icon}
+					adminImage={miliLogoSrc}
 				/>
 			);
 		}
@@ -101,8 +98,12 @@ const ContactLists = ({
 	return (
 		<CustomStackFullWidth>
 			{channelList?.length > 0 && (
-				<SimpleBar
-					style={{ maxHeight: selectedId ? "430px" : "270px" }}
+				<Box
+					sx={{
+						maxHeight: selectedId ? "430px" : "270px",
+						overflowY: "auto",
+						overscrollBehavior: "contain",
+					}}
 				>
 					<List disablePadding>
 						{channelList?.map(
@@ -123,9 +124,9 @@ const ContactLists = ({
 								)
 						)}
 					</List>
-				</SimpleBar>
+				</Box>
 			)}
-			{channelList.length === 0 && (
+			{channelList?.length === 0 && (
 				<Stack width="100%" justifyContent="center" alignItems="center">
 					<CustomTypography>
 						{t("You have no channels.")}

@@ -1,15 +1,14 @@
 import { useTheme } from "@emotion/react";
-import { Typography, useMediaQuery } from "@mui/material";
+import { Box, Typography, alpha, useMediaQuery } from "@mui/material";
 import React from "react";
 import {
   CustomStackFullWidth,
   CustomTypographyBold,
 } from "styled-components/CustomStyles.style";
-import CustomImageContainer from "../../CustomImageContainer";
 import Link from "next/link";
 
 const SomeInfo = (props) => {
-  const { image, alt, title, info, t, href } = props;
+  const { icon, title, info, t, href } = props;
   const theme = useTheme();
   const isXsmall = useMediaQuery(theme.breakpoints.down("sm"));
   const formattedTitle = isXsmall ? t(title).toLocaleUpperCase("ka-GE") : t(title);
@@ -29,6 +28,26 @@ const SomeInfo = (props) => {
     letterSpacing: 0,
     maxWidth: { xs: "230px", sm: "none" },
   };
+  const iconView = (
+    <Box
+      sx={{
+        width: iconSize,
+        height: iconSize,
+        borderRadius: "50%",
+        display: "grid",
+        placeItems: "center",
+        flexShrink: 0,
+        color: theme.palette.primary.main,
+        backgroundColor: alpha(theme.palette.primary.main, 0.12),
+        transition: "transform 180ms ease, background-color 180ms ease",
+        "& svg": {
+          fontSize: isXsmall ? 24 : 30,
+        },
+      }}
+    >
+      {icon}
+    </Box>
+  );
   return (
     <>{href ? (
       <Link href={href}>
@@ -38,10 +57,11 @@ const SomeInfo = (props) => {
           spacing={isXsmall ? 1.2 : 3}
           sx={{
             cursor: "pointer",
-            img: {
-              transition: "all ease 0.5s",
-            },
             "&:hover": {
+              "& > .MuiBox-root": {
+                transform: "translateY(-2px)",
+                backgroundColor: alpha(theme.palette.primary.main, 0.18),
+              },
               ".MuiTypography-body1": {
                 color: theme.palette.primary.main,
               },
@@ -51,7 +71,7 @@ const SomeInfo = (props) => {
             },
           }}
         >
-          <CustomImageContainer src={image.src} alt={alt} height={iconSize} width={iconSize} />
+          {iconView}
           <CustomStackFullWidth
             alignItems="center"
             justifyContent="center"
@@ -78,10 +98,11 @@ const SomeInfo = (props) => {
         spacing={isXsmall ? 1.2 : 3}
         sx={{
           cursor: "pointer",
-          img: {
-            transition: "all ease 0.5s",
-          },
           "&:hover": {
+            "& > .MuiBox-root": {
+              transform: "translateY(-2px)",
+              backgroundColor: alpha(theme.palette.primary.main, 0.18),
+            },
             ".MuiTypography-body1": {
               color: theme.palette.primary.main,
             },
@@ -91,7 +112,7 @@ const SomeInfo = (props) => {
           },
         }}
       >
-        <CustomImageContainer src={image.src} alt={alt} height={iconSize} width={iconSize} />
+        {iconView}
         <CustomStackFullWidth
           alignItems="center"
           justifyContent="center"

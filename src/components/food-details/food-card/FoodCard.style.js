@@ -85,10 +85,10 @@ export const FoodTitleTypographyDetails = styled(Typography)(({ theme }) => ({
 
 export const FoodSubTitleTypography = styled(Typography)(({ theme }) => ({
   // eslint-disable-next-line no-mixed-operators
-  fontSize: "14px",
-  padding: 0,
-  lineHeight: 1.3,
-  letterSpacing: "0.00938em",
+  fontSize: "13px",
+  padding: "2px 0 0",
+  lineHeight: 1.45,
+  letterSpacing: 0,
   fontWeight: "400",
   overflow: "hidden",
   textOverflow: "ellipsis",
@@ -97,7 +97,7 @@ export const FoodSubTitleTypography = styled(Typography)(({ theme }) => ({
   WebkitBoxOrient: "vertical",
   color: theme.palette.neutral[500],
   [theme.breakpoints.down("sm")]: {
-    fontSize: "10px",
+    fontSize: "9.5px",
   },
 }));
 

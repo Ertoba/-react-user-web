@@ -30,6 +30,10 @@ import {
   getCurrentModuleId,
   getCurrentModuleType,
 } from "helper-functions/getCurrentModuleType";
+import {
+  PENDING_REFERRAL_CODE_KEY,
+  sanitizeReferralCode,
+} from "helper-functions/referralLink";
 
 const SignUp = ({
   configData,
@@ -92,6 +96,23 @@ const SignUp = ({
   const handleCheckbox = (e) => {
     signUpFormik.setFieldValue("tandc", e.target.checked);
   };
+
+  useEffect(() => {
+    if (!router.isReady || signUpFormik.values.ref_code) return;
+
+    const queryCode = sanitizeReferralCode(
+      router.query.code || router.query.ref_code
+    );
+    const storedCode =
+      typeof window !== "undefined"
+        ? sanitizeReferralCode(localStorage.getItem(PENDING_REFERRAL_CODE_KEY))
+        : "";
+    const referralCode = queryCode || storedCode;
+
+    if (referralCode) {
+      signUpFormik.setFieldValue("ref_code", referralCode, false);
+    }
+  }, [router.isReady, router.query.code, router.query.ref_code]);
   const ReferCodeHandler = (value) => {
     signUpFormik.setFieldValue("ref_code", value);
   };
@@ -114,6 +135,7 @@ const SignUp = ({
     useGetProfile(userOnSuccessHandler);
   const handleTokenAfterSignUp = (response) => {
     if (response) {
+      localStorage.removeItem(PENDING_REFERRAL_CODE_KEY);
       localStorage.setItem("token", response?.token);
       profileRefetch();
       toast.success(t(signup_successfull));

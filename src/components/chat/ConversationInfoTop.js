@@ -17,7 +17,12 @@ const ConversationInfoTop = ({
   receiverType,
   adminUser,
 }) => {
-  const language_direction = localStorage.getItem("direction");
+  const language_direction =
+    typeof window !== "undefined"
+      ? window.localStorage.getItem("direction")
+      : "ltr";
+  const displayName = (person) =>
+    [person?.f_name, person?.l_name].filter(Boolean).join(" ");
   return (
     <Stack>
       {!mdUp && (
@@ -102,14 +107,8 @@ const ConversationInfoTop = ({
                   fontWeight="600"
                 >
                   {receiver?.sender_type === "customer"
-                    ? receiver?.receiver?.f_name.concat(
-                        " ",
-                        receiver?.receiver?.l_name
-                      ) || " "
-                    : receiver?.sender?.f_name.concat(
-                        " ",
-                        receiver?.sender?.l_name
-                      ) || " "}
+                    ? displayName(receiver?.receiver) || " "
+                    : displayName(receiver?.sender) || " "}
                 </Typography>
               )}
             </>

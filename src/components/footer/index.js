@@ -4,7 +4,6 @@ import CustomContainer from "../container";
 import { StyledFooterBackground } from "./Footer.style";
 import FooterBottom from "./FooterBottom";
 import FooterMiddle from "./footer-middle/FooterMiddle";
-import FooterTop from "./footer-top/FooterTop";
 import useGetLandingPage from "api-manage/hooks/react-query/useGetLandingPage";
 import { useEffect } from "react";
 
@@ -28,7 +27,6 @@ const FooterComponent = (props) => {
         },
       }}
     >
-      <FooterTop landingPageData={landingPageData} />
       <StyledFooterBackground nobottommargin={isLandingPage}>
         <CustomStackFullWidth
           height="100%"

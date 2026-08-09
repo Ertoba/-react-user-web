@@ -1,18 +1,21 @@
 import { Typography } from "@mui/material";
 import PropTypes from "prop-types";
 import { useTranslation } from "react-i18next";
-import { IsSmallScreen } from "../../utils/CommonValues";
 
 const H1 = (props) => {
-	const { text, textAlign, textTransform, fontWeight, ...rest } = props;
+	const { text, textAlign, textTransform, fontWeight, sx, ...rest } = props;
 
 	const { t } = useTranslation();
 	return (
 		<Typography
 			textAlign={textAlign ? textAlign : "center"}
 			fontWeight={fontWeight ? fontWeight : "700"}
-			lineHeight={IsSmallScreen() ? "10px" : "30px"}
-			sx={{ fontSize: { xs: "15px", md: "22px" } }}
+			lineHeight={{ xs: 1.35, md: 1.4 }}
+			sx={{
+				fontSize: { xs: "14px", md: "22px" },
+				letterSpacing: 0,
+				...sx,
+			}}
 			textTransform={textTransform}
 			{...rest}
 		>

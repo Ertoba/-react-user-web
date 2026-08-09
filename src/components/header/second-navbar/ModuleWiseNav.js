@@ -16,7 +16,7 @@ import DrawerMenu from "../top-navbar/drawer-menu/DrawerMenu";
 import MobileModuleSelection from "./mobile-module-select";
 import CustomLogo from "components/logo/CustomLogo";
 import { useRouter } from "next/router";
-import { miliLogoSrc } from "components/logo/brandAssets";
+import { miliAuthLogoSrc } from "components/logo/brandAssets";
 
 const ModuleWiseNav = (props) => {
 	const {
@@ -38,7 +38,7 @@ const ModuleWiseNav = (props) => {
 		"customer_image_url",
 		configData
 	)}/${profileInfo?.image}`;
-	const favIcon = miliLogoSrc;
+	const favIcon = miliAuthLogoSrc;
 	const lanDirection = getLanguage();
 	const dispatch = useDispatch();
 	useEffect(() => {
@@ -94,7 +94,8 @@ const ModuleWiseNav = (props) => {
 		<Box
 			onClick={handleIconClick}
 			sx={{
-				height: "40px",
+				height: "36px",
+				width: "76px",
 				position: "relative",
 				cursor: "pointer",
 				display: "flex",
@@ -111,8 +112,8 @@ const ModuleWiseNav = (props) => {
 			<CustomLogo
 				atlText="logo"
 				logoImg={favIcon}
-				width="42px"
-				height="40px"
+				width="76px"
+				height="32px"
 				objectFit="contain"
 				style={{ marginLeft: 0 }} // force left if needed
 			/>

@@ -13,6 +13,9 @@ import playstoreicon from "../../../../public/static/footer/playstore.svg";
 import CustomImageContainer from "../../CustomImageContainer";
 import NextImage from "components/NextImage";
 
+const CUSTOMER_PLAY_STORE_URL =
+  "https://play.google.com/store/apps/details?id=ge.mili.customer";
+
 export const CustomButton = styled(Button)(({ theme, graybackground }) => ({
   height: "40px",
   padding: "px 16px",
@@ -33,20 +36,20 @@ export const CustomButton = styled(Button)(({ theme, graybackground }) => ({
 const AppLinks = (props) => {
   const { graybackground, landingPageData } = props;
   const theme = useTheme();
-  console.log({ landingPageData });
-
   let language_direction;
   if (typeof window !== "undefined") {
     language_direction = window.localStorage.getItem("direction");
   }
   const goToApp = (href) => {
-    window.open(href);
+    if (href) {
+      window.open(href, "_blank", "noopener,noreferrer");
+    }
   };
   const { t } = useTranslation();
   const googlePlay = () => (
     <CustomButton
       onClick={() =>
-        goToApp(landingPageData?.play_store_link)
+        goToApp(CUSTOMER_PLAY_STORE_URL)
       }
       variant="contained"
       graybackground={graybackground ? "true" : "false"}
@@ -125,7 +128,7 @@ const AppLinks = (props) => {
             }}
             color={theme.palette.whiteContainer.main}
           >
-            {t("App Store")}
+            App Store
           </Typography>
         </Stack>
       </Stack>

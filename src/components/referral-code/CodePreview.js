@@ -1,22 +1,19 @@
 import React from "react";
-import PropTypes from "prop-types";
-import { Box, Stack } from "@mui/system";
-import { alpha, styled, Typography, useMediaQuery } from "@mui/material";
-import {
-  CustomStackFullWidth,
-  CustomTypographyGray,
-} from "../../styled-components/CustomStyles.style";
+import { Stack } from "@mui/system";
+import { Typography, useMediaQuery } from "@mui/material";
 import { useSelector } from "react-redux";
 import CustomCopyWithTooltip from "../custom-copy-with-tooltip";
 import { useTheme } from "@emotion/react";
 import { CodePreviewWrapper } from "./ReferralCode.style";
 import ReferralShare from "./ReferralShare";
 import { t } from "i18next";
+import { getReferralLink } from "helper-functions/referralLink";
 
 const CodePreview = (props) => {
   const theme = useTheme();
   const isXsmall = useMediaQuery(theme.breakpoints.down("sm"))
   const { profileInfo } = useSelector((state) => state.profileInfo);
+  const referralLink = getReferralLink(profileInfo?.ref_code);
   return (
     <Stack
       sx={{ p: "1rem" }}
@@ -35,6 +32,22 @@ const CodePreview = (props) => {
         </Typography>
         <CustomCopyWithTooltip t={t} value={profileInfo?.ref_code} />
       </CodePreviewWrapper>
+      <CodePreviewWrapper
+        direction="row"
+        alignItems="center"
+        justifyContent="space-between"
+        gap={1}
+      >
+        <Typography
+          fontWeight="600"
+          color={theme.palette.primary.main}
+          noWrap
+          sx={{ minWidth: 0, fontSize: { xs: "12px", sm: "14px" } }}
+        >
+          {referralLink}
+        </Typography>
+        <CustomCopyWithTooltip t={t} value={referralLink} />
+      </CodePreviewWrapper>
       <Typography>
         {t("OR SHARE")}
       </Typography>
@@ -42,7 +55,5 @@ const CodePreview = (props) => {
     </Stack>
   );
 };
-
-CodePreview.propTypes = {};
 
 export default CodePreview;

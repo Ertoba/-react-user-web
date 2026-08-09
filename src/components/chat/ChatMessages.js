@@ -15,13 +15,16 @@ const ChatMessages = ({ conversationData, scrollBottom, receiverType }) => {
 	const messagesEndRef = useRef(null);
 	useEffect(() => {
 		let a = [];
-		if (conversationData.length > 0) {
+		if (Array.isArray(conversationData) && conversationData.length > 0) {
 			conversationData.forEach((page) => {
 				setConversationDetails(page);
 				page?.messages?.forEach((item) => a.push(item));
 			});
 			setMessagesData(a);
 			setIsMessage(true);
+		} else {
+			setMessagesData([]);
+			setIsMessage(false);
 		}
 	}, [conversationData]);
 	useEffect(() => {

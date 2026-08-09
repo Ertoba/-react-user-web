@@ -5,6 +5,7 @@ import { useTheme } from "@mui/material/styles";
 import { CustomStackFullWidth } from "styled-components/CustomStyles.style";
 import { StyledBadge } from "./InfoCard";
 import { Stack } from "@mui/system";
+import { miliLogoSrc } from "components/logo/brandAssets";
 
 const ChatWithAdmin = ({ handleChannelOnClick, configData }) => {
 	const theme = useTheme();
@@ -33,8 +34,13 @@ const ChatWithAdmin = ({ handleChannelOnClick, configData }) => {
 				//variant="dot"
 			>
 				<Avatar
-					src={configData?.logo_full_url}
-					sx={{ width: "48px", height: "48px" }}
+					src={miliLogoSrc}
+					imgProps={{ style: { objectFit: "contain" } }}
+					sx={{
+						width: "48px",
+						height: "48px",
+						backgroundColor: "transparent",
+					}}
 				/>
 			</StyledBadge>
 			<CustomStackFullWidth>

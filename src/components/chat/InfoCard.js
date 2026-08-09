@@ -8,6 +8,7 @@ import { useTheme } from "@mui/material/styles";
 import useGetUserInfo from "../../api-manage/hooks/react-query/user/useGetUserInfo";
 import { CustomTypographyEllipsis } from "styled-components/CustomTypographies.style";
 import moment from "moment";
+import { miliLogoSrc } from "components/logo/brandAssets";
 
 export const StyledBadge = styled(Badge)(({ theme }) => ({
 	"& .MuiBadge-badge": {
@@ -60,7 +61,7 @@ const InfoCard = ({
 			return userList?.receiver?.image_full_url;
 		}
 		if (userList?.receiver_type === "admin") {
-			return configData?.logo_full_url;
+			return miliLogoSrc;
 		}
 	};
 
@@ -97,7 +98,12 @@ const InfoCard = ({
 			>
 				<Avatar
 					src={ChatImageUrl()}
-					sx={{ width: "48px", height: "48px" }}
+					imgProps={{ style: { objectFit: "contain" } }}
+					sx={{
+						width: "48px",
+						height: "48px",
+						backgroundColor: "transparent",
+					}}
 				/>
 			</StyledBadge>
 			<CustomStackFullWidth>

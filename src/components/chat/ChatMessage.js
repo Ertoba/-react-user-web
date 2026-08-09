@@ -22,6 +22,7 @@ import CustomImageContainer from "../CustomImageContainer";
 import { t } from "i18next";
 import { getAmountWithSign } from "helper-functions/CardHelpers";
 import moment from "moment";
+import { miliLogoSrc } from "components/logo/brandAssets";
 
 const ChatMessage = (props) => {
 	const theme = useTheme();
@@ -36,7 +37,12 @@ const ChatMessage = (props) => {
 		receiverType,
 	} = props;
 	const { configData } = useSelector((state) => state.configData);
-	const language_direction = localStorage.getItem("direction");
+	const language_direction =
+		typeof window !== "undefined"
+			? window.localStorage.getItem("direction")
+			: "ltr";
+	const displayName = (person) =>
+		[person?.f_name, person?.l_name].filter(Boolean).join(" ");
 	const receiverImageUrl = () => {
 		if (conversationData?.conversation?.receiver_type === "vendor") {
 			return conversationData.conversation?.receiver?.image_full_url;
@@ -44,7 +50,7 @@ const ChatMessage = (props) => {
 			conversationData?.conversation?.receiver_type === "delivery_man"
 		) {
 			return conversationData.conversation?.sender?.image_full_url;
-		} else return configData?.logo_full_url;
+		} else return miliLogoSrc;
 	};
 
 	const customerImageUrl = configData?.base_urls?.customer_image_url;
@@ -57,7 +63,7 @@ const ChatMessage = (props) => {
 		userType = conversationData?.conversation.sender_id;
 		userImage =
 			receiverType === "admin"
-				? configData?.fav_icon
+				? miliLogoSrc
 				: conversationData?.conversation?.receiver?.image;
 		senderImage = conversationData?.conversation?.sender?.image;
 	} else {
@@ -66,35 +72,19 @@ const ChatMessage = (props) => {
 	const nameHandler = () => {
 		if (conversationData?.conversation?.sender_type === "customer") {
 			if (authorType === userType) {
-				return conversationData?.conversation?.sender?.f_name.concat(
-					" ",
-					conversationData?.conversation?.sender?.l_name
-				);
+				return displayName(conversationData?.conversation?.sender);
 			} else {
 				if (conversationData?.conversation?.receiver?.f_name) {
-					return conversationData?.conversation?.receiver?.f_name.concat(
-						" ",
-						conversationData?.conversation?.receiver?.l_name
-					);
+					return displayName(conversationData?.conversation?.receiver);
 				} else {
 					return configData?.business_name;
 				}
 			}
 		} else {
 			if (authorType === userType) {
-				return (
-					conversationData?.conversation?.receiver?.f_name.concat(
-						" ",
-						conversationData?.conversation?.receiver?.l_name
-					) || " "
-				);
+				return displayName(conversationData?.conversation?.receiver) || " ";
 			} else {
-				return (
-					conversationData?.conversation?.sender?.f_name.concat(
-						" ",
-						conversationData?.conversation?.sender?.l_name
-					) || " "
-				);
+				return displayName(conversationData?.conversation?.sender) || " ";
 			}
 		}
 	};

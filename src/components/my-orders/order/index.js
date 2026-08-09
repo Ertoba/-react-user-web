@@ -1,4 +1,5 @@
 import StarBorderSharpIcon from "@mui/icons-material/StarBorderSharp";
+import LocationOnOutlinedIcon from "@mui/icons-material/LocationOnOutlined";
 import {
   Button,
   Chip,
@@ -22,8 +23,6 @@ import {
 import CustomImageContainer from "../../CustomImageContainer";
 import CustomFormatedDateTime from "../../date/CustomFormatedDateTime";
 import TrackParcelOrderDrawer from "../../home/module-wise-components/parcel/TrackParcelOrderDrawer";
-import trackOrderIcon1 from "../assets/Maskroup.svg";
-import trackOrderIcon from "../assets/trackOrderIcon.png";
 import { DateTypography, TrackOrderButton } from "../myorders.style";
 import { getImageUrl } from "utils/CustomFunctions";
 import { hasChatAndReview } from "components/my-orders/order-details/other-order/StoreDetails";
@@ -197,13 +196,12 @@ const Order = (props) => {
               size="small"
               onClick={(e) => handleClickTrackOrder(e)}
               endIcon={
-                <CustomImageContainer
-                  src={isXSmall ? trackOrderIcon1.src : trackOrderIcon.src}
-                  width="20px"
-                  height="20px"
-                  smWidth="15px"
-                  smHeight="15px"
-                  alt="icon"
+                <LocationOnOutlinedIcon
+                  sx={{
+                    width: { xs: 18, sm: 20 },
+                    height: { xs: 18, sm: 20 },
+                    color: "currentColor",
+                  }}
                 />
               }
             >

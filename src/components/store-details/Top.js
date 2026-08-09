@@ -256,7 +256,7 @@ const Top = (props) => {
             sx={{
               position: "relative",
               height: "122px",
-              borderBottomRightRadius: "10px"
+              overflow: "hidden",
             }}
           >
             {storeDetails?.discount ? (
@@ -292,7 +292,7 @@ const Top = (props) => {
                       onClick={() => handleBannerClick(banner?.default_link)}
                       sx={{
                         cursor: "pointer",
-                        borderBottomRightRadius: "10px",
+                        overflow: "hidden",
                         aspectRatio: "5 / 1",
                       }}
                     >
@@ -300,8 +300,8 @@ const Top = (props) => {
                         src={banner?.image_full_url}
                         width="100%"
                         height="100%"
-                        objectfit="contain"
-                        borderRadius="10px"
+                        objectfit="cover"
+                        borderRadius="0"
                       />
                     </Stack>
                   );
@@ -312,8 +312,8 @@ const Top = (props) => {
                 src={bannerCover}
                 width="100%"
                 height="100%"
-                objectfit="contain"
-                borderRadius="10px"
+                objectfit="cover"
+                borderRadius="0"
               />
             )}{" "}
           </CustomBoxFullWidth>
