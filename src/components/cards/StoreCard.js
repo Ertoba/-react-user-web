@@ -30,6 +30,7 @@ import ClosedNow from "components/closed-now";
 import NextImage from "components/NextImage";
 import useTextEllipsis from "api-manage/hooks/custom-hooks/useTextEllipsis";
 import { formatStoreName } from "utils/georgianText";
+import VerifiedStoreBadge from "./VerifiedStoreBadge";
 const ContentSection = styled(Box)(({ theme }) => ({
   background: "",
   marginTop: "10px",
@@ -239,6 +240,8 @@ const StoreCard = (props) => {
                 sx={{
                   px: "10px",
                   width: "100%",
+                  display: "flex",
+                  alignItems: "center",
                   // Ensu"100%",
                   // Ensure wrapper in flex can shrink and give a constrained width
                   minWidth: 0,
@@ -259,6 +262,7 @@ const StoreCard = (props) => {
                 >
                   {storeDisplayName}
                 </Typography>
+                <VerifiedStoreBadge verified={item?.verified_seller} />
               </CustomBoxFullWidth>
             </Tooltip>
 
@@ -345,7 +349,7 @@ const StoreCard = (props) => {
       ) : (
         <CustomBoxFullWidth>
           <Grid container>
-            <Grid item xs={9.5}>
+            <Grid item xs={9.5} sx={{ display: "flex", alignItems: "center", minWidth: 0 }}>
               <Tooltip
                 title={storeDisplayName || ""}
                 placement="bottom"
@@ -372,6 +376,7 @@ const StoreCard = (props) => {
                   {storeDisplayName}
                 </Typography>
               </Tooltip>
+              <VerifiedStoreBadge verified={item?.verified_seller} />
               {/*<H4 text={item?.name} />*/}
             </Grid>
             <Grid item xs={2.5}>

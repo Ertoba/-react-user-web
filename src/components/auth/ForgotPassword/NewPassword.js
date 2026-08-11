@@ -72,7 +72,7 @@ const NewPassword = ({ data, goBack,phoneOrEmail }) => {
                 {t("Password")}
               </InputLabel>
               <OutlinedInput
-                placeholder="Minimum 8 characters"
+                placeholder={t("Minimum 8 characters")}
                 require
                 type={showPassword ? "text" : "password"}
                 id="password"
@@ -91,7 +91,7 @@ const NewPassword = ({ data, goBack,phoneOrEmail }) => {
                 endAdornment={
                   <InputAdornment position="end">
                     <IconButton
-                      aria-label="toggle password visibility"
+                      aria-label={t("Toggle password visibility")}
                       onClick={() => setShowPassword((prevState) => !prevState)}
                       //   onMouseDown={handleMouseDownPassword}
                       edge="end"
@@ -113,7 +113,7 @@ const NewPassword = ({ data, goBack,phoneOrEmail }) => {
                 {t("Confirm Password")}
               </InputLabel>
               <OutlinedInput
-                placeholder="Re-enter your password"
+                placeholder={t("Re-enter your password")}
                 require
                 type={showConfirmPassword ? "text" : "password"}
                 id="confirm_password"
@@ -132,7 +132,7 @@ const NewPassword = ({ data, goBack,phoneOrEmail }) => {
                 endAdornment={
                   <InputAdornment position="end">
                     <IconButton
-                      aria-label="toggle password visibility"
+                      aria-label={t("Toggle password visibility")}
                       onClick={() =>
                         setConfirmShowPassword((prevState) => !prevState)
                       }

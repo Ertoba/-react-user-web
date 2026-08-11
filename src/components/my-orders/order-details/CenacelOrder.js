@@ -147,7 +147,7 @@ const CancelOrder = ({
                 <TextField
                   sx={{ marginTop: ".5rem" }}
                   id="outlined-multiline-static"
-                  label="Type here your cancel reason..."
+                  label={t("Type here your cancel reason...")}
                   multiline
                   fullWidth
                   rows={4}
@@ -209,7 +209,7 @@ const CancelOrder = ({
                   )}
 
                   <RadioGroup
-                    aria-label="gender"
+                    aria-label={t("Cancel Reason")}
                     name="gender1"
                     value={cancelReason}
                     onChange={handleChange}
@@ -236,7 +236,7 @@ const CancelOrder = ({
                 <TextField
                   sx={{ marginTop: ".5rem" }}
                   id="outlined-multiline-static"
-                  label="Type here your cancel reason..."
+                  label={t("Type here your cancel reason...")}
                   multiline
                   fullWidth
                   rows={4}

@@ -30,9 +30,9 @@ const AddressSelectionField = (props) => {
 							fontSize: "12px",
 						},
 					}}
-					placeholder="Set Location"
+					placeholder={t("Set Location")}
 					inputProps={{
-						"aria-label": "search google maps",
+						"aria-label": t("Search Google Maps"),
 					}}
 					value={address?.address}
 				/>

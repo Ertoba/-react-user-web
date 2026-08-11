@@ -22,6 +22,7 @@ import QuickView, { PrimaryToolTip } from "./QuickView";
 import NextImage from "components/NextImage";
 import useTextEllipsis from "api-manage/hooks/custom-hooks/useTextEllipsis";
 import { formatProductName, formatStoreName } from "utils/georgianText";
+import VerifiedStoreBadge from "./VerifiedStoreBadge";
 
 const VegNonVegFlag = styled(Box)(({ theme, veg, rounded }) => ({
   height: "14px",
@@ -265,7 +266,10 @@ const SpecialCard = (props) => {
       </CustomStackFullWidth>
       <CustomStackFullWidth mt="15px" sx={{ padding: "5px" }} spacing={0.5}>
         {getModuleWiseItemName()}
-        <Body2 text={storeDisplayName} component="h4" />
+        <Stack direction="row" alignItems="center" spacing={0.5}>
+          <Body2 text={storeDisplayName} component="h4" />
+          <VerifiedStoreBadge verified={item?.verified_seller} fontSize={14} />
+        </Stack>
       </CustomStackFullWidth>
       <CustomBoxFullWidth sx={{ padding: "0px 5px 5px 5px" }}>
         <Grid container>

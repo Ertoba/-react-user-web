@@ -4,6 +4,7 @@ import { styled } from "@mui/material/styles";
 import { Box, Stack } from "@mui/system";
 import { Typography } from "@mui/material";
 import moment from "moment";
+import { useTranslation } from "react-i18next";
 
 const Container = styled(Box)(({ theme }) => ({
   backgroundColor: theme.palette.primary.main,
@@ -17,8 +18,10 @@ const Container = styled(Box)(({ theme }) => ({
   borderRadius: "4px",
 }));
 
-// Random component
-const Completionist = () => <span>This campaign is over</span>;
+const Completionist = () => {
+  const { t } = useTranslation();
+  return <span>{t("This campaign is over")}</span>;
+};
 
 // Renderer callback with condition
 const renderer = ({ days, hours, minutes, seconds, completed }) => {

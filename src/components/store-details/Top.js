@@ -45,6 +45,7 @@ import { useRouter } from "next/router";
 import { getImageUrl } from "utils/CustomFunctions";
 import StoreShare from "components/store-details/StoreShare";
 import { formatStoreName } from "utils/georgianText";
+import VerifiedStoreBadge from "components/cards/VerifiedStoreBadge";
 
 const ContentWrapper = styled(CustomBoxFullWidth)(({ theme }) => ({
   position: "relative",
@@ -373,7 +374,14 @@ const Top = (props) => {
                         sx={{ color: "whiteContainer.main" }}
                         spacing={1}
                       >
-                        <H1 text={storeDisplayName} textAlign="flex-start" />
+                        <Stack direction="row" alignItems="center" sx={{ minWidth: 0 }}>
+                          <H1
+                            text={storeDisplayName}
+                            textAlign="flex-start"
+                            sx={{ flex: 1, minWidth: 0, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}
+                          />
+                          <VerifiedStoreBadge verified={storeDetails?.verified_seller} fontSize={20} />
+                        </Stack>
 
                         {hasStoreRatingOrReview && (
                           <Stack direction="row" alignItems="center" spacing={1}>
@@ -590,7 +598,14 @@ const Top = (props) => {
                     </Grid>
                     <Grid item xs={7} md={7.5} alignSelf="center">
                       <CustomStackFullWidth spacing={1}>
-                        <H1 text={storeDisplayName} textAlign="flex-start" />
+                        <Stack direction="row" alignItems="center" sx={{ minWidth: 0 }}>
+                          <H1
+                            text={storeDisplayName}
+                            textAlign="flex-start"
+                            sx={{ flex: 1, minWidth: 0, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}
+                          />
+                          <VerifiedStoreBadge verified={storeDetails?.verified_seller} fontSize={20} />
+                        </Stack>
 
                         {hasStoreRatingOrReview && (
                           <Stack direction="row" alignItems="center" spacing={1}>
@@ -677,7 +692,7 @@ const Top = (props) => {
                     <Grid item xs={2} align="right">
                       {!isInWishList(storeDetails?.id) && (
                         <Tooltip
-                          title={"Add to wishlist"}
+                          title={t("Add to wishlist")}
                           arrow
                           placement={"bottom"}
                         >
@@ -688,7 +703,7 @@ const Top = (props) => {
                       )}
                       {isInWishList(storeDetails?.id) && (
                         <Tooltip
-                          title={"Remove from wishlist"}
+                          title={t("Remove from wishlist")}
                           arrow
                           placement={"bottom"}
                         >

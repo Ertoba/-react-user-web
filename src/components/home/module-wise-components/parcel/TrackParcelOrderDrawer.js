@@ -97,19 +97,19 @@ const TrackParcelOrderDrawer = (props) => {
   }, [actStep, trackOrderData, orderId]);
   const steps = [
     {
-      label: "Order Placed",
+      label: t("Order Placed"),
       time: trackOrderData?.pending,
     },
     {
-      label: "Order Confirmed",
+      label: t("Order Confirmed"),
       time: trackOrderData?.confirmed,
     },
     {
-      label: "On the Way",
+      label: t("On the Way"),
       time: trackOrderData?.picked_up,
     },
     {
-      label: "Delivered",
+      label: t("Delivered"),
       time: trackOrderData?.delivered,
     },
   ];
@@ -159,7 +159,7 @@ const TrackParcelOrderDrawer = (props) => {
               mb="10px"
             >
               <Typography fontSize="16px" fontWeight="600" textAlign="center">
-                {"Order ID:"}{" "}
+                {t("Order ID:")}{" "}
                 <Typography component="span" fontSize="16px" fontWeight="600">
                   {trackOrderData?.id}
                 </Typography>

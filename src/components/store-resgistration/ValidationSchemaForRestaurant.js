@@ -68,36 +68,36 @@ const ValidationSchemaForRestaurant = () => {
 				(value) => value && IMAGE_SUPPORTED_FORMATS.includes(value.type)
 			),
 		email: Yup.string()
-			.email("Must be a valid email")
+			.email(t("Must be a valid email"))
 			.max(255)
 			.required(t("Email is required")),
 
 		password: Yup.string()
-			.required("No password provided.")
+			.required(t("No password provided."))
 			.test(
 				"password-requirements",
-				"Password requirements not met",
+				t("Password requirements not met"),
 				function (value) {
 					if (!value) return true; // Handled by required()
 
 					const errors = [];
 					if (value.length < 8) {
 						errors.push(
-							"Password is too short - should be 8 characters minimum."
+							t("Password is too short - should be 8 characters minimum.")
 						);
 					}
 					if (!/[0-9]/.test(value)) {
-						errors.push("one number.");
+						errors.push(t("one number."));
 					}
 					if (!/[A-Z]/.test(value)) {
-						errors.push("one uppercase letter.");
+						errors.push(t("one uppercase letter."));
 					}
 					if (!/[a-z]/.test(value)) {
-						errors.push("one lowercase letter.");
+						errors.push(t("one lowercase letter."));
 					}
 					if (!/[!@#$%^&*(),.?":{}|<>+_=]/.test(value)) {
 						errors.push(
-							"one special character."
+							t("one special character.")
 						);
 					}
 

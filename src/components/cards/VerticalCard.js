@@ -1,5 +1,5 @@
 import { alpha, styled, Typography } from "@mui/material";
-import { Box } from "@mui/system";
+import { Box, Stack } from "@mui/system";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { getAmountWithSign } from "../../helper-functions/CardHelpers";
@@ -15,6 +15,7 @@ import { CustomOverLay } from "./Card.style";
 import QuickView from "./QuickView";
 import { FoodHalalHaram } from "./SpecialCard";
 import { formatProductName, formatStoreName } from "utils/georgianText";
+import VerifiedStoreBadge from "./VerifiedStoreBadge";
 
 export const Wrapper = styled(CustomStackFullWidth)(
   ({ theme, marginbottom }) => ({
@@ -131,7 +132,10 @@ const VerticalCard = (props) => {
         )}
       </ImageWrapper>
       <Box sx={{ marginTop: "10px", marginBottom: "6px" }}>
-        <Body2 text={storeDisplayName} />
+        <Stack direction="row" alignItems="center" spacing={0.5}>
+          <Body2 text={storeDisplayName} />
+          <VerifiedStoreBadge verified={item?.verified_seller} fontSize={14} />
+        </Stack>
       </Box>
       <Box sx={{ marginBottom: "8px" }}>
         <H3 text={productDisplayName} />

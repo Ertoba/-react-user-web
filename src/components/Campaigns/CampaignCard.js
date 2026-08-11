@@ -44,11 +44,11 @@ const CampaignCard = ({ data }) => {
           </Typography>
           <Typography textAlign="left">{data?.description}</Typography>
           <Typography textAlign="left" fontWeight="500" variant="subtitle2">
-            {"Start Date"}:{"  "}
+            {t("Start Date")}:{"  "}
             {moment(data?.available_date_starts).format("MMMM Do YYYY")}
           </Typography>
           <Typography textAlign="left" fontWeight="500" variant="subtitle2">
-            {"Start Date"}:{"  "}
+            {t("End Date")}:{"  "}
             {moment(data?.available_date_ends).format("MMMM Do YYYY")}
           </Typography>
           <Typography variant="subtitle2" textAlign="left">

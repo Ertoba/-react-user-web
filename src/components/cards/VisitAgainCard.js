@@ -26,6 +26,7 @@ import QuickView, { PrimaryToolTip } from "./QuickView";
 import NextImage from "components/NextImage";
 import { handleStoreRedirect } from "helper-functions/handleStoreRedirect";
 import { formatStoreName } from "utils/georgianText";
+import VerifiedStoreBadge from "./VerifiedStoreBadge";
 
 export const getModuleWiseData = () => {
 	switch (getCurrentModuleType()) {
@@ -263,6 +264,7 @@ const VisitAgainCard = (props) => {
 			<CustomBoxFullWidth sx={{ mt: "10px" }}>
 				<Grid container spacing={1.5}>
 					<Grid item xs={8.5} md={9}>
+						<Box sx={{ display: "flex", alignItems: "center", minWidth: 0 }}>
 						<PrimaryToolTip
 							text={storeDisplayName}
 							placement="bottom"
@@ -277,6 +279,8 @@ const VisitAgainCard = (props) => {
 								{storeDisplayName}
 							</Typography>
 						</PrimaryToolTip>
+						<VerifiedStoreBadge verified={item?.verified_seller} />
+						</Box>
 						<Typography
 							color="text.secondary"
 							className={classes.multiLineEllipsis}

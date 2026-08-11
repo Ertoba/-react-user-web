@@ -41,7 +41,7 @@ const CustomCopyWithTooltip = (props) => {
           onMouseEnter={() => copy && setCopy(false)}
           onClick={() => handleCopy(value)}
         >
-          Copy
+          {t("Copy")}
         </Button>
       ) : (
         <IconButton

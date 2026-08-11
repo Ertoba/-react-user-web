@@ -278,9 +278,8 @@ const ParcelPaymentMethod = (props) => {
                       {configData?.active_payment_method_list?.map(
                         (item, index) => {
                           return (
-                            <Stack flexGrow={1} flexBasis={"48%"}>
+                            <Stack key={item?.gateway ?? index} flexGrow={1} flexBasis={"48%"}>
                               <PaymentMethodCard
-                                key={index}
                                 parcel={parcel}
                                 paymentType={item?.gateway_title}
                                 image={item?.gateway_image_full_url}
@@ -372,7 +371,7 @@ const ParcelPaymentMethod = (props) => {
                     </FormControl>
                     <Tooltip
                       placement="left"
-                      title="Offline Payment! Now, with just a click of a button, you can make secure transactions. It's simple, convenient, and reliable."
+                      title={t("Offline Payment! Now, with just a click of a button, you can make secure transactions. It's simple, convenient, and reliable.")}
                     >
                       <InfoIcon
                         fontSize="16px"

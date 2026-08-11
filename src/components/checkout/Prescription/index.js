@@ -284,7 +284,7 @@ const PrescriptionCheckout = ({ storeId ,page}) => {
                 </Typography>
               </Stack>
               <CustomTextArea
-                aria-label="empty textarea"
+                aria-label={t("Additional Note")}
                 placeholder={t("Additional Note")}
                 style={{ width: "100%", minHeight: "50px", marginTop: "20px" }}
                 onChange={(e) => handleChange(e)}

@@ -157,7 +157,7 @@ const OfflineOrderDetailsModal = ({
                         {trackData?.offline_payment?.data?.customer_note && (
                           <>
                             <ModalCustomTypography>
-                              {"Note"}
+                              {t("Note")}
                             </ModalCustomTypography>
                             <Typography sx={{ wordWrap: "break-word" }}>
                               :&nbsp;&nbsp;

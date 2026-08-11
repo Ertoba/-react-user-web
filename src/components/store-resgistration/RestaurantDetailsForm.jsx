@@ -194,10 +194,10 @@ const RestaurantDetailsForm = ({
                   <CustomMultiSelect
                     required
                     zoneOption={zoneOption}
-                    label="Pickup Area"
+                    label={t("Pickup Area")}
                     placeholder={
                       RestaurantJoinFormik.values.pickup_zone_id.length < 1
-                        ? "Select Pickup Area"
+                        ? t("Select Pickup Area")
                         : ""
                     }
                     handleChange={pickupZoneHandler}

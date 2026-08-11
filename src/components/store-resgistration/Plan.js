@@ -131,7 +131,7 @@ const Plan = ({ setSelectedPackage, selectedPackage, item }) => {
         <Box textAlign="center">
           <PlanItemTitle>{item?.package_name}</PlanItemTitle>
           <PlanItemPrice>{getAmountWithSign(item?.price)}</PlanItemPrice>
-          <PlanItemDayCount>{item?.validity} Days</PlanItemDayCount>
+          <PlanItemDayCount>{item?.validity} {t("Days")}</PlanItemDayCount>
         </Box>
         <PlanItemInfoList>
           <PlanItemInfoListItem>

@@ -82,6 +82,7 @@ import SpecialCard, { FoodHalalHaram, FoodVegNonVegFlag } from "./SpecialCard";
 import NextImage from "components/NextImage";
 import useTextEllipsis from "api-manage/hooks/custom-hooks/useTextEllipsis";
 import { formatProductName, formatStoreName } from "utils/georgianText";
+import VerifiedStoreBadge from "./VerifiedStoreBadge";
 
 export const CardWrapper = styled(Card)(
   ({
@@ -741,7 +742,10 @@ const ProductCard = (props) => {
               {item?.generic_name[0]}
             </Typography>
           ) : (
-            <Body2 text={storeDisplayName} component="h4" />
+            <Stack direction="row" alignItems="center" spacing={0.5}>
+              <Body2 text={storeDisplayName} component="h4" />
+              <VerifiedStoreBadge verified={item?.verified_seller} fontSize={14} />
+            </Stack>
           )}
         </CustomBoxFullWidth>
         {item?.unit_type ? (
@@ -859,13 +863,16 @@ const ProductCard = (props) => {
             <FoodVegNonVegFlag veg={item?.veg === 0 ? "false" : "true"} />
           ) : null}
         </CustomStackFullWidth>
-        <Typography
-          color="text.secondary"
-          variant={isSmall ? "body2" : "body1"}
-          component="h4"
-        >
-          {storeDisplayName}
-        </Typography>
+        <Stack direction="row" alignItems="center" spacing={0.5}>
+          <Typography
+            color="text.secondary"
+            variant={isSmall ? "body2" : "body1"}
+            component="h4"
+          >
+            {storeDisplayName}
+          </Typography>
+          <VerifiedStoreBadge verified={item?.verified_seller} fontSize={14} />
+        </Stack>
         {/* </CustomStackFullWidth> */}
         <CustomStackFullWidth
           direction="row"
@@ -906,7 +913,10 @@ const ProductCard = (props) => {
         spacing={0.6}
         p={item?.module_type === "pharmacy" ? "5px 16px 16px 16px" : "1rem"}
       >
-        <Body2 text={storeDisplayName} component="h4" />
+        <Stack direction="row" alignItems="center" spacing={0.5}>
+          <Body2 text={storeDisplayName} component="h4" />
+          <VerifiedStoreBadge verified={item?.verified_seller} fontSize={14} />
+        </Stack>
 
 
         {isEllipsed ? (
@@ -957,7 +967,10 @@ const ProductCard = (props) => {
         // p="1rem"
         p="0 4px"
       >
-        <Body2 text={storeDisplayName} />
+        <Stack direction="row" alignItems="center" spacing={0.5}>
+          <Body2 text={storeDisplayName} />
+          <VerifiedStoreBadge verified={item?.verified_seller} fontSize={14} />
+        </Stack>
         {isEllipsed ? (
           <PrimaryToolTip text={productDisplayName} placement="bottom" arrow="false">
             <Box ref={textRef}>
@@ -1035,7 +1048,10 @@ const ProductCard = (props) => {
         p="1rem"
 
       >
-        <Body2 paddingTop="5px" text={storeDisplayName} component="h4" />
+        <Stack direction="row" alignItems="center" spacing={0.5} paddingTop="5px">
+          <Body2 text={storeDisplayName} component="h4" />
+          <VerifiedStoreBadge verified={item?.verified_seller} fontSize={14} />
+        </Stack>
         {isEllipsed ? (
           <PrimaryToolTip text={productDisplayName} placement="bottom" arrow="false">
             <Box ref={textRef}>
@@ -1239,6 +1255,7 @@ const ProductCard = (props) => {
               >
                 {item?.module?.module_type === "pharmacy" && (
                   <Stack
+                    direction="row"
                     width="100%"
                     alignItems="center"
                     justifyContent="center"
@@ -1259,6 +1276,7 @@ const ProductCard = (props) => {
                     component="h4"
                   >
                     {storeDisplayName}
+                    <VerifiedStoreBadge verified={item?.verified_seller} fontSize={14} />
                   </Stack>
                 )}
                 {handleBadge()}

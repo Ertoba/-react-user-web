@@ -15,6 +15,7 @@ import {
 	isWebsiteTestModeEnabled,
 	WEBSITE_TEST_MODE_BANNER_HEIGHT,
 } from "../header/WebsiteTestModeBanner";
+import CustomerAiChat from "../ai-chat/CustomerAiChat";
 
 const MainLayout = ({ children, configData }) => {
 	const [rerenderUi, setRerenderUi] = useState(false);
@@ -96,6 +97,7 @@ const MainLayout = ({ children, configData }) => {
 				/>
 			</footer>
 			{isSmall && page !== "parcel" && <BottomNav />}
+			<CustomerAiChat configData={effectiveConfigData} />
 		</MainLayoutRoot>
 	);
 };

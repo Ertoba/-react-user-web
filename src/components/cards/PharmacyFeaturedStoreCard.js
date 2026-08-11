@@ -11,6 +11,7 @@ import CustomImageContainer from "../CustomImageContainer";
 import Body2 from "../typographies/Body2";
 import { handleStoreRedirect } from "helper-functions/handleStoreRedirect";
 import { formatStoreName } from "utils/georgianText";
+import VerifiedStoreBadge from "./VerifiedStoreBadge";
 
 const Wrapper = styled(CustomBoxFullWidth)(({ theme, hover }) => ({
 	position: "relative",
@@ -98,6 +99,7 @@ const PharmacyFeaturedStoreCard = (props) => {
 							spacing={2}
 						>
 							<Stack alignItems="flex-start" spacing={1}>
+								<Stack direction="row" alignItems="center" sx={{ minWidth: 0 }}>
 								<PrimaryToolTip
 									text={storeDisplayName}
 									placement="bottom"
@@ -112,6 +114,8 @@ const PharmacyFeaturedStoreCard = (props) => {
 										{storeDisplayName}
 									</Typography>
 								</PrimaryToolTip>
+								<VerifiedStoreBadge verified={data?.verified_seller} />
+								</Stack>
 								<Body2 text={data?.address} />
 								<Typography
 									variant="body2"

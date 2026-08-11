@@ -141,7 +141,7 @@ const InterestOptions = ({ configData }) => {
             })
           ) : (
             <Grid item xs={12} align="center">
-              <Typography>No categories found</Typography>
+              <Typography>{t("No categories found")}</Typography>
             </Grid>
           )
         ) : (

@@ -208,7 +208,7 @@ const text1=t("Please enter the registered")
           {t(
             "Back to"
           )}
-          <Typography onClick={handleClick} component="span" sx={{cursor:"pointer",paddingInlineStart:"10px",textDecoration:"underline",color:theme=>theme.palette.primary.main}}>{("Log in")}</Typography>
+          <Typography onClick={handleClick} component="span" sx={{cursor:"pointer",paddingInlineStart:"10px",textDecoration:"underline",color:theme=>theme.palette.primary.main}}>{t("Log in")}</Typography>
         </Typography>
         <AuthModal
           modalFor={modalFor}

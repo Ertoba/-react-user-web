@@ -18,6 +18,7 @@ import {
   CustomStackFullWidth,
 } from "styled-components/CustomStyles.style";
 import { textWithEllipsis } from "styled-components/TextWithEllipsis";
+import VerifiedStoreBadge from "components/cards/VerifiedStoreBadge";
 import { not_logged_in_message } from "utils/toasterMessages";
 import CustomImageContainer from "../CustomImageContainer";
 import CustomMultipleRatings from "../CustomMultipleRatings";
@@ -225,8 +226,20 @@ const NearbyStoreCard = (props) => {
             )}
           </CustomStackFullWidth>
         </CustomStackFullWidth>
-        {isEllipsed ? (
-          <PrimaryToolTip text={storeDisplayName} placement="bottom" arrow="false">
+        <Box sx={{ display: "flex", alignItems: "center", minWidth: 0 }}>
+          {isEllipsed ? (
+            <PrimaryToolTip text={storeDisplayName} placement="bottom" arrow="false">
+              <Typography
+                ref={textRef}
+                className={classes.singleLineEllipsis}
+                fontSize={{ xs: "13px", md: "16px" }}
+                fontWeight="500"
+                component="h3"
+              >
+                {storeDisplayName}
+              </Typography>
+            </PrimaryToolTip>
+          ) : (
             <Typography
               ref={textRef}
               className={classes.singleLineEllipsis}
@@ -236,18 +249,9 @@ const NearbyStoreCard = (props) => {
             >
               {storeDisplayName}
             </Typography>
-          </PrimaryToolTip>
-        ) : (
-          <Typography
-            ref={textRef}
-            className={classes.singleLineEllipsis}
-            fontSize={{ xs: "13px", md: "16px" }}
-            fontWeight="500"
-            component="h3"
-          >
-            {storeDisplayName}
-          </Typography>
-        )}
+          )}
+          <VerifiedStoreBadge verified={item?.verified_seller} />
+        </Box>
         {/*<H3 text={item?.name} />*/}
         <Typography
           textAlign="flex-start"

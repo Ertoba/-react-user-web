@@ -42,6 +42,7 @@ import {
 } from "./helperFunction";
 import PricePreviewWithStock from "./PricePreviewWithStock";
 import { ACTION, initialState, reducer } from "./states";
+import VerifiedStoreBadge from "components/cards/VerifiedStoreBadge";
 
 export const getItemObject = (productData) => {
 	return {
@@ -309,6 +310,7 @@ const ProductInformation = ({
 			>
 				{state.modalData[0]?.store_name ? (
 					router.pathname !== `/store/[id]` ? (
+						<Stack direction="row" alignItems="center" sx={{ minWidth: 0 }}>
 						<Link
 							href={getStoreRedirectURL(state.modalData[0]?.store_details|| {
 							id:productDetailsData?.store_id,
@@ -333,6 +335,8 @@ const ProductInformation = ({
 								{modalStoreDisplayName}
 							</Typography>
 						</Link>
+						<VerifiedStoreBadge verified={state.modalData[0]?.verified_seller} fontSize={14} />
+						</Stack>
 					) : null
 				) : (
 					<Skeleton width={100} variant="text" />

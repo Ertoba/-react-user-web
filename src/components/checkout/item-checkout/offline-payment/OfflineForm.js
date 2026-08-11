@@ -119,7 +119,7 @@ const OfflineForm = ({
       <CustomImageContainer width="120px" src={OfflinePaymentImage.src} />
       <Typography variant="body1" color={theme.palette.neutral[600]} mb={1}>{t("Pay your bill using any of the payment method below and input the required information in the form")}</Typography>
       <Stack direction="row" alignItems="center" gap="10px">
-        <Typography variant="subtitle1">Total order price: </Typography>
+        <Typography variant="subtitle1">{t("Total order price:")} </Typography>
         <Typography variant="subtitle1" color={theme.palette.primary.main}>{getAmountWithSign(total_order_amount)}</Typography>
       </Stack>
       <CustomStackFullWidth mt={4}>
@@ -312,7 +312,7 @@ const OfflineForm = ({
                   multiline
                   fullWidth
                   id="customer_note"
-                  label="Payment Note"
+                  label={t("Payment Note")}
                   name="customer_note"
                   value={formik.values["customer_note"]}
                   onChange={formik.handleChange}

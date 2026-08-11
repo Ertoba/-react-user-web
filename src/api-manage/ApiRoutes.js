@@ -69,6 +69,7 @@ export const delete_wish_list_api = "/api/v1/customer/wish-list/remove";
 export const get_channel_list = "/api/v1/customer/message/list";
 export const get_conversations_api = "/api/v1/customer/message/details";
 export const store_message_api = "/api/v1/customer/message/send";
+export const ai_chat_send_api = "/api/v1/ai-chat/send";
 export const channel_search_api = "/api/v1/customer/message/search-list";
 export const cm_firebase_token_api = "/api/v1/customer/cm-firebase-token";
 export const suggestedProducts_api = "/api/v1/customer/suggested-items";

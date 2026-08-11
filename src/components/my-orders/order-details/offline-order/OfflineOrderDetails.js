@@ -121,7 +121,7 @@ const OfflineOrderDetails = ({ trackOrderData, setOpenOfflineModal, setOpenPayme
                 <Stack>
                     {trackOrderData?.offline_payment?.data?.customer_note &&
                         <Typography fontSize="12px">
-                            {"Note"}&nbsp;&nbsp;:&nbsp;&nbsp;
+                            {t("Note")}&nbsp;&nbsp;:&nbsp;&nbsp;
                             <Typography fontWeight="600" component="span" sx={{ fontSize: "12px", overflowWrap: "break-word", }}>
                                 <ReadMore limits="110">
                                     {trackOrderData?.offline_payment?.data?.customer_note}

@@ -34,15 +34,16 @@ const DiscountedProductRedirectBanner = (props) => {
           fontSize="19px"
           textAlign={IsSmallScreen() ? "center" : "flex-start"}
         >
-          <CustomSpan mr="true">100% Natural Quality</CustomSpan>Organic Product
+          <CustomSpan mr="true">{t("100% Natural Quality")}</CustomSpan>
+          {t("Organic Product")}
         </Typography>
         <Typography
           textAlign={IsSmallScreen() ? "center" : "flex-start"}
           fontSize="15px"
           color="text.customText1"
         >
-          See Our latest discounted products from here and get a special
-          <CustomSpan>discount product</CustomSpan>
+          {t("See Our latest discounted products from here and get a special")}
+          <CustomSpan>{t("discount product")}</CustomSpan>
         </Typography>
       </Stack>
       <Button variant="contained">{t("Shop Now")}</Button>

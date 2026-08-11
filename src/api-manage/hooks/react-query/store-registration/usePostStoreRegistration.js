@@ -7,15 +7,18 @@ import {
 } from "../../../ApiRoutes";
 import MainApi from "../../../MainApi";
 import dayjs from "dayjs";
+import { REQUIRED_CONTENT_LANGUAGES } from "components/store-resgistration/helper";
 const postData = async (storeData) => {
   const translationsR = [];
-  for (const [locale, name] of Object.entries(storeData.restaurant_name)) {
+  const fallbackName = storeData.restaurant_name?.en || "";
+  const fallbackAddress = storeData.restaurant_address?.en || "";
+  for (const { key: locale } of REQUIRED_CONTENT_LANGUAGES) {
+    const name = storeData.restaurant_name?.[locale] || fallbackName;
     translationsR.push({ id: null, locale, key: "name", value: name });
   }
 
-  for (const [locale, address] of Object.entries(
-    storeData.restaurant_address
-  )) {
+  for (const { key: locale } of REQUIRED_CONTENT_LANGUAGES) {
+    const address = storeData.restaurant_address?.[locale] || fallbackAddress;
     translationsR.push({ id: null, locale, key: "address", value: address });
   }
   const translations = JSON.stringify(translationsR);

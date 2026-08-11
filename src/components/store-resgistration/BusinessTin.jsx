@@ -208,7 +208,7 @@ const BusinessTin = ({
                 <Grid item xs={12}>
                   <TextField
                     size="medium"
-                    label="Expire Date"
+                    label={t("Expire Date")}
                     fullWidth
                     value={selectedDates ? selectedDates[0] : ""}
                     onClick={handleOpen}

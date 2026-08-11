@@ -37,14 +37,14 @@ const PartialPaymentModal = (props) => {
 						fontSize="16px"
 						textAlign="center"
 					>
-						{title}
+						{t(title)}
 						<Typography
 							fontWeight="500"
 							fontSize="16px"
 							color={theme.palette.primary.main}
 							component="span"
 						>
-							{colorTitle}
+							{" "}{t(colorTitle.trim())}{" "}
 						</Typography>
 					</Typography>
 				</Stack>
@@ -57,11 +57,11 @@ const PartialPaymentModal = (props) => {
 					>
 						{getAmountWithSign(payableAmount)}
 					</Typography>
-					<Typography>(Order Amount)</Typography>
+					<Typography>({t("Order Amount")})</Typography>
 				</Stack>
 				{remainingBalance && (
 					<Typography fontSize="12px">
-						Remaining Wallet Balance :
+						{t("Remaining Wallet Balance")} :
 						<Typography component="span" fontSize="12px">
 							{getAmountWithSign(remainingBalance)}
 						</Typography>
@@ -73,7 +73,7 @@ const PartialPaymentModal = (props) => {
 					{t("No")}
 				</GrayButton>
 				<Button fullWidth variant="contained" onClick={agree}>
-					{"Yes"}
+					{t("Yes")}
 				</Button>
 			</Stack>
 		</CustomStackFullWidth>

@@ -17,6 +17,7 @@ import { removeWishListStore } from "redux/slices/wishList";
 import toast from "react-hot-toast";
 import { useWishListStoreDelete } from "api-manage/hooks/react-query/wish-list/useWishListStoreDelete";
 import { useRouter } from "next/router";
+import VerifiedStoreBadge from "components/cards/VerifiedStoreBadge";
 const StoreWishCard = ({ data, setSideDrawerOpen }) => {
   const router = useRouter();
   const theme = useTheme();
@@ -65,9 +66,12 @@ const StoreWishCard = ({ data, setSideDrawerOpen }) => {
         </StoreImageBox>
 
         <Stack width="0px" flexGrow="1" justifyContent="center" spacing={0.5}>
-          <Typography fontWeight="500" fontSize="14px">
-            {data?.name}
-          </Typography>
+          <Stack direction="row" alignItems="center" sx={{ minWidth: 0 }}>
+            <Typography fontWeight="500" fontSize="14px" noWrap>
+              {data?.name}
+            </Typography>
+            <VerifiedStoreBadge verified={data?.verified_seller} fontSize={14} />
+          </Stack>
           <CustomRatings
             ratingValue={data?.avg_rating}
             readOnly="true"

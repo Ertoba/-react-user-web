@@ -125,7 +125,7 @@ const CardView = (props) => {
               color={theme.palette.primary.dark}
             />
           }
-          title="Shopping Cart"
+          title={t("Shopping Cart")}
           closeHandler={closeHandler}
         />
         {cartList?.length > 0 ? (

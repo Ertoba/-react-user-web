@@ -113,7 +113,7 @@ const ItemsCampaign = ({ flashSales }) => {
         </Slider>
       </StyledCustomSlider>
        <Stack width="100%" alignItems="end" justifyContent="center">
-         <Typography   onClick={handleFlashSales} sx={{textDecoration:"underLine",color:theme=>theme.palette.neutral[400]}} fontSize="16px" fontWeight="600"  marginRight="10px">{("See All")}</Typography>
+         <Typography onClick={handleFlashSales} sx={{textDecoration:"underLine",color:theme=>theme.palette.neutral[400]}} fontSize="16px" fontWeight="600" marginRight="10px">{t("See All")}</Typography>
        </Stack>
     </CustomStackFullWidth>
   );

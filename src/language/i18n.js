@@ -1,12 +1,11 @@
 import i18n from "i18next";
 import { initReactI18next } from "react-i18next";
 import { english } from "./en";
-import { bengali } from "./bn";
-import { spain } from "./es";
 import { georgian } from "./ka";
+import { russian } from "./ru";
 
 const getInitialLanguage = () => {
-  const allowedLanguages = ["ka", "en", "es", "bn"];
+  const allowedLanguages = ["ka", "ru", "en"];
 
   if (typeof window === "undefined") {
     return "ka";
@@ -27,14 +26,11 @@ const resources = {
   en: {
     translation: english,
   },
-  es: {
-    translation: spain,
-  },
-  bn: {
-    translation: bengali,
-  },
   ka: {
     translation: georgian,
+  },
+  ru: {
+    translation: russian,
   },
 };
 

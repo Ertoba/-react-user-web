@@ -103,7 +103,7 @@ const OfflinePaymentEdit = (
                     <Grid items xs={12} md={12} padding="20px 0px 0px 18px">
                         <TextField
                             fullWidth
-                            label="Payment Note"
+                            label={t("Payment Note")}
                             id="customer_note"
                             name="customer_note"
                             onChange={formik.handleChange}

@@ -18,7 +18,10 @@ import AccountInfo from "components/store-resgistration/AccountInfo";
 import { useQuery } from "react-query";
 import { GoogleApi } from "api-manage/hooks/react-query/googleApi";
 import { useDispatch, useSelector } from "react-redux";
-import { getZoneWiseModule } from "components/store-resgistration/helper";
+import {
+  getRequiredContentLanguages,
+  getZoneWiseModule,
+} from "components/store-resgistration/helper";
 import { setAllData, setInZone } from "redux/slices/storeRegistrationData";
 import { SaveButton } from "components/profile/basic-information/Profile.style";
 import { useRouter } from "next/router";
@@ -82,7 +85,11 @@ const StoreRegistrationForm = ({ setActiveStep, setFormValues }) => {
   const [selectedZone, setSelectedZone] = React.useState(null);
   const { allData, activeStep, inZone } = useSelector((state) => state.storeRegData);
   const { data, refetch } = useGetModule();
-  const initialValues = generateInitialValues(configData?.language, allData);
+  const contentLanguages = React.useMemo(
+    () => getRequiredContentLanguages(configData?.language),
+    [configData?.language],
+  );
+  const initialValues = generateInitialValues(contentLanguages, allData);
   const [file, setFile] = useState(null);
   const [preview, setPreview] = useState(null);
   const isBottomMenu = useMediaQuery("(max-width: 1180px)");
@@ -177,7 +184,7 @@ const StoreRegistrationForm = ({ setActiveStep, setFormValues }) => {
       RestaurantJoinFormik.setFieldValue("max_delivery_time", value);
     } else
       toast.error(
-        "Please enter max delivery time greater than min delivery time"
+        t("Please enter max delivery time greater than min delivery time")
       );
   };
   const handleTimeTypeChangeHandler = (value) => {
@@ -283,7 +290,7 @@ const StoreRegistrationForm = ({ setActiveStep, setFormValues }) => {
           RestaurantJoinFormik.values.max_delivery_time
         ) {
           toast.error(
-            "Minimum delivery time should be less than maximum delivery time"
+            t("Minimum delivery time should be less than maximum delivery time")
           );
         }
       }, 500); // delay in milliseconds (e.g., 1000ms = 1 second)
@@ -323,17 +330,17 @@ const StoreRegistrationForm = ({ setActiveStep, setFormValues }) => {
     // Check if moduleOption remains empty after filtering out "parcel"
     if (moduleOption.length === 0) {
       moduleOption.push({
-        label: "No result found",
+        label: t("No result found"),
       });
     }
   } else {
     moduleOption.push({
-      label: "No result found",
+      label: t("No result found"),
     });
   }
 
   let tabs = [];
-  configData?.language?.forEach((lan) => {
+  contentLanguages.forEach((lan) => {
     let obj = {
       name: lan?.key,
       value: lan?.value,

@@ -108,7 +108,7 @@ const StoreList = ({ storeType, type, setType, data, sortby, setSortby, searchKe
                   variant="outlined"
                   value={sortby}
                   label={<Box display="flex" alignItems="center">
-                    Sort by ({sortLabel})
+                    {t("Sort by")} ({sortLabel})
                     <IconButton
                       size="small"
                       sx={{ padding: 0, ml: 0.5 }}
@@ -122,21 +122,21 @@ const StoreList = ({ storeType, type, setType, data, sortby, setSortby, searchKe
                   <CustomChip
                     variant="outlined"
                     value={type === 'halal'}
-                    label="Only Halal"
+                    label={t("Only Halal")}
                     onClick={() => setType(type === 'halal' ? '' : 'halal')}
                   />
 
                   <CustomChip
                     variant="outlined"
                     value={type === 'veg'}
-                    label="Only Veg"
+                    label={t("Only Veg")}
                     onClick={() => setType(type === 'veg' ? '' : 'veg')}
                   />
 
                   <CustomChip
                     variant="outlined"
                     value={type === 'non_veg'}
-                    label="Only Non Veg"
+                    label={t("Only Non Veg")}
                     onClick={() => setType(type === 'non_veg' ? '' : 'non_veg')}
                   />
 

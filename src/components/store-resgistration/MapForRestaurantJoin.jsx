@@ -267,8 +267,8 @@ const MapForRestaurantJoin = ({
               }}
             >
               <Stack direction="row" spacing={{ xs: 1, sm: 2 }} backgroundColor={theme.palette.neutral[100]} paddingX='5px' borderRadius='3px'>
-                <CustomTypography sx={{ fontSize: { xs: '10px', sm: '12px' } }}>Latitude: {Number(location?.lat)?.toFixed(7)}</CustomTypography>
-                <CustomTypography sx={{ fontSize: { xs: '10px', sm: '12px' } }}>Longitude: {Number(location?.lng)?.toFixed(7)}</CustomTypography>
+                <CustomTypography sx={{ fontSize: { xs: '10px', sm: '12px' } }}>{t("Latitude:")} {Number(location?.lat)?.toFixed(7)}</CustomTypography>
+                <CustomTypography sx={{ fontSize: { xs: '10px', sm: '12px' } }}>{t("Longitude:")} {Number(location?.lng)?.toFixed(7)}</CustomTypography>
               </Stack>
             </CustomStackFullWidth>
           )}

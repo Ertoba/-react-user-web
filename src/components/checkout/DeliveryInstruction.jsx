@@ -99,7 +99,7 @@ const DeliveryInstruction = (props) => {
                 multiline
                 value={value}
                 fullWidth
-                placeholder='Please write a note'
+                placeholder={t("Please write a note")}
                 id="custom_note"
                 name="custom_note"
                 onChange={handleCustomNote}

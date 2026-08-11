@@ -33,6 +33,7 @@ import { formatStoreName } from "utils/georgianText";
 import CustomImageContainer from "../CustomImageContainer";
 import CustomRatings from "../search/CustomRatings";
 import { RoundedIconButton } from "./product-details-section/ProductsThumbnailsSettings";
+import VerifiedStoreBadge from "../cards/VerifiedStoreBadge";
 
 const CustomWrapper = styled(Paper)(({ theme }) => ({
 	padding: "20px",
@@ -142,9 +143,12 @@ const StoreDetails = ({ storeDetails, storeImageBaseUrl }) => {
 								/>
 							</CustomBoxFullWidth>
 							<CustomStackFullWidth spacing={0.5}>
-								<Typography variant="h7" component="h2">
-									{storeDisplayName}
-								</Typography>
+								<CustomStackFullWidth direction="row" alignItems="center">
+									<Typography variant="h7" component="h2" noWrap>
+										{storeDisplayName}
+									</Typography>
+									<VerifiedStoreBadge verified={storeDetails?.verified_seller} />
+								</CustomStackFullWidth>
 								<CustomStackFullWidth
 									direction="row"
 									alignItems="center"

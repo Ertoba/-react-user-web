@@ -144,13 +144,18 @@ const OrderDetailsModal = ({ orderDetailsModalOpen }) => {
             </Typography>
           </CustomStackFullWidth> */}
           <Typography fontWeight="400" textAlign="center" maxWidth="380px">
-            We will begin processing your order shortly. Your Order ID is
-              <Typography component="span" fontWeight={600}>{ " " }{guestUserOrderId || order_id}</Typography>,
-              placed using the phone number
-              <Typography component="span" fontWeight={600}>{" "}{guestUserInfo?.phone || orderInformation?.phone || "+880170987654"}</Typography>.
+            {t("We will begin processing your order shortly. Your Order ID is")}
+            <Typography component="span" fontWeight={600}>
+              {" "}{guestUserOrderId || order_id}
+            </Typography>
+            {", "}{t("placed using the phone number")}
+            <Typography component="span" fontWeight={600}>
+              {" "}{guestUserInfo?.phone || orderInformation?.phone || "-"}
+            </Typography>
+            .
           </Typography>
           <Typography fontWeight="400" textAlign="center" maxWidth="380px">
-            Please keep this Order ID handy for track your order in future We’ve also emailed the details to you
+            {t("Please keep this Order ID handy for track your order in future We’ve also emailed the details to you")}
           </Typography>
 
 

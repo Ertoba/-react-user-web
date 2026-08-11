@@ -737,7 +737,7 @@ const ParcelCheckout = () => {
                                   fontSize="12px"
                                   fontWeight={600}
 
-                                >Note:</Typography>
+                                >{t("Note:")}</Typography>
                                 <Typography
                                   fontSize="12px"
                                   fontWeight={400}
@@ -893,7 +893,7 @@ const ParcelCheckout = () => {
                                   color="primary"
                                   component="span"
                                 >
-                                  {"(Vat/Tax incl.)"}
+                                  {t("(Vat/Tax incl.)")}
                                 </Typography>
                               )}
                           </Typography>
