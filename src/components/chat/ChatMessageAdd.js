@@ -191,6 +191,7 @@ const ChatMessageAdd = ({
 							hidden
 							ref={fileInputRef}
 							type="file"
+							accept="image/*"
 							multiple
 							onChange={handleFileOnChange}
 						/>

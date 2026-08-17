@@ -51,14 +51,19 @@ const ChatView = ({
   userType,
   channelId,
   orderId,
+  embedded = false,
 }) => {
   const classes = useStyles();
   return (
-    <StyledBox>
+    <StyledBox
+      sx={embedded ? { minHeight: 0, height: "100%", overflow: "hidden" } : undefined}
+    >
       <Box
         sx={{
           overflowY: "scroll",
-          height: "60vh",
+          height: embedded ? "auto" : "60vh",
+          minHeight: 0,
+          flex: embedded ? 1 : undefined,
           backgroundColor: (theme) => theme.palette.background.custom6,
         }}
         onScroll={handleScroll}

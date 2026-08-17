@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
 	CustomBoxFullWidth,
 	CustomStackFullWidth,
@@ -20,23 +20,29 @@ import { useSearchList } from "api-manage/hooks/react-query/chat/useSearch";
 import PushNotificationLayout from "../PushNotificationLayout";
 import { miliLogoSrc } from "components/logo/brandAssets";
 
-const Chatting = ({ configData }) => {
+const Chatting = ({ configData, embedded = false, initialMessage = "" }) => {
 	const theme = useTheme();
 	const [page_limit, setPageLimit] = useState(10);
 	const [offset, setOffset] = useState(1);
-	const [isSidebarOpen, setIsSidebarOpen] = useState(true);
-	const [channelId, setChannelId] = useState(null);
+	const [isSidebarOpen, setIsSidebarOpen] = useState(!embedded);
+	const [channelId, setChannelId] = useState(embedded ? "admin" : null);
 	const [channelList, setChannelList] = useState([]);
 	const [messagesData, setMessagesData] = useState([]);
-	const [apiFor, setApiFor] = useState("conversation_id");
-	const [receiverType, setReceiverType] = useState();
+	const [apiFor, setApiFor] = useState(
+		embedded ? "admin_id" : "conversation_id"
+	);
+	const [receiverType, setReceiverType] = useState(
+		embedded ? "admin" : undefined
+	);
 	const [receiverName, setReceiverName] = useState();
 	const [receiverId, setReceiverId] = useState();
 	const [searchValue, setSearchValue] = useState("");
 	const [receiver, setReceiver] = useState();
 	const [receiverImage, setReceiverImage] = useState();
 	const [userType, setUserType] = useState("");
-	const [resetState, setResetState] = useState(false);
+	const [resetState, setResetState] = useState(embedded);
+	const initialMessageSent = useRef(false);
+	const sendMessageRef = useRef(null);
 	const mdUp = useMediaQuery((theme) => theme.breakpoints.up("md"));
 	const mdDown = useMediaQuery((theme) => theme.breakpoints.down("md"));
 	const router = useRouter();
@@ -192,6 +198,22 @@ const Chatting = ({ configData }) => {
 			onError: onErrorResponse,
 		});
 	};
+	sendMessageRef.current = handleChatMessageSend;
+
+	useEffect(() => {
+		if (
+			!embedded ||
+			!initialMessage.trim() ||
+			initialMessageSent.current ||
+			channelId !== "admin" ||
+			receiverType !== "admin"
+		) {
+			return;
+		}
+
+		initialMessageSent.current = true;
+		sendMessageRef.current?.({ text: initialMessage, file: [] });
+	}, [channelId, embedded, initialMessage, receiverType]);
 
 	useEffect(() => {
 		if (type === "admin" && text && channelId && orderId) {
@@ -260,15 +282,24 @@ const Chatting = ({ configData }) => {
 	return (
 		<PushNotificationLayout refetch={refetch} pathName="chat">
 			<CustomBoxFullWidth
-				mt={{
-					xs: "1rem",
-					md: "2rem",
-					paddingInlineEnd: "1rem",
-					paddingBlockEnd: "1rem",
-				}}
+				mt={
+					embedded
+						? 0
+						: {
+								xs: "1rem",
+								md: "2rem",
+								paddingInlineEnd: "1rem",
+								paddingBlockEnd: "1rem",
+							}
+				}
+				height={embedded ? "100%" : "auto"}
 			>
-				<CustomStackFullWidth spacing={1} direction="row">
-					{mdDown ? (
+				<CustomStackFullWidth
+					spacing={embedded ? 0 : 1}
+					direction="row"
+					height={embedded ? "100%" : "auto"}
+				>
+					{!embedded && (mdDown ? (
 						<>
 							{isSidebarOpen && (
 								<Stack width="100%">
@@ -328,7 +359,7 @@ const Chatting = ({ configData }) => {
 							configData={configData}
 							setResetState={setResetState}
 						/>
-					)}
+					))}
 
 					<Stack
 						width={mdDown ? (isSidebarOpen ? "" : "100%") : "100%"}
@@ -336,12 +367,15 @@ const Chatting = ({ configData }) => {
 							theme.palette.background.default,
 							0.6
 						)}
-						borderRadius="0px 10px 10px 0px"
+						borderRadius={embedded ? 0 : "0px 10px 10px 0px"}
+						height={embedded ? "100%" : "auto"}
 						sx={{
-							borderLeft: `1px solid ${theme.palette.neutral[200]}`,
+							borderLeft: embedded
+								? 0
+								: `1px solid ${theme.palette.neutral[200]}`,
 						}}
 					>
-						{!isSidebarOpen && resetState && (
+						{!embedded && !isSidebarOpen && resetState && (
 							<ConversationInfoTop
 								receiver={receiver}
 								mdUp={mdUp}
@@ -379,6 +413,7 @@ const Chatting = ({ configData }) => {
 									userType={userType}
 									channelId={channelId}
 									orderId={orderId}
+									embedded={embedded}
 								/>
 							)}
 						{isFetchingNextPage && <LoadingBox />}

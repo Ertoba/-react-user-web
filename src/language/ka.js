@@ -1966,5 +1966,15 @@ export const georgian = {
   "one lowercase letter.": "ერთი პატარა ასო.",
   "one special character.": "ერთი სპეციალური სიმბოლო.",
   "Verified Restaurant": "ვერიფიცირებული რესტორანი",
-  "Verified Store": "ვერიფიცირებული მაღაზია"
+  "Verified Store": "ვერიფიცირებული მაღაზია",
+  "AI assistant online": "AI ასისტენტი ხაზზეა",
+  "Contact Support": "მხარდაჭერასთან დაკავშირება",
+  "New Chat": "ახალი ჩატი",
+  "No chat history": "ჩატის ისტორია ცარიელია",
+  "Archived": "დაარქივებულია",
+  "Preparing a response...": "პასუხი მზადდება...",
+  "Archived chats are read-only. Start a new chat to continue.": "დაარქივებული ჩატები მხოლოდ წასაკითხია. გასაგრძელებლად დაიწყეთ ახალი ჩატი.",
+  "Hello": "გამარჯობა",
+  "Support Operator": "მხარდაჭერის ოპერატორი",
+  "Human support": "ოპერატორის მხარდაჭერა"
 };

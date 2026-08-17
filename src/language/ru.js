@@ -1769,5 +1769,15 @@ export const russian = {
   "one lowercase letter.": "одну строчную букву.",
   "one special character.": "один специальный символ.",
   "Verified Restaurant": "Проверенный ресторан",
-  "Verified Store": "Проверенный магазин"
+  "Verified Store": "Проверенный магазин",
+  "AI assistant online": "ИИ-ассистент онлайн",
+  "Contact Support": "Связаться с поддержкой",
+  "New Chat": "Новый чат",
+  "No chat history": "История чатов пуста",
+  "Archived": "Архив",
+  "Preparing a response...": "Подготавливаю ответ...",
+  "Archived chats are read-only. Start a new chat to continue.": "Архивные чаты доступны только для чтения. Чтобы продолжить, начните новый чат.",
+  "Hello": "Здравствуйте",
+  "Support Operator": "Оператор поддержки",
+  "Human support": "Поддержка оператора"
 };

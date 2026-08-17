@@ -1771,5 +1771,15 @@ export const english = {
   "one lowercase letter.": "one lowercase letter.",
   "one special character.": "one special character.",
   "Verified Restaurant": "Verified Restaurant",
-  "Verified Store": "Verified Store"
+  "Verified Store": "Verified Store",
+  "AI assistant online": "AI assistant online",
+  "Contact Support": "Contact support",
+  "New Chat": "New chat",
+  "No chat history": "No chat history",
+  "Archived": "Archived",
+  "Preparing a response...": "Preparing a response...",
+  "Archived chats are read-only. Start a new chat to continue.": "Archived chats are read-only. Start a new chat to continue.",
+  "Hello": "Hello",
+  "Support Operator": "Support operator",
+  "Human support": "Human support"
 };
