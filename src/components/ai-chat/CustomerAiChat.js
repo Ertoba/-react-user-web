@@ -96,28 +96,51 @@ const normalizeConversations = (items) => {
     .slice(0, maxConversations);
 };
 
-const LinkifiedText = ({ text }) => (
-  <>
-    {String(text)
-      .split(/(https?:\/\/[^\s]+)/g)
-      .map((part, index) =>
-        /^https?:\/\//.test(part) ? (
-          <Link
-            key={`${part}-${index}`}
-            href={part}
-            target="_blank"
-            rel="noopener noreferrer"
-            color="inherit"
-            underline="always"
-          >
-            {part}
-          </Link>
-        ) : (
-          part
-        )
-      )}
-  </>
-);
+const linkPattern = /\[([^\]\n]+)\]\((https?:\/\/[^\s)]+)\)|(https?:\/\/[^\s<]+)/g;
+
+const LinkifiedText = ({ text }) => {
+  const source = String(text);
+  const parts = [];
+  let cursor = 0;
+  let match;
+
+  while ((match = linkPattern.exec(source)) !== null) {
+    if (match.index > cursor) {
+      parts.push(source.slice(cursor, match.index));
+    }
+
+    const label = match[1];
+    let href = match[2] || match[3];
+    let trailingPunctuation = "";
+
+    if (!match[2]) {
+      const trailingMatch = href.match(/[),.!?;:]+$/);
+      if (trailingMatch) {
+        trailingPunctuation = trailingMatch[0];
+        href = href.slice(0, -trailingPunctuation.length);
+      }
+    }
+
+    parts.push(
+      <Link
+        key={`${match.index}-${href}`}
+        href={href}
+        target="_blank"
+        rel="noopener noreferrer"
+        color="inherit"
+        underline="always"
+      >
+        {label || href}
+      </Link>
+    );
+    if (trailingPunctuation) parts.push(trailingPunctuation);
+    cursor = linkPattern.lastIndex;
+  }
+
+  if (cursor < source.length) parts.push(source.slice(cursor));
+
+  return <>{parts}</>;
+};
 
 const CustomerAiChat = ({ configData }) => {
   const { t } = useTranslation();
