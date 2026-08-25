@@ -1976,5 +1976,7 @@ export const georgian = {
   "Archived chats are read-only. Start a new chat to continue.": "დაარქივებული ჩატები მხოლოდ წასაკითხია. გასაგრძელებლად დაიწყეთ ახალი ჩატი.",
   "Hello": "გამარჯობა",
   "Support Operator": "მხარდაჭერის ოპერატორი",
-  "Human support": "ოპერატორის მხარდაჭერა"
+  "Human support": "ოპერატორის მხარდაჭერა",
+  "Price Comparison": "ფასების შედარება",
+  "Lowest Price": "ყველაზე დაბალი ფასი"
 };

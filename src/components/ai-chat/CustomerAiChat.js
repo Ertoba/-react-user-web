@@ -40,6 +40,8 @@ import { useSelector } from "react-redux";
 import { useRouter } from "next/router";
 import MainApi from "../../api-manage/MainApi";
 import { ai_chat_send_api } from "../../api-manage/ApiRoutes";
+import { getProductRedirectURL } from "../../helper-functions/handleProductRedirect";
+import { getStoreRedirectURL } from "../../helper-functions/handleStoreRedirect";
 import AiChatResultSections from "./AiChatResultSections";
 import Chatting from "../chat/Chatting";
 
@@ -357,6 +359,20 @@ const CustomerAiChat = ({ configData }) => {
 
   const askAbout = (name) => {
     if (name) sendMessage(`${t("Search")}: ${name}`);
+  };
+
+  const openProduct = (product) => {
+    const id = Number(product?.id);
+    if (!Number.isInteger(id) || id <= 0) return;
+    setOpen(false);
+    router.push(getProductRedirectURL(product));
+  };
+
+  const openStore = (store) => {
+    const id = Number(store?.id);
+    if (!Number.isInteger(id) || id <= 0) return;
+    setOpen(false);
+    router.push(getStoreRedirectURL(store, undefined, router.query));
   };
 
   const openOperatorChat = () => {
@@ -678,6 +694,8 @@ const CustomerAiChat = ({ configData }) => {
                       <AiChatResultSections
                         metadata={message.metadata}
                         onAskAbout={askAbout}
+                        onOpenProduct={openProduct}
+                        onOpenStore={openStore}
                       />
                     )}
                   </Box>

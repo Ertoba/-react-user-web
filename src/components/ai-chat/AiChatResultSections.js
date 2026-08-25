@@ -42,7 +42,7 @@ const SectionHeading = ({ icon, title }) => (
   </Stack>
 );
 
-const ProductCard = ({ product, currency, onAskAbout }) => {
+const ProductCard = ({ product, currency, onOpen, comparisonRank, index }) => {
   const { t } = useTranslation();
   const price = numberValue(product?.price);
   const discountedPrice = numberValue(product?.discounted_price);
@@ -58,11 +58,17 @@ const ProductCard = ({ product, currency, onAskAbout }) => {
         height: 142,
         borderRadius: "8px",
         boxShadow: "none",
+        animation: "aiResultEnter 240ms ease-out both",
+        animationDelay: `${Math.min(index, 5) * 40}ms`,
+        "@keyframes aiResultEnter": {
+          from: { opacity: 0, transform: "translateY(10px)" },
+          to: { opacity: 1, transform: "translateY(0)" },
+        },
       }}
     >
       <CardActionArea
         aria-label={String(product?.name ?? t("Items"))}
-        onClick={() => onAskAbout(String(product?.name ?? ""))}
+        onClick={() => onOpen(product)}
         sx={{ height: "100%", p: 1.25 }}
       >
         <Stack direction="row" spacing={1.25} sx={{ height: "100%" }}>
@@ -96,6 +102,11 @@ const ProductCard = ({ product, currency, onAskAbout }) => {
             <Typography variant="caption" color="text.secondary" noWrap>
               {product?.store_name}
             </Typography>
+            {comparisonRank && (
+              <Typography variant="caption" color="primary" fontWeight={700}>
+                #{comparisonRank} {comparisonRank === 1 ? t("Lowest Price") : t("Price Comparison")}
+              </Typography>
+            )}
             <Box flex={1} />
             <Stack direction="row" alignItems="center" spacing={0.4}>
               <StarRoundedIcon sx={{ fontSize: 17, color: "#F4A62A" }} />
@@ -132,7 +143,7 @@ const ProductCard = ({ product, currency, onAskAbout }) => {
   );
 };
 
-const StoreCard = ({ store, currency, onAskAbout }) => {
+const StoreCard = ({ store, currency, onOpen, index }) => {
   const { t } = useTranslation();
   return (
     <Card
@@ -143,11 +154,17 @@ const StoreCard = ({ store, currency, onAskAbout }) => {
         height: 116,
         borderRadius: "8px",
         boxShadow: "none",
+        animation: "aiResultEnter 240ms ease-out both",
+        animationDelay: `${Math.min(index, 5) * 40}ms`,
+        "@keyframes aiResultEnter": {
+          from: { opacity: 0, transform: "translateY(10px)" },
+          to: { opacity: 1, transform: "translateY(0)" },
+        },
       }}
     >
       <CardActionArea
         aria-label={String(store?.name ?? t("Stores"))}
-        onClick={() => onAskAbout(String(store?.name ?? ""))}
+        onClick={() => onOpen(store)}
         sx={{ height: "100%", p: 1.25 }}
       >
         <Stack direction="row" spacing={1.25} alignItems="center">
@@ -204,11 +221,17 @@ const HorizontalResults = ({ children }) => (
   </Stack>
 );
 
-const AiChatResultSections = ({ metadata = {}, onAskAbout }) => {
+const AiChatResultSections = ({
+  metadata = {},
+  onAskAbout,
+  onOpenProduct,
+  onOpenStore,
+}) => {
   const { t } = useTranslation();
   const products = listOfObjects(metadata?.products);
   const stores = listOfObjects(metadata?.stores);
   const categories = listOfObjects(metadata?.categories);
+  const isPriceComparison = Boolean(metadata?.comparison);
 
   if (!products.length && !stores.length && !categories.length) return null;
 
@@ -218,15 +241,17 @@ const AiChatResultSections = ({ metadata = {}, onAskAbout }) => {
         <Box>
           <SectionHeading
             icon={<Inventory2OutlinedIcon color="primary" fontSize="small" />}
-            title={t("Items")}
+            title={t(isPriceComparison ? "Price Comparison" : "Items")}
           />
           <HorizontalResults>
-            {products.map((product) => (
+            {products.map((product, index) => (
               <ProductCard
                 key={product.id}
                 product={product}
                 currency={metadata.currency}
-                onAskAbout={onAskAbout}
+                comparisonRank={isPriceComparison ? index + 1 : undefined}
+                index={index}
+                onOpen={onOpenProduct}
               />
             ))}
           </HorizontalResults>
@@ -239,12 +264,13 @@ const AiChatResultSections = ({ metadata = {}, onAskAbout }) => {
             title={t("Stores")}
           />
           <HorizontalResults>
-            {stores.map((store) => (
+            {stores.map((store, index) => (
               <StoreCard
                 key={store.id}
                 store={store}
                 currency={metadata.currency}
-                onAskAbout={onAskAbout}
+                index={index}
+                onOpen={onOpenStore}
               />
             ))}
           </HorizontalResults>

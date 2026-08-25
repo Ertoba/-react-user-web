@@ -1781,5 +1781,7 @@ export const english = {
   "Archived chats are read-only. Start a new chat to continue.": "Archived chats are read-only. Start a new chat to continue.",
   "Hello": "Hello",
   "Support Operator": "Support operator",
-  "Human support": "Human support"
+  "Human support": "Human support",
+  "Price Comparison": "Price comparison",
+  "Lowest Price": "Lowest price"
 };

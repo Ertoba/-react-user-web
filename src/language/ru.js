@@ -1779,5 +1779,7 @@ export const russian = {
   "Archived chats are read-only. Start a new chat to continue.": "Архивные чаты доступны только для чтения. Чтобы продолжить, начните новый чат.",
   "Hello": "Здравствуйте",
   "Support Operator": "Оператор поддержки",
-  "Human support": "Поддержка оператора"
+  "Human support": "Поддержка оператора",
+  "Price Comparison": "Сравнение цен",
+  "Lowest Price": "Самая низкая цена"
 };
