@@ -13,6 +13,7 @@ import { HomeComponentsWrapper } from "../HomePageComponents";
 import { createEnhancedArrows } from "../../common/EnhancedSliderArrows";
 import StoreCard from "components/cards/StoreCard";
 import { useGetRecommendStores } from "api-manage/hooks/react-query/store/useGetRecommendStores";
+import { getRecommendedStoreTitleKey } from "helper-functions/moduleTerminology";
 
 
 
@@ -160,7 +161,10 @@ const RecommendedStore = ({ title }) => {
           {popularIsLoading ? (
             <Skeleton variant="text" width="110px" />
           ) : (
-            <H2 text={t(title || "Recommended Store")} component="h2" />
+            <H2
+              text={t(title || getRecommendedStoreTitleKey())}
+              component="h2"
+            />
           )}
         </CustomStackFullWidth>
         {sliderItems}

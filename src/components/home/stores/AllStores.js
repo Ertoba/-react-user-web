@@ -12,7 +12,7 @@ import DotSpin from "../../DotSpin";
 import CustomEmptyResult from "components/custom-empty-result";
 import noData from "../../../../public/static/newnoitem.png";
 import EmptySearchResults from "components/EmptySearchResults";
-import { isBeerModule } from "helper-functions/moduleTerminology";
+import { getNoStoreAvailableKey } from "helper-functions/moduleTerminology";
 
 const AllStores = (props) => {
   const theme = useTheme();
@@ -36,7 +36,6 @@ const AllStores = (props) => {
     limit: page_limit,
     filteredData,
   };
-  const beerModule = isBeerModule();
   const {
     data,
     refetch,
@@ -91,7 +90,7 @@ const AllStores = (props) => {
     <CustomBoxFullWidth>
       <Grid container spacing={2}>
         {storeData?.length === 0 && !isLoading && (
-          <EmptySearchResults text={beerModule ? "Bars not found!" : "Stores not found!"} />
+          <EmptySearchResults text={getNoStoreAvailableKey()} />
         )}
         {storeData?.length > 0 &&
           !isLoading &&

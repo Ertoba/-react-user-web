@@ -11,6 +11,13 @@ export const handleInitialTotalPriceVarPriceQuantitySet = (
   modalData
 ) => {
   if (productDetailsData) {
+    const moduleType =
+      productDetailsData?.module_type ||
+      productDetailsData?.module?.module_type ||
+      getCurrentModuleType();
+    const requiresExplicitSelection =
+      moduleType === "ecommerce" &&
+      productDetailsData?.choice_options?.length > 0;
     if (productDetailsData?.selectedOption?.length > 0) {
       dispatch({
         type: ACTION.setModalData,
@@ -30,12 +37,16 @@ export const handleInitialTotalPriceVarPriceQuantitySet = (
           type: ACTION.setModalData,
           payload: {
             ...productDetailsData,
-            selectedOption: [productDetailsData.variations[0]],
+            selectedOption: requiresExplicitSelection
+              ? []
+              : [productDetailsData.variations[0]],
             quantity: productDetailsData?.quantity
               ? productDetailsData?.quantity
               : 1,
             totalPrice: productDetailsData?.totalPrice
               ? productDetailsData?.totalPrice
+              : requiresExplicitSelection
+              ? productDetailsData?.price
               : productDetailsData?.variations?.[0]?.price,
           },
         });

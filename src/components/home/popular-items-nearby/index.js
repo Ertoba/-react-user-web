@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import useGetPopularItemsNearby from "../../../api-manage/hooks/react-query/useGetPopularItemsNearby";
 
-import { Grid, Skeleton } from "@mui/material";
+import { Grid, Skeleton, Stack } from "@mui/material";
 import Slider from "react-slick";
 
 import { useTranslation } from "react-i18next";
@@ -25,6 +25,7 @@ import Subtitle1 from "../../typographies/Subtitle1";
 import { NextFood, PrevFood } from "../best-reviewed-items/SliderSettings";
 import { HomeComponentsWrapper } from "../HomePageComponents";
 import ItemsCampaign from "./items-campaign-slide";
+import PopularStarAnimation from "../../common/PopularStarAnimation";
 
 const PopularItemsNearby = ({ title, subTitle }) => {
   const { popularItemsNearby } = useSelector((state) => state.storedData);
@@ -168,7 +169,10 @@ const PopularItemsNearby = ({ title, subTitle }) => {
             {isLoading ? (
               <Skeleton varient="text" width="110px" />
             ) : (
-              <H2 text={title} component="h2" />
+              <Stack direction="row" alignItems="center" spacing={0.75}>
+                <H2 text={t(title)} component="h2" />
+                <PopularStarAnimation />
+              </Stack>
             )}
             {isLoading ? (
               <Skeleton varient="text" width="310px" />

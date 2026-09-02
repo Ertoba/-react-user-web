@@ -4,7 +4,7 @@ import CategoryOutlinedIcon from "@mui/icons-material/CategoryOutlined";
 import CloseIcon from "@mui/icons-material/Close";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import HistoryRoundedIcon from "@mui/icons-material/HistoryRounded";
-import LocalFireDepartmentOutlinedIcon from "@mui/icons-material/LocalFireDepartmentOutlined";
+import StarRoundedIcon from "@mui/icons-material/StarRounded";
 import LocalOfferOutlinedIcon from "@mui/icons-material/LocalOfferOutlined";
 import SendRoundedIcon from "@mui/icons-material/SendRounded";
 import StorefrontOutlinedIcon from "@mui/icons-material/StorefrontOutlined";
@@ -398,7 +398,7 @@ const CustomerAiChat = ({ configData }) => {
   const quickPrompts = [
     {
       label: t("Most Popular Items"),
-      icon: <LocalFireDepartmentOutlinedIcon />,
+      icon: <StarRoundedIcon />,
     },
     { label: t("Discounted Items"), icon: <LocalOfferOutlinedIcon /> },
     { label: t("Popular Stores"), icon: <StorefrontOutlinedIcon /> },

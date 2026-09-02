@@ -15,6 +15,7 @@ import CustomContainer from "../../container";
 import H1 from "../../typographies/H1";
 import Subtitle1 from "../../typographies/Subtitle1";
 import { createEnhancedArrows } from "../../common/EnhancedSliderArrows";
+import { getRecentPurchasePromptKey } from "helper-functions/moduleTerminology";
 
 const VisitAgainShimmerCard = () => {
   const theme = useTheme();
@@ -81,9 +82,7 @@ const VisitAgain = ({ configData, visitedStores, isVisited, isLoading }) => {
         return {
           mainPosition: "flex-start",
           heading: isVisited ? t("Visit Again!") : t("Whats New"),
-          subHeading: t(
-            "Get your recent purchase from the shop you recently ordered"
-          ),
+          subHeading: t(getRecentPurchasePromptKey()),
           bgColor:
             theme.palette.mode === "dark"
               ? "rgba(3, 157, 85, 0.05)"
@@ -93,9 +92,7 @@ const VisitAgain = ({ configData, visitedStores, isVisited, isLoading }) => {
         return {
           mainPosition: !isVisited ? "flex-start" : "center",
           heading: isVisited ? t("Visit Again!") : t("Whats New"),
-          subHeading: t(
-            "Get your recent medicine from the store you recently ordered"
-          ),
+          subHeading: t(getRecentPurchasePromptKey()),
           bgColor:
             theme.palette.mode === "dark"
               ? "rgba(3, 157, 85, 0.05)"
@@ -105,9 +102,7 @@ const VisitAgain = ({ configData, visitedStores, isVisited, isLoading }) => {
         return {
           mainPosition: "flex-start",
           heading: isVisited ? t("Visit Again!") : t("Whats New"),
-          subHeading: t(
-            "Get your recent purchase from the shop you recently ordered"
-          ),
+          subHeading: t(getRecentPurchasePromptKey()),
           bgColor:
             theme.palette.mode === "dark"
               ? "rgba(3, 157, 85, 0.05)"
@@ -117,9 +112,7 @@ const VisitAgain = ({ configData, visitedStores, isVisited, isLoading }) => {
         return {
           mainPosition: "flex-start",
           heading: isVisited ? t("Wanna Try  Again!!") : t("Whats New"),
-          subHeading: t(
-            "Get your recent food from the restaurant you recently ordered"
-          ),
+          subHeading: t(getRecentPurchasePromptKey()),
           bgColor:
             theme.palette.mode === "dark"
               ? "rgba(3, 157, 85, 0.05)"

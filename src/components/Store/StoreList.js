@@ -16,7 +16,11 @@ import Radio from '@mui/material/Radio'
 import EmptyBoxSvg from "components/chat/EmptyBoxSvg";
 import EmptySearchResults from "components/EmptySearchResults";
 import { getModule } from "helper-functions/getLanguage";
-import { isBeerModule } from "helper-functions/moduleTerminology";
+import {
+  getNoStoreAvailableKey,
+  getStoreSearchPlaceholderKey,
+  isBeerModule,
+} from "helper-functions/moduleTerminology";
 export const CustomChip = styled(Chip)(({ theme, query, value, isSticky, color }) => ({
   padding: '10px 10px',
   alignItems: 'center',
@@ -144,7 +148,7 @@ const StoreList = ({ storeType, type, setType, data, sortby, setSortby, searchKe
               </Stack>
               <Stack width="100%" marginTop={{ xs: "1rem", sm: "1rem", md: "0rem" }}>
                 <CustomSearch
-                  label={t(beerModule ? "Search for bars..." : "Search for stores...")}
+                  label={t(getStoreSearchPlaceholderKey(selectedOrCachedModule))}
                   selectedValue={searchKey}
                   handleSearchResult={handleSearchResult}
                   type2
@@ -164,7 +168,9 @@ const StoreList = ({ storeType, type, setType, data, sortby, setSortby, searchKe
           })
         ) : (
           <Grid item xs={12} display="flex" justifyContent="center" alignItems="center">
-            <EmptySearchResults text={beerModule ? "Bars not found!" : "Stores not found!"} />
+            <EmptySearchResults
+              text={getNoStoreAvailableKey(selectedOrCachedModule)}
+            />
           </Grid>
         )}
       </Grid>

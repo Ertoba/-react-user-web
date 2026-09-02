@@ -155,7 +155,7 @@ const ManageSearch = ({
       return `Search for grocery or store...`;
     }
     if (getCurrentModuleType() === ModuleTypes.PHARMACY) {
-      return `Search for medicine or store...`;
+      return `Search for medicines or pharmacies...`;
     }
     if (getCurrentModuleType() === ModuleTypes.ECOMMERCE) {
       return `Search for products or store...`;

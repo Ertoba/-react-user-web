@@ -1783,5 +1783,22 @@ export const english = {
   "Support Operator": "Support operator",
   "Human support": "Human support",
   "Price Comparison": "Price comparison",
-  "Lowest Price": "Lowest price"
+  "Lowest Price": "Lowest price",
+  "Pharmacies": "Pharmacies",
+  "Recommended Bar": "Recommended bar",
+  "Recommended Pharmacy": "Recommended pharmacy",
+  "Recommended Restaurant": "Recommended restaurant",
+  "Order from the bar where you last ordered": "Order from the bar where you last ordered",
+  "Order from the pharmacy where you last ordered": "Order from the pharmacy where you last ordered",
+  "Order from the restaurant where you last ordered": "Order from the restaurant where you last ordered",
+  "Best Pharmacy Nearby": "Best pharmacies nearby",
+  "Best Restaurant Nearby": "Best restaurant nearby",
+  "Featured Pharmacies": "Featured pharmacies",
+  "Search for medicines or pharmacies...": "Search for medicines or pharmacies...",
+  "Search for restaurants...": "Search for restaurants...",
+  "Pharmacies not found!": "No pharmacies found!",
+  "Restaurants not found!": "No restaurants found!",
+  "No matching options": "No matching options",
+  "This option combination is unavailable": "This option combination is unavailable",
+  "Select all product options before continuing": "Select all product options before continuing"
 };

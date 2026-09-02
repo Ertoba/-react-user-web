@@ -1978,5 +1978,22 @@ export const georgian = {
   "Support Operator": "მხარდაჭერის ოპერატორი",
   "Human support": "ოპერატორის მხარდაჭერა",
   "Price Comparison": "ფასების შედარება",
-  "Lowest Price": "ყველაზე დაბალი ფასი"
+  "Lowest Price": "ყველაზე დაბალი ფასი",
+  "Pharmacies": "აფთიაქები",
+  "Recommended Bar": "რეკომენდებული ბარი",
+  "Recommended Pharmacy": "რეკომენდებული აფთიაქი",
+  "Recommended Restaurant": "რეკომენდებული რესტორანი",
+  "Order from the bar where you last ordered": "შეუკვეთეთ ბარიდან სადაც ბოლოს შეუკვეთეთ",
+  "Order from the pharmacy where you last ordered": "შეუკვეთეთ აფთიაქში სადაც ბოლოს შეუკვეთეთ",
+  "Order from the restaurant where you last ordered": "შეუკვეთეთ რესტორანში სადაც ბოლოს შეუკვეთეთ",
+  "Best Pharmacy Nearby": "საუკეთესო ახლომდებარე აფთიაქები",
+  "Best Restaurant Nearby": "საუკეთესო ახლომდებარე რესტორანი",
+  "Featured Pharmacies": "გამორჩეული აფთიაქები",
+  "Search for medicines or pharmacies...": "მოძებნეთ სასურველი მედიკამენტი ან აფთიაქი...",
+  "Search for restaurants...": "მოძებნეთ რესტორანი...",
+  "Pharmacies not found!": "აფთიაქი ვერ მოიძებნა!",
+  "Restaurants not found!": "რესტორანი ვერ მოიძებნა!",
+  "No matching options": "შესაბამისი ვარიანტი ვერ მოიძებნა",
+  "This option combination is unavailable": "არჩეული ვარიანტების კომბინაცია ხელმისაწვდომი არ არის",
+  "Select all product options before continuing": "გასაგრძელებლად აირჩიეთ პროდუქტის ყველა პარამეტრი"
 };

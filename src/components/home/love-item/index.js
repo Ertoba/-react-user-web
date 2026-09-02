@@ -111,7 +111,11 @@ const LoveItem = (props) => {
                 <>
                   {data?.items?.length > 0 && (
                       <H2
-                          text={beerModule ? t("Beer for you !") : "Item That You’ll Love"}
+                          text={t(
+                            beerModule
+                              ? "Beer for you !"
+                              : "Item That You’ll Love"
+                          )}
                           component="h2"
                       />
                   )}

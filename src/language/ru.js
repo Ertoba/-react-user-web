@@ -1781,5 +1781,22 @@ export const russian = {
   "Support Operator": "Оператор поддержки",
   "Human support": "Поддержка оператора",
   "Price Comparison": "Сравнение цен",
-  "Lowest Price": "Самая низкая цена"
+  "Lowest Price": "Самая низкая цена",
+  "Pharmacies": "Аптеки",
+  "Recommended Bar": "Рекомендуемый бар",
+  "Recommended Pharmacy": "Рекомендуемая аптека",
+  "Recommended Restaurant": "Рекомендуемый ресторан",
+  "Order from the bar where you last ordered": "Закажите в баре, где вы заказывали в последний раз",
+  "Order from the pharmacy where you last ordered": "Закажите в аптеке, где вы заказывали в последний раз",
+  "Order from the restaurant where you last ordered": "Закажите в ресторане, где вы заказывали в последний раз",
+  "Best Pharmacy Nearby": "Лучшие аптеки поблизости",
+  "Best Restaurant Nearby": "Лучший ресторан поблизости",
+  "Featured Pharmacies": "Избранные аптеки",
+  "Search for medicines or pharmacies...": "Найдите лекарство или аптеку...",
+  "Search for restaurants...": "Найдите ресторан...",
+  "Pharmacies not found!": "Аптеки не найдены!",
+  "Restaurants not found!": "Рестораны не найдены!",
+  "No matching options": "Подходящие варианты не найдены",
+  "This option combination is unavailable": "Выбранная комбинация недоступна",
+  "Select all product options before continuing": "Чтобы продолжить, выберите все параметры товара"
 };

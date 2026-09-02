@@ -21,6 +21,10 @@ import FeaturedStores from "./featured-stores";
 import PharmacyStaticBanners from "./pharmacy-banners/PharmacyStaticBanners";
 import TopOffersNearMe from "components/home/top-offers-nearme";
 import RecommendedStore from "components/home/recommended-store";
+import {
+  getBestNearbyStoreTitleKey,
+  getFeaturedStoreTitleKey,
+} from "helper-functions/moduleTerminology";
 
 const menus = ["All", "New", "Baby Care", "Womans Care", "Mens"];
 
@@ -109,7 +113,7 @@ const Pharmacy = ({ configData }) => {
       
       <Grid item xs={12}>
         <CustomContainer>
-          <TopOffersNearMe title="Top offers near me"  />
+          <TopOffersNearMe title={getBestNearbyStoreTitleKey()} />
         </CustomContainer>
       </Grid>
       
@@ -121,7 +125,10 @@ const Pharmacy = ({ configData }) => {
       
       <Grid item xs={12}>
         <CustomContainer>
-          <FeaturedStores title="Featured Store" configData={configData} />
+          <FeaturedStores
+            title={getFeaturedStoreTitleKey()}
+            configData={configData}
+          />
         </CustomContainer>
       </Grid>
       

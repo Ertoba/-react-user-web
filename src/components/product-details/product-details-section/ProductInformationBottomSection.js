@@ -56,6 +56,14 @@ const ProductInformationBottomSection = ({
   const { wishLists } = useSelector((state) => state.wishList);
   const isXSmall = useMediaQuery(theme.breakpoints.down("sm"));
   const [openLocationAlert, setOpenLocationAlert] = useState(false);
+  const moduleType =
+    productDetailsData?.module_type ||
+    productDetailsData?.module?.module_type ||
+    getCurrentModuleType();
+  const selectionRequired =
+    moduleType === "ecommerce" &&
+    productDetailsData?.choice_options?.length > 0 &&
+    !productDetailsData?.selectedOption?.length;
 
   const variationErrorToast = () =>
     toast.error(
@@ -63,6 +71,9 @@ const ProductInformationBottomSection = ({
         "This variation is out of stock. Choose another variation to proceed further."
       )
     );
+
+  const missingSelectionToast = () =>
+    toast.error(t("Select all product options before continuing"));
 
   const isInCart = (id) => {
     if (cartList?.length > 0) {
@@ -122,6 +133,10 @@ const ProductInformationBottomSection = ({
 
   const handleRedirectToCheckoutClick = () => {
     if (!ensureLocation()) return;
+    if (selectionRequired) {
+      missingSelectionToast();
+      return;
+    }
     if (productDetailsData?.selectedOption?.length > 0) {
       if (productDetailsData?.selectedOption?.[0]?.stock === 0) {
         variationErrorToast();
@@ -157,6 +172,10 @@ const ProductInformationBottomSection = ({
 
   const handleVariationAvailability = (checkFor, cartItem) => {
     if (!ensureLocation()) return;
+    if (selectionRequired) {
+      missingSelectionToast();
+      return;
+    }
     if (productDetailsData?.selectedOption?.length > 0) {
       if (productDetailsData?.selectedOption?.[0]?.stock === 0) {
         variationErrorToast();

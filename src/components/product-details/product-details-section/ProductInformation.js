@@ -106,6 +106,19 @@ const ProductInformation = ({
 	}, [productDetailsData]);
 
 	const handleChoices = (option, choice) => {
+		if (!option) {
+			dispatch({
+				type: ACTION.setModalData,
+				payload: {
+					...state.modalData[0],
+					selectedOption: [],
+					quantity: 1,
+					price: productDetailsData?.price,
+					totalPrice: productDetailsData?.price,
+				},
+			});
+			return;
+		}
 		if (cartList.length > 0) {
 			const itemIsInCart = cartList.find(
 				(item) =>
@@ -504,6 +517,7 @@ const ProductInformation = ({
 							>
 								{state.modalData[0]?.variations?.length > 0 && (
 									<VariationsManager
+										key={state.modalData[0]?.id}
 										productDetailsData={state.modalData[0]}
 										handleChoices={handleChoices}
 									/>

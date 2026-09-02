@@ -22,7 +22,10 @@ import VisitAgain from "../../visit-again";
 import FeaturedCategoriesWithFilter from "../ecommerce/FeaturedCategoriesWithFilter";
 import TopOffersNearMe from "components/home/top-offers-nearme";
 import RecommendedStore from "components/home/recommended-store";
-import { isBeerModule } from "helper-functions/moduleTerminology";
+import {
+  getBestNearbyStoreTitleKey,
+  isBeerModule,
+} from "helper-functions/moduleTerminology";
 
 const FoodModule = (props) => {
   const { configData } = props;
@@ -81,7 +84,7 @@ const FoodModule = (props) => {
       </Grid>
       <Grid item xs={12}>
         <CustomContainer>
-          <RecommendedStore title={beerModule ? "Recommended Bars" : undefined} />
+          <RecommendedStore />
         </CustomContainer>
       </Grid>
       <Grid item xs={12}>
@@ -115,7 +118,7 @@ const FoodModule = (props) => {
       </Grid>
       <Grid item xs={12}>
         <CustomContainer>
-          <TopOffersNearMe title={beerModule ? "Best Bar Nearby" : "Top offers near me"} />
+          <TopOffersNearMe title={getBestNearbyStoreTitleKey()} />
         </CustomContainer>
       </Grid>
 
