@@ -1,7 +1,7 @@
+import { miliBodyFontFamily, miliCapsFontFamily } from "./typography";
 import { createTheme } from "@mui/material/styles";
 
-const headingFontFamily =
-  '"BPG SSP Crystal Caps", "BPG SSP Crystal", "Rubik", sans-serif';
+const headingFontFamily = miliCapsFontFamily;
 
 export const baseThemeOptions = {
   breakpoints: {
@@ -277,8 +277,13 @@ export const baseThemeOptions = {
   },
 
   typography: {
-    fontFamily: '"BPG SSP Crystal", "Rubik", sans-serif',
-    button: { fontWeight: 600 },
+    fontFamily: miliBodyFontFamily,
+    button: {
+      fontFamily: miliBodyFontFamily,
+      fontWeight: 700,
+      lineHeight: 1.4,
+      textTransform: "none",
+    },
 
     body1: {
       fontSize: "0.875rem",
@@ -288,12 +293,12 @@ export const baseThemeOptions = {
     body2: {
       fontSize: "0.75rem",
       fontWeight: 400,
-      lineHeight: "11.85px",
+      lineHeight: 1.5,
     },
     body3: {
       fontSize: "0.625rem",
       fontWeight: 400,
-      lineHeight: "11.85px",
+      lineHeight: 1.5,
     },
     body4: {
       fontSize: "0.5rem",
@@ -303,14 +308,15 @@ export const baseThemeOptions = {
     subtitle1: {
       fontSize: "1rem",
       fontWeight: 500,
-      lineHeight: "18.96px",
+      lineHeight: 1.4,
     },
     subtitle2: {
       fontSize: "0.875rem",
       fontWeight: 500,
-      lineHeight: "20px",
+      lineHeight: 1.4,
     },
     overline: {
+      fontFamily: miliCapsFontFamily,
       fontSize: "0.75rem",
       fontWeight: 600,
       letterSpacing: "0.5px",
@@ -324,48 +330,52 @@ export const baseThemeOptions = {
     },
     h1: {
       fontFamily: headingFontFamily,
+      textTransform: "uppercase",
       fontWeight: 700,
       fontSize: "3.5rem",
       lineHeight: 1.375,
     },
     h2: {
       fontFamily: headingFontFamily,
+      textTransform: "uppercase",
       fontWeight: 700,
       fontSize: "3rem",
       lineHeight: 1.375,
     },
     h3: {
       fontFamily: headingFontFamily,
+      textTransform: "uppercase",
       fontWeight: 700,
       fontSize: "2.25rem",
       lineHeight: 1.375,
     },
     h4: {
       fontFamily: headingFontFamily,
+      textTransform: "uppercase",
       fontWeight: 700,
       fontSize: "2rem",
       lineHeight: 1.375,
     },
     h5: {
-      fontFamily: headingFontFamily,
+      fontFamily: miliBodyFontFamily,
       fontWeight: 600,
       fontSize: "1.5rem",
       lineHeight: 1.375,
     },
     h6: {
-      fontFamily: headingFontFamily,
+      fontFamily: miliBodyFontFamily,
       fontWeight: 600,
       fontSize: "1.25rem",
       lineHeight: 1.375,
     },
     h7: {
-      fontFamily: headingFontFamily,
+      fontFamily: miliBodyFontFamily,
       fontWeight: 600,
       fontSize: "1rem",
       lineHeight: 1.375,
     },
     h8: {
-      fontFamily: headingFontFamily,
+      fontFamily: miliBodyFontFamily,
       fontWeight: 600,
       fontSize: "0.75rem",
       lineHeight: 1.375,

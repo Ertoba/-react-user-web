@@ -1,3 +1,5 @@
+import { miliCapsFontFamily } from "../theme/typography.js";
+
 const GEORGIAN_LOCALE = "ka-GE";
 
 export const toGeorgianUpper = (value) => {
@@ -5,11 +7,11 @@ export const toGeorgianUpper = (value) => {
   return value.toLocaleUpperCase(GEORGIAN_LOCALE);
 };
 
-export const formatStoreName = (value) => toGeorgianUpper(value);
+// Names retain their authored case; only category labels opt into CAPS.
+export const formatStoreName = (value) => value;
 
-export const formatProductName = (value) => toGeorgianUpper(value);
+export const formatProductName = (value) => value;
 
 export const formatCategoryName = (value) => toGeorgianUpper(value);
 
-export const georgianCapsFontFamily =
-  '"BPG SSP Crystal Caps", "BPG SSP Crystal", "Rubik", sans-serif';
+export const georgianCapsFontFamily = miliCapsFontFamily;

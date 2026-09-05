@@ -1,3 +1,4 @@
+import { miliBodyFontFamily } from "../../theme/typography";
 import { Button, styled, Typography } from "@mui/material";
 import { Box } from "@mui/system";
 import React from "react";
@@ -12,10 +13,9 @@ export const BannerWrapper = styled(Box)(({ theme }) => ({
   aspectRatio: "5 / 1",
   position: "relative",
   marginTop: "20px",
-  img:{
+  img: {
     width: "100%",
     height: "100%",
-
   },
 }));
 export const ContentWrapper = styled(CustomStackFullWidth)(({ theme }) => ({
@@ -23,7 +23,7 @@ export const ContentWrapper = styled(CustomStackFullWidth)(({ theme }) => ({
   top: 0,
 }));
 export const CustomTypography = styled(Typography)(({ theme }) => ({
-  fontFamily: "Quicksand",
+  fontFamily: miliBodyFontFamily,
   fontWeight: "700",
   fontSize: "16px",
   // lineHeight: "48px",

@@ -1,49 +1,108 @@
+/* Bundled typography: genuine weights and italics, with no font CDN. */
 @font-face {
     font-family: 'BPG SSP Crystal';
-    src: url('/fonts/BPG_SSP_Crystal.ttf') format('truetype');
+    src: url('/fonts/crystal/BPGSSPCrystal-Regular.woff2') format('woff2');
     font-weight: 400;
     font-style: normal;
-    font-display: swap;
+    font-display: block;
 }
 
 @font-face {
     font-family: 'BPG SSP Crystal';
-    src: url('/fonts/BPG_SSP_Crystal_Bold.ttf') format('truetype');
+    src: url('/fonts/crystal/BPGSSPCrystal-Bold.woff2') format('woff2');
     font-weight: 700;
     font-style: normal;
-    font-display: swap;
+    font-display: block;
 }
 
 @font-face {
     font-family: 'BPG SSP Crystal';
-    src: url('/fonts/BPG_SSP_Crystal_Italic.ttf') format('truetype');
+    src: url('/fonts/crystal/BPGSSPCrystal-Italic.woff2') format('woff2');
     font-weight: 400;
     font-style: italic;
-    font-display: swap;
+    font-display: block;
 }
 
 @font-face {
     font-family: 'BPG SSP Crystal';
-    src: url('/fonts/BPG_SSP_Crystal_BoldItalic.ttf') format('truetype');
+    src: url('/fonts/crystal/BPGSSPCrystal-BoldItalic.woff2') format('woff2');
     font-weight: 700;
     font-style: italic;
-    font-display: swap;
+    font-display: block;
 }
 
 @font-face {
     font-family: 'BPG SSP Crystal Caps';
-    src: url('/fonts/BPG_SSP_Crystal_Caps.ttf') format('truetype');
+    src: url('/fonts/crystal/BPGSSPCrystalCaps-Regular.woff2') format('woff2');
     font-weight: 400;
     font-style: normal;
-    font-display: swap;
+    font-display: block;
 }
 
 @font-face {
     font-family: 'BPG SSP Crystal Caps';
-    src: url('/fonts/BPG_SSP_Crystal_Bold_Caps.ttf') format('truetype');
+    src: url('/fonts/crystal/BPGSSPCrystalCaps-Bold.woff2') format('woff2');
     font-weight: 700;
     font-style: normal;
-    font-display: swap;
+    font-display: block;
+}
+
+@font-face {
+    font-family: 'BPG SSP Crystal Caps';
+    src: url('/fonts/crystal/BPGSSPCrystalCaps-Italic.woff2') format('woff2');
+    font-weight: 400;
+    font-style: italic;
+    font-display: block;
+}
+
+@font-face {
+    font-family: 'BPG SSP Crystal Caps';
+    src: url('/fonts/crystal/BPGSSPCrystalCaps-BoldItalic.woff2') format('woff2');
+    font-weight: 700;
+    font-style: italic;
+    font-display: block;
+}
+
+@font-face {
+    font-family: 'MILI Cyrillic';
+    src: url('/fonts/crystal/MiliCyrillic-Regular.woff2') format('woff2');
+    font-weight: 400;
+    font-style: normal;
+    font-display: block;
+    unicode-range: U+0400-052F, U+2DE0-2DFF, U+A640-A69F;
+}
+
+@font-face {
+    font-family: 'MILI Cyrillic';
+    src: url('/fonts/crystal/MiliCyrillic-Bold.woff2') format('woff2');
+    font-weight: 700;
+    font-style: normal;
+    font-display: block;
+    unicode-range: U+0400-052F, U+2DE0-2DFF, U+A640-A69F;
+}
+
+@font-face {
+    font-family: 'MILI Cyrillic';
+    src: url('/fonts/crystal/MiliCyrillic-Italic.woff2') format('woff2');
+    font-weight: 400;
+    font-style: italic;
+    font-display: block;
+    unicode-range: U+0400-052F, U+2DE0-2DFF, U+A640-A69F;
+}
+
+@font-face {
+    font-family: 'MILI Cyrillic';
+    src: url('/fonts/crystal/MiliCyrillic-BoldItalic.woff2') format('woff2');
+    font-weight: 700;
+    font-style: italic;
+    font-display: block;
+    unicode-range: U+0400-052F, U+2DE0-2DFF, U+A640-A69F;
+}
+
+/* CAPS is for short headings/categories; body copy and controls stay regular. */
+:root {
+    --mili-font-body: 'BPG SSP Crystal', 'MILI Cyrillic';
+    --mili-font-caps: 'BPG SSP Crystal Caps', 'BPG SSP Crystal', 'MILI Cyrillic';
 }
 
 html,
@@ -53,7 +112,9 @@ body {
     width: 100%;
     max-width: 100%;
     overflow-x: hidden;
-    font-family: 'BPG SSP Crystal', -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    font-family: var(--mili-font-body);
+    font-synthesis: none;
+    line-height: 1.5;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
 }
@@ -67,11 +128,32 @@ body {
 h1,
 h2,
 h3,
-h4,
-h5,
-h6 {
-    font-family: 'BPG SSP Crystal Caps', 'BPG SSP Crystal', -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+h4 {
+    font-family: var(--mili-font-caps);
     letter-spacing: 0;
+    text-transform: uppercase;
+}
+
+h5, h6 {
+    font-family: var(--mili-font-body);
+    font-weight: 700;
+    text-transform: none;
+}
+
+button, input, textarea, select, code, pre, kbd, samp,
+.react-tel-input, .react-tel-input .form-control {
+    font-family: var(--mili-font-body);
+    font-synthesis: none;
+}
+
+strong, b { font-weight: 700; }
+em, i, cite { font-style: italic; }
+
+/* Map controls and place suggestions use the same bundled text faces. */
+.gm-style, .gm-style .gm-style-iw,
+.pac-container, .pac-item, .pac-item-query {
+    font-family: var(--mili-font-body) !important;
+    font-synthesis: none;
 }
 
 html[data-theme="dark"],

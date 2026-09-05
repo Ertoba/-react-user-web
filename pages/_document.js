@@ -43,12 +43,27 @@ class CustomDocument extends Document {
               `,
             }}
           />
-          {/* Fonts */}
-          <link rel="preconnect" href="https://fonts.googleapis.com" />
-          <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />
+          {/* Local faces prevent a font-CDN dependency and late primary-face swaps. */}
           <link
-            href="https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;600;700&display=swap"
-            rel="stylesheet"
+            rel="preload"
+            href="/fonts/crystal/BPGSSPCrystal-Regular.woff2"
+            as="font"
+            type="font/woff2"
+            crossOrigin="anonymous"
+          />
+          <link
+            rel="preload"
+            href="/fonts/crystal/BPGSSPCrystal-Bold.woff2"
+            as="font"
+            type="font/woff2"
+            crossOrigin="anonymous"
+          />
+          <link
+            rel="preload"
+            href="/fonts/crystal/BPGSSPCrystalCaps-Bold.woff2"
+            as="font"
+            type="font/woff2"
+            crossOrigin="anonymous"
           />
 
           {/* Social login scripts */}
@@ -95,7 +110,10 @@ class CustomDocument extends Document {
 
           {analyticsConfig.google_analytics && (
             <>
-              <script async src={`https://www.googletagmanager.com/gtag/js?id=${analyticsConfig.google_analytics}`} />
+              <script
+                async
+                src={`https://www.googletagmanager.com/gtag/js?id=${analyticsConfig.google_analytics}`}
+              />
               <script
                 dangerouslySetInnerHTML={{
                   __html: `
@@ -203,8 +221,8 @@ class CustomDocument extends Document {
         </Head>
 
         <body>
-        <Main />
-        <NextScript />
+          <Main />
+          <NextScript />
         </body>
       </Html>
     );
@@ -234,7 +252,8 @@ CustomDocument.getInitialProps = async (ctx) => {
   // 🛠 Fetch analytics config server-side
   let analyticsConfig = {};
   try {
-    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "https://yourdomain.com";
+    const baseUrl =
+      process.env.NEXT_PUBLIC_BASE_URL || "https://yourdomain.com";
     const res = await fetch(`${baseUrl}/api/v1/config/get-analytic-scripts`, {
       headers: {
         "X-software-id": 33571750,
@@ -245,7 +264,8 @@ CustomDocument.getInitialProps = async (ctx) => {
     const data = await res.json();
     if (Array.isArray(data)) {
       data.forEach((item) => {
-        if (item.type && item.script_id) analyticsConfig[item.type] = item.script_id;
+        if (item.type && item.script_id)
+          analyticsConfig[item.type] = item.script_id;
       });
     }
   } catch (err) {

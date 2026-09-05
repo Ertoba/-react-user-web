@@ -1508,7 +1508,7 @@ export const russian = {
   "Yes,Received": "Да, Получено",
   "You Have Earned Point": "Вы заработали балл",
   "You are not logged in": "Вы не вошли в систему",
-  "You can not Order more then 1000৳ on COD order": "Вы не можете заказать более 1000৳ при оплате при доставке",
+  "You can not Order more then 1000৳ on COD order": "Вы не можете заказать более 1000 BDT при оплате при доставке",
   "You can use this ID to track your order later": "Вы можете использовать этот ID для отслеживания вашего заказа позже",
   "You cannot order from multiple restaurants in a single order": "Вы не можете заказывать из нескольких ресторанов в одном заказе",
   "You denied location permission. Please allow browsers location permission from your device, refresh the site and receive more accurate delivery.": "Вы отклонили разрешение на определение местоположения. Пожалуйста, включите разрешение на геолокацию в браузере на вашем устройстве, обновите сайт и получите более точную доставку.",

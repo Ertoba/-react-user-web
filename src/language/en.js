@@ -1457,7 +1457,7 @@ export const english = {
   "Yes,Received": "Yes,Received",
   "You Have Earned Point": "You Have Earned Point",
   "You are not logged in": "You are not logged in",
-  "You can not Order more then 1000৳ on COD order": "You can not Order more then 1000৳ on COD order",
+  "You can not Order more then 1000৳ on COD order": "You can not Order more then 1000 BDT on COD order",
   "You can use this ID to track your order later": "You can use this ID to track your order later",
   "You cannot order from multiple restaurants in a single order": "You cannot order from multiple restaurants in a single order",
   "You denied location permission. Please allow browsers location permission from your device, refresh the site and receive more accurate delivery.": "You denied location permission. Please allow browsers location permission from your device, refresh the site and receive more accurate delivery.",

@@ -1,4 +1,5 @@
 export const googleMapsLoaderOptions = {
+  preventGoogleFontsLoading: true,
   id: "google-map-script",
   googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAP_KEY,
   language: "ka",
