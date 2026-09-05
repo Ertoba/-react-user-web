@@ -1995,5 +1995,16 @@ export const georgian = {
   "Restaurants not found!": "რესტორანი ვერ მოიძებნა!",
   "No matching options": "შესაბამისი ვარიანტი ვერ მოიძებნა",
   "This option combination is unavailable": "არჩეული ვარიანტების კომბინაცია ხელმისაწვდომი არ არის",
-  "Select all product options before continuing": "გასაგრძელებლად აირჩიეთ პროდუქტის ყველა პარამეტრი"
+  "Select all product options before continuing": "გასაგრძელებლად აირჩიეთ პროდუქტის ყველა პარამეტრი",
+  "ai_chat_ui_subtitle": "შენი ასისტენტი შოპინგისთვის",
+  "ai_chat_ui_intro": "იპოვე პროდუქტები, შეადარე ფასები და აღმოაჩინე მაღაზიები ერთ საუბარში.",
+  "ai_chat_ui_placeholder": "იკითხე პროდუქტზე ან მაღაზიაზე…",
+  "ai_chat_ui_footer": "AI დაგეხმარება არჩევაში. შეკვეთას თავად მართავ.",
+  "ai_chat_ui_popular_hint": "ნახე მომხმარებლების რჩეულები",
+  "ai_chat_ui_deals_hint": "აღმოაჩინე ფასდაკლებები",
+  "ai_chat_ui_stores_hint": "იპოვე სასურველი მაღაზია",
+  "ai_chat_ui_categories_hint": "მოძებნე ის, რაც გჭირდება",
+  "ai_chat_ui_latest": "ბოლო შეტყობინება",
+  "ai_chat_ui_history": "ისტორია",
+  "ai_chat_ui_support": "ოპერატორი"
 };

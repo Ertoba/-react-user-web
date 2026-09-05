@@ -6,7 +6,8 @@ import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import HistoryRoundedIcon from "@mui/icons-material/HistoryRounded";
 import StarRoundedIcon from "@mui/icons-material/StarRounded";
 import LocalOfferOutlinedIcon from "@mui/icons-material/LocalOfferOutlined";
-import SendRoundedIcon from "@mui/icons-material/SendRounded";
+import ArrowUpwardRoundedIcon from "@mui/icons-material/ArrowUpwardRounded";
+import ArrowDownwardRoundedIcon from "@mui/icons-material/ArrowDownwardRounded";
 import StorefrontOutlinedIcon from "@mui/icons-material/StorefrontOutlined";
 import SupportAgentOutlinedIcon from "@mui/icons-material/SupportAgentOutlined";
 import {
@@ -14,7 +15,7 @@ import {
   Avatar,
   Box,
   Chip,
-  CircularProgress,
+  Button,
   Collapse,
   Dialog,
   DialogActions,
@@ -43,6 +44,12 @@ import { ai_chat_send_api } from "../../api-manage/ApiRoutes";
 import { getProductRedirectURL } from "../../helper-functions/handleProductRedirect";
 import { getStoreRedirectURL } from "../../helper-functions/handleStoreRedirect";
 import AiChatResultSections from "./AiChatResultSections";
+import {
+  AiChatMark,
+  AiChatWelcome,
+  AiChatTyping,
+  aiChatEntrance,
+} from "./AiChatPresentation";
 import Chatting from "../chat/Chatting";
 
 const supportedModules = new Set(["food", "grocery", "ecommerce", "pharmacy"]);
@@ -98,7 +105,8 @@ const normalizeConversations = (items) => {
     .slice(0, maxConversations);
 };
 
-const linkPattern = /\[([^\]\n]+)\]\((https?:\/\/[^\s)]+)\)|(https?:\/\/[^\s<]+)/g;
+const linkPattern =
+  /\[([^\]\n]+)\]\((https?:\/\/[^\s)]+)\)|(https?:\/\/[^\s<]+)/g;
 
 const LinkifiedText = ({ text }) => {
   const source = String(text);
@@ -150,6 +158,10 @@ const CustomerAiChat = ({ configData }) => {
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const router = useRouter();
   const endRef = useRef(null);
+  const nearBottomRef = useRef(true);
+  const inputRef = useRef(null);
+  const [showLatest, setShowLatest] = useState(false);
+  const reduceMotion = useMediaQuery("(prefers-reduced-motion: reduce)");
   const [open, setOpen] = useState(false);
   const [showHistory, setShowHistory] = useState(false);
   const [operatorMode, setOperatorMode] = useState(false);
@@ -228,10 +240,11 @@ const CustomerAiChat = ({ configData }) => {
 
   useEffect(() => {
     if (!open) return;
-    const timer = window.setTimeout(
-      () => endRef.current?.scrollIntoView({ block: "end" }),
-      90
-    );
+    const timer = window.setTimeout(() => {
+      if (nearBottomRef.current)
+        endRef.current?.scrollIntoView({ block: "end" });
+      else setShowLatest(true);
+    }, 90);
     return () => window.clearTimeout(timer);
   }, [messages, open, sending, showHistory]);
 
@@ -285,6 +298,9 @@ const CustomerAiChat = ({ configData }) => {
     setActiveId(conversation.id);
     setShowHistory(false);
     setInput("");
+    nearBottomRef.current = true;
+    setShowLatest(false);
+    inputRef.current?.focus();
   };
 
   const deleteConversation = (id) => {
@@ -308,6 +324,8 @@ const CustomerAiChat = ({ configData }) => {
       messages: [...conversation.messages, userMessage].slice(-maxMessages),
     }));
     setInput("");
+    nearBottomRef.current = true;
+    setShowLatest(false);
     setSending(true);
 
     try {
@@ -383,7 +401,9 @@ const CustomerAiChat = ({ configData }) => {
       .slice(-10)
       .map(
         (message) =>
-          `${message.role === "user" ? profileInfo?.f_name || "Customer" : "AI"}: ${message.content}`
+          `${
+            message.role === "user" ? profileInfo?.f_name || "Customer" : "AI"
+          }: ${message.content}`
       )
       .join("\n");
     setOperatorTranscript(
@@ -399,10 +419,23 @@ const CustomerAiChat = ({ configData }) => {
     {
       label: t("Most Popular Items"),
       icon: <StarRoundedIcon />,
+      hint: t("ai_chat_ui_popular_hint"),
     },
-    { label: t("Discounted Items"), icon: <LocalOfferOutlinedIcon /> },
-    { label: t("Popular Stores"), icon: <StorefrontOutlinedIcon /> },
-    { label: t("Categories"), icon: <CategoryOutlinedIcon /> },
+    {
+      label: t("Discounted Items"),
+      icon: <LocalOfferOutlinedIcon />,
+      hint: t("ai_chat_ui_deals_hint"),
+    },
+    {
+      label: t("Popular Stores"),
+      icon: <StorefrontOutlinedIcon />,
+      hint: t("ai_chat_ui_stores_hint"),
+    },
+    {
+      label: t("Categories"),
+      icon: <CategoryOutlinedIcon />,
+      hint: t("ai_chat_ui_categories_hint"),
+    },
   ];
 
   return (
@@ -410,31 +443,40 @@ const CustomerAiChat = ({ configData }) => {
       <Tooltip title={t("AI_Chat_Assistant")} placement="left">
         <IconButton
           aria-label={t("AI_Chat_Assistant")}
-          onClick={() => setOpen(true)}
+          aria-haspopup="dialog"
+          aria-expanded={open}
+          onClick={() => {
+            nearBottomRef.current = true;
+            setShowLatest(false);
+            setOpen(true);
+          }}
           sx={{
             position: "fixed",
             right: { xs: 16, sm: 24 },
             bottom: { xs: 82, sm: 24 },
             zIndex: theme.zIndex.speedDial,
-            width: 52,
-            height: 52,
+            width: 56,
+            height: 56,
+            p: 0,
+            borderRadius: "18px",
             color: "primary.contrastText",
             bgcolor: "primary.main",
             boxShadow: theme.shadows[4],
             "&:hover": { bgcolor: "primary.dark" },
           }}
         >
-          <AutoAwesomeOutlinedIcon />
+          <AiChatMark size={56} />
         </IconButton>
       </Tooltip>
 
       <Dialog
         open={open}
+        aria-labelledby="mili-ai-chat-title"
         onClose={() => setOpen(false)}
         fullWidth
         maxWidth="sm"
         TransitionComponent={SheetTransition}
-        transitionDuration={{ enter: 300, exit: 220 }}
+        transitionDuration={reduceMotion ? 0 : { enter: 300, exit: 220 }}
         keepMounted
         sx={{
           "& .MuiDialog-container": {
@@ -443,85 +485,138 @@ const CustomerAiChat = ({ configData }) => {
         }}
         PaperProps={{
           sx: {
+            "--ai-chat-muted":
+              theme.palette.mode === "dark" ? "#B8C4CE" : "#596A75",
+            "--ai-chat-accent":
+              theme.palette.mode === "dark" ? "#77DAB1" : "#167449",
             m: { xs: 0, sm: 2 },
             width: { xs: "100%", sm: "min(100% - 32px, 680px)" },
             height: { xs: "94dvh", sm: 680 },
             maxHeight: { xs: "94dvh", sm: "calc(100dvh - 48px)" },
-            borderRadius: { xs: "8px 8px 0 0", sm: "8px" },
+            borderRadius: { xs: "28px 28px 0 0", sm: "28px" },
             overflow: "hidden",
+            "@media (prefers-reduced-motion: reduce)": {
+              "&, & *": {
+                animation: "none !important",
+                transition: "none !important",
+              },
+            },
           },
         }}
       >
-        <DialogTitle sx={{ p: 1.5 }}>
-          <Stack direction="row" spacing={1.25} alignItems="center">
-            <Avatar
+        <DialogTitle component="div" sx={{ px: 2, pt: 1.25, pb: 1 }}>
+          {isMobile && (
+            <Box
+              aria-hidden="true"
               sx={{
-                width: 44,
-                height: 44,
-                color: "primary.main",
-                bgcolor: alpha(theme.palette.primary.main, 0.1),
+                width: 32,
+                height: 4,
+                mx: "auto",
+                mb: 1.5,
+                bgcolor: "divider",
+                borderRadius: 4,
               }}
-            >
-              {operatorMode ? (
+            />
+          )}
+          <Stack direction="row" spacing={1.5} alignItems="center">
+            {operatorMode ? (
+              <Avatar
+                sx={{
+                  color: "primary.main",
+                  bgcolor: alpha(theme.palette.primary.main, 0.1),
+                }}
+              >
                 <SupportAgentOutlinedIcon />
-              ) : (
-                <AutoAwesomeOutlinedIcon />
-              )}
-            </Avatar>
+              </Avatar>
+            ) : (
+              <AiChatMark />
+            )}
             <Box minWidth={0} flex={1}>
-              <Typography variant="subtitle1" fontWeight={700} noWrap>
+              <Typography
+                id="mili-ai-chat-title"
+                component="h2"
+                variant="subtitle1"
+                fontWeight={700}
+                sx={{ lineHeight: 1.5 }}
+              >
                 {operatorMode ? t("Support Operator") : t("AI_Chat_Assistant")}
               </Typography>
-              <Typography variant="caption" color="primary" noWrap>
-                {operatorMode ? t("Human support") : t("AI assistant online")}
+              <Typography
+                variant="caption"
+                color="var(--ai-chat-muted, #596A75)"
+              >
+                {operatorMode ? t("Human support") : t("ai_chat_ui_subtitle")}
               </Typography>
             </Box>
-            {!operatorMode && (
+            <IconButton
+              aria-label={t("Close")}
+              onClick={() => setOpen(false)}
+              sx={{ width: 44, height: 44 }}
+            >
+              <CloseIcon />
+            </IconButton>
+          </Stack>
+          <Stack
+            direction="row"
+            spacing={0.5}
+            sx={{
+              mt: 1,
+              overflowX: "auto",
+              "& .MuiButton-root": {
+                flexShrink: 0,
+                minHeight: 44,
+                fontSize: 12,
+                px: 1,
+                color: "var(--ai-chat-accent)",
+                textTransform: "none",
+              },
+            }}
+          >
+            {!operatorMode ? (
               <>
-                <Tooltip title={t("See Chat History")}>
-                  <IconButton
-                    aria-label={t("See Chat History")}
-                    onClick={() => setShowHistory((value) => !value)}
-                  >
-                    <HistoryRoundedIcon />
-                  </IconButton>
-                </Tooltip>
-                <Tooltip title={t("Contact Support")}>
-                  <IconButton
-                    aria-label={t("Contact Support")}
-                    onClick={openOperatorChat}
-                  >
-                    <SupportAgentOutlinedIcon />
-                  </IconButton>
-                </Tooltip>
-              </>
-            )}
-            {operatorMode && (
-              <Tooltip title={t("AI_Chat_Assistant")}>
-                <IconButton
-                  aria-label={t("AI_Chat_Assistant")}
-                  onClick={() => setOperatorMode(false)}
+                <Button
+                  disabled={sending}
+                  startIcon={<AddCommentOutlinedIcon />}
+                  onClick={startNewChat}
                 >
-                  <AutoAwesomeOutlinedIcon />
-                </IconButton>
-              </Tooltip>
-            )}
-            <Tooltip title={t("Close")}>
-              <IconButton
-                aria-label={t("Close")}
-                onClick={() => setOpen(false)}
+                  {t("New Chat")}
+                </Button>
+                <Button
+                  startIcon={<HistoryRoundedIcon />}
+                  aria-expanded={showHistory}
+                  aria-controls="mili-ai-chat-history"
+                  onClick={() => setShowHistory((value) => !value)}
+                  sx={{ bgcolor: showHistory ? "action.selected" : undefined }}
+                >
+                  {t("ai_chat_ui_history")}
+                </Button>
+                <Button
+                  startIcon={<SupportAgentOutlinedIcon />}
+                  onClick={openOperatorChat}
+                >
+                  {t("ai_chat_ui_support")}
+                </Button>
+              </>
+            ) : (
+              <Button
+                startIcon={<AutoAwesomeOutlinedIcon />}
+                onClick={() => setOperatorMode(false)}
               >
-                <CloseIcon />
-              </IconButton>
-            </Tooltip>
+                {t("AI_Chat_Assistant")}
+              </Button>
+            )}
           </Stack>
         </DialogTitle>
         <Divider />
 
-        <Collapse in={!operatorMode && showHistory} timeout={220}>
+        <Collapse
+          id="mili-ai-chat-history"
+          in={!operatorMode && showHistory}
+          timeout={reduceMotion ? 0 : 220}
+        >
           <Box
             sx={{
-              maxHeight: 220,
+              maxHeight: "min(220px, 30dvh)",
               overflowY: "auto",
               bgcolor: "background.paper",
             }}
@@ -536,11 +631,15 @@ const CustomerAiChat = ({ configData }) => {
                 label={t("New Chat")}
                 color="primary"
                 variant="outlined"
-                onClick={startNewChat}
+                onClick={sending ? undefined : startNewChat}
               />
             </Stack>
             {conversations.length === 0 ? (
-              <Typography color="text.secondary" variant="body2" sx={{ p: 2 }}>
+              <Typography
+                color="var(--ai-chat-muted, #596A75)"
+                variant="body2"
+                sx={{ p: 2 }}
+              >
                 {t("No chat history")}
               </Typography>
             ) : (
@@ -554,6 +653,8 @@ const CustomerAiChat = ({ configData }) => {
                       key={conversation.id}
                       selected={conversation.id === activeId}
                       onClick={() => {
+                        nearBottomRef.current = true;
+                        setShowLatest(false);
                         setActiveId(conversation.id);
                         setShowHistory(false);
                       }}
@@ -590,6 +691,12 @@ const CustomerAiChat = ({ configData }) => {
         </Collapse>
 
         <DialogContent
+          onScroll={(event) => {
+            const node = event.currentTarget;
+            nearBottomRef.current =
+              node.scrollHeight - node.scrollTop - node.clientHeight < 80;
+            setShowLatest(!nearBottomRef.current);
+          }}
           sx={{
             minHeight: 0,
             flex: 1,
@@ -606,55 +713,24 @@ const CustomerAiChat = ({ configData }) => {
               initialMessage={operatorTranscript}
             />
           ) : messages.length === 0 ? (
-            <Stack
-              spacing={2.5}
-              alignItems="center"
-              sx={{ py: { xs: 4, sm: 6 } }}
-            >
-              <Avatar
-                sx={{
-                  width: 64,
-                  height: 64,
-                  color: "primary.main",
-                  bgcolor: alpha(theme.palette.primary.main, 0.1),
-                }}
-              >
-                <AutoAwesomeOutlinedIcon fontSize="large" />
-              </Avatar>
-              <Box textAlign="center" maxWidth={440}>
-                <Typography variant="h6" fontWeight={700}>
-                  {profileInfo?.f_name
-                    ? `${t("Hello")}, ${profileInfo.f_name}`
-                    : t("AI_Chat_Assistant")}
-                </Typography>
-                <Typography
-                  color="text.secondary"
-                  variant="body2"
-                  sx={{ mt: 0.75 }}
-                >
-                  {t("AI_Chat_Assistant_read_only_hint")}
-                </Typography>
-              </Box>
-              <Stack
-                direction="row"
-                useFlexGap
-                flexWrap="wrap"
-                justifyContent="center"
-                gap={1}
-              >
-                {quickPrompts.map((prompt) => (
-                  <Chip
-                    key={prompt.label}
-                    icon={prompt.icon}
-                    label={prompt.label}
-                    variant="outlined"
-                    onClick={() => sendMessage(prompt.label)}
-                  />
-                ))}
-              </Stack>
-            </Stack>
+            <AiChatWelcome
+              greeting={
+                profileInfo?.f_name
+                  ? `${t("Hello")}, ${profileInfo.f_name}`
+                  : t("AI_Chat_Assistant")
+              }
+              intro={t("ai_chat_ui_intro")}
+              prompts={quickPrompts}
+              onPrompt={sendMessage}
+            />
           ) : (
-            <Stack spacing={1.5}>
+            <Stack
+              role="log"
+              aria-label={t("AI_Chat_Assistant")}
+              aria-live="polite"
+              aria-relevant="additions"
+              spacing={2}
+            >
               {messages.map((message, index) => {
                 const isUser = message.role === "user";
                 const isError = message.role === "error";
@@ -662,6 +738,7 @@ const CustomerAiChat = ({ configData }) => {
                   <Box
                     key={message.id || `${message.role}-${index}`}
                     sx={{
+                      ...aiChatEntrance,
                       alignSelf: isUser ? "flex-end" : "stretch",
                       maxWidth: isUser ? "88%" : "100%",
                     }}
@@ -671,11 +748,13 @@ const CustomerAiChat = ({ configData }) => {
                         width: "fit-content",
                         maxWidth: "100%",
                         ml: isUser ? "auto" : 0,
-                        px: 1.5,
-                        py: 1,
+                        px: 2,
+                        py: 1.5,
                         border: isUser ? 0 : 1,
                         borderColor: isError ? "error.light" : "divider",
-                        borderRadius: "8px",
+                        borderRadius: isUser
+                          ? "18px 18px 4px 18px"
+                          : "18px 18px 18px 4px",
                         color: isError
                           ? "error.main"
                           : isUser
@@ -686,7 +765,7 @@ const CustomerAiChat = ({ configData }) => {
                         overflowWrap: "anywhere",
                       }}
                     >
-                      <Typography variant="body2">
+                      <Typography variant="body2" sx={{ lineHeight: 1.7 }}>
                         <LinkifiedText text={message.content} />
                       </Typography>
                     </Box>
@@ -701,23 +780,36 @@ const CustomerAiChat = ({ configData }) => {
                   </Box>
                 );
               })}
-              {sending && (
-                <Stack
-                  direction="row"
-                  spacing={1}
-                  alignItems="center"
-                  color="text.secondary"
-                >
-                  <CircularProgress size={18} />
-                  <Typography variant="body2">
-                    {t("Preparing a response...")}
-                  </Typography>
-                </Stack>
-              )}
+              {sending && <AiChatTyping label={t("Preparing a response...")} />}
               <span ref={endRef} />
             </Stack>
           )}
         </DialogContent>
+        {!operatorMode && messages.length > 0 && showLatest && (
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+              py: 0.5,
+              bgcolor: "background.paper",
+            }}
+          >
+            <Button
+              size="small"
+              startIcon={<ArrowDownwardRoundedIcon />}
+              onClick={() => {
+                nearBottomRef.current = true;
+                setShowLatest(false);
+                endRef.current?.scrollIntoView({
+                  block: "end",
+                  behavior: reduceMotion ? "auto" : "smooth",
+                });
+              }}
+            >
+              {t("ai_chat_ui_latest")}
+            </Button>
+          </Box>
+        )}
 
         {!operatorMode && archived ? (
           <Stack
@@ -726,7 +818,11 @@ const CustomerAiChat = ({ configData }) => {
             spacing={1.25}
             sx={{ p: 1.5 }}
           >
-            <Typography color="text.secondary" variant="body2" flex={1}>
+            <Typography
+              color="var(--ai-chat-muted, #596A75)"
+              variant="body2"
+              flex={1}
+            >
               {t("Archived chats are read-only. Start a new chat to continue.")}
             </Typography>
             <Tooltip title={t("New Chat")}>
@@ -742,44 +838,99 @@ const CustomerAiChat = ({ configData }) => {
         ) : !operatorMode ? (
           <DialogActions
             sx={{
-              p: 1.25,
-              gap: 0.75,
-              alignItems: "flex-end",
+              p: 2,
+              pt: 1.5,
+              pb: "max(12px, env(safe-area-inset-bottom))",
+              display: "block",
               bgcolor: "background.paper",
               borderTop: 1,
               borderColor: "divider",
             }}
           >
-            <TextField
-              fullWidth
-              multiline
-              maxRows={4}
-              value={input}
-              disabled={sending}
-              inputProps={{ maxLength: 1000 }}
-              placeholder={t("Type Here")}
-              onChange={(event) => setInput(event.target.value)}
-              onKeyDown={(event) => {
-                if (event.key === "Enter" && !event.shiftKey) {
-                  event.preventDefault();
-                  sendMessage();
-                }
+            <Stack
+              direction="row"
+              alignItems="flex-end"
+              sx={{
+                p: 0.75,
+                borderRadius: "24px",
+                border: 1,
+                borderColor: "divider",
+                bgcolor: "background.default",
+                "&:focus-within": { borderColor: "primary.main" },
               }}
-              sx={{ "& .MuiOutlinedInput-root": { borderRadius: "8px" } }}
-            />
-            <Tooltip title={t("Send")}>
-              <span>
-                <IconButton
-                  color="primary"
-                  aria-label={t("Send")}
-                  disabled={!input.trim() || sending}
-                  onClick={() => sendMessage()}
-                  sx={{ width: 44, height: 44 }}
-                >
-                  <SendRoundedIcon />
-                </IconButton>
-              </span>
-            </Tooltip>
+            >
+              <TextField
+                fullWidth
+                multiline
+                maxRows={4}
+                variant="standard"
+                inputRef={inputRef}
+                value={input}
+                inputProps={{
+                  maxLength: 1000,
+                  "aria-label": t("ai_chat_ui_placeholder"),
+                }}
+                InputProps={{ disableUnderline: true }}
+                placeholder={t("ai_chat_ui_placeholder")}
+                onChange={(event) => setInput(event.target.value)}
+                onKeyDown={(event) => {
+                  if (
+                    event.key === "Enter" &&
+                    !event.shiftKey &&
+                    !event.nativeEvent.isComposing &&
+                    event.keyCode !== 229
+                  ) {
+                    event.preventDefault();
+                    sendMessage();
+                  }
+                }}
+                sx={{
+                  "& textarea::placeholder": {
+                    color: "var(--ai-chat-muted)",
+                    opacity: 1,
+                  },
+                  "& .MuiInputBase-root": {
+                    px: 1.5,
+                    py: 1.25,
+                    fontSize: 14,
+                    lineHeight: 1.5,
+                  },
+                }}
+              />
+              <Tooltip title={t("Send")}>
+                <span>
+                  <IconButton
+                    aria-label={t("Send")}
+                    disabled={!input.trim() || sending}
+                    onClick={() => {
+                      sendMessage();
+                      inputRef.current?.focus();
+                    }}
+                    sx={{
+                      width: 48,
+                      height: 48,
+                      color: "primary.contrastText",
+                      bgcolor: "primary.main",
+                      "&:hover": { bgcolor: "primary.dark" },
+                      "&.Mui-disabled": {
+                        bgcolor: "action.disabledBackground",
+                      },
+                    }}
+                  >
+                    <ArrowUpwardRoundedIcon />
+                  </IconButton>
+                </span>
+              </Tooltip>
+            </Stack>
+            <Typography
+              variant="caption"
+              color="var(--ai-chat-muted, #596A75)"
+              align="center"
+              display="block"
+              sx={{ mt: 1, fontSize: 11, lineHeight: 1.5 }}
+            >
+              {t("ai_chat_ui_footer")}
+            </Typography>
           </DialogActions>
         ) : null}
       </Dialog>

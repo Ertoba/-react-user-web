@@ -55,8 +55,14 @@ const ProductCard = ({ product, currency, onOpen, comparisonRank, index }) => {
       sx={{
         width: 276,
         minWidth: 276,
-        height: 142,
-        borderRadius: "8px",
+        minHeight: 166,
+        borderRadius: "18px",
+        scrollSnapAlign: "start",
+        "@media (prefers-reduced-motion: reduce)": {
+          animation: "none",
+          transition: "none",
+        },
+        "&:hover, &:focus-within": { borderColor: "primary.main" },
         boxShadow: "none",
         animation: "aiResultEnter 240ms ease-out both",
         animationDelay: `${Math.min(index, 5) * 40}ms`,
@@ -69,23 +75,25 @@ const ProductCard = ({ product, currency, onOpen, comparisonRank, index }) => {
       <CardActionArea
         aria-label={String(product?.name ?? t("Items"))}
         onClick={() => onOpen(product)}
-        sx={{ height: "100%", p: 1.25 }}
+        sx={{ height: "100%", p: 1.5 }}
       >
         <Stack direction="row" spacing={1.25} sx={{ height: "100%" }}>
-          <Box
-            component="img"
-            src={product?.image_full_url || "/static/no-image-found.png"}
+          <Avatar
+            variant="rounded"
+            src={product?.image_full_url || undefined}
             alt=""
             sx={{
               width: 88,
               height: 88,
               flexShrink: 0,
-              objectFit: "cover",
+              "& img": { objectFit: "cover" },
               borderRadius: "6px",
               bgcolor: "action.hover",
             }}
-          />
-          <Stack minWidth={0} flex={1}>
+          >
+            <Inventory2OutlinedIcon color="action" />
+          </Avatar>
+          <Stack minWidth={0} flex={1} spacing={0.35}>
             <Typography variant="subtitle2" fontWeight={700} noWrap={false}>
               <Box
                 component="span"
@@ -99,12 +107,23 @@ const ProductCard = ({ product, currency, onOpen, comparisonRank, index }) => {
                 {product?.name}
               </Box>
             </Typography>
-            <Typography variant="caption" color="text.secondary" noWrap>
+            <Typography
+              variant="caption"
+              color="var(--ai-chat-muted, #596A75)"
+              noWrap
+            >
               {product?.store_name}
             </Typography>
             {comparisonRank && (
-              <Typography variant="caption" color="primary" fontWeight={700}>
-                #{comparisonRank} {comparisonRank === 1 ? t("Lowest Price") : t("Price Comparison")}
+              <Typography
+                variant="caption"
+                color="var(--ai-chat-accent, #167449)"
+                fontWeight={700}
+              >
+                #{comparisonRank}{" "}
+                {comparisonRank === 1
+                  ? t("Lowest Price")
+                  : t("Price Comparison")}
               </Typography>
             )}
             <Box flex={1} />
@@ -123,13 +142,17 @@ const ProductCard = ({ product, currency, onOpen, comparisonRank, index }) => {
               />
             </Stack>
             <Stack direction="row" spacing={0.75} alignItems="baseline">
-              <Typography variant="subtitle2" color="primary" fontWeight={700}>
+              <Typography
+                variant="subtitle2"
+                color="var(--ai-chat-accent, #167449)"
+                fontWeight={700}
+              >
                 {formatMoney(discountedPrice, currency)}
               </Typography>
               {hasDiscount && (
                 <Typography
                   variant="caption"
-                  color="text.secondary"
+                  color="var(--ai-chat-muted, #596A75)"
                   sx={{ textDecoration: "line-through" }}
                 >
                   {formatMoney(price, currency)}
@@ -151,8 +174,14 @@ const StoreCard = ({ store, currency, onOpen, index }) => {
       sx={{
         width: 286,
         minWidth: 286,
-        height: 116,
-        borderRadius: "8px",
+        minHeight: 124,
+        borderRadius: "18px",
+        scrollSnapAlign: "start",
+        "@media (prefers-reduced-motion: reduce)": {
+          animation: "none",
+          transition: "none",
+        },
+        "&:hover, &:focus-within": { borderColor: "primary.main" },
         boxShadow: "none",
         animation: "aiResultEnter 240ms ease-out both",
         animationDelay: `${Math.min(index, 5) * 40}ms`,
@@ -165,7 +194,7 @@ const StoreCard = ({ store, currency, onOpen, index }) => {
       <CardActionArea
         aria-label={String(store?.name ?? t("Stores"))}
         onClick={() => onOpen(store)}
-        sx={{ height: "100%", p: 1.25 }}
+        sx={{ height: "100%", p: 1.5 }}
       >
         <Stack direction="row" spacing={1.25} alignItems="center">
           <Avatar
@@ -173,7 +202,9 @@ const StoreCard = ({ store, currency, onOpen, index }) => {
             alt=""
             variant="rounded"
             sx={{ width: 72, height: 72, bgcolor: "action.hover" }}
-          />
+          >
+            <StorefrontOutlinedIcon color="action" />
+          </Avatar>
           <Stack minWidth={0} flex={1} spacing={0.35}>
             <Typography variant="subtitle2" fontWeight={700} noWrap>
               {store?.name}
@@ -189,7 +220,11 @@ const StoreCard = ({ store, currency, onOpen, index }) => {
                     color="disabled"
                     sx={{ ml: 0.75, fontSize: 15 }}
                   />
-                  <Typography variant="caption" color="text.secondary" noWrap>
+                  <Typography
+                    variant="caption"
+                    color="var(--ai-chat-muted, #596A75)"
+                    noWrap
+                  >
                     {store.delivery_time}
                   </Typography>
                 </>
@@ -215,7 +250,13 @@ const HorizontalResults = ({ children }) => (
   <Stack
     direction="row"
     spacing={1}
-    sx={{ overflowX: "auto", pb: 0.75, scrollSnapType: "x proximity" }}
+    sx={{
+      overflowX: "auto",
+      pb: 1,
+      scrollSnapType: "x proximity",
+      overscrollBehaviorX: "contain",
+      "& .MuiCard-root": { flexShrink: 0 },
+    }}
   >
     {children}
   </Stack>

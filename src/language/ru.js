@@ -1798,5 +1798,16 @@ export const russian = {
   "Restaurants not found!": "Рестораны не найдены!",
   "No matching options": "Подходящие варианты не найдены",
   "This option combination is unavailable": "Выбранная комбинация недоступна",
-  "Select all product options before continuing": "Чтобы продолжить, выберите все параметры товара"
+  "Select all product options before continuing": "Чтобы продолжить, выберите все параметры товара",
+  "ai_chat_ui_subtitle": "Ваш помощник в покупках",
+  "ai_chat_ui_intro": "Находите товары, сравнивайте цены и открывайте магазины в одном чате.",
+  "ai_chat_ui_placeholder": "Спросите о товарах или магазинах…",
+  "ai_chat_ui_footer": "ИИ помогает с выбором. Решение о заказе за вами.",
+  "ai_chat_ui_popular_hint": "Посмотрите любимые товары покупателей",
+  "ai_chat_ui_deals_hint": "Найдите выгодные предложения",
+  "ai_chat_ui_stores_hint": "Откройте магазины для покупок",
+  "ai_chat_ui_categories_hint": "Выберите нужную категорию",
+  "ai_chat_ui_latest": "Последнее сообщение",
+  "ai_chat_ui_history": "История",
+  "ai_chat_ui_support": "Оператор"
 };

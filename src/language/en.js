@@ -1800,5 +1800,16 @@ export const english = {
   "Restaurants not found!": "No restaurants found!",
   "No matching options": "No matching options",
   "This option combination is unavailable": "This option combination is unavailable",
-  "Select all product options before continuing": "Select all product options before continuing"
+  "Select all product options before continuing": "Select all product options before continuing",
+  "ai_chat_ui_subtitle": "Your shopping companion",
+  "ai_chat_ui_intro": "Find products, compare prices and discover stores in one conversation.",
+  "ai_chat_ui_placeholder": "Ask about products or stores…",
+  "ai_chat_ui_footer": "AI helps you explore. You choose what to order.",
+  "ai_chat_ui_popular_hint": "Explore customer favourites",
+  "ai_chat_ui_deals_hint": "Find offers worth a look",
+  "ai_chat_ui_stores_hint": "Discover places to shop",
+  "ai_chat_ui_categories_hint": "Browse by what you need",
+  "ai_chat_ui_latest": "Latest message",
+  "ai_chat_ui_history": "History",
+  "ai_chat_ui_support": "Support"
 };
