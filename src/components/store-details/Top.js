@@ -460,20 +460,20 @@ const Top = (props) => {
             </CustomBoxFullWidth>
             <CustomBoxFullWidth
               sx={{
-                // backdropFilter: "blur(10px)",
                 backgroundColor: getModuleWiseBG()?.bgColor,
                 opacity: "0.9",
-                padding: "13.5px 25px",
+                padding: { xs: "12px 14px", sm: "13.5px 25px" },
                 color: "whiteContainer.main",
               }}
             >
               <Stack
                 direction="row"
-                alignItems="center"
-                spacing={{ xs: 4, sm: 3, md: 5 }}
+                alignItems="flex-start"
+                justifyContent="space-between"
+                sx={{ width: "100%", gap: { xs: 1, sm: 3 } }}
               >
                 {storeDetails?.positive_rating !== 0 ? (
-                  <Stack alignItems="flex-start">
+                  <Stack alignItems="center" sx={{ flex: 1, minWidth: 0 }}>
                     <Typography
                       textAlign="center"
                       variant="h5"
@@ -483,40 +483,49 @@ const Top = (props) => {
                           sm: "22px",
                           md: "22px",
                         },
+                        lineHeight: 1.25,
                       }}
                     >
                       {storeDetails?.positive_rating?.toFixed(0)}%
                     </Typography>
-                    <Stack direction="row" alignItems="center" spacing={0.3}>
-                      <Typography
-                        noWrap
-                        sx={{
-                          fontSize: { xs: "10px", sm: "inherit" },
-                        }}
-                      >
-                        {t("Positive Review")}
-                      </Typography>
-                    </Stack>
+                    <Typography
+                      sx={{
+                        width: "100%",
+                        fontSize: { xs: "9px", sm: "13px" },
+                        lineHeight: { xs: 1.25, sm: 1.35 },
+                        textAlign: "center",
+                        overflowWrap: "break-word",
+                        wordBreak: "normal",
+                      }}
+                    >
+                      {t("Positive Review")}
+                    </Typography>
                   </Stack>
                 ) : null}
                 {storeDetails?.minimum_order !== 0 ? (
-                  <Stack alignItems="flex-start">
+                  <Stack alignItems="center" sx={{ flex: 1, minWidth: 0 }}>
                     <Typography
                       variant="h5"
                       sx={{
                         fontSize: {
-                          xs: "16px",
+                          xs: "14px",
                           sm: "22px",
                           md: "22px",
                         },
+                        lineHeight: 1.25,
+                        textAlign: "center",
                       }}
                     >
                       {getAmountWithSign(storeDetails?.minimum_order)}
                     </Typography>
                     <Typography
-                      noWrap
                       sx={{
-                        fontSize: { xs: "10px", sm: "inherit" },
+                        width: "100%",
+                        fontSize: { xs: "9px", sm: "13px" },
+                        lineHeight: { xs: 1.25, sm: 1.35 },
+                        textAlign: "center",
+                        overflowWrap: "break-word",
+                        wordBreak: "normal",
                       }}
                     >
                       {t("Minimum Order Value")}
@@ -524,23 +533,29 @@ const Top = (props) => {
                   </Stack>
                 ) : null}
 
-                <Stack alignItems="flex-start">
+                <Stack alignItems="center" sx={{ flex: 1, minWidth: 0 }}>
                   <Typography
                     variant="h5"
                     sx={{
                       fontSize: {
-                        xs: "16px",
+                        xs: "14px",
                         sm: "22px",
                         md: "22px",
                       },
+                      lineHeight: 1.25,
+                      textAlign: "center",
                     }}
                   >
                     {storeDetails?.delivery_time}
                   </Typography>
                   <Typography
-                    noWrap
                     sx={{
-                      fontSize: { xs: "10px", sm: "inherit" },
+                      width: "100%",
+                      fontSize: { xs: "9px", sm: "13px" },
+                      lineHeight: { xs: 1.25, sm: 1.35 },
+                      textAlign: "center",
+                      overflowWrap: "break-word",
+                      wordBreak: "normal",
                     }}
                   >
                     {t("Delivery Time")}
