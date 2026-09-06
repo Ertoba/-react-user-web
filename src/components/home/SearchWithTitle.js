@@ -18,8 +18,8 @@ const SearchWithTitle = (props) => {
   const categoryName = Array.isArray(name) ? name[0] : name;
   const isCategorySearch = query?.data_type === "category" && categoryName;
 
-  const getBannerTexts1 = t("Get your car rental service with")
-  const getBannerSubTexts = t("with affordable price.")
+  const getBannerTexts1 = t("Get your car rental service with");
+  const getBannerSubTexts = t("with affordable price.");
 
   const getBannerTexts = () => {
     switch (getCurrentModuleType()) {
@@ -70,32 +70,34 @@ const SearchWithTitle = (props) => {
     <CustomStackFullWidth
       alignItems="center"
       justifyContent="center"
-      spacing={isSmall ? 1 : 3}
-      p={isSmall ? "25px" : "20px"}
+      spacing={{ xs: 0.75, sm: 1.5, md: 3 }}
+      px={{ xs: 1.5, sm: 2.5 }}
+      py={{ xs: 2, sm: 2.5 }}
       mt={moduleType === ModuleTypes.RENTAL ? { xs: 0, sm: 2 } : 0}
     >
       <CustomStackFullWidth
         alignItems="center"
         justifyContent="center"
-        spacing={1.5}
+        spacing={{ xs: 1, sm: 1.5 }}
       >
         <Typography
           variant={isSmall ? "h6" : "h5"}
           textAlign="center"
           fontWeight="600"
           component="h1"
-
           sx={{
             fontSize: isCategorySearch
-              ? { xs: "22px", sm: "30px", md: "38px" }
+              ? { xs: "19px", sm: "25px", md: "34px" }
               : {
-                  md: moduleType === ModuleTypes.RENTAL && "30px !important",
+                  xs: "19px",
+                  sm: "23px",
+                  md: moduleType === ModuleTypes.RENTAL ? "30px" : "24px",
                 },
             lineHeight: isCategorySearch
-              ? { xs: 1.35, md: 1.25 }
-              : { xs: 1.35, md: "33.18px" },
+              ? { xs: 1.28, sm: 1.3, md: 1.25 }
+              : { xs: 1.28, sm: 1.3, md: 1.35 },
             pt: isCategorySearch ? "2px" : 0,
-            maxWidth: { xs: "92vw", md: "720px" },
+            maxWidth: { xs: "94vw", md: "720px" },
             overflowWrap: "break-word",
             wordBreak: "normal",
             color:
@@ -125,9 +127,12 @@ const SearchWithTitle = (props) => {
                       ? theme.palette.neutral[1000]
                       : theme.palette.neutral[400],
             textShadow: "none",
+            fontSize: { xs: "12.5px", sm: "14px", md: "16px" },
+            lineHeight: { xs: "18px", sm: "20px", md: "22px" },
+            overflowWrap: "break-word",
+            wordBreak: "normal",
           }}
           fontWeight="400"
-          lineHeight="18.75px"
           component="p"
         >
           {t(getBannerTexts().subTitle)}

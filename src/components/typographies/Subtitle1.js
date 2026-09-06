@@ -1,18 +1,23 @@
-import { Typography, useMediaQuery, useTheme } from "@mui/material";
+import { Typography } from "@mui/material";
 import { useTranslation } from "react-i18next";
 
 const Subtitle1 = (props) => {
-	const { text, textAlign, ...rest } = props;
+	const { text, textAlign, sx, ...rest } = props;
 	const { t } = useTranslation();
-	const theme = useTheme();
-	const isSmall = useMediaQuery(theme.breakpoints.down("sm"));
+
 	return (
 		<Typography
 			textAlign={textAlign ? textAlign : "center"}
-			variant={isSmall ? "body2" : "subtitle1"}
-			lineHeight="24px"
 			fontWeight="400"
-			sx={{ color: "text.secondary" }}
+			sx={{
+				color: "text.secondary",
+				fontSize: { xs: "12.5px", sm: "14px", md: "16px" },
+				lineHeight: { xs: "18px", sm: "20px", md: "24px" },
+				letterSpacing: 0,
+				overflowWrap: "break-word",
+				wordBreak: "normal",
+				...sx,
+			}}
 			{...rest}
 		>
 			{t(text)}
