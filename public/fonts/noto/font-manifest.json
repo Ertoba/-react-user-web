@@ -1,0 +1,113 @@
+{
+  "archive": "NotoSansGeorgian-v2.005.zip",
+  "archive_sha256": "10e85011008108308e6feab0408242acb07804da61ede3d3ff236461ae07ab1b",
+  "default_family": "Noto Sans Georgian",
+  "version": "2.005",
+  "faces": [
+    {
+      "file": "NotoSansGeorgian-Thin.woff2",
+      "source": "NotoSansGeorgian/googlefonts/ttf/NotoSansGeorgian-Thin.ttf",
+      "weight": 100,
+      "style": "normal",
+      "sha256": "1da352bff701169bbcbcb8b0e21f2a862405aeb3cde8ea97d1f4de14bc5cc52d",
+      "source_ttf_sha256": "024b7ba1069ed1a95067a8acdc522b373a258e73c6da2851192affffecfda875"
+    },
+    {
+      "file": "NotoSansGeorgian-ExtraLight.woff2",
+      "source": "NotoSansGeorgian/googlefonts/ttf/NotoSansGeorgian-ExtraLight.ttf",
+      "weight": 200,
+      "style": "normal",
+      "sha256": "44f79ed1d49ee065c31cccc16a62da2a596b19db1e4712f1f28d52b945547e62",
+      "source_ttf_sha256": "5b9137058f3828b6d3cbffa7a8fe3a5eb9a82a4f8749be682e5b424f3971e397"
+    },
+    {
+      "file": "NotoSansGeorgian-Light.woff2",
+      "source": "NotoSansGeorgian/googlefonts/ttf/NotoSansGeorgian-Light.ttf",
+      "weight": 300,
+      "style": "normal",
+      "sha256": "0ae9870148c1ae7256ecb0c78d7aa263c58fca9df67739859a3c2ec3f7f86128",
+      "source_ttf_sha256": "62a0b609fc698368699e94f4019ae33c64e2bb75b2dc63648262521d5a4f4048"
+    },
+    {
+      "file": "NotoSansGeorgian-Regular.woff2",
+      "source": "NotoSansGeorgian/googlefonts/ttf/NotoSansGeorgian-Regular.ttf",
+      "weight": 400,
+      "style": "normal",
+      "sha256": "5ca7bce690daa08be296b8f0ac7824e1b92b6efc441c651f23dfa1942d33c698",
+      "source_ttf_sha256": "b919df5747cbc149794de33835387bbfac97368acc2768194e83220a843f3371"
+    },
+    {
+      "file": "NotoSansGeorgian-Medium.woff2",
+      "source": "NotoSansGeorgian/googlefonts/ttf/NotoSansGeorgian-Medium.ttf",
+      "weight": 500,
+      "style": "normal",
+      "sha256": "a25f2b645bac494ad93217ef763de618fb0193776bbaa09ca79138285c3c5507",
+      "source_ttf_sha256": "e18f09a1f88d3b73e691358f9a8a981c8d1491c06aeac4620f2186e19fc98506"
+    },
+    {
+      "file": "NotoSansGeorgian-SemiBold.woff2",
+      "source": "NotoSansGeorgian/googlefonts/ttf/NotoSansGeorgian-SemiBold.ttf",
+      "weight": 600,
+      "style": "normal",
+      "sha256": "01ff6cefd673f30b2ad22463a89f83b0c116e478b213b91015b0e847f5db3eeb",
+      "source_ttf_sha256": "3733a66d89a3db010b1c889f170fe888c1b35042d19c73e64b74b51ef97f1346"
+    },
+    {
+      "file": "NotoSansGeorgian-Bold.woff2",
+      "source": "NotoSansGeorgian/googlefonts/ttf/NotoSansGeorgian-Bold.ttf",
+      "weight": 700,
+      "style": "normal",
+      "sha256": "189ac30ea9d28c65b0ae313ef5185b186bde48503bb5a0c4603beef04ff78217",
+      "source_ttf_sha256": "31f486eb04d27dca944006fb0243af3c622909a7829d827d0d7adee645cbab41"
+    },
+    {
+      "file": "NotoSansGeorgian-ExtraBold.woff2",
+      "source": "NotoSansGeorgian/googlefonts/ttf/NotoSansGeorgian-ExtraBold.ttf",
+      "weight": 800,
+      "style": "normal",
+      "sha256": "b7061595fdba29f473a199490bd218ec0e79e0ac6940223b4a36dc4d8b21c17a",
+      "source_ttf_sha256": "be13d8f36e56adc4e0c0e193d9972f300cf4a9b9acc32e414a65247c53d3c209"
+    },
+    {
+      "file": "NotoSansGeorgian-Black.woff2",
+      "source": "NotoSansGeorgian/googlefonts/ttf/NotoSansGeorgian-Black.ttf",
+      "weight": 900,
+      "style": "normal",
+      "sha256": "290b74d5135740e61f8873979a1d3d0f2a2c472bf231f2ad4d62bf7d37781a44",
+      "source_ttf_sha256": "2a0217b5359f85386536af295a5a7b50d859927fef0859497c9b16ca8d4b5a55"
+    },
+    {
+      "file": "MiliCyrillic-Regular.woff2",
+      "source": "Roboto-Regular.ttf",
+      "source_sha256": "56a45233d29f11b4dfb86d248e921939d115778f87325e7ae8cc108383d6664d",
+      "sha256": "a40f0169efae5f977e3ecad7b15e0aa45f07d8e97609ac09820d870871953567",
+      "unicode_range": "U+0400-052F,U+2DE0-2DFF,U+A640-A69F",
+      "source_ttf_sha256": "67455cf2042081847fa23b26e141890e111ff2a1349864f4083a4bc1bc2aab69"
+    },
+    {
+      "file": "MiliCyrillic-Bold.woff2",
+      "source": "Roboto-Bold.ttf",
+      "source_sha256": "61f89f8db49261c2f6106e8dccc35df7b2f7ed909020db40a3fc905e95f99334",
+      "sha256": "bdcfeb20681e755ecbec0cf615a5caf14fb41720a51e359ba965b77f286497d0",
+      "unicode_range": "U+0400-052F,U+2DE0-2DFF,U+A640-A69F",
+      "source_ttf_sha256": "3420eac283a718ae9c7da87dad2f02549510c44fc82da8d0fbf60358b261e01d"
+    },
+    {
+      "file": "MiliCyrillic-Italic.woff2",
+      "source": "Roboto-Italic.ttf",
+      "source_sha256": "fa0b17bb4aaac4a1b2ee149dd4ca3b55e97d3077aa6ba9bb02541b316e7c46ce",
+      "sha256": "f7c1cb9f611ae9dc9abe4f15e5a2452cc45ebd2fc7621dff1ba83ab91f69b02d",
+      "unicode_range": "U+0400-052F,U+2DE0-2DFF,U+A640-A69F",
+      "source_ttf_sha256": "40c9ff92b970e6b3ecc7455f826f417a100b9068f1043f5291f0295faeed0701"
+    },
+    {
+      "file": "MiliCyrillic-BoldItalic.woff2",
+      "source": "Roboto-BoldItalic.ttf",
+      "source_sha256": "40083ed54338397cf49d2c49f59eddcd963a30fdb301813d4bd3abbb37a13d12",
+      "sha256": "d52e9bd4df49e93f630aba6b737b387d3b1a6cbd1a4f10b035a0c17db8acec92",
+      "unicode_range": "U+0400-052F,U+2DE0-2DFF,U+A640-A69F",
+      "source_ttf_sha256": "6d4b69481bf84fdce502d7b9e16ea7ad483db5a551b29e5cb95e79b7cb3674a9"
+    }
+  ],
+  "cyrillic_source": "https://github.com/googlefonts/roboto-2/tree/38062f4b4a0be4346d07a928408da21602545e9e"
+}

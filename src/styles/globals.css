@@ -1,71 +1,79 @@
-/* Bundled typography: genuine weights and italics, with no font CDN. */
+/* Bundled Noto Sans Georgian v2.005; no remote font dependency. */
 @font-face {
-    font-family: 'BPG SSP Crystal';
-    src: url('/fonts/crystal/BPGSSPCrystal-Regular.woff2') format('woff2');
+    font-family: 'Noto Sans Georgian';
+    src: url('/fonts/noto/NotoSansGeorgian-Thin.woff2') format('woff2');
+    font-weight: 100;
+    font-style: normal;
+    font-display: block;
+}
+
+@font-face {
+    font-family: 'Noto Sans Georgian';
+    src: url('/fonts/noto/NotoSansGeorgian-ExtraLight.woff2') format('woff2');
+    font-weight: 200;
+    font-style: normal;
+    font-display: block;
+}
+
+@font-face {
+    font-family: 'Noto Sans Georgian';
+    src: url('/fonts/noto/NotoSansGeorgian-Light.woff2') format('woff2');
+    font-weight: 300;
+    font-style: normal;
+    font-display: block;
+}
+
+@font-face {
+    font-family: 'Noto Sans Georgian';
+    src: url('/fonts/noto/NotoSansGeorgian-Regular.woff2') format('woff2');
     font-weight: 400;
     font-style: normal;
     font-display: block;
 }
 
 @font-face {
-    font-family: 'BPG SSP Crystal';
-    src: url('/fonts/crystal/BPGSSPCrystal-Bold.woff2') format('woff2');
+    font-family: 'Noto Sans Georgian';
+    src: url('/fonts/noto/NotoSansGeorgian-Medium.woff2') format('woff2');
+    font-weight: 500;
+    font-style: normal;
+    font-display: block;
+}
+
+@font-face {
+    font-family: 'Noto Sans Georgian';
+    src: url('/fonts/noto/NotoSansGeorgian-SemiBold.woff2') format('woff2');
+    font-weight: 600;
+    font-style: normal;
+    font-display: block;
+}
+
+@font-face {
+    font-family: 'Noto Sans Georgian';
+    src: url('/fonts/noto/NotoSansGeorgian-Bold.woff2') format('woff2');
     font-weight: 700;
     font-style: normal;
     font-display: block;
 }
 
 @font-face {
-    font-family: 'BPG SSP Crystal';
-    src: url('/fonts/crystal/BPGSSPCrystal-Italic.woff2') format('woff2');
-    font-weight: 400;
-    font-style: italic;
-    font-display: block;
-}
-
-@font-face {
-    font-family: 'BPG SSP Crystal';
-    src: url('/fonts/crystal/BPGSSPCrystal-BoldItalic.woff2') format('woff2');
-    font-weight: 700;
-    font-style: italic;
-    font-display: block;
-}
-
-@font-face {
-    font-family: 'BPG SSP Crystal Caps';
-    src: url('/fonts/crystal/BPGSSPCrystalCaps-Regular.woff2') format('woff2');
-    font-weight: 400;
+    font-family: 'Noto Sans Georgian';
+    src: url('/fonts/noto/NotoSansGeorgian-ExtraBold.woff2') format('woff2');
+    font-weight: 800;
     font-style: normal;
     font-display: block;
 }
 
 @font-face {
-    font-family: 'BPG SSP Crystal Caps';
-    src: url('/fonts/crystal/BPGSSPCrystalCaps-Bold.woff2') format('woff2');
-    font-weight: 700;
+    font-family: 'Noto Sans Georgian';
+    src: url('/fonts/noto/NotoSansGeorgian-Black.woff2') format('woff2');
+    font-weight: 900;
     font-style: normal;
-    font-display: block;
-}
-
-@font-face {
-    font-family: 'BPG SSP Crystal Caps';
-    src: url('/fonts/crystal/BPGSSPCrystalCaps-Italic.woff2') format('woff2');
-    font-weight: 400;
-    font-style: italic;
-    font-display: block;
-}
-
-@font-face {
-    font-family: 'BPG SSP Crystal Caps';
-    src: url('/fonts/crystal/BPGSSPCrystalCaps-BoldItalic.woff2') format('woff2');
-    font-weight: 700;
-    font-style: italic;
     font-display: block;
 }
 
 @font-face {
     font-family: 'MILI Cyrillic';
-    src: url('/fonts/crystal/MiliCyrillic-Regular.woff2') format('woff2');
+    src: url('/fonts/noto/MiliCyrillic-Regular.woff2') format('woff2');
     font-weight: 400;
     font-style: normal;
     font-display: block;
@@ -74,7 +82,7 @@
 
 @font-face {
     font-family: 'MILI Cyrillic';
-    src: url('/fonts/crystal/MiliCyrillic-Bold.woff2') format('woff2');
+    src: url('/fonts/noto/MiliCyrillic-Bold.woff2') format('woff2');
     font-weight: 700;
     font-style: normal;
     font-display: block;
@@ -83,7 +91,7 @@
 
 @font-face {
     font-family: 'MILI Cyrillic';
-    src: url('/fonts/crystal/MiliCyrillic-Italic.woff2') format('woff2');
+    src: url('/fonts/noto/MiliCyrillic-Italic.woff2') format('woff2');
     font-weight: 400;
     font-style: italic;
     font-display: block;
@@ -92,17 +100,16 @@
 
 @font-face {
     font-family: 'MILI Cyrillic';
-    src: url('/fonts/crystal/MiliCyrillic-BoldItalic.woff2') format('woff2');
+    src: url('/fonts/noto/MiliCyrillic-BoldItalic.woff2') format('woff2');
     font-weight: 700;
     font-style: italic;
     font-display: block;
     unicode-range: U+0400-052F, U+2DE0-2DFF, U+A640-A69F;
 }
 
-/* CAPS is for short headings/categories; body copy and controls stay regular. */
 :root {
-    --mili-font-body: 'BPG SSP Crystal', 'MILI Cyrillic';
-    --mili-font-caps: 'BPG SSP Crystal Caps', 'BPG SSP Crystal', 'MILI Cyrillic';
+    --mili-font-body: 'Noto Sans Georgian', 'MILI Cyrillic';
+    --mili-font-caps: 'Noto Sans Georgian', 'MILI Cyrillic';
 }
 
 html,
@@ -113,7 +120,7 @@ body {
     max-width: 100%;
     overflow-x: hidden;
     font-family: var(--mili-font-body);
-    font-synthesis: none;
+    font-synthesis: style;
     line-height: 1.5;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
@@ -143,7 +150,7 @@ h5, h6 {
 button, input, textarea, select, code, pre, kbd, samp,
 .react-tel-input, .react-tel-input .form-control {
     font-family: var(--mili-font-body);
-    font-synthesis: none;
+    font-synthesis: style;
 }
 
 strong, b { font-weight: 700; }
@@ -153,7 +160,7 @@ em, i, cite { font-style: italic; }
 .gm-style, .gm-style .gm-style-iw,
 .pac-container, .pac-item, .pac-item-query {
     font-family: var(--mili-font-body) !important;
-    font-synthesis: none;
+    font-synthesis: style;
 }
 
 html[data-theme="dark"],

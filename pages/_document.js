@@ -46,21 +46,14 @@ class CustomDocument extends Document {
           {/* Local faces prevent a font-CDN dependency and late primary-face swaps. */}
           <link
             rel="preload"
-            href="/fonts/crystal/BPGSSPCrystal-Regular.woff2"
+            href="/fonts/noto/NotoSansGeorgian-Regular.woff2"
             as="font"
             type="font/woff2"
             crossOrigin="anonymous"
           />
           <link
             rel="preload"
-            href="/fonts/crystal/BPGSSPCrystal-Bold.woff2"
-            as="font"
-            type="font/woff2"
-            crossOrigin="anonymous"
-          />
-          <link
-            rel="preload"
-            href="/fonts/crystal/BPGSSPCrystalCaps-Bold.woff2"
+            href="/fonts/noto/NotoSansGeorgian-Bold.woff2"
             as="font"
             type="font/woff2"
             crossOrigin="anonymous"
