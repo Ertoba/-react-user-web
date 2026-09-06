@@ -11,12 +11,12 @@ permissions:
 jobs:
   audit:
     runs-on: ubuntu-latest
-    timeout-minutes: 60
+    timeout-minutes: 90
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
         with:
-          node-version: 20
+          node-version: 24
           cache: yarn
       - name: Yarn
         run: npm install -g yarn@1.22.22
@@ -33,37 +33,26 @@ jobs:
           files=[p for root in roots if root.exists() for p in root.rglob('*') if p.is_file() and p.suffix in exts]
           text={str(p):p.read_text(encoding='utf-8',errors='ignore') for p in files}
           page_files=[p for p in files if str(p).startswith('pages/') and p.suffix in {'.js','.jsx','.ts','.tsx'} and not p.name.startswith('_') and '/api/' not in str(p)]
-          static_routes=[]
+          static_routes=[]; dynamic_routes=[]
           for p in page_files:
             rel=p.relative_to('pages').with_suffix('')
             parts=list(rel.parts)
-            if any('[' in x or ']' in x for x in parts): continue
             if parts[-1]=='index': parts=parts[:-1]
-            route='/'+'/'.join(parts)
-            static_routes.append(route if route!='/' else '/')
+            route='/'+'/'.join(parts); route=route if route!='/' else '/'
+            (dynamic_routes if any('[' in x or ']' in x for x in parts) else static_routes).append(route)
           def n(rx): return sum(len(re.findall(rx,s,re.I|re.M)) for s in text.values())
           inv={
-            'source_files':len(files),
-            'page_files':len(page_files),
-            'static_routes':len(set(static_routes)),
+            'source_files':len(files),'page_files':len(page_files),'static_routes':len(set(static_routes)),'dynamic_routes':len(set(dynamic_routes)),
             'components':sum(1 for p in files if '/components/' in str(p).replace('\\','/')),
-            'forms':n(r'<(?:form|Formik|TextField|Select|Checkbox|Radio)\b'),
-            'buttons_links':n(r'<(?:Button|IconButton|button|a|Link)\b'),
-            'dialogs_drawers':n(r'<(?:Dialog|Modal|Drawer|BottomSheet|Popover|Menu)\b'),
-            'loaders_skeletons':n(r'\b(?:Skeleton|CircularProgress|LinearProgress|loading|spinner|Lottie)\b'),
+            'forms':n(r'<(?:form|Formik|TextField|Select|Checkbox|Radio)\b'),'buttons_links':n(r'<(?:Button|IconButton|button|a|Link)\b'),
+            'dialogs_drawers':n(r'<(?:Dialog|Modal|Drawer|BottomSheet|Popover|Menu)\b'),'loaders_skeletons':n(r'\b(?:Skeleton|CircularProgress|LinearProgress|loading|spinner|Lottie)\b'),
             'animations_transitions':n(r'\b(?:transition|animation|Fade|Slide|Collapse|Grow|Zoom|CSSTransition|TransitionGroup)\b'),
-            'console_calls':n(r'console\.(?:log|warn|error|debug)\s*\('),
-            'important_rules':n(r'!important'),
-            'zindex_rules':n(r'zIndex\s*:|z-index\s*:'),
+            'console_calls':n(r'console\.(?:log|warn|error|debug)\s*\('),'important_rules':n(r'!important'),'zindex_rules':n(r'zIndex\s*:|z-index\s*:'),
             'absolute_fixed_sticky':n(r'position\s*:\s*["\']?(?:absolute|fixed|sticky)|position\s*:\s*(?:absolute|fixed|sticky)'),
             'hardcoded_font_px':n(r'fontSize\s*:\s*["\']?\d+(?:\.\d+)?px|font-size\s*:\s*\d+(?:\.\d+)?px'),
             'hardcoded_dimensions_px':n(r'\b(?:width|height|minWidth|maxWidth|minHeight|maxHeight)\s*:\s*["\']?\d{2,}(?:\.\d+)?px'),
-            'text_transform':n(r'textTransform\s*:|text-transform\s*:'),
-            'overflow_rules':n(r'overflow(?:X|Y)?\s*:|overflow(?:-x|-y)?\s*:'),
-            'mui_media_queries':n(r'useMediaQuery\s*\(|breakpoints\.(?:up|down|between|only)\s*\('),
-            'aria_attributes':n(r'aria-[a-z-]+\s*='),
-            'alt_attributes':n(r'\balt\s*='),
-          }
+            'text_transform':n(r'textTransform\s*:|text-transform\s*:'),'overflow_rules':n(r'overflow(?:X|Y)?\s*:|overflow(?:-x|-y)?\s*:'),
+            'mui_media_queries':n(r'useMediaQuery\s*\(|breakpoints\.(?:up|down|between|only)\s*\('),'aria_attributes':n(r'aria-[a-z-]+\s*='),'alt_attributes':n(r'\balt\s*=')}
           risks=[]
           checks=[('console',r'console\.(?:log|warn|error|debug)\s*\(',2),('important',r'!important',2),('zindex',r'zIndex\s*:\s*(?:[1-9]\d{2,})|z-index\s*:\s*(?:[1-9]\d{2,})',2),('absolute_fixed',r'position\s*:\s*["\']?(?:absolute|fixed)',1),('large_font',r'fontSize\s*:\s*["\']?(?:[3-9]\d|\d{3,})px',2),('fixed_dimension',r'\b(?:width|height)\s*:\s*["\']?(?:[5-9]\d\d|\d{4,})px',2)]
           for p,s in text.items():
@@ -73,7 +62,7 @@ jobs:
               if c: score+=min(c,5)*w; sig.append(f'{tag}:{c}')
             if score>=4: risks.append({'file':p,'score':score,'signals':sig})
           risks.sort(key=lambda x:(-x['score'],x['file']))
-          report={'inventory':inv,'static_routes':sorted(set(static_routes)),'high_risk_files':risks[:160]}
+          report={'inventory':inv,'static_routes':sorted(set(static_routes)),'dynamic_routes':sorted(set(dynamic_routes)),'high_risk_files':risks[:200]}
           Path('audit-static.json').write_text(json.dumps(report,indent=2),encoding='utf-8')
           print(json.dumps(report,indent=2))
           PY
@@ -102,15 +91,22 @@ jobs:
         if: always()
         shell: bash
         run: |
-          if [ "$(cat build.exit)" != "0" ]; then
+          if [ "$(cat build.exit 2>/dev/null || echo 1)" != "0" ]; then
             echo "Build failed; browser QA skipped." | tee browser-qa.txt
             exit 0
           fi
           npm install --no-save --legacy-peer-deps playwright@1.55.0
           npx playwright install --with-deps chromium firefox webkit
           nohup yarn start -p 3000 > server.txt 2>&1 &
-          for i in $(seq 1 60); do curl -fsS http://127.0.0.1:3000 >/dev/null && break; sleep 1; done
-          cat > /tmp/browser-audit.mjs <<'JS'
+          SERVER_PID=$!
+          READY=0
+          for i in $(seq 1 90); do
+            if curl -fsS http://127.0.0.1:3000 >/dev/null 2>&1; then READY=1; break; fi
+            if ! kill -0 "$SERVER_PID" 2>/dev/null; then echo "Next.js server exited before becoming ready."; cat server.txt || true; exit 1; fi
+            sleep 1
+          done
+          if [ "$READY" != "1" ]; then echo "Next.js server did not become ready within 90 seconds."; cat server.txt || true; exit 1; fi
+          cat > browser-audit.mjs <<'JS'
           import fs from 'fs';
           import { chromium, firefox, webkit } from 'playwright';
           const staticReport=JSON.parse(fs.readFileSync('audit-static.json','utf8'));
@@ -118,71 +114,78 @@ jobs:
           const base='http://127.0.0.1:3000';
           const widths=[320,360,375,390,393,412,430,480,768,1024,1280,1440];
           const results=[];
-          async function inspect(browserType,name,widthList){
+          const totals={pagesVisited:0,navigationErrors:0,consoleErrors:0,pageErrors:0,requestFailures:0,horizontalOverflow:0,brokenImages:0,clippedText:0,oversizedElements:0,smallTapTargets:0,typographyRisks:0,notoSansMissing:0};
+          const uniq=(items)=>[...new Set(items)];
+          async function inspect(browserType,name){
             const browser=await browserType.launch({headless:true});
-            for(const width of widthList){
-              const context=await browser.newContext({viewport:{width,height:Math.max(700,Math.round(width*1.8))}});
+            for(const width of widths){
+              const context=await browser.newContext({viewport:{width,height:Math.max(700,Math.round(width*1.8))},reducedMotion:'reduce'});
               for(const route of routes){
+                totals.pagesVisited++;
                 const page=await context.newPage();
                 const consoleErrors=[]; const pageErrors=[]; const failed=[];
-                page.on('console',m=>{if(['error','warning'].includes(m.type())) consoleErrors.push(m.text().slice(0,400));});
-                page.on('pageerror',e=>pageErrors.push(String(e).slice(0,400)));
+                page.on('console',m=>{if(['error','warning'].includes(m.type())){const t=m.text().slice(0,500); if(!t.includes('Download the React DevTools')) consoleErrors.push(t);}});
+                page.on('pageerror',e=>pageErrors.push(String(e).slice(0,500)));
                 page.on('requestfailed',r=>failed.push(`${r.method()} ${r.url()} :: ${r.failure()?.errorText||''}`.slice(0,500)));
-                let status=null, navError=null;
-                try{ const resp=await page.goto(base+route,{waitUntil:'domcontentloaded',timeout:15000}); status=resp?.status()??null; await page.waitForTimeout(700);}catch(e){navError=String(e).slice(0,500);}
+                let status=null,navError=null;
+                try{const resp=await page.goto(base+route,{waitUntil:'domcontentloaded',timeout:20000}); status=resp?.status()??null; await page.waitForTimeout(350);}catch(e){navError=String(e).slice(0,500);}
                 let metrics={};
                 if(!navError){
                   try{metrics=await page.evaluate(()=>{
-                    const doc=document.documentElement;
-                    const body=document.body;
+                    const doc=document.documentElement,body=document.body;
                     const overflowX=Math.max(doc.scrollWidth,body?.scrollWidth||0)-window.innerWidth;
-                    const brokenImages=[...document.images].filter(i=>i.complete&&i.naturalWidth===0).slice(0,20).map(i=>i.currentSrc||i.src||'');
-                    const clipped=[];
-                    const oversized=[];
-                    const smallTargets=[];
+                    const brokenImages=[...document.images].filter(i=>i.complete&&i.naturalWidth===0).slice(0,30).map(i=>i.currentSrc||i.src||'');
+                    const clipped=[],oversized=[],smallTargets=[],typography=[];
+                    const selector=(el)=>{const id=el.id?`#${el.id}`:''; const cls=typeof el.className==='string'&&el.className.trim()?'.'+el.className.trim().split(/\s+/).slice(0,2).join('.'):''; return `${el.tagName}${id}${cls}`.slice(0,160);};
                     for(const el of document.querySelectorAll('body *')){
-                      const cs=getComputedStyle(el); if(cs.display==='none'||cs.visibility==='hidden') continue;
+                      const cs=getComputedStyle(el); if(cs.display==='none'||cs.visibility==='hidden'||Number(cs.opacity)===0) continue;
                       const r=el.getBoundingClientRect(); if(r.width<1||r.height<1) continue;
-                      if((el.scrollWidth-el.clientWidth>3||el.scrollHeight-el.clientHeight>3) && ['hidden','clip'].includes(cs.overflow) && el.textContent?.trim()){
-                        clipped.push({tag:el.tagName,text:el.textContent.trim().slice(0,120),cw:el.clientWidth,sw:el.scrollWidth,ch:el.clientHeight,sh:el.scrollHeight});
+                      const text=(el.textContent||'').trim();
+                      if(text&&(el.scrollWidth-el.clientWidth>3||el.scrollHeight-el.clientHeight>3)&&[cs.overflow,cs.overflowX,cs.overflowY].some(v=>['hidden','clip'].includes(v))) clipped.push({selector:selector(el),text:text.slice(0,140),cw:el.clientWidth,sw:el.scrollWidth,ch:el.clientHeight,sh:el.scrollHeight});
+                      if(r.right>window.innerWidth+3||r.left<-3) oversized.push({selector:selector(el),text:text.slice(0,100),left:Math.round(r.left),right:Math.round(r.right),w:Math.round(r.width)});
+                      if(text&&/^(H[1-6]|BUTTON|A|LABEL|P|SPAN|DIV)$/.test(el.tagName)){
+                        const fs=parseFloat(cs.fontSize)||0; const lh=cs.lineHeight==='normal'?fs*1.2:parseFloat(cs.lineHeight)||0; const mobile=window.innerWidth<=480;
+                        if((lh>0&&fs>0&&lh/fs<1.08)||(mobile&&/^H[1-3]$/.test(el.tagName)&&fs>36)||(mobile&&['BUTTON','A'].includes(el.tagName)&&fs>24)) typography.push({selector:selector(el),text:text.slice(0,140),fontSize:fs,lineHeight:lh,height:Math.round(r.height)});
                       }
-                      if(r.right>window.innerWidth+3||r.left<-3) oversized.push({tag:el.tagName,text:(el.textContent||'').trim().slice(0,80),left:Math.round(r.left),right:Math.round(r.right),w:Math.round(r.width)});
                     }
-                    for(const el of document.querySelectorAll('button,a,input,select,textarea,[role="button"]')){
-                      const r=el.getBoundingClientRect(); const cs=getComputedStyle(el); if(cs.display==='none'||cs.visibility==='hidden'||r.width<1||r.height<1) continue;
-                      if(r.width<44||r.height<44) smallTargets.push({tag:el.tagName,text:(el.textContent||el.getAttribute('aria-label')||'').trim().slice(0,80),w:Math.round(r.width),h:Math.round(r.height)});
-                    }
-                    return {overflowX,brokenImages,clipped:clipped.slice(0,30),oversized:oversized.slice(0,30),smallTargets:smallTargets.slice(0,30),title:document.title,url:location.href};
+                    for(const el of document.querySelectorAll('button,a,input,select,textarea,[role="button"]')){const r=el.getBoundingClientRect(),cs=getComputedStyle(el); if(cs.display==='none'||cs.visibility==='hidden'||r.width<1||r.height<1) continue; if(r.width<44||r.height<44) smallTargets.push({selector:selector(el),text:(el.textContent||el.getAttribute('aria-label')||'').trim().slice(0,100),w:Math.round(r.width),h:Math.round(r.height)});}
+                    const fontLoaded=document.fonts?(document.fonts.check('16px "Noto Sans Georgian"')||document.fonts.check('16px "Noto Sans"')):true;
+                    return {overflowX,brokenImages,clipped:clipped.slice(0,40),oversized:oversized.slice(0,40),smallTargets:smallTargets.slice(0,40),typography:typography.slice(0,40),fontLoaded,bodyFont:getComputedStyle(document.body).fontFamily,title:document.title,url:location.href};
                   });}catch(e){metrics.evaluateError=String(e).slice(0,500);}
                 }
-                const issue=navError||pageErrors.length||consoleErrors.length||metrics.overflowX>3||metrics.brokenImages?.length||metrics.clipped?.length||metrics.oversized?.length;
-                if(issue) results.push({browser:name,width,route,status,navError,consoleErrors:consoleErrors.slice(0,10),pageErrors:pageErrors.slice(0,10),failed:failed.slice(0,10),...metrics});
+                totals.navigationErrors+=navError?1:0; totals.consoleErrors+=consoleErrors.length; totals.pageErrors+=pageErrors.length; totals.requestFailures+=failed.length; totals.horizontalOverflow+=metrics.overflowX>3?1:0; totals.brokenImages+=metrics.brokenImages?.length||0; totals.clippedText+=metrics.clipped?.length||0; totals.oversizedElements+=metrics.oversized?.length||0; totals.smallTapTargets+=metrics.smallTargets?.length||0; totals.typographyRisks+=metrics.typography?.length||0; totals.notoSansMissing+=metrics.fontLoaded===false?1:0;
+                const issue=navError||pageErrors.length||consoleErrors.length||(status&&status>=400)||metrics.overflowX>3||metrics.brokenImages?.length||metrics.clipped?.length||metrics.oversized?.length||metrics.smallTargets?.length||metrics.typography?.length||metrics.fontLoaded===false||metrics.evaluateError;
+                if(issue) results.push({browser:name,width,route,status,navError,consoleErrors:uniq(consoleErrors).slice(0,12),pageErrors:uniq(pageErrors).slice(0,12),failed:uniq(failed).slice(0,12),...metrics});
                 await page.close();
               }
               await context.close();
             }
             await browser.close();
           }
-          await inspect(chromium,'chromium',widths);
-          await inspect(firefox,'firefox',[390,1440]);
-          await inspect(webkit,'webkit',[390,1440]);
-          fs.writeFileSync('browser-qa.json',JSON.stringify({routesChecked:routes.length,results},null,2));
-          console.log(JSON.stringify({routesChecked:routes.length,issues:results.length},null,2));
+          await inspect(chromium,'chromium');
+          await inspect(firefox,'firefox');
+          await inspect(webkit,'webkit');
+          const grouped={};
+          for(const row of results){grouped[row.route]??={occurrences:0,browsers:new Set(),widths:new Set(),signals:new Set()}; const g=grouped[row.route]; g.occurrences++; g.browsers.add(row.browser); g.widths.add(row.width); if(row.navError)g.signals.add('navigation'); if(row.consoleErrors?.length)g.signals.add('console'); if(row.pageErrors?.length)g.signals.add('pageerror'); if(row.overflowX>3)g.signals.add('overflow-x'); if(row.brokenImages?.length)g.signals.add('broken-image'); if(row.clipped?.length)g.signals.add('clipped'); if(row.oversized?.length)g.signals.add('oversized'); if(row.smallTargets?.length)g.signals.add('tap-target'); if(row.typography?.length)g.signals.add('typography'); if(row.fontLoaded===false)g.signals.add('font');}
+          const routeSummary=Object.entries(grouped).map(([route,g])=>({route,occurrences:g.occurrences,browsers:[...g.browsers],widths:[...g.widths].sort((a,b)=>a-b),signals:[...g.signals]})).sort((a,b)=>b.occurrences-a.occurrences||a.route.localeCompare(b.route));
+          const report={routesChecked:routes.length,widths,browsers:['chromium','firefox','webkit'],totals,issueSnapshots:results.length,routeSummary,results};
+          fs.writeFileSync('browser-qa.json',JSON.stringify(report,null,2));
+          fs.writeFileSync('browser-qa-summary.json',JSON.stringify({routesChecked:report.routesChecked,widths:report.widths,browsers:report.browsers,totals:report.totals,issueSnapshots:report.issueSnapshots,routeSummary:report.routeSummary.slice(0,80)},null,2));
+          console.log(JSON.stringify({routesChecked:report.routesChecked,widths:report.widths.length,browsers:report.browsers,totals:report.totals,issueSnapshots:report.issueSnapshots,topRoutes:report.routeSummary.slice(0,20)},null,2));
           JS
-          node /tmp/browser-audit.mjs 2>&1 | tee browser-qa.txt
+          node ./browser-audit.mjs 2>&1 | tee browser-qa.txt
       - name: Summary
         if: always()
         shell: bash
         run: |
           echo "## Production QA Audit" >> "$GITHUB_STEP_SUMMARY"
-          echo "ESLint exit: $(cat eslint.exit 2>/dev/null || echo n/a)" >> "$GITHUB_STEP_SUMMARY"
-          echo "Typecheck exit: $(cat typecheck.exit 2>/dev/null || echo n/a)" >> "$GITHUB_STEP_SUMMARY"
-          echo "Build exit: $(cat build.exit 2>/dev/null || echo n/a)" >> "$GITHUB_STEP_SUMMARY"
-          echo '```json' >> "$GITHUB_STEP_SUMMARY"
-          head -140 audit-static.json >> "$GITHUB_STEP_SUMMARY" || true
-          echo '```' >> "$GITHUB_STEP_SUMMARY"
-          tail -80 browser-qa.txt >> "$GITHUB_STEP_SUMMARY" || true
-      - uses: actions/upload-artifact@v4
+          echo "- ESLint exit: $(cat eslint.exit 2>/dev/null || echo n/a)" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Typecheck exit: $(cat typecheck.exit 2>/dev/null || echo n/a)" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Build exit: $(cat build.exit 2>/dev/null || echo n/a)" >> "$GITHUB_STEP_SUMMARY"
+          echo "" >> "$GITHUB_STEP_SUMMARY"
+          echo "### Browser QA" >> "$GITHUB_STEP_SUMMARY"
+          if [ -f browser-qa-summary.json ]; then echo '```json' >> "$GITHUB_STEP_SUMMARY"; cat browser-qa-summary.json >> "$GITHUB_STEP_SUMMARY"; echo '```' >> "$GITHUB_STEP_SUMMARY"; else tail -100 browser-qa.txt >> "$GITHUB_STEP_SUMMARY" 2>/dev/null || true; fi
+      - uses: actions/upload-artifact@v7
         if: always()
         with:
           name: production-audit
@@ -197,3 +200,4 @@ jobs:
             server.txt
             browser-qa.txt
             browser-qa.json
+            browser-qa-summary.json
