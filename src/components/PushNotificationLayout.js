@@ -87,7 +87,7 @@ const PushNotificationLayout = ({
   };
 
   useEffect(() => {
-    if (typeof window !== undefined) {
+    if (typeof window !== "undefined") {
       setUserToken(localStorage.getItem("token"));
       //userToken = window.localStorage.getItem('token')
     }
@@ -97,10 +97,10 @@ const PushNotificationLayout = ({
   const { mutate } = useStoreFcm();
 
   useEffect(() => {
-    if (userToken) {
+    if (userToken && fcmToken) {
       mutate(fcmToken);
     }
-  }, [fcmToken]);
+  }, [fcmToken, userToken, mutate]);
 
   const clickHandler = () => {
     if (notification.type === "message") {

@@ -38,7 +38,7 @@ const CheckOutSelectedAddress = ({
         <CustomStackFullWidth direction="row" alignItems="flex-start">
           <Radio
             checked
-            row
+
             aria-labelledby="demo-row-radio-buttons-group-label"
             name="row-radio-buttons-group"
             sx={{ marginTop: "-4px" }}

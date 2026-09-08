@@ -13,8 +13,9 @@ import {
 import bgImg from "../../../public/bgimge.jpg";
 
 import React from "react";
+import { omitStyleProps } from "../../utils/styleProps";
 
-export const AppBarStyle = styled(AppBar)(({ theme, scrolling, isSmall }) => ({
+export const AppBarStyle = styled(AppBar, { shouldForwardProp: omitStyleProps('scrolling', 'isSmall') })(({ theme, scrolling, isSmall }) => ({
   top: !scrolling ? "0" : isSmall ? "0px" : "-30px",
   background: `${theme.palette.mode === "light" && "#fff !important"}`,
   transition: "all 0.4s ease",

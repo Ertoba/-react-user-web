@@ -1,3 +1,4 @@
+import { omitStyleProps } from "../utils/styleProps";
 import {
 	Alert,
 	alpha,
@@ -91,7 +92,7 @@ export const CustomPaper = styled(Paper)(({ theme, width, height }) => ({
 	textAlign: "center",
 }));
 
-export const CustomPaperBigCard = styled(Paper)(
+export const CustomPaperBigCard = styled(Paper, { shouldForwardProp: omitStyleProps('backgroundcolor','nopadding','minheight','noboxshadow') })(
 	({
 		theme,
 		nopadding,
@@ -322,7 +323,7 @@ export const CustomFab = styled(Fab)(({ theme, module_type }) => ({
 		height: "30px",
 	},
 }));
-export const CustomImageContainerStyled = styled(Box)(
+export const CustomImageContainerStyled = styled(Box, { shouldForwardProp: omitStyleProps('borderBottomRightRadius','mdHeight','sm_width','max_width','margin_bottom','smheight','objectfit','minwidth','border_radius','sm_mb','sm_max_width','cursor','aspect_ratio','bg') })(
 	({
 		theme,
 		sm_width,
@@ -453,7 +454,7 @@ export const CustomTypographyGray = styled(Typography)(
 		textDecoration: textdecoration,
 	})
 );
-export const CustomBoxForTips = styled(Box)(({ theme, active }) => ({
+export const CustomBoxForTips = styled(Box, { shouldForwardProp: omitStyleProps('active') })(({ theme, active }) => ({
 	paddingInline: "10px",
 	height: "50px",
 	width: "auto",
@@ -537,7 +538,7 @@ export const AddressTypeStack = styled(Stack)(
 	})
 );
 
-export const UserInfoGrid = styled(Grid)(({ theme, page, userToken }) => ({
+export const UserInfoGrid = styled(Grid, { shouldForwardProp: omitStyleProps('page','userToken') })(({ theme, page, userToken }) => ({
 	position: "relative",
 	zIndex: 99,
 	minHeight: "100px",

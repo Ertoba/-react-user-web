@@ -38,6 +38,10 @@ export const getMessagingObject = async () => {
 
 // fetchToken function
 export const fetchToken = async (setTokenFound, setFcmToken) => {
+  if (typeof window === 'undefined' || !('Notification' in window) || Notification.permission !== 'granted') {
+    setTokenFound(false);
+    return null;
+  }
   try {
     const messaging = await getMessagingObject();
     if (!messaging) return;
@@ -50,9 +54,10 @@ export const fetchToken = async (setTokenFound, setFcmToken) => {
     if (currentToken) {
       setTokenFound(true);
       setFcmToken(currentToken);
+      return currentToken;
     } else {
       setTokenFound(false);
-      setFcmToken();
+      setFcmToken('');
     }
   } catch (err) {
     console.error("Token fetch error:", err);

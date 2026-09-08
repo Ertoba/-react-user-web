@@ -139,7 +139,7 @@ const AddPaymentMethod = (props) => {
 
   return (
     <CustomStackFullWidth spacing={2}>
-      <DeliveryCaption const id="demo-row-radio-buttons-group-label">
+      <DeliveryCaption id="demo-row-radio-buttons-group-label">
         {t("Payment Method")}
       </DeliveryCaption>
       <PaymentMethodBox

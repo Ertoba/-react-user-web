@@ -1811,5 +1811,8 @@ export const english = {
   "ai_chat_ui_categories_hint": "Browse by what you need",
   "ai_chat_ui_latest": "Latest message",
   "ai_chat_ui_history": "History",
-  "ai_chat_ui_support": "Support"
+  "ai_chat_ui_support": "Support",
+  "Enter a valid phone number.": "Enter a valid phone number.",
+  "Enable order notifications": "Enable order notifications",
+  "Unable to enable notifications. Please try again.": "Unable to enable notifications. Please try again."
 };

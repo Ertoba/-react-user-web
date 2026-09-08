@@ -1,4 +1,5 @@
 const nextConfig = {
+  distDir: process.env.MILI_QA === '1' ? '.next-qa' : '.next',
   reactStrictMode: true,
   outputFileTracingRoot: __dirname,
   experimental: {

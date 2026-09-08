@@ -16,6 +16,7 @@ import { CustomTypographyEllipsis } from "styled-components/CustomTypographies.s
 import GridViewRoundedIcon from "@mui/icons-material/GridViewRounded";
 import ProfileTabPopover from "../profile/ProfileTabPopover";
 import { getImageUrl } from "utils/CustomFunctions";
+import NotificationOptIn from "../notifications/NotificationOptIn";
 
 const UserDetails = ({
   data,
@@ -88,6 +89,7 @@ const UserDetails = ({
           </Stack>
         )}
       </Stack>
+      <NotificationOptIn />
       <ProfileTabPopover
         anchorEl={anchorRef.current}
         onClose={() => setOpenPopover(false)}

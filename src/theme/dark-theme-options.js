@@ -128,7 +128,7 @@ const toolTipColor = "#88908C";
 const paperBoxShadow = "#E5EAF1";
 export const darkThemeOptions = {
   components: {
-     MuiUseMediaQuery: { defaultProps: { noSsr: true } }, // ⚡ Fix hydration
+     MuiUseMediaQuery: { defaultProps: { noSsr: false } },
     MuiAvatar: {
       styleOverrides: {
         root: {
@@ -172,8 +172,8 @@ export const darkThemeOptions = {
         },
         input: {
           "&:-webkit-autofill": {
-            "-webkit-box-shadow": "0 0 0 100px #282929 inset",
-            "-webkit-text-fill-color": "#fff",
+            WebkitBoxShadow: "0 0 0 100px #282929 inset",
+            WebkitTextFillColor: "#fff",
           },
         },
       },

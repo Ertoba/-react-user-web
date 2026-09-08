@@ -1,3 +1,4 @@
+import { recoveryValidation } from "../../../utils/recoveryValidation.mjs";
 import React, {useEffect, useRef, useState} from "react";
 import {alpha, Box, InputAdornment, Stack, Typography, useTheme} from "@mui/material";
 import { useFormik } from "formik";
@@ -5,7 +6,6 @@ import { CustomStackFullWidth, CustomTextField } from "styled-components/CustomS
 import { useTranslation } from "react-i18next";
 import {useDispatch, useSelector} from "react-redux";
 import LoadingButton from "@mui/lab/LoadingButton";
-import * as Yup from "yup";
 import toast from "react-hot-toast";
 import simage from "../../../../public/static/gotosupport.png"
 import CustomPhoneInput from "../../custom-component/CustomPhoneInput";
@@ -72,25 +72,7 @@ const ForgotPasswordNumberForm = ({
       email:phoneOrEmail==="email"?data? data?.email:"":"",
       verification_method:phoneOrEmail
     },
-    validationSchema: Yup.object({
-      phone: Yup.string().when('verification_method', {
-        is: phoneOrEmail==="phone",
-        then: (schema) =>
-          schema
-            .required(t("Please provide a phone number"))
-            .matches(/^\d{10}$/, t("Phone number must be exactly 10 digits")),
-        otherwise: (schema) => schema.notRequired(),
-      }),
-      email: Yup.string().when('verification_method', {
-        is: phoneOrEmail==="email",
-        then: (schema) =>
-          schema
-            .required(t("Please provide an email address"))
-            .email(t("Please enter a valid email address")),
-        otherwise: (schema) => schema.notRequired(),
-      }),
-    })
-,
+    validationSchema: recoveryValidation({ method: phoneOrEmail, country: configData?.country, t }),
     onSubmit: async (values, helpers) => {
      
       

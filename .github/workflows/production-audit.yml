@@ -1,0 +1,85 @@
+name: Production QA Audit
+
+on:
+  push:
+    branches: [main, audit/production-qa-2026-09-06]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: production-qa-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: yarn
+      - run: npm install -g yarn@1.22.22
+      - run: yarn install --frozen-lockfile
+      - name: Inventory every source file and route
+        run: python3 .qa/inventory.py
+      - name: ESLint
+        run: yarn lint
+      - name: TypeScript
+        if: ${{ !cancelled() }}
+        run: yarn type-check
+      - name: Typography regressions
+        if: ${{ !cancelled() }}
+        run: node --test tests/*.test.mjs
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: source-inventory
+          path: .qa/results/inventory.json
+          include-hidden-files: true
+
+  browsers:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    strategy:
+      fail-fast: false
+      matrix:
+        browser: [chromium, firefox, webkit]
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: yarn
+      - run: npm install -g yarn@1.22.22
+      - run: yarn install --frozen-lockfile
+      - name: Install isolated, locked browser tooling
+        run: npm ci --prefix .qa
+      - run: node .qa/node_modules/playwright/cli.js install --with-deps ${{ matrix.browser }}
+      - run: python3 .qa/inventory.py
+      - name: Build and test against local API fixtures
+        env:
+          QA_BROWSERS: ${{ matrix.browser }}
+        run: node .qa/run.mjs
+      - name: Summary
+        if: always()
+        run: |
+          echo '## Browser audit - ${{ matrix.browser }}' >> "$GITHUB_STEP_SUMMARY"
+          echo '```json' >> "$GITHUB_STEP_SUMMARY"
+          if [ -f .qa/results/summary.json ]; then
+            cat .qa/results/summary.json >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo '{"status":"incomplete - inspect the build/browser log"}' >> "$GITHUB_STEP_SUMMARY"
+          fi
+          echo '```' >> "$GITHUB_STEP_SUMMARY"
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: browser-audit-${{ matrix.browser }}
+          path: .qa/results/
+          include-hidden-files: true

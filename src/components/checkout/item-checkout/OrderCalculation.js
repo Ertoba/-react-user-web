@@ -15,7 +15,7 @@ import {
   getReferDiscount,
 } from "helper-functions/CardHelpers";
 import {getGuestId, getToken} from "helper-functions/getToken";
-import React, {useEffect, useState} from "react";
+import React, {useEffect} from "react";
 import { useTranslation } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
 import { setTotalAmount } from "redux/slices/cart";
@@ -66,7 +66,7 @@ const OrderCalculation = (props) => {
 
   const token = getToken();
   const { t } = useTranslation();
-  const [freeDelivery, setFreeDelivery] = useState("false");
+  const freeDelivery = couponDiscount?.coupon_type === "free_delivery" ? "true" : "false";
   const { profileInfo } = useSelector((state) => state.profileInfo);
   const tempExtraCharge = extraCharge ?? 0;
   const theme = useTheme();
@@ -85,8 +85,7 @@ const OrderCalculation = (props) => {
       })
     }
     }, [storeData,orderType,scheduleAt]);
-  const handleDeliveryFee = () => {
-    let price = getDeliveryFees(
+  const calculatedDeliveryFee = getDeliveryFees(
       storeData,
       configData,
       cartList,
@@ -101,9 +100,12 @@ const OrderCalculation = (props) => {
       surgePrice
 
     );
-console.log({price,zoneData});
+  useEffect(() => {
+    setDeliveryFee(orderType !== "delivery" ? 0 : calculatedDeliveryFee);
+  }, [calculatedDeliveryFee, orderType, setDeliveryFee]);
 
-    setDeliveryFee(orderType !== "delivery" ? 0 : price);
+  const handleDeliveryFee = () => {
+    const price = calculatedDeliveryFee;
     if (price === 0) {
       return <Typography>{t("Free")}</Typography>;
     } else {
@@ -130,7 +132,6 @@ console.log({price,zoneData});
     );
 
     if (couponDiscount && couponDiscount.coupon_type === "free_delivery") {
-      setFreeDelivery("true");
       return 0;
     } else {
       return getAmountWithSign(couponDiscountValue);
@@ -169,18 +170,22 @@ console.log({price,zoneData});
       taxAmount?.tax_amount,
       surgePrice
     );
-    setPayableAmount(totalAmount);
-    dispatch(setTotalAmount(totalAmount));
     return totalAmount;
   };
+  const calculatedTotal = handleOrderAmount();
+  useEffect(() => {
+    setPayableAmount(calculatedTotal);
+    dispatch(setTotalAmount(calculatedTotal));
+  }, [calculatedTotal, dispatch, setPayableAmount]);
+
   let diffDiscount={
     value:0
   }
   const discountedPrice = getProductDiscount(cartList, storeData,diffDiscount);
-  const totalAmountAfterPartial = handleOrderAmount() - walletBalance;
+  const totalAmountAfterPartial = calculatedTotal - walletBalance;
   const finalTotalAmount = profileInfo?.is_valid_for_discount
-    ? handleOrderAmount() - referDiscount
-    : handleOrderAmount();
+    ? calculatedTotal - referDiscount
+    : calculatedTotal;
 
   const text1 = t("After completing the order, you will receive a");
   const text2 = t(

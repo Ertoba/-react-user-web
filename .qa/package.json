@@ -1,0 +1,11 @@
+{
+  "name": "mili-browser-audit",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "audit": "node run.mjs"
+  },
+  "dependencies": {
+    "playwright": "1.63.0"
+  }
+}

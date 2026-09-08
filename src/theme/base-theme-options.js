@@ -15,10 +15,10 @@ export const baseThemeOptions = {
   },
 
   components: {
-    // ✅ GLOBAL FIX FOR useMediaQuery HYDRATION
+    // Match the server on the first render, then apply the browser breakpoint.
     MuiUseMediaQuery: {
       defaultProps: {
-        noSsr: true,
+        noSsr: false,
       },
     },
 

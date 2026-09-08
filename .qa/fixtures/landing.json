@@ -1,0 +1,306 @@
+{
+  "hero_section": {
+    "header_title": "$შენი ელ კომერცია!$",
+    "header_sub_title": "ყველა სერვისი ერთ პლატფორმაზე",
+    "header_tag_line": null,
+    "pick_location_title": "ძიებისთვის აირჩიე ლოკაცია"
+  },
+  "trust_section": {
+    "trust_section_status": 0,
+    "cards": [
+      {
+        "status": 1,
+        "title": "10+",
+        "sub_title": "მიტანილი შეკვეთა",
+        "image_full_url": "http://127.0.0.1:4319/fixture.svg"
+      },
+      {
+        "status": 1,
+        "title": "10+",
+        "sub_title": "კმაყოფილი მომხმარებელი",
+        "image_full_url": "http://127.0.0.1:4319/fixture.svg"
+      },
+      {
+        "status": 1,
+        "title": "10+",
+        "sub_title": "აქტიური ვენდორი",
+        "image_full_url": "http://127.0.0.1:4319/fixture.svg"
+      },
+      {
+        "status": 1,
+        "title": "10+",
+        "sub_title": "დელივერი",
+        "image_full_url": "http://127.0.0.1:4319/fixture.svg"
+      }
+    ]
+  },
+  "available_zone_section": {
+    "available_zone_status": 0,
+    "available_zone_title": "ხელმისაწვდომი მიტანის ზონები",
+    "available_zone_short_description": "<p><strong>ჩვენი მიწოდების სერვისი ინტეგრირებულია რეგიონების ფართო სპექტრზე. იმის გასაგებად, ვაწვდით თუ არა თქვენს მიდამოებში, გადახედეთ ჩვენს მიწოდების ზონების სიას.</strong></p>\r\n\r\n<p><strong>✅ 50+ აქტიური ზონები<br />\r\n🚚 ქსელის სწრაფი გაფართოება<br />\r\n&nbsp;⏱&nbsp; საშუალოდ მიწოდების დრო 15 წუთი<br />\r\n📦 ამანათი, ლუდი, საკვები და სხვა</strong></p>",
+    "available_zone_list": [
+      {
+        "id": 2,
+        "name": "თეთრიწყარო",
+        "display_name": "თეთრიწყარო",
+        "modules": [
+          "მარკეტი",
+          "მარკეტები",
+          "აფთიაქი",
+          "საკვები",
+          "ტექნიკა",
+          "ლუდი",
+          "ამანათი"
+        ]
+      }
+    ]
+  },
+  "promotional_banner_section": {
+    "promotion_banner_section_status": 0,
+    "promotion_banners_full_url": [
+      "http://127.0.0.1:4319/fixture.svg",
+      "http://127.0.0.1:4319/fixture.svg"
+    ]
+  },
+  "user_app_download_section": {
+    "download_user_app_section_status": 0,
+    "download_user_app_title": "სრულყოფილი, მრავალმოდულიანი ელ კომერცია.",
+    "download_user_app_sub_title": "მილი არის მრავალგანზომილებიანი სისტემა საკვების, ლუდის, ამანათებისა და წამლების მიწოდებისთვის, რომელიც შექმნილია პოპულარულ Laravel-ისა და Flutter-ის ფრეიმვორკებზე. მას გააჩნია ექვსი მოდული",
+    "download_user_app_image_full_url": "http://127.0.0.1:4319/fixture.svg",
+    "download_user_app_button_title": "ჩამოტვირთე მილი",
+    "download_user_app_button_sub_title": "დაიწყე სწრაფი შოპინგი",
+    "download_user_app_links": {
+      "playstore_url_status": "1",
+      "playstore_url": "http://127.0.0.1:4318/",
+      "apple_store_url_status": "1",
+      "apple_store_url": "http://127.0.0.1:4318/"
+    },
+    "download_business_app_links": {
+      "seller_playstore_url_status": "1",
+      "seller_playstore_url": "http://127.0.0.1:4318/",
+      "seller_appstore_url_status": "1",
+      "seller_appstore_url": "http://127.0.0.1:4318/",
+      "dm_playstore_url_status": "1",
+      "dm_playstore_url": "http://127.0.0.1:4318/",
+      "dm_appstore_url_status": "1",
+      "dm_appstore_url": "http://127.0.0.1:4318/"
+    }
+  },
+  "popular_client_section": {
+    "popular_client_section_status": 0,
+    "popular_client_title": "კმაყოფილი  $მომხმარებლები$",
+    "popular_client_sub_title": "გვენდობა წამყვანი ქართული ბრენდები.",
+    "cards": [
+      {
+        "image_full_url": "http://127.0.0.1:4319/fixture.svg"
+      },
+      {
+        "image_full_url": "http://127.0.0.1:4319/fixture.svg"
+      },
+      {
+        "image_full_url": "http://127.0.0.1:4319/fixture.svg"
+      },
+      {
+        "image_full_url": "http://127.0.0.1:4319/fixture.svg"
+      },
+      {
+        "image_full_url": "http://127.0.0.1:4319/fixture.svg"
+      },
+      {
+        "image_full_url": "http://127.0.0.1:4319/fixture.svg"
+      },
+      {
+        "image_full_url": "http://127.0.0.1:4319/fixture.svg"
+      },
+      {
+        "image_full_url": "http://127.0.0.1:4319/fixture.svg"
+      }
+    ]
+  },
+  "seller_app_download_section": {
+    "download_seller_app_section_status": 0,
+    "download_seller_app_title": "დაიწყე გაყიდვები $მილიზე$",
+    "download_seller_app_sub_title": "გადააქციე შენი ლოკალური გაყიდვების ობიექტი ონლაინ ბიზნესად ჩვენი აპლიკაციის საშუალებით",
+    "download_seller_app_content_button_title": "დაიწყე გაყიდვები",
+    "download_seller_app_image_full_url": "http://127.0.0.1:4319/fixture.svg",
+    "download_seller_app_button_title": "ჩამოტვირთე ვენდორის აპლიკაცია",
+    "download_seller_app_button_sub_title": "აიყვანე შენი ობიექტი სრულ კონტროლზე დისტანციურად",
+    "download_seller_app_links": {
+      "playstore_url_status": 1,
+      "playstore_url": "http://127.0.0.1:4318/",
+      "apple_store_url_status": 1,
+      "apple_store_url": "http://127.0.0.1:4318/"
+    },
+    "download_business_app_links": {
+      "seller_playstore_url_status": "1",
+      "seller_playstore_url": "http://127.0.0.1:4318/",
+      "seller_appstore_url_status": "1",
+      "seller_appstore_url": "http://127.0.0.1:4318/",
+      "dm_playstore_url_status": "1",
+      "dm_playstore_url": "http://127.0.0.1:4318/",
+      "dm_appstore_url_status": "1",
+      "dm_appstore_url": "http://127.0.0.1:4318/"
+    }
+  },
+  "deliveryman_app_download_section": {
+    "download_deliveryman_app_section_status": 0,
+    "download_dm_app_title": "მიიტანე მეტი $გამოიმუშავე$ მეტი",
+    "download_dm_app_sub_title": "<p>შემოგვიერთდი <strong>მილი-ში</strong>&nbsp;კურიერ პარტნიორად და გადააქციე ყოველი გადაადგილება შემოსავლად. იმუშავე შენს გრაფიკზე და მიიღე ანაზღაურება ყოველდღე.</p>\r\n\r\n<p>&bull; აირჩიე შენი ტრანსპორტი: ავტომობილი, მოტოციკლი ან ველოსიპედი<br />\r\n&bull; მოქნილი სამუშაო საათები, რომლებიც შენს ყოველდღიურობას ერგება<br />\r\n&bull; მყისიერი გადახდები და ბონუსების შესაძლებლობები</p>",
+    "download_dm_app_content_button_title": "დაიწყე გამომუშავება",
+    "download_dm_app_image_full_url": "http://127.0.0.1:4319/fixture.svg",
+    "download_dm_app_button_title": "ჩამოტვირთე დელივერის აპლიკაცია",
+    "download_dm_app_button_sub_title": "გამოიმუშავე",
+    "download_dm_app_links": {
+      "playstore_url_status": 1,
+      "playstore_url": "http://127.0.0.1:4318/",
+      "apple_store_url_status": 1,
+      "apple_store_url": "http://127.0.0.1:4318/"
+    },
+    "download_business_app_links": {
+      "seller_playstore_url_status": "1",
+      "seller_playstore_url": "http://127.0.0.1:4318/",
+      "seller_appstore_url_status": "1",
+      "seller_appstore_url": "http://127.0.0.1:4318/",
+      "dm_playstore_url_status": "1",
+      "dm_playstore_url": "http://127.0.0.1:4318/",
+      "dm_appstore_url_status": "1",
+      "dm_appstore_url": "http://127.0.0.1:4318/"
+    }
+  },
+  "banner_section": {
+    "banner_section_status": 0,
+    "banner_iamge_full_url": "http://127.0.0.1:4319/fixture.svg"
+  },
+  "testimonial_section": {
+    "testimonial_section_status": 0,
+    "testimonial_title": "ჩვენ $გვყავს$ კმაყოფილი მომხმარებლები და ვენდორები",
+    "testimonial_sub_title": "მოუსმინეთ მომხმარებლებსა და პარტნიორებს, რომლებიც ტკბებიან უპრობლემოდ შოპინგითა და სწრაფი მიწოდებით.",
+    "testimonial_button_title": "დაიწყე ეხლავე",
+    "testimonial_list": []
+  },
+  "gallery_section": {
+    "gallery_section_status": 0,
+    "gallery_content_title": "See $6amMart$ in Action",
+    "gallery_content_sub_title": "Explore how customers use our services, vendors grow their business",
+    "cards": [
+      {
+        "status": 1,
+        "image_full_url": "http://127.0.0.1:4319/fixture.svg"
+      },
+      {
+        "status": 1,
+        "image_full_url": "http://127.0.0.1:4319/fixture.svg"
+      },
+      {
+        "status": 1,
+        "image_full_url": "http://127.0.0.1:4319/fixture.svg"
+      },
+      {
+        "status": 1,
+        "image_full_url": "http://127.0.0.1:4319/fixture.svg"
+      }
+    ]
+  },
+  "highlight_section": {
+    "highlight_section_status": 0,
+    "highlight_title": "Ride Anytime, Anywhere",
+    "highlight_sub_title": "6amMart makes it easy to rent vehicles quickly and affordably.",
+    "highlight_button_title": null,
+    "highlight_image_full_url": "http://127.0.0.1:4319/fixture.svg"
+  },
+  "faq_section": {
+    "faq_section_status": 0,
+    "faq_title": "ხშირად დასმული კითხვები",
+    "faq_list": [
+      {
+        "id": 1,
+        "question": "How do I place an order?",
+        "answer": "Browse your favorite items, add them to your cart, and confirm checkout — it’s that simple!",
+        "page_type": "react_landing_page",
+        "user_type": "customer",
+        "status": 1,
+        "created_at": "2025-11-16T17:24:17.000000Z",
+        "updated_at": "2025-11-16T17:24:17.000000Z",
+        "translations": []
+      },
+      {
+        "id": 2,
+        "question": "How do I cancel or change my order?",
+        "answer": "You can cancel or modify your order before it’s confirmed by the store.",
+        "page_type": "react_landing_page",
+        "user_type": "customer",
+        "status": 1,
+        "created_at": "2025-11-16T17:24:39.000000Z",
+        "updated_at": "2025-11-16T17:24:39.000000Z",
+        "translations": []
+      },
+      {
+        "id": 3,
+        "question": "How can my store join the platform?",
+        "answer": "Fill out our partner registration form — our team will contact you for setup.",
+        "page_type": "react_landing_page",
+        "user_type": "vendor",
+        "status": 1,
+        "created_at": "2025-11-16T17:24:58.000000Z",
+        "updated_at": "2025-11-16T17:24:58.000000Z",
+        "translations": []
+      },
+      {
+        "id": 4,
+        "question": "Can I update my menu or prices anytime?",
+        "answer": "Yes, you can easily update items, prices, and availability through your dashboard.",
+        "page_type": "react_landing_page",
+        "user_type": "vendor",
+        "status": 1,
+        "created_at": "2025-11-16T17:25:19.000000Z",
+        "updated_at": "2025-11-16T17:25:19.000000Z",
+        "translations": []
+      },
+      {
+        "id": 5,
+        "question": "How do I become a delivery partner?",
+        "answer": "Apply through our website or app — submit your details and required documents.",
+        "page_type": "react_landing_page",
+        "user_type": "deliveryman",
+        "status": 1,
+        "created_at": "2025-11-16T17:25:38.000000Z",
+        "updated_at": "2025-11-16T17:25:38.000000Z",
+        "translations": []
+      },
+      {
+        "id": 6,
+        "question": "როგორ მივიღო მიტანის შეკვეთები?",
+        "answer": "აპლიკაციის გახსნისას, უახლოესი შეკვეთები ავტომატურად გამოჩნდება თქვენს მიტანის აპლიკაციაში..",
+        "page_type": "react_landing_page",
+        "user_type": "deliveryman",
+        "status": 1,
+        "created_at": "2025-11-16T17:25:57.000000Z",
+        "updated_at": "2026-04-29T20:35:52.000000Z",
+        "translations": []
+      }
+    ]
+  },
+  "footer_section": {
+    "fixed_newsletter_title": "გამოიწერე სიახლეები",
+    "fixed_newsletter_sub_title": "მიიღე ყოველკვირეული განახლებები მეილზე",
+    "fixed_footer_description": "შემოგვიერთდით ჩვენს სოციალურ ქსელებზე.",
+    "fixed_promotional_banner_full_url": "http://127.0.0.1:4319/fixture.svg"
+  },
+  "company_intro_section": {
+    "company_title": "$6amMart$",
+    "company_sub_title": "is Best Delivery Service Near You",
+    "company_description": "6amMart is a one-stop shop for all your daily necessities. You can shop for groceries, and pharmacy items, order food, and send important parcels from one place to another from the comfort of your home.",
+    "company_button_name": "Order Now",
+    "company_button_url": "http://127.0.0.1:4318/"
+  },
+  "module_home_page_data_title": null,
+  "module_home_page_data_sub_title": null,
+  "module_home_page_data_image": "",
+  "module_vendor_registration_data_title": null,
+  "module_vendor_registration_data_sub_title": null,
+  "module_vendor_registration_data_button_title": null,
+  "module_vendor_registration_data_image": "",
+  "meta_title": null,
+  "meta_description": null,
+  "meta_image": null
+}

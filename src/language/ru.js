@@ -1809,5 +1809,8 @@ export const russian = {
   "ai_chat_ui_categories_hint": "Выберите нужную категорию",
   "ai_chat_ui_latest": "Последнее сообщение",
   "ai_chat_ui_history": "История",
-  "ai_chat_ui_support": "Оператор"
+  "ai_chat_ui_support": "Оператор",
+  "Enter a valid phone number.": "Введите корректный номер телефона.",
+  "Enable order notifications": "Включить уведомления о заказах",
+  "Unable to enable notifications. Please try again.": "Не удалось включить уведомления. Попробуйте ещё раз."
 };

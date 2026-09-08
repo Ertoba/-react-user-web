@@ -134,7 +134,7 @@ const toolTipColor = neutral[1000];
 
 export const lightThemeOptions = {
 	components: {
-		 MuiUseMediaQuery: { defaultProps: { noSsr: true } }, // ⚡ Fix hydration
+		 MuiUseMediaQuery: { defaultProps: { noSsr: false } },
 		MuiAvatar: {
 			styleOverrides: {
 				root: {
@@ -177,8 +177,8 @@ export const lightThemeOptions = {
 				},
 				input: {
 					"&:-webkit-autofill": {
-						"-webkit-box-shadow": "0 0 0 100px #f0f5f5 inset",
-						"-webkit-text-fill-color": "#000",
+						WebkitBoxShadow: "0 0 0 100px #f0f5f5 inset",
+						WebkitTextFillColor: "#000",
 					},
 				},
 			},

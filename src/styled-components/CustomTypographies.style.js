@@ -6,8 +6,8 @@ export const CustomTypographyEllipsis = styled(Typography)(({ theme }) => ({
   textOverflow: "ellipsis",
   whiteSpace: "nowrap",
   overflow: "hidden",
-  "-webkit-line-clamp": 1,
-  "-webkit-box-orient": "vertical",
+  WebkitLineClamp: 1,
+  WebkitBoxOrient: "vertical",
 }));
 
 export const CustomTypographyGray = styled(Typography)(({ theme }) => ({

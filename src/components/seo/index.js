@@ -2,6 +2,7 @@ import Head from "next/head";
 import PropTypes from "prop-types";
 import { useRouter } from "next/router";
 import DynamicFavicon from "../favicon/DynamicFavicon";
+import { imageSource } from "../../utils/imageSource.mjs";
 
 const normalizeOrigin = (origin) => {
   if (!origin) return "";
@@ -78,8 +79,7 @@ const SEO = ({
   const robotsContent = buildRobotsContent()
   const metaTitle = title || siteName;
   const metaDescription = description || "";
-  const metaImage = image || configData?.logo_full_url ;
-  console.log({metaImage});
+  const metaImage = imageSource(image, imageSource(configData?.logo_full_url));
   
   return (
     <>

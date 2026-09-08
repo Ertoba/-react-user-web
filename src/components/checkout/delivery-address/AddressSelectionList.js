@@ -55,7 +55,7 @@ const AddressSelectionList = (props) => {
 								>
 									<Radio
 										checked={item.id === address?.id}
-										row
+
 										aria-labelledby="demo-row-radio-buttons-group-label"
 										name="row-radio-buttons-group"
 										sx={{ marginTop: "-2px" }}

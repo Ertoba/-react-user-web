@@ -1,3 +1,4 @@
+import { omitStyleProps } from "../utils/styleProps";
 import LoadingButton from "@mui/lab/LoadingButton";
 import { alpha, Button, IconButton, styled } from "@mui/material";
 
@@ -89,7 +90,7 @@ export const CustomButtonPrimary = styled(Button)(
 
 // ##ziaul
 
-export const DeliveryOptionButton = styled(CustomButtonPrimary)(
+export const DeliveryOptionButton = styled(CustomButtonPrimary, { shouldForwardProp: omitStyleProps("orderType") })(
   ({ theme, orderType }) => ({
     backgroundColor: orderType
       ? theme.palette.primary.main

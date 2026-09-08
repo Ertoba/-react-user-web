@@ -2006,5 +2006,8 @@ export const georgian = {
   "ai_chat_ui_categories_hint": "მოძებნე ის, რაც გჭირდება",
   "ai_chat_ui_latest": "ბოლო შეტყობინება",
   "ai_chat_ui_history": "ისტორია",
-  "ai_chat_ui_support": "ოპერატორი"
+  "ai_chat_ui_support": "ოპერატორი",
+  "Enter a valid phone number.": "შეიყვანეთ სწორი ტელეფონის ნომერი.",
+  "Enable order notifications": "შეკვეთის შეტყობინებების ჩართვა",
+  "Unable to enable notifications. Please try again.": "შეტყობინებების ჩართვა ვერ მოხერხდა. სცადეთ ხელახლა."
 };

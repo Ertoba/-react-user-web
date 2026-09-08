@@ -78,7 +78,7 @@ const DeliveryDetails = (props) => {
 	};
 	return (
 		<CustomStackFullWidth spacing={{ xs: 1.5, md: 3 }}>
-			<DeliveryCaption const id="demo-row-radio-buttons-group-label">
+			<DeliveryCaption id="demo-row-radio-buttons-group-label">
 				{t("Delivery Options")}
 			</DeliveryCaption>
 			{storeData &&  (

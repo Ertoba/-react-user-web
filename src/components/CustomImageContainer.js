@@ -2,6 +2,7 @@ import React, { memo, useEffect, useState } from "react";
 import { CustomImageContainerStyled } from "styled-components/CustomStyles.style";
 import placeholder from "../../public/static/no-image-found.png";
 import { Box } from "@mui/system";
+import { imageSource } from "../utils/imageSource.mjs";
 
 const CustomImageContainer = ({
   cursor,
@@ -28,7 +29,7 @@ const CustomImageContainer = ({
 }) => {
   const [imageFile, setState] = useState(null);
   useEffect(() => {
-    setState(src ? src : placeholder?.src);
+    setState(imageSource(src, placeholder?.src));
   }, [src]);
 
   return (
@@ -44,7 +45,7 @@ const CustomImageContainer = ({
       max_width={maxWidth}
       sm_max_width={smMaxWidth}
       sm_width={smWidth}
-      md_height={mdHeight}
+      mdHeight={mdHeight}
       cursor={cursor}
       aspect_ratio={aspectRatio}
       padding={padding}
