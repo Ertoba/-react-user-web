@@ -60,14 +60,29 @@ export async function auditInteractions(browser, engine) {
         await form.locator('button[type="submit"]').click();
         await page.waitForTimeout(350);
         assert.equal(submitted,0,'An invalid recovery form must not send an API request.');
-        await input.fill(name==='recovery-phone' ? '+995555123456' : 'qa@example.test');
-        await form.locator('button[type="submit"]').click();
-        await page.waitForResponse(response=>new URL(response.url()).pathname==='/api/v1/auth/forgot-password');
+        if (name === 'recovery-phone') {
+          // The phone widget manages the prefix/caret on keyboard events.
+          await input.click();
+          await input.press('ControlOrMeta+A');
+          await input.pressSequentially('+995555123456', { delay: 30 });
+          assert.equal((await input.inputValue()).replace(/\D/g,''),'995555123456');
+        } else {
+          await input.fill('qa@example.test');
+        }
+        await Promise.all([
+          page.waitForResponse(response=>new URL(response.url()).pathname==='/api/v1/auth/forgot-password'),
+          form.locator('button[type="submit"]').click(),
+        ]);
         assert.equal(submitted,1);
         assert.equal(lastPayload.verification_method,name==='recovery-phone'?'phone':'email');
       }
       assert.deepEqual(errors,[]);
-    } catch (error) { row.status='failed'; row.error=String(error); }
+    } catch (error) {
+      row.status='failed'; row.error=String(error); row.submitted=submitted;
+      row.recoveryInput = await page.locator('input[type="tel"],input[name="email"]').first().inputValue().catch(()=>null);
+      row.pageText = await page.locator('body').innerText().catch(()=>null);
+      await page.screenshot({ path:new URL(`./results/interaction-${engine}-${name}.png`,import.meta.url).pathname.replace(/^\/([A-Za-z]:)/,'$1'), fullPage:true }).catch(()=>{});
+    }
     results.push(row);
     console.log(`${row.status.toUpperCase()} ${engine} ${name}${row.error ? ': '+row.error : ''}`);
     await context.close();

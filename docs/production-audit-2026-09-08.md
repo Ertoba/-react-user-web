@@ -10,11 +10,15 @@ The previous audit run visited 37 static routes at 12 widths in three engines (1
 - Normalize missing/imported image sources so loading data does not request `null/undefined`; preserve the local image fallback and image sizing.
 - Request notification permission only from the profile opt-in button. Skip automatic token requests without permission and avoid posting an empty FCM token.
 - Validate the currently selected password-recovery method. The former boolean/string condition skipped validation; the old ten-digit pattern also rejected Georgian numbers with `+995`. Regression tests cover invalid values and valid Georgian/email inputs.
-- Replace the inline audit shell script with locked, versioned browser tooling, local API fixtures, screenshots, incremental results, explicit exclusions and real failure conditions. ESLint uses the supported CLI rather than the removed `next lint` command.
+- Replace the inline audit shell script with locked, versioned browser tooling, local API fixtures, screenshots, incremental results, explicit exclusions and real failure conditions. ESLint runs directly over application sources and reports its actual exit code.
 
 ## Evidence
 
-The first completed Chrome matrix after the shared hydration fixes visited 44 routes at 320/390/768/1440 pixels: 144 active-page cases passed, 32 retained rental cases were excluded, and none failed. This checkpoint preceded the final recovery-form changes; final commit validation is recorded in GitHub Actions and the release report.
+The production application source at `ff58f50` completed all 44 routes across Chromium, Firefox and WebKit at 12 widths: 1,296 active-page cases passed; 288 retained rental cases were explicitly excluded. Each engine visited 528 cases. Separate Chrome and Edge runs covered 176 and 88 cases respectively, also with no active-page failures.
+
+Chat and recovery interaction tests pass in Chrome, Edge, Firefox and WebKit. The controlled phone input is exercised through keyboard events and its final number is asserted before submission. Bulk fill did not reproduce its prefix/caret handling in Firefox/WebKit; the runner now models typing and registers its response listener before submitting. A clean-checkout TypeScript check first runs `next typegen`, which supplies Next's generated image/route declarations.
+
+Seven JavaScript regression tests cover font integrity/case, missing-image handling and recovery validation. Existing lint warnings remain reported. Production was rebuilt with its real environment, deployed with rollback files, and verified at HTTP 200 with build ID `_gZWMtqc6hrb_lcBFo26B`. All 13 served font files match repository hashes. PM2 `mili-react` was restarted and saved. Backup: `/root/mili-backups/ui-audit-20260908-112754`.
 
 The source inventory lists every scanned source file and all static/dynamic routes. File counts represent inventory coverage, not individual manual review of every component. Existing lint warnings remain reported. Disabled rental screens, real provider transactions, native Safari/device testing and exhaustive authenticated business-state combinations are not certified by this audit.
 

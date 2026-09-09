@@ -32,7 +32,9 @@ jobs:
         run: yarn lint
       - name: TypeScript
         if: ${{ !cancelled() }}
-        run: yarn type-check
+        run: |
+          yarn next typegen
+          yarn type-check
       - name: Typography regressions
         if: ${{ !cancelled() }}
         run: node --test tests/*.test.mjs
