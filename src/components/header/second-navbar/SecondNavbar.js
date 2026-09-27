@@ -51,7 +51,7 @@ import { getCurrentModuleType } from "helper-functions/getCurrentModuleType";
 import Box from "@mui/material/Box";
 import cookie from "js-cookie";
 import CustomModal from "components/modal";
-import ForgotPassword from "components/auth/ForgotPassword/ForgotPassword";
+const ForgotPassword = dynamic(() => import("components/auth/ForgotPassword/ForgotPassword"));
 import { setOpenForgotPasswordModal } from "redux/slices/utils";
 import TrackOrderSvg from "components/header/TrackOrderSvg";
 import NextImage from "components/NextImage";

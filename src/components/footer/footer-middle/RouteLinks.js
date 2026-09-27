@@ -68,13 +68,14 @@ const RouteLinks = (props) => {
 
   return (
     <CustomStackFullWidth
-      direction={{ xs: "row", sm: "column" }}
+      direction={{ xs: "column", sm: "column" }}
       spacing={{ xs: 0, sm: 2 }}
-      alignItems={{ xs: "flex-start", sm: "start" }}
+      alignItems={{ xs: "stretch", sm: "start" }}
       sx={{
-        flexWrap: { xs: "wrap", sm: "nowrap" },
+        display: { xs: "grid", sm: "flex" },
+        gridTemplateColumns: { xs: "1.15fr 0.85fr", sm: "none" },
         columnGap: { xs: "16px", sm: 0 },
-        rowGap: { xs: "10px", sm: 0 },
+        rowGap: { xs: "8px", sm: 0 },
       }}
     >
       {RouteLinksData.map((item, index) => {

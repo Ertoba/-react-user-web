@@ -6,93 +6,74 @@ import { useDispatch } from "react-redux";
 import { setConfigData, setLandingPageData } from "redux/slices/configData";
 import Router from "next/router";
 import SEO from "../src/components/seo";
-import useGetLandingPage from "../src/api-manage/hooks/react-query/useGetLandingPage";
-import { useGetConfigData } from "../src/api-manage/hooks/useGetConfigData";
-import { RTL } from "components/rtl";
 
 const Root = (props) => {
-	const { configData, landingPageData } = props;
-	const { data, refetch } = useGetLandingPage();
-	const dispatch = useDispatch();
-	const { data: dataConfig, refetch: configRefetch } = useGetConfigData();
-	useEffect(() => {
-		configRefetch();
-		refetch();
-	}, []);
-	useEffect(() => {
-		dispatch(setLandingPageData(data));
-		if (dataConfig) {
-			if (dataConfig.length === 0) {
-				Router.push("/404");
-			} else if (dataConfig?.maintenance_mode) {
-				Router.push("/maintainance");
-			} else {
-				dispatch(setConfigData(dataConfig));
-			}
-		} else {
-		}
-	}, [dataConfig, data]);
-	let lanDirection = undefined;
+        const { configData, landingPageData } = props;
+        const dispatch = useDispatch();
 
-	if (typeof window !== "undefined") {
-		lanDirection = JSON.parse(localStorage.getItem("settings"))
-	}
-	// console.log({ lanDirection })
-	return (
-		<>
-			<CssBaseline />
-			{/* <DynamicFavicon configData={configData} /> */}
-			<SEO
-				image={landingPageData?.meta_image || configData?.fav_icon_full_url}
-				businessName={configData?.business_name}
-				configData={configData}
-				title={landingPageData?.meta_title || configData?.business_name}
-				description={landingPageData?.meta_description || configData?.meta_description}
-			/>
-			{data && (
-				<LandingLayout configData={dataConfig} landingPageData={data}>
+        useEffect(() => {
+                dispatch(setLandingPageData(landingPageData));
 
-					<LandingPage
-						configData={dataConfig}
-						landingPageData={data}
-					/>
+                if (!configData || configData.length === 0) {
+                        Router.push("/404");
+                } else if (configData?.maintenance_mode) {
+                        Router.push("/maintainance");
+                } else {
+                        dispatch(setConfigData(configData));
+                }
+        }, [configData, landingPageData, dispatch]);
 
-				</LandingLayout>
-			)}
-		</>
-	);
+        return (
+                <>
+                        <CssBaseline />
+                        <SEO
+                                image={landingPageData?.meta_image || configData?.fav_icon_full_url}
+                                businessName={configData?.business_name}
+                                configData={configData}
+                                title={landingPageData?.meta_title || configData?.business_name}
+                                description={landingPageData?.meta_description || configData?.meta_description}
+                        />
+                        {landingPageData && (
+                                <LandingLayout
+                                        configData={configData}
+                                        landingPageData={landingPageData}
+                                >
+                                        <LandingPage
+                                                configData={configData}
+                                                landingPageData={landingPageData}
+                                        />
+                                </LandingLayout>
+                        )}
+                </>
+        );
 };
 export default Root;
 export const getServerSideProps = async (context) => {
 	const { req, res } = context;
 	const language = req.cookies.languageSetting;
 
-	const configRes = await fetch(
-		`${process.env.NEXT_PUBLIC_BASE_URL}/api/v1/config`,
-		{
-			method: "GET",
-			headers: {
-				"X-software-id": 33571750,
-				"X-server": "server",
-				"X-localization": language,
-				origin: process.env.NEXT_CLIENT_HOST_URL,
-			},
-		}
-	);
-	const config = await configRes.json();
-	const landingPageRes = await fetch(
-		`${process.env.NEXT_PUBLIC_BASE_URL}/api/v1/react-landing-page`,
-		{
-			method: "GET",
-			headers: {
-				"X-software-id": 33571750,
-				"X-server": "server",
-				"X-localization": language,
-				origin: process.env.NEXT_CLIENT_HOST_URL,
-			},
-		}
-	);
-	const landingPageData = await landingPageRes.json();
+const headers = {
+"X-software-id": 33571750,
+"X-server": "server",
+"X-localization": language,
+origin: process.env.NEXT_CLIENT_HOST_URL,
+};
+
+const [configRes, landingPageRes] = await Promise.all([
+fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/v1/config`, {
+method: "GET",
+headers,
+}),
+fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/v1/react-landing-page`, {
+method: "GET",
+headers,
+}),
+]);
+
+const [config, landingPageData] = await Promise.all([
+configRes.json(),
+landingPageRes.json(),
+]);
 	// Set cache control headers for 1 hour (3600 seconds)
 	res.setHeader(
 		"Cache-Control",

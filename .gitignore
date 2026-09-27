@@ -39,7 +39,3 @@ next-env.d.ts
 /.idea
 /.idea/
 /.vscode
-# Local audit dependencies, screenshots and logs
-.qa/node_modules/
-.qa/results/
-.next-qa/

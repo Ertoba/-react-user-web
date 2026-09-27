@@ -17,8 +17,6 @@ import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import FormatQuoteOutlinedIcon from '@mui/icons-material/FormatQuoteOutlined';
-import MapModal from "components/Map/MapModal";
-import { useGeolocated } from "react-geolocated";
 import DollarSignHighlighter from 'components/DollarSignHighlighter';
 import { translateDynamicText } from 'utils/translateDynamicText';
 
@@ -58,17 +56,8 @@ const testimonialData = [
 ];
 
 const TestimonialCard = ({ testimonial, }) => {
-	const [open, setOpen] = useState(false)
 
 	const theme = useTheme();
-	const { coords } =
-		useGeolocated({
-			positionOptions: {
-				enableHighAccuracy: false,
-			},
-			userDecisionTimeout: 5000,
-			isGeolocationEnabled: true,
-		});
 
 	return (
 		<Card

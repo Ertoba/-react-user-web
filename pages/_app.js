@@ -10,11 +10,9 @@ import { createTheme } from "theme";
 import CssBaseline from "@mui/material/CssBaseline";
 import { RTL } from "components/rtl";
 import { Toaster } from "react-hot-toast";
-import { getServerSideProps } from "./index";
 import { SettingsConsumer, SettingsProvider } from "contexts/settings-context";
 import "../src/language/i18n";
 import { QueryClient, QueryClientProvider } from "react-query";
-import { ReactQueryDevtools } from "react-query/devtools";
 import nProgress from "nprogress";
 import Router from "next/router";
 import { persistStore } from "redux-persist";
@@ -106,7 +104,6 @@ function MyApp(props) {
               </SettingsConsumer>
             </SettingsProvider>
           </ReduxProvider>
-          <ReactQueryDevtools initialIsOpen={false} position="bottom-right" />
         </QueryClientProvider>
       </CacheProvider>
     </>
@@ -114,7 +111,6 @@ function MyApp(props) {
 }
 
 export default MyApp;
-export { getServerSideProps };
 
 const getThemeFromCookieHeader = (cookieHeader = "") => {
   const match = cookieHeader.match(/(?:^|;\s*)themeMode=(dark|light)(?:;|$)/);

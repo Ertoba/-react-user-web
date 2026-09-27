@@ -5,7 +5,7 @@ import SimpleBar from "simplebar-react";
 import "simplebar-react/dist/simplebar.min.css";
 import CustomAlert from "../../../alert/CustomAlert";
 import { CustomButtonPrimary } from "styled-components/CustomButtons.style";
-import DeliveryAddress from "../../../checkout/delivery-address";
+const DeliveryAddress = dynamic(() => import("../../../checkout/delivery-address"));
 import ControlPointOutlinedIcon from "@mui/icons-material/ControlPointOutlined";
 import useGetGeoCode from "../../../../api-manage/hooks/react-query/google-api/useGetGeoCode";
 import useGetZoneId from "../../../../api-manage/hooks/react-query/google-api/useGetZone";
