@@ -20,7 +20,7 @@ export async function auditInteractions(browser, engine) {
       const request = route.request(), url = new URL(request.url());
       if (!['127.0.0.1','localhost'].includes(url.hostname)) return route.abort('blockedbyclient');
       if (url.pathname === '/api/v1/config') return route.fulfill({ json: { ...config, ai_chat_status: 1, is_sms_active: name !== 'recovery-email', is_mail_active: true, firebase_otp_verification: 0 } });
-      if (url.pathname === '/api/v1/ai-chat/send' || url.pathname === '/api/v1/auth/forgot-password') {
+      if (url.pathname === '/api/v1/customer/ai-chat/send' || url.pathname === '/api/v1/auth/forgot-password') {
         submitted++; lastPayload = request.postDataJSON();
         await new Promise(resolve => setTimeout(resolve,300));
         return route.fulfill({ json: { message: 'სატესტო პასუხი მზად არის', metadata: {} } });
@@ -64,7 +64,8 @@ export async function auditInteractions(browser, engine) {
           // The phone widget manages the prefix/caret on keyboard events.
           await input.click();
           await input.press('ControlOrMeta+A');
-          await input.pressSequentially('+995555123456', { delay: 30 });
+          await input.press('Backspace');
+          await input.pressSequentially('555123456', { delay: 30 });
           assert.equal((await input.inputValue()).replace(/\D/g,''),'995555123456');
         } else {
           await input.fill('qa@example.test');
