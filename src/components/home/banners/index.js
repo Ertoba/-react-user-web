@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { handleStoreRedirect } from "helper-functions/handleStoreRedirect";
 
-import { Grid, Skeleton, styled } from "@mui/material";
+import { Grid, Skeleton, styled, useMediaQuery, useTheme } from "@mui/material";
 import { Box } from "@mui/system";
 import { useRouter } from "next/router";
 import { useDispatch, useSelector } from "react-redux";
@@ -19,37 +19,77 @@ import {
 } from "styled-components/CustomStyles.style";
 import CustomImageContainer from "../../CustomImageContainer";
 import FoodDetailModal from "../../food-details/foodDetail-modal/FoodDetailModal";
+import ModuleModal from "../../cards/ModuleModal";
 import NextImage from "components/NextImage";
-import { handleProductRedirect } from "helper-functions/handleProductRedirect";
+import {
+  handleProductRedirect,
+  handleServiceRedirect,
+} from "helper-functions/handleProductRedirect";
+
+// Service module banners come in 3 flavors:
+// - "default"    → admin sets a custom URL directly on the banner (banner.link)
+// - "store_wise" → links to a provider (banner.store)
+// - "item_wise"  → links to a service (banner.service, banner.item is null)
+const handleServiceModuleBannerClick = (banner, router) => {
+  switch (banner?.type) {
+    case "default":
+      if (banner?.link) window.open(banner.link, "_blank");
+      return;
+    case "store_wise":
+      handleStoreRedirect(banner?.store, router);
+      return;
+    case "item_wise":
+      handleServiceRedirect(banner?.service, router);
+      return;
+    default:
+      return;
+  }
+};
 
 export const BannersWrapper = styled(Box)(({ theme }) => ({
   cursor: "pointer",
-  borderRadius: "10px",
+  borderRadius: "16px",
   width: "100%",
   aspectRatio: "3 / 1",
   position: "relative",
   overflow: "hidden",
+  backgroundColor: theme.palette.background.secondary,
   img: {
-    width: '100%',
-    height: '100%',
+    width: "100% !important",
+    height: "100% !important",
+    objectFit: "contain !important",
+  },
+
+  "&:hover": {
+    img: {
+      transform: "scale(1.04)",
+    },
   },
 }));
 
 const Banners = ({ feature }) => {
   const router = useRouter();
+  const theme = useTheme();
+  const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
+  const isExtraSmallScreen = useMediaQuery(theme.breakpoints.down("xs"));
   const { selectedModule } = useSelector((state) => state.utilsData);
   const { banners } = useSelector((state) => state.storedData);
-  const { data, refetch: refetchBannerData, isFetched } = useGetBanners(feature);
+  const {
+    data,
+    refetch: refetchBannerData,
+    isFetched,
+  } = useGetBanners(feature);
   const [bannersData, setBannersData] = useState([]);
   const [foodBanner, setFoodBanner] = useState();
   const [openModal, setOpenModal] = useState(false);
   const { configData } = useSelector((state) => state.configData);
   const dispatch = useDispatch();
   useEffect(() => {
-    if (banners.banners.length === 0) {
+    if (banners?.banners?.length === 0) {
       refetchBannerData();
     }
   }, [banners]);
+
   useEffect(() => {
     if (data) {
       dispatch(setBanners(data));
@@ -60,8 +100,7 @@ const Banners = ({ feature }) => {
       handleBannersData();
     }
   }, [banners]);
- console.log({banners,data});
- 
+
   const handleBannersData = () => {
     let mergedBannerData = [];
 
@@ -71,7 +110,7 @@ const Banners = ({ feature }) => {
       }
       if (banners?.campaigns?.length > 0) {
         banners?.campaigns?.forEach((item) =>
-          mergedBannerData.push({ ...item, isCampaign: true })
+          mergedBannerData.push({ ...item, isCampaign: true }),
         );
       }
       setBannersData(mergedBannerData);
@@ -84,35 +123,39 @@ const Banners = ({ feature }) => {
   };
   const handleBannerClick = (banner) => {
     if (banner?.isCampaign) {
-
-      router.push(
-        {
-          pathname: "/campaigns/[id]",
-          query: { id: `${banner?.slug||banner?.id}`},
-        },
-        undefined,
-        { scroll: false } // Disable Next.js auto scroll
-      )
+      router
+        .push(
+          {
+            pathname: "/campaigns/[id]",
+            query: { id: `${banner?.slug || banner?.id}` },
+          },
+          undefined,
+          { scroll: false }, // Disable Next.js auto scroll
+        )
         .then(() => {
           // Add slight delay to ensure new page is mounted
           setTimeout(() => {
             window.scrollTo({ top: 0, behavior: "smooth" });
           }, 100); // delay helps after DOM updates
         });
-    } else if (banner?.type === "default") {
-      window.open(banner?.link, "_blank");
-    } else {
-      if (banner?.type === "store_wise") {
-        handleStoreRedirect(banner?.store, router);
+      return;
+    }
+
+    if (getCurrentModuleType() === ModuleTypes.SERVICE) {
+      handleServiceModuleBannerClick(banner, router);
+      return;
+    }
+
+    if (banner?.type === "default") {
+      if (banner?.link) window.open(banner.link, "_blank");
+    } else if (banner?.type === "store_wise") {
+      handleStoreRedirect(banner?.store, router);
+    } else if (banner?.type === "item_wise") {
+      if (selectedModule?.module_type === "ecommerce") {
+        handleProductRedirect(banner?.item, router);
       } else {
-        if (banner?.type === "item_wise") {
-          if (selectedModule?.module_type !== "ecommerce") {
-            setFoodBanner(banner?.item);
-            setOpenModal(true);
-          } else {
-            handleProductRedirect(banner?.item, router);
-          }
-        }
+        setFoodBanner(banner?.item);
+        setOpenModal(true);
       }
     }
   };
@@ -123,10 +166,12 @@ const Banners = ({ feature }) => {
   const getModuleWiseBanners = () => {
     switch (getCurrentModuleType()) {
       case ModuleTypes.GROCERY:
-        if (bannersData.length > 1) {
+        if (bannersData.length === 1) {
+          return 1;
+        } else if (bannersData.length === 2) {
           return 2;
         } else {
-          return 2;
+          return 3.1;
         }
       case ModuleTypes.PHARMACY:
         if (bannersData.length === 1) {
@@ -134,13 +179,15 @@ const Banners = ({ feature }) => {
         } else if (bannersData.length === 2) {
           return 2;
         } else {
-          return 3;
+          return 3.2;
         }
       case ModuleTypes.ECOMMERCE:
-        if (bannersData.length > 1) {
+        if (bannersData.length === 1) {
+          return 1;
+        } else if (bannersData.length === 2) {
           return 2;
         } else {
-          return 1;
+          return 3.2;
         }
       case ModuleTypes.FOOD:
         if (bannersData.length === 1) {
@@ -148,16 +195,28 @@ const Banners = ({ feature }) => {
         } else if (bannersData.length === 2) {
           return 2;
         } else {
-          return 3;
+          return 3.2;
         }
+      case ModuleTypes.SERVICE:
+      case ModuleTypes.RIDE:
+        if (bannersData.length === 1) {
+          return 1;
+        } else if (bannersData.length === 2) {
+          return 2;
+        } else {
+          return 3.1;
+        }
+      default:
+        return 1;
     }
   };
 
   const settings = {
-    dots: false,
-    infinite: bannersData.length > 2 && true,
+    dots: true,
+    infinite: false,
     slidesToShow: getModuleWiseBanners(),
     slidesToScroll: 1,
+    swipeToSlide: true,
     autoplay: true,
     speed: 800,
     autoplaySpeed: 4000,
@@ -166,8 +225,11 @@ const Banners = ({ feature }) => {
       {
         breakpoint: 600,
         settings: {
-          slidesToShow: 1.1,
+          slidesToShow: 1.15,
           slidesToScroll: 1,
+          swipeToSlide: true,
+          infinite: false,
+          autoplay: false,
         },
       },
     ],
@@ -176,30 +238,65 @@ const Banners = ({ feature }) => {
     <>
       <CustomStackFullWidth
         sx={{
-          mt: "10px",
+          mt: { xs: 0, sm: bannersData?.length > 0 ? "10px" : 0 },
+          "& .slick-track": { marginLeft: 0 },
           "& .slick-list": {
-            marginRight: { xs: "-10px", sm: "-20px" },
+            marginRight: "-16px",
           },
           "& .slick-slide": {
-            paddingRight: { xs: "10px", sm: "20px" },
+            paddingRight: "16px !important",
           },
+          "& .slick-dots": {
+            position: "static",
+            marginTop: { xs: 0, sm: "10px" },
+            display: "flex !important",
+            justifyContent: "center",
+            alignItems: "center",
+            gap: "6px",
+            "& li": {
+              width: 8,
+              height: 8,
+              margin: 0,
+              display: "flex",
+            },
+            "& li button": {
+              width: 8,
+              height: 8,
+              padding: 0,
+            },
+            "& li button:before": {
+              content: '""',
+              width: 8,
+              height: 8,
+              top: 0,
+              left: 0,
+              borderRadius: "50%",
+              backgroundColor: (theme) =>
+                theme.palette.action?.disabled || "#C7C7CC",
+              opacity: 1,
+              fontSize: 0,
+              lineHeight: 0,
+            },
+            "& li.slick-active button:before": {
+              backgroundColor: "primary.main",
+              opacity: 1,
+              transform: "scale(1.1)",
+            },
+          },
+          marginInlineStart: { xs: 0, sm: "-8px" },
         }}
       >
         {!isFetched ? (
           <Slider {...settings}>
             {[...Array(2)].map((_, index) => (
               <BannersWrapper key={index}>
-                <Skeleton
-                  variant="rectangular"
-                  height="100%"
-                  width="100%"
-                />
+                <Skeleton variant="rectangular" height="100%" width="100%" />
               </BannersWrapper>
             ))}
           </Slider>
         ) : (
           bannersData?.length > 0 && (
-            <SliderCustom>
+            <SliderCustom padding="0px">
               <Slider {...settings}>
                 {bannersData.map((item, index) => (
                   <BannersWrapper
@@ -211,16 +308,18 @@ const Banners = ({ feature }) => {
                     }
                     sx={{
                       cursor:
-                        item?.type === "default" && item?.link === null ? "default" : "pointer",
+                        item?.type === "default" && item?.link === null
+                          ? "default"
+                          : "pointer",
                     }}
                   >
                     <NextImage
                       src={item?.image_full_url}
                       alt={item?.title}
-                      height={300}
-                      width={900}
+                      fill
+                      sizes="(max-width: 600px) 100vw, 300px"
                       objectFit="contain"
-                      borderRadius="10px"
+                      borderRadius="16px"
                     />
                   </BannersWrapper>
                 ))}
@@ -230,15 +329,24 @@ const Banners = ({ feature }) => {
         )}
       </CustomStackFullWidth>
 
-      {openModal && foodBanner && (
-        <FoodDetailModal
-          product={foodBanner}
-          image={`${configData?.base_urls?.item_image_url}/${foodBanner?.image}`}
-          open={openModal}
-          handleModalClose={handleModalClose}
-          setOpen={setOpenModal}
-        />
-      )}
+      {openModal &&
+        foodBanner &&
+        (getCurrentModuleType() === ModuleTypes.FOOD ? (
+          <FoodDetailModal
+            product={foodBanner}
+            image={`${configData?.base_urls?.item_image_url}/${foodBanner?.image}`}
+            open={openModal}
+            handleModalClose={handleModalClose}
+            setOpen={setOpenModal}
+          />
+        ) : (
+          <ModuleModal
+            open={openModal}
+            handleModalClose={handleModalClose}
+            configData={configData}
+            productDetailsData={foodBanner}
+          />
+        ))}
     </>
   );
 };
