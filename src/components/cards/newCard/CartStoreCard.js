@@ -126,6 +126,25 @@ const ReorderBtn = styled(IconButton)(({ theme }) => ({
 
 // ─── Avatar group ──────────────────────────────────────────────────────────
 
+const toAvatarImages = (row) => {
+  if (Array.isArray(row?.bundle_details?.items) && row.bundle_details.items.length) {
+    return row.bundle_details.items.map((it) => ({
+      name: it?.name,
+      image_full_url: it?.image_full_url,
+    }));
+  }
+  if (row?.bogo_details) {
+    const buyItems = row.bogo_details.buy_items ?? [];
+    const freeItems = row.bogo_details.free_items ?? [];
+    const merged = [...buyItems, ...freeItems].map((it) => ({
+      name: it?.item?.name,
+      image_full_url: it?.item?.image_full_url,
+    }));
+    if (merged.length) return merged;
+  }
+  return [row];
+};
+
 const ItemAvatars = ({
   items,
   size,
@@ -133,8 +152,9 @@ const ItemAvatars = ({
   gap = "-6px",
   borderColor = "background.paper",
 }) => {
-  const visible = items.slice(0, max);
-  const overflow = items.length - visible.length;
+  const avatarImages = items.flatMap(toAvatarImages);
+  const visible = avatarImages.slice(0, max);
+  const overflow = avatarImages.length - visible.length;
   return (
     <Stack
       direction="row"
@@ -146,9 +166,9 @@ const ItemAvatars = ({
         {visible.map((it, i) => (
           <Tooltip
             key={i}
-            title={it?.name ?? ""}
+            title={it?.name ?? it?.service?.name ?? ""}
             arrow
-            disableHoverListener={!it?.name}
+            disableHoverListener={!it?.name && !it?.service?.name}
           >
             <Box
               sx={{
@@ -170,7 +190,11 @@ const ItemAvatars = ({
               }}
             >
               <NextImage
-                src={it?.item?.image_full_url ?? it?.image_full_url}
+                src={
+                  it?.item?.image_full_url ??
+                  it?.service?.thumbnail_full_url ??
+                  it?.image_full_url
+                }
                 alt=""
                 width={size}
                 height={size}
@@ -228,6 +252,8 @@ const CartStoreCard = ({
   onReorder,
   onClick,
   isReordering = false,
+  isDeleting = false,
+  showReorder = true,
 }) => {
   const theme = useTheme();
   const { t } = useTranslation();
@@ -330,32 +356,34 @@ const CartStoreCard = ({
               {getAmountWithSign(totalPrice)}
             </Typography>
           </PriceRow>
-          <ReorderBtn
-            disabled={isReordering}
-            onClick={(e) => {
-              e.stopPropagation();
-              if (isReordering) return;
-              onReorder?.();
-            }}
-          >
-            {isReordering ? (
-              <CircularProgress
-                size={16}
-                thickness={5}
-                sx={{ color: "#ffffff" }}
-              />
-            ) : (
-              <i
-                className="fi fi-rr-rotate-right"
-                style={{
-                  fontSize: "16px",
-                  lineHeight: 1,
-                  display: "flex",
-                  color: "#ffffff",
-                }}
-              />
-            )}
-          </ReorderBtn>
+          {showReorder ? (
+            <ReorderBtn
+              disabled={isReordering}
+              onClick={(e) => {
+                e.stopPropagation();
+                if (isReordering) return;
+                onReorder?.();
+              }}
+            >
+              {isReordering ? (
+                <CircularProgress
+                  size={16}
+                  thickness={5}
+                  sx={{ color: "#ffffff" }}
+                />
+              ) : (
+                <i
+                  className="fi fi-rr-rotate-right"
+                  style={{
+                    fontSize: "16px",
+                    lineHeight: 1,
+                    display: "flex",
+                    color: "#ffffff",
+                  }}
+                />
+              )}
+            </ReorderBtn>
+          ) : null}
         </Stack>
       </CardRoot>
     );
@@ -421,20 +449,26 @@ const CartStoreCard = ({
           </Stack>
         </Stack>
         <TrashBtn
+          disabled={isDeleting}
           onClick={(e) => {
             e.stopPropagation();
+            if (isDeleting) return;
             onDelete?.();
           }}
         >
-          <i
-            className="fi fi-rr-trash"
-            style={{
-              fontSize: "20px",
-              lineHeight: 1,
-              display: "flex",
-              color: theme.palette.error.red,
-            }}
-          />
+          {isDeleting ? (
+            <CircularProgress size={16} thickness={5} sx={{ color: theme.palette.error.red }} />
+          ) : (
+            <i
+              className="fi fi-rr-trash"
+              style={{
+                fontSize: "20px",
+                lineHeight: 1,
+                display: "flex",
+                color: theme.palette.error.red,
+              }}
+            />
+          )}
         </TrashBtn>
       </RunningHeader>
 

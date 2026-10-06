@@ -54,10 +54,46 @@ export interface ChatCartItem {
   discounted_price?: number;
   quantity: number;
   total_price?: number;
+  line_total?: number;
   store_id?: number;
   store_name?: string;
   variation?: unknown;
   item?: ChatProduct & Record<string, any>;
+}
+
+// Byte-identical to a GET /bogo/offers row, so the existing bogo-list card
+// (src/components/bogo-list/BogoOfferCard.jsx) renders it as-is.
+export interface ChatBogoOffer {
+  id: number;
+  slug?: string;
+  title: string;
+  description?: string;
+  image_full_url?: string | null;
+  buy_qty?: number;
+  get_qty?: number;
+}
+
+// A bundle suggestion card — same shape as the `bundles` row nested under a
+// store in GET .../get-combined-data (one summary thumbnail, not a
+// per-item image set). Carries enough of its owning store to navigate there
+// — unlike StackFood's bogo bundle (which deep-links to the offer page), a
+// 6amMart bundle belongs to one store and has no separate details page, so
+// the card opens that store instead.
+export interface ChatBundle {
+  id: number;
+  slug?: string | null;
+  name?: string;
+  image_full_url?: string | null;
+  item_count?: number;
+  base_price?: number;
+  bundle_price?: number;
+  discount_percentage?: number;
+  // Names only, no images — what the backend actually sends. Shown as a
+  // tooltip on the item count instead of per-item avatars.
+  member_items?: string[];
+  store_id?: number;
+  store_slug?: string;
+  store_name?: string;
 }
 
 export interface ChatCategory {
@@ -70,11 +106,29 @@ export interface ChatCategory {
   priority?: number;
 }
 
+// Persisted messages store the cart grouped by store instead of the flat
+// `cart_items` list the live send response uses.
+export interface ChatCartStoreGroup {
+  store_id?: number;
+  store_name?: string;
+  items?: ChatCartItem[];
+  store_subtotal?: number;
+}
+
+export interface ChatCartSummary {
+  stores?: ChatCartStoreGroup[];
+  grand_total?: number;
+  total_items?: number;
+}
+
 export interface ChatMessageMetadata {
   products?: ChatProduct[];
   stores?: ChatStore[];
   categories?: ChatCategory[];
+  bogo_offers?: ChatBogoOffer[];
+  bundles?: ChatBundle[];
   cart_items?: ChatCartItem[];
+  cart?: ChatCartSummary;
   cart_updated?: boolean;
 }
 
@@ -156,11 +210,52 @@ export interface AiChatMessagesResponse {
   data: AiChatMessageApi[];
 }
 
+// Persisted messages group the cart under metadata.cart.stores[].items[]
+// while the live send response uses a flat metadata.cart_items — flatten the
+// grouped shape (carrying each store's id/name onto its items) so the UI can
+// always read cart_items.
+const flattenCartStores = (
+  cart: ChatCartSummary | undefined
+): ChatCartItem[] => {
+  if (!Array.isArray(cart?.stores)) return [];
+  return cart.stores.flatMap((store) =>
+    (Array.isArray(store?.items) ? store.items : []).map((item) => ({
+      ...item,
+      store_id: item?.store_id ?? store?.store_id,
+      store_name: item?.store_name ?? store?.store_name,
+    }))
+  );
+};
+
+// The messages API may deliver `metadata` as a JSON string (unparsed DB
+// column) — normalize so consumers can always read metadata.cart_items etc.
+export const normalizeMetadata = (
+  metadata: unknown
+): ChatMessageMetadata | null => {
+  let meta: ChatMessageMetadata | null = null;
+  if (!metadata) return null;
+  if (typeof metadata === "string") {
+    try {
+      const parsed = JSON.parse(metadata);
+      meta = typeof parsed === "object" && parsed !== null ? parsed : null;
+    } catch {
+      return null;
+    }
+  } else if (typeof metadata === "object") {
+    meta = metadata as ChatMessageMetadata;
+  }
+  if (!meta) return null;
+  if (!meta.cart_items?.length && meta.cart?.stores?.length) {
+    meta = { ...meta, cart_items: flattenCartStores(meta.cart) };
+  }
+  return meta;
+};
+
 export const mapApiMessage = (m: AiChatMessageApi): ChatMessage => ({
   id: String(m.id),
   role: m.role === "user" ? "user" : "bot",
   text: m.content ?? "",
   createdAt: m.created_at ? new Date(m.created_at).getTime() : Date.now(),
   toolName: m.tool_name,
-  metadata: m.metadata,
+  metadata: normalizeMetadata(m.metadata),
 });

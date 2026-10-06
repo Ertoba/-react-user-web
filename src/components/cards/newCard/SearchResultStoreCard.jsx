@@ -4,9 +4,12 @@ import VerifiedStoreBadge from "components/cards/VerifiedStoreBadge";
 import NextImage from "components/NextImage";
 import ClosedNow from "components/closed-now";
 import { getAmountWithSign } from "helper-functions/CardHelpers";
+import { getStoreItemCardPricing } from "helper-functions/getStoreItemCardPricing";
 import { handleStoreRedirect } from "helper-functions/handleStoreRedirect";
 import { useRouter } from "next/router";
 import { useTranslation } from "react-i18next";
+import { getCurrentModuleType } from "helper-functions/getCurrentModuleType";
+import { ModuleTypes } from "helper-functions/moduleTypes";
 
 // ─── Styled ────────────────────────────────────────────────────────────────
 
@@ -23,7 +26,8 @@ const CardRoot = styled(Box)(({ theme }) => ({
   boxShadow: "0px 1px 4px 0px rgba(0,0,0,0.05)",
   transition: "box-shadow 0.2s ease",
   "&:hover": {
-    boxShadow: "0px 4px 4px -4px rgba(0,0,0,0.05), 0px 16px 32px -4px rgba(0,0,0,0.05)",
+    boxShadow:
+      "0px 4px 4px -4px rgba(0,0,0,0.05), 0px 16px 32px -4px rgba(0,0,0,0.05)",
   },
 }));
 
@@ -90,20 +94,21 @@ const EmptyItems = styled(Box)(({ theme }) => ({
 // ─── Item card (small inside slider) ───────────────────────────────────────
 
 const SearchItemCard = ({ item }) => {
-  const displayPrice =
-    item?.discount > 0
-      ? item.price -
-        (item.discount_type === "percent"
-          ? (item.price * item.discount) / 100
-          : item.discount)
-      : item?.price;
-  const showStrike = item?.discount > 0 && item?.price > displayPrice;
+  const { displayPrice, originalPrice, showStrike } =
+    getStoreItemCardPricing(item);
 
   return (
-    <Box sx={{ width: 84, flexShrink: 0, display: "flex", flexDirection: "column" }}>
+    <Box
+      sx={{
+        width: 84,
+        flexShrink: 0,
+        display: "flex",
+        flexDirection: "column",
+      }}
+    >
       <ItemThumb>
         <NextImage
-          src={item?.image_full_url}
+          src={item?.image_full_url ?? item?.thumbnail_full_url}
           alt={item?.name}
           width="84"
           height="84"
@@ -159,7 +164,7 @@ const SearchItemCard = ({ item }) => {
                 fontVariantNumeric: "tabular-nums",
               }}
             >
-              {getAmountWithSign(item.price)}
+              {getAmountWithSign(originalPrice)}
             </Typography>
           )}
         </Stack>
@@ -270,14 +275,9 @@ const SearchResultStoreCard = ({ store, items = [], showAdBadge = false }) => {
   const theme = useTheme();
   const { t } = useTranslation();
   const router = useRouter();
+  const currentModule = getCurrentModuleType();
 
   const handleClick = () => handleStoreRedirect(store, router);
-
-  const formatDistance = (meters) => {
-    if (!meters && meters !== 0) return null;
-    const km = meters / 1000;
-    return `${km.toFixed(1)} km`;
-  };
 
   return (
     <CardRoot onClick={handleClick}>
@@ -337,7 +337,7 @@ const SearchResultStoreCard = ({ store, items = [], showAdBadge = false }) => {
               fontSize="14px"
             />
           </Stack>
-          {(store?.delivery_time || store?.distance != null) && (
+          {(store?.delivery_time || store?.distance_label) && (
             <Stack
               direction="row"
               alignItems="center"
@@ -355,6 +355,7 @@ const SearchResultStoreCard = ({ store, items = [], showAdBadge = false }) => {
               />
               {store?.delivery_time && (
                 <Typography
+                  dir="ltr"
                   sx={{
                     fontSize: "12px",
                     fontWeight: 600,
@@ -362,13 +363,15 @@ const SearchResultStoreCard = ({ store, items = [], showAdBadge = false }) => {
                     lineHeight: 1.3,
                     whiteSpace: "nowrap",
                     fontVariantNumeric: "tabular-nums",
+                    unicodeBidi: "isolate",
                   }}
                 >
                   {store.delivery_time}
                 </Typography>
               )}
-              {formatDistance(store?.distance) && (
+              {store?.distance_label && (
                 <Typography
+                  dir="ltr"
                   sx={{
                     fontSize: "12px",
                     fontWeight: 600,
@@ -376,9 +379,10 @@ const SearchResultStoreCard = ({ store, items = [], showAdBadge = false }) => {
                     lineHeight: 1.3,
                     whiteSpace: "nowrap",
                     fontVariantNumeric: "tabular-nums",
+                    unicodeBidi: "isolate",
                   }}
                 >
-                  ({formatDistance(store.distance)})
+                  ({store.distance_label})
                 </Typography>
               )}
             </Stack>
@@ -397,7 +401,11 @@ const SearchResultStoreCard = ({ store, items = [], showAdBadge = false }) => {
       ) : (
         <EmptyItems>
           <i
-            className="fi fi-rr-restaurant"
+            className={`fi ${
+              currentModule === ModuleTypes.SERVICE
+                ? "fi-rr-sign-posts-wrench"
+                : "fi-rr-restaurant"
+            }`}
             style={{
               fontSize: "16px",
               lineHeight: 1,
@@ -413,7 +421,9 @@ const SearchResultStoreCard = ({ store, items = [], showAdBadge = false }) => {
               lineHeight: 1.3,
             }}
           >
-            {t("No items available")}
+            {currentModule === ModuleTypes.SERVICE
+              ? t("No services available")
+              : t("No items available")}
           </Typography>
         </EmptyItems>
       )}
