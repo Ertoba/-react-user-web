@@ -81,10 +81,10 @@ const ContactLists = ({
 					messageTime={item.last_message_time}
 					last_message={item?.last_message}
 					receiver={
-						[item?.sender?.f_name, item?.sender?.l_name]
-							.filter(Boolean)
-							.join(" ") || " "
-					}
+[item?.sender?.f_name, item?.sender?.l_name]
+.filter(Boolean)
+.join(" ") || " "
+}
 					unRead={item.unread_message_count}
 					userList={item}
 					selectedId={selectedId}
@@ -99,12 +99,12 @@ const ContactLists = ({
 		<CustomStackFullWidth>
 			{channelList?.length > 0 && (
 				<Box
-					sx={{
-						maxHeight: selectedId ? "430px" : "270px",
-						overflowY: "auto",
-						overscrollBehavior: "contain",
-					}}
-				>
+sx={{
+maxHeight: selectedId ? "430px" : "270px",
+overflowY: "auto",
+overscrollBehavior: "contain",
+}}
+>
 					<List disablePadding>
 						{channelList?.map(
 							(item, index) =>
@@ -126,7 +126,7 @@ const ContactLists = ({
 					</List>
 				</Box>
 			)}
-			{channelList?.length === 0 && (
+			{!channelList?.length && (
 				<Stack width="100%" justifyContent="center" alignItems="center">
 					<CustomTypography>
 						{t("You have no channels.")}

@@ -20,6 +20,7 @@ import { Box, Stack } from "@mui/system";
 import { useFormik } from "formik";
 import { t } from "i18next";
 import React, { useState } from "react";
+import toast from "react-hot-toast";
 import { useSelector } from "react-redux";
 import * as Yup from "yup";
 import {
@@ -94,9 +95,11 @@ const WalletBoxComponent = (props) => {
     mutate(payloadData, {
       onSuccess: async (response) => {
         setLoading(false);
-        const url = response?.redirect_link;
+        const url = response?.content?.redirect_link ?? response?.redirect_link;
         if (url) {
           window.location.assign(url);
+        } else {
+          toast.error(t("Something went wrong, please try again"));
         }
       },
       onError: (error) => {

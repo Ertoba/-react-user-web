@@ -40,7 +40,7 @@ import {
   getConvertDiscount,
   getImageUrl,
   getTotalVariationsPrice,
-  handleTotalAmountWithAddons,
+  newHandleTotalAmountWithAddons,
 } from "utils/CustomFunctions";
 import Body2 from "components/typographies/Body2";
 import { formatProductName } from "utils/georgianText";
@@ -121,7 +121,7 @@ const CartContent = (props) => {
       } else {
         if (cartItem?.maximum_cart_quantity) {
           if (cartItem?.maximum_cart_quantity <= cartItem?.quantity) {
-            toast.error(t(out_of_limits));
+            toast.error(t(out_of_limits), { id: "out-of-limits" });
           } else {
             updateMutate(itemObject, {
               onSuccess: cartUpdateHandleSuccess,
@@ -180,6 +180,7 @@ const CartContent = (props) => {
   const handleRemove = () => {
     const cartIdAndGuestId = {
       cart_id: cartItem?.cartItemId,
+      store_id: cartItem?.store_id ?? cartItem?.store?.id,
       guestId: guestId,
     };
     mutate(cartIdAndGuestId, {
@@ -201,7 +202,7 @@ const CartContent = (props) => {
       return cartItem?.totalPrice;
     }
   };
-console.log({cartItem});
+  console.log({ cartItem });
   const productDisplayName = formatProductName(cartItem?.name);
 
   return (
@@ -265,7 +266,7 @@ console.log({cartItem});
           </Typography>
           <Typography fontWeight="500" fontSize={{ xs: "13px", md: "16px" }}>
             {getAmountWithSign(
-              handleTotalAmountWithAddons(
+              newHandleTotalAmountWithAddons(
                 getDiscountedAmount(
                   cartItem?.totalPrice,
                   cartItem?.discount,
