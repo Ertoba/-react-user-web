@@ -20,7 +20,7 @@ const AccountInfo = ({
 
   return (
     <>
-      <Grid container columnSpacing={3}>
+      <Grid container spacing={3}>
         <Grid item xs={12} lg={4}  sx={{ minHeight: "5rem" }}>
           <CustomPhoneInput
             required
@@ -52,7 +52,6 @@ const AccountInfo = ({
             // onChangeHandler={restaurantNameHandler}
 
             value={deliveryManFormik.values.password}
-            fontSize="12px"
             startIcon={
               <InputAdornment position="start">
                 <HttpsIcon
@@ -83,7 +82,6 @@ const AccountInfo = ({
             errors={deliveryManFormik.errors.confirm_password}
             fieldProps={deliveryManFormik.getFieldProps("confirm_password")}
             value={deliveryManFormik.values.confirm_password}
-            fontSize="12px"
             startIcon={
               <InputAdornment position="start">
                 <HttpsIcon

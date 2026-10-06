@@ -34,10 +34,8 @@ const AccountInfo = ({
         }}>
         {t("Account Info")}
       </Typography>
-      <Stack p={2} pb={0} mt={2}>
-        <Grid container columnSpacing={3}>
-          <Grid item xs={12} md={12} align="left">
-          </Grid>
+      <Stack p={2} pb={2} mt={2}>
+        <Grid container spacing={3}>
           <Grid item xs={12} sm={6} md={4}>
             <CustomTextFieldWithFormik
               labelColor={alpha(theme.palette.neutral[1000],0.8)}
@@ -50,7 +48,6 @@ const AccountInfo = ({
               fieldProps={RestaurantJoinFormik.getFieldProps("email")}
               onChangeHandler={fNameHandler}
               value={RestaurantJoinFormik.values.email}
-              fontSize="12px"
               startIcon={
                 <InputAdornment position="start">
                   <EmailIcon
@@ -79,7 +76,6 @@ const AccountInfo = ({
               fieldProps={RestaurantJoinFormik.getFieldProps("password")}
               onChangeHandler={lNameHandler}
               value={RestaurantJoinFormik.values.password}
-              fontSize="12px"
               startIcon={
                 <InputAdornment position="start">
                   <LockIcon
@@ -108,7 +104,6 @@ const AccountInfo = ({
               fieldProps={RestaurantJoinFormik.getFieldProps("confirm_password")}
               onChangeHandler={lNameHandler}
               value={RestaurantJoinFormik.values.confirm_password}
-              fontSize="12px"
               startIcon={
                 <InputAdornment position="start">
                   <LockIcon

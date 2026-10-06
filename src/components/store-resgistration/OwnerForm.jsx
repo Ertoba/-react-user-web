@@ -37,10 +37,8 @@ const OwnerForm = ({
       >
         {t("Owner Information")}
       </Typography>
-      <Stack p={2} pb={{xs: 2, md: 0}} mt={2}>
-        <Grid container columnSpacing={3}>
-          <Grid item xs={12} md={12} align="left">
-          </Grid>
+      <Stack p={2} pb={2} mt={2}>
+        <Grid container spacing={3}>
           <Grid item xs={12} sm={6} md={4}>
               <CustomTextFieldWithFormik
               labelColor={alpha(theme.palette.neutral[1000], 0.8)}
@@ -53,7 +51,6 @@ const OwnerForm = ({
               fieldProps={RestaurantJoinFormik.getFieldProps("f_name")}
               onChangeHandler={fNameHandler}
               value={RestaurantJoinFormik.values.f_name}
-              fontSize="12px"
               startIcon={
                 <InputAdornment position="start">
                   <AccountCircleIcon
@@ -82,7 +79,6 @@ const OwnerForm = ({
               fieldProps={RestaurantJoinFormik.getFieldProps("l_name")}
               onChangeHandler={lNameHandler}
               value={RestaurantJoinFormik.values.l_name}
-              fontSize="12px"
               startIcon={
                 <InputAdornment position="start">
                   <AccountCircleIcon

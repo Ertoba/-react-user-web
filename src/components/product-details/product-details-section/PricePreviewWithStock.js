@@ -15,10 +15,7 @@ const PricePreviewWithStock = (props) => {
 				display="flex"
 				alignItems="center"
 				fontWeight="700"
-				color={theme.palette.primary.main}
-				sx={{
-					fontSize: { xs: "15px", sm: "24px" },
-				}}
+				sx={{ fontSize: { xs: "15px", sm: "24px", md: "32px" }, color: "neutral.1050" }}
 				component="h2"
 			>
 				{price ===
@@ -46,7 +43,7 @@ const PricePreviewWithStock = (props) => {
 									marginLeft="8px"
 									fontWeight="400"
 									color={theme.palette.customColor.textGray}
-									sx={{ fontSize: { xs: "13px", sm: "16px" } }}
+									sx={{ fontSize: { xs: "13px", sm: "16px", md: "18px" } }}
 								>
 									<del>{getAmountWithSign(price)}</del>
 								</Typography>
@@ -66,10 +63,7 @@ const PricePreviewWithStock = (props) => {
 				display="flex"
 				alignItems="center"
 				fontWeight="700"
-				color={theme.palette.primary.main}
-				sx={{
-					fontSize: { xs: "15px", sm: "24px" },
-				}}
+				sx={{ fontSize: { xs: "15px", sm: "24px", md: "32px" }, color: "neutral.1050" }}
 			>
 				{Number(state?.modalData?.[0]?.discount ?? 0) === 0 ? (
 					<>
@@ -112,7 +106,7 @@ const PricePreviewWithStock = (props) => {
 							marginLeft="8px"
 							fontWeight="400"
 							color={theme.palette.customColor.textGray}
-							sx={{ fontSize: { xs: "13px", sm: "16px" } }}
+							sx={{ fontSize: { xs: "13px", sm: "16px", md: "18px" } }}
 						>
 							<del>
 								{`${getAmountWithSign(minPrice)} - ${getAmountWithSign(
