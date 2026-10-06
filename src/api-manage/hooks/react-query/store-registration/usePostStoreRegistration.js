@@ -6,6 +6,7 @@ import {
   store_registration,
 } from "../../../ApiRoutes";
 import MainApi from "../../../MainApi";
+import { getApiContent } from "../../../getApiContent";
 import dayjs from "dayjs";
 import { REQUIRED_CONTENT_LANGUAGES } from "components/store-resgistration/helper";
 const postData = async (storeData) => {
@@ -75,7 +76,7 @@ const postData = async (storeData) => {
     `${store_registration}`,
     formData
   );
-  return responseData;
+  return getApiContent(responseData);
 };
 
 export const usePostStoreRegistration = () => {

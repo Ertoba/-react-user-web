@@ -17,23 +17,59 @@ export const handleTokenExpire = (item, status) => {
 };
 
 export const onErrorResponse = (error) => {
-  if (error?.response?.status === 401) {
-    handleTokenExpire(error, error?.response?.status);
+  const status = error?.response?.status;
+
+  if (status === 401) {
+    handleTokenExpire(error, status);
     return;
   }
 
-  error?.response?.data?.errors?.forEach((item) => {
-    handleTokenExpire(item, error?.response?.status);
-  });
+  const errors = error?.response?.data?.errors;
+
+  if (Array.isArray(errors)) {
+    errors.forEach((item) => {
+      handleTokenExpire(item, status);
+    });
+  } else if (errors && typeof errors === "object") {
+    const messages = Object.values(errors).flat().filter(Boolean);
+
+    if (messages.length > 0) {
+      messages.forEach((message) =>
+        handleTokenExpire({ message }, status)
+      );
+    } else {
+      handleTokenExpire({ message: errors?.message }, status);
+    }
+  } else if (errors) {
+    handleTokenExpire(
+      { message: typeof errors === "string" ? errors : undefined },
+      status
+    );
+  }
 };
+
 export const onSingleErrorResponse = (error) => {
+  const status = error?.response?.status;
+  const errors = error?.response?.data?.errors;
+
+  if (
+    (Array.isArray(errors) && errors.length > 0) ||
+    (errors && typeof errors === "object")
+  ) {
+    return onErrorResponse(error);
+  }
+
+  if (status === 401) {
+    handleTokenExpire(error, status);
+    return;
+  }
+
   const message =
     error?.response?.data?.message ||
-    error?.response?.data?.errors?.[0]?.message ||
+    (typeof errors === "string" ? errors : undefined) ||
     error?.message;
 
   toast.error(t(message), {
     id: "error",
   });
-  handleTokenExpire(error, error?.response?.status);
 };

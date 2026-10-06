@@ -1,4 +1,5 @@
 import { Children } from "react";
+import { getApiList } from "api-manage/getApiContent";
 import Document, { Head, Html, Main, NextScript } from "next/document";
 import createEmotionServer from "@emotion/server/create-instance";
 import createEmotionCache from "../src/utils/create-emotion-cache";
@@ -59,6 +60,7 @@ class CustomDocument extends Document {
             crossOrigin="anonymous"
           />
 
+
           {/* Social login scripts */}
           <script
             type="application/javascript"
@@ -103,10 +105,7 @@ class CustomDocument extends Document {
 
           {analyticsConfig.google_analytics && (
             <>
-              <script
-                async
-                src={`https://www.googletagmanager.com/gtag/js?id=${analyticsConfig.google_analytics}`}
-              />
+              <script async src={`https://www.googletagmanager.com/gtag/js?id=${analyticsConfig.google_analytics}`} />
               <script
                 dangerouslySetInnerHTML={{
                   __html: `
@@ -214,13 +213,17 @@ class CustomDocument extends Document {
         </Head>
 
         <body>
-          <Main />
-          <NextScript />
+        <Main />
+        <NextScript />
         </body>
       </Html>
     );
   }
 }
+
+const ANALYTICS_TTL_MS = 5 * 60 * 1000;
+let cachedAnalyticsConfig = null;
+let cachedAnalyticsAt = 0;
 
 CustomDocument.getInitialProps = async (ctx) => {
   const originalRenderPage = ctx.renderPage;
@@ -244,25 +247,41 @@ CustomDocument.getInitialProps = async (ctx) => {
 
   // 🛠 Fetch analytics config server-side
   let analyticsConfig = {};
-  try {
-    const baseUrl =
-      process.env.NEXT_PUBLIC_BASE_URL || "https://yourdomain.com";
-    const res = await fetch(`${baseUrl}/api/v1/config/get-analytic-scripts`, {
-      headers: {
-        "X-software-id": 33571750,
-        "X-server": "server",
-        origin: process.env.NEXT_CLIENT_HOST_URL || "http://localhost:3000",
-      },
-    });
-    const data = await res.json();
-    if (Array.isArray(data)) {
-      data.forEach((item) => {
-        if (item.type && item.script_id)
-          analyticsConfig[item.type] = item.script_id;
+  // `_document.getInitialProps` runs on EVERY server render, so this fetch was
+  // firing once per page view on every route — checkout included. The analytics
+  // script ids change rarely, so memoise them for the life of the server
+  // process (with a TTL) instead of paying an API round trip per request.
+  if (
+    cachedAnalyticsConfig &&
+    Date.now() - cachedAnalyticsAt < ANALYTICS_TTL_MS
+  ) {
+    analyticsConfig = cachedAnalyticsConfig;
+  } else {
+    try {
+      const baseUrl =
+        (process.env.NEXT_PUBLIC_BASE_URL || "").replace(/\/+$/, "") ||
+        "https://yourdomain.com";
+      const res = await fetch(`${baseUrl}/api/v1/config/get-analytic-scripts`, {
+        headers: {
+          "X-software-id": 33571750,
+          "X-server": "server",
+          origin: process.env.NEXT_CLIENT_HOST_URL || "http://localhost:3000",
+        },
       });
+      // v4.2 wraps the script list in the standard envelope, so a raw
+      // Array.isArray() check silently skipped every analytics tag.
+      const data = getApiList(await res.json());
+      if (Array.isArray(data)) {
+        data.forEach((item) => {
+          if (item.type && item.script_id)
+            analyticsConfig[item.type] = item.script_id;
+        });
+      }
+      cachedAnalyticsConfig = analyticsConfig;
+      cachedAnalyticsAt = Date.now();
+    } catch (err) {
+      console.error("Error fetching analytics config:", err);
     }
-  } catch (err) {
-    console.error("Error fetching analytics config:", err);
   }
 
   return {
