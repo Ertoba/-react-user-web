@@ -24,13 +24,13 @@ import {
 import CustomImageContainer from "../../../CustomImageContainer";
 import CustomAlert from "../../../alert/CustomAlert";
 import CustomModal from "../../../modal";
-import { zoneWiseModule } from "../../../module-select/ModuleSelect";
+import { zoneWiseModule, getCurrentZoneIds } from "../../../module-select/ModuleSelect";
 import CloseIcon from "@mui/icons-material/Close";
 import ErrorIcon from "@mui/icons-material/Error";
 import { setSelectedModule } from "redux/slices/utils";
 import { setCartList } from "redux/slices/cart";
 import useGetBookingList from "api-manage/hooks/react-query/useGetBookingList";
-import useGetAllCartList from "api-manage/hooks/react-query/add-cart/useGetAllCartList";
+import useGetGroupedCart from "api-manage/hooks/react-query/add-cart/useGetGroupedCart";
 import { handleProductValueWithOutDiscount } from "utils/CustomFunctions";
 import { getSelectedVariations } from "components/header/second-navbar/SecondNavbar";
 import { getGuestId } from "helper-functions/getToken";
@@ -109,7 +109,8 @@ export const ModuleSelection = ({
   fromsignup,
   disableAutoFocus,
   setOpenModuleSelection,
-  zoneId
+  zoneId,
+  autoSelect = false,
 }) => {
   const router = useRouter();
   const [openModal, setOpenModal] = useState(true);
@@ -176,7 +177,7 @@ export const ModuleSelection = ({
     data: cartListData,
     refetch: cartListRefetch,
     isLoading,
-  } = useGetAllCartList(getGuestId(), cartListSuccessHandler);
+  } = useGetGroupedCart();
 
   const bookingSuccess = (res) => {
     dispatch(setCartList(res));
@@ -245,19 +246,17 @@ export const ModuleSelection = ({
     setOpenModuleSelection?.(false);
     completeModuleChange(data);
   };
-  let currentZoneIds = undefined;
-  if (typeof window !== "undefined") {
-    const rawZoneIds = localStorage.getItem("zoneid");
-    if (rawZoneIds) {
-      try {
-        const parsed = JSON.parse(rawZoneIds);
-        currentZoneIds = Array.isArray(parsed) ? parsed : undefined;
-      } catch {
-        currentZoneIds = undefined;
-      }
-    }
-  }
+  const currentZoneIds = getCurrentZoneIds();
   const modulesToShow = currentZoneIds ? zoneWiseModule(data) : data;
+
+  useEffect(() => {
+    if (!autoSelect || !data?.length) return;
+    const first = modulesToShow?.[0];
+    if (!first) return;
+    handleSingleModule(first);
+  }, [autoSelect, data]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  if (autoSelect) return null;
   console.log("modulesToShow", modulesToShow, currentZoneIds, data);
   const innerContent = () => {
 

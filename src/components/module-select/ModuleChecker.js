@@ -26,6 +26,7 @@ const moduleMatchesIdentifier = (moduleItem, identifier) => {
   const identifierString = String(identifier);
   return (
     String(moduleItem?.slug) === identifierString ||
+    String(moduleItem?.module_type) === identifierString ||
     String(moduleItem?.id) === identifierString
   );
 };
@@ -98,7 +99,9 @@ const ModuleChecker = () => {
       const moduleIdStr = String(moduleIdFromUrl);
       const selectedModule = data.find(
         (item) =>
-          String(item?.slug) === moduleIdStr || String(item?.id) === moduleIdStr
+          String(item?.slug) === moduleIdStr ||
+            String(item?.module_type) === moduleIdStr ||
+            String(item?.id) === moduleIdStr
       );
       if (selectedModule) {
         localStorage.setItem("module", JSON.stringify(selectedModule));
