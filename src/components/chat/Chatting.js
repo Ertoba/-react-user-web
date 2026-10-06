@@ -12,6 +12,7 @@ import { useRouter } from "next/router";
 import { useTheme } from "@mui/material/styles";
 import ConversationInfoTop from "./ConversationInfoTop";
 import LoadingBox from "./LoadingBox";
+import ChatDetailShimmer from "../ai-chatbot/ChatDetailShimmer";
 import { useGetChannelList } from "api-manage/hooks/react-query/chat/useGetChannelLists";
 import { onErrorResponse } from "api-manage/api-error-response/ErrorResponses";
 import { useGetConversation } from "api-manage/hooks/react-query/chat/useGetConversation";
@@ -29,11 +30,11 @@ const Chatting = ({ configData, embedded = false, initialMessage = "" }) => {
 	const [channelList, setChannelList] = useState([]);
 	const [messagesData, setMessagesData] = useState([]);
 	const [apiFor, setApiFor] = useState(
-		embedded ? "admin_id" : "conversation_id"
-	);
+embedded ? "admin_id" : "conversation_id"
+);
 	const [receiverType, setReceiverType] = useState(
-		embedded ? "admin" : undefined
-	);
+embedded ? "admin" : undefined
+);
 	const [receiverName, setReceiverName] = useState();
 	const [receiverId, setReceiverId] = useState();
 	const [searchValue, setSearchValue] = useState("");
@@ -41,8 +42,9 @@ const Chatting = ({ configData, embedded = false, initialMessage = "" }) => {
 	const [receiverImage, setReceiverImage] = useState();
 	const [userType, setUserType] = useState("");
 	const [resetState, setResetState] = useState(embedded);
-	const initialMessageSent = useRef(false);
-	const sendMessageRef = useRef(null);
+const initialMessageSent = useRef(false);
+const sendMessageRef = useRef(null);
+const [isConversationLoading, setIsConversationLoading] = useState(false);
 	const mdUp = useMediaQuery((theme) => theme.breakpoints.up("md"));
 	const mdDown = useMediaQuery((theme) => theme.breakpoints.down("md"));
 	const router = useRouter();
@@ -74,8 +76,14 @@ const Chatting = ({ configData, embedded = false, initialMessage = "" }) => {
 	const handleToggleSidebar = () => {
 		setIsSidebarOpen((prevState) => !prevState);
 	};
+	// The old API wrapped the rows in `conversations`; v4.2 returns them under
+	// `content.data`, which the hook now unwraps to a plain array. Accept either
+	// and never store undefined — ContactLists does `channelList.length`.
+	const toChannelArray = (res) =>
+		Array.isArray(res) ? res : res?.conversations ?? res?.data ?? [];
+
 	const handleChatListOnSuccess = (res) => {
-		setChannelList(res?.conversations ?? []);
+		setChannelList(toChannelArray(res));
 	};
 	const {
 		refetch: refetchChannelList,
@@ -83,6 +91,9 @@ const Chatting = ({ configData, embedded = false, initialMessage = "" }) => {
 		isLoading: channelLoading,
 	} = useGetChannelList(handleChatListOnSuccess);
 
+	// const handleConFetchOnSuccess = (res) => {
+	// 	setConversationData(res.pages[0]);
+	// };
 	const {
 		data,
 		isSuccess,
@@ -104,9 +115,9 @@ const Chatting = ({ configData, embedded = false, initialMessage = "" }) => {
 			setChannelId(conversationId);
 			setScrollBottom(true);
 			const tempReceiver = channelList.find(
-				(item) => item.id == conversationId
-			);
-			setReceiver(tempReceiver);
+(item) => item.id == conversationId
+);
+setReceiver(tempReceiver);
 		}
 		if (type === "admin") {
 			setReceiverId(conversationId);
@@ -141,16 +152,18 @@ const Chatting = ({ configData, embedded = false, initialMessage = "" }) => {
 
 	useEffect(() => {
 		if (channelId) {
-			refetch();
+			setMessagesData([]);
+			setIsConversationLoading(true);
+			refetch().finally(() => setIsConversationLoading(false));
 		}
 	}, [channelId]);
 
 	useEffect(() => {
 		setMessagesData(data ? [data] : []);
 	}, [data]);
-	const handleChannelOnClick = async (value) => {
+	const handleChannelOnClick = (value) => {
 		setReceiverId(null);
-		await refetchChannelList();
+		refetchChannelList();
 		if (value.receiver_type === "admin") {
 			setApiFor("admin_id");
 			setChannelId("admin");
@@ -165,7 +178,7 @@ const Chatting = ({ configData, embedded = false, initialMessage = "" }) => {
 			setChannelId(value.id);
 			setScrollBottom(true);
 			setReceiverType(value.receiver_type);
-			setReceiverName(value?.receiver?.f_name);
+			setReceiverName(value.receiver.f_name);
 			setReceiverImage(value?.receiver?.image_full_url);
 			setReceiver(value);
 			setIsSidebarOpen(false);
@@ -198,23 +211,23 @@ const Chatting = ({ configData, embedded = false, initialMessage = "" }) => {
 			onError: onErrorResponse,
 		});
 	};
-	sendMessageRef.current = handleChatMessageSend;
 
-	useEffect(() => {
-		if (
-			!embedded ||
-			!initialMessage.trim() ||
-			initialMessageSent.current ||
-			channelId !== "admin" ||
-			receiverType !== "admin"
-		) {
-			return;
-		}
+sendMessageRef.current = handleChatMessageSend;
 
-		initialMessageSent.current = true;
-		sendMessageRef.current?.({ text: initialMessage, file: [] });
-	}, [channelId, embedded, initialMessage, receiverType]);
+useEffect(() => {
+if (
+!embedded ||
+!initialMessage.trim() ||
+initialMessageSent.current ||
+channelId !== "admin" ||
+receiverType !== "admin"
+) {
+return;
+}
 
+initialMessageSent.current = true;
+sendMessageRef.current?.({ text: initialMessage, file: [] });
+}, [channelId, embedded, initialMessage, receiverType]);
 	useEffect(() => {
 		if (type === "admin" && text && channelId && orderId) {
 			handleChatMessageSend({ text: text, file: [], order_id: orderId });
@@ -229,7 +242,7 @@ const Chatting = ({ configData, embedded = false, initialMessage = "" }) => {
 
 	const handleSearchFetchOnSuccess = (res) => {
 		if (res) {
-			setChannelList(res.conversations);
+			setChannelList(toChannelArray(res));
 		}
 	};
 	const {
@@ -282,23 +295,14 @@ const Chatting = ({ configData, embedded = false, initialMessage = "" }) => {
 	return (
 		<PushNotificationLayout refetch={refetch} pathName="chat">
 			<CustomBoxFullWidth
-				mt={
-					embedded
-						? 0
-						: {
-								xs: "1rem",
-								md: "2rem",
-								paddingInlineEnd: "1rem",
-								paddingBlockEnd: "1rem",
-							}
-				}
-				height={embedded ? "100%" : "auto"}
+				p={embedded ? 0 : { xs: "0px", md: "16px" }}
+height={embedded ? "100%" : "auto"}
 			>
 				<CustomStackFullWidth
-					spacing={embedded ? 0 : 1}
-					direction="row"
-					height={embedded ? "100%" : "auto"}
-				>
+spacing={embedded ? 0 : 1}
+direction="row"
+height={embedded ? "100%" : "auto"}
+>
 					{!embedded && (mdDown ? (
 						<>
 							{isSidebarOpen && (
@@ -361,18 +365,26 @@ const Chatting = ({ configData, embedded = false, initialMessage = "" }) => {
 						/>
 					))}
 
-					<Stack
-						width={mdDown ? (isSidebarOpen ? "" : "100%") : "100%"}
+					{(!mdDown || !isSidebarOpen) && <Stack
+						width="100%"
 						backgroundColor={alpha(
 							theme.palette.background.default,
 							0.6
 						)}
-						borderRadius={embedded ? 0 : "0px 10px 10px 0px"}
-						height={embedded ? "100%" : "auto"}
+						borderRadius={
+embedded
+? 0
+: mdDown
+? "10px"
+: "0px 10px 10px 0px"
+}
+height={embedded ? "100%" : "auto"}
 						sx={{
 							borderLeft: embedded
-								? 0
-								: `1px solid ${theme.palette.neutral[200]}`,
+? 0
+: mdDown
+? "none"
+: `1px solid ${theme.palette.neutral[200]}`,
 						}}
 					>
 						{!embedded && !isSidebarOpen && resetState && (
@@ -397,6 +409,15 @@ const Chatting = ({ configData, embedded = false, initialMessage = "" }) => {
 						)}
 
 						{channelId &&
+							isConversationLoading &&
+							!isSidebarOpen && (
+								<CustomBoxFullWidth p={2}>
+									<ChatDetailShimmer />
+								</CustomBoxFullWidth>
+							)}
+
+						{channelId &&
+							!isConversationLoading &&
 							messagesData.length > 0 &&
 							!isFetchingNextPage &&
 							!isSidebarOpen && (
@@ -413,13 +434,13 @@ const Chatting = ({ configData, embedded = false, initialMessage = "" }) => {
 									userType={userType}
 									channelId={channelId}
 									orderId={orderId}
-									embedded={embedded}
+embedded={embedded}
 								/>
 							)}
 						{isFetchingNextPage && <LoadingBox />}
 
 						{!channelId && !mdDown && <EmptyView />}
-					</Stack>
+					</Stack>}
 				</CustomStackFullWidth>
 			</CustomBoxFullWidth>
 		</PushNotificationLayout>
