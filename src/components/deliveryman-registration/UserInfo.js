@@ -86,7 +86,7 @@ const UserInfo = ({
       <CustomBoxFullWidth>
         <Grid container spacing={3}>
           <Grid item xs={12} lg={9}>
-            <Grid container columnSpacing={3}>
+            <Grid container spacing={3}>
               <Grid item xs={12} sm={6}>
                 <CustomTextFieldWithFormik
                   required
@@ -100,7 +100,6 @@ const UserInfo = ({
                     handleFieldChange("f_name", value);
                   }}
                   value={deliveryManFormik.values.f_name}
-                  fontSize="12px"
                   startIcon={
                     <InputAdornment position="start">
                       <AccountCircleIcon
@@ -129,9 +128,7 @@ const UserInfo = ({
                   }}
                   value={deliveryManFormik.values.l_name}
                   touched={deliveryManFormik.touched.l_name}
-                  errors={deliveryManFormik.errors.l_name}
-                  fontSize="12px"
-                  startIcon={
+                  errors={deliveryManFormik.errors.l_name}                  startIcon={
                     <InputAdornment position="start">
                       <AccountCircleIcon
                         sx={{
@@ -159,9 +156,7 @@ const UserInfo = ({
                   onChangeHandler={(value) => {
                     handleFieldChange("email", value);
                   }}
-                  value={deliveryManFormik.values.email}
-                  fontSize="12px"
-                  startIcon={
+                  value={deliveryManFormik.values.email}                  startIcon={
                     <InputAdornment position="start">
                       <EmailIcon
                         sx={{
@@ -215,9 +210,7 @@ const UserInfo = ({
                     onChangeHandler={(value) => {
                       handleFieldChange("referral_code", value);
                     }}
-                    value={deliveryManFormik.values.referral_code}
-                    fontSize="12px"
-                    startIcon={
+                    value={deliveryManFormik.values.referral_code}                    startIcon={
                       <InputAdornment position="start">
                         <PeopleIcon
                           sx={{

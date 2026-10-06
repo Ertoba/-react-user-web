@@ -57,7 +57,7 @@ const IdentityInfo = ({
   return (
     <>
       <CustomBoxFullWidth>
-        <Grid container columnSpacing={3}>
+        <Grid container spacing={3}>
           <Grid item xs={12} md={6} sx={{ minHeight: "5rem" }}>
             <CustomSelectWithFormik
               required
@@ -99,7 +99,6 @@ const IdentityInfo = ({
               }}
               value={deliveryManFormik.values.identity_number}
               placeholder={t("Enter Identity Number")}
-              fontSize="12px"
               startIcon={
                 <InputAdornment position="start">
                   <BadgeIcon
