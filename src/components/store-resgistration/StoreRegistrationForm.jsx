@@ -18,14 +18,11 @@ import AccountInfo from "components/store-resgistration/AccountInfo";
 import { useQuery } from "react-query";
 import { GoogleApi } from "api-manage/hooks/react-query/googleApi";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  getRequiredContentLanguages,
-  getZoneWiseModule,
-} from "components/store-resgistration/helper";
+import { getRequiredContentLanguages } from "components/store-resgistration/helper";
 import { setAllData, setInZone } from "redux/slices/storeRegistrationData";
 import { SaveButton } from "components/profile/basic-information/Profile.style";
 import { useRouter } from "next/router";
-import useGetModule from "api-manage/hooks/react-query/useGetModule";
+import useGetModuleByZone from "api-manage/hooks/react-query/useGetModuleByZone";
 import { toast } from "react-hot-toast";
 import { formatPhoneNumber } from "utils/CustomFunctions";
 import useGetZoneList from "api-manage/hooks/react-query/zone-list/zone-list";
@@ -84,7 +81,7 @@ const StoreRegistrationForm = ({ setActiveStep, setFormValues }) => {
   const [selectedLanguage, setSelectedLanguage] = React.useState("en");
   const [selectedZone, setSelectedZone] = React.useState(null);
   const { allData, activeStep, inZone } = useSelector((state) => state.storeRegData);
-  const { data, refetch } = useGetModule();
+
   const contentLanguages = React.useMemo(
     () => getRequiredContentLanguages(configData?.language),
     [configData?.language],
@@ -115,6 +112,10 @@ const StoreRegistrationForm = ({ setActiveStep, setFormValues }) => {
     },
   });
   console.log({ inZone });
+  const { data, refetch } = useGetModuleByZone(
+    RestaurantJoinFormik?.values?.zoneId
+  );
+
   let currentLatLng = undefined;
   if (typeof window !== "undefined") {
     currentLatLng = JSON.parse(window.localStorage.getItem("currentLatLng"));
@@ -312,10 +313,7 @@ const StoreRegistrationForm = ({ setActiveStep, setFormValues }) => {
   });
 
   let moduleOption = [];
-  const zoneWiseModules = getZoneWiseModule(
-    data,
-    RestaurantJoinFormik?.values?.zoneId
-  );
+  const zoneWiseModules = data;
 
   if (zoneWiseModules?.length > 0) {
     zoneWiseModules.forEach((module) => {
