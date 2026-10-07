@@ -38,7 +38,8 @@ const GoogleMapComponent = ({
   bottom,
   polygonPaths,
   fromVendor,
-  mapmodal
+  mapmodal,
+  zoomToLocationToken,
 }) => {
   const theme = useTheme();
   const isSmall = useMediaQuery(theme.breakpoints.down("sm"));
@@ -46,27 +47,21 @@ const GoogleMapComponent = ({
   const expanded =
     typeof isModalExpand === "boolean" ? isModalExpand : localExpanded;
   const setExpanded =
-    typeof setIsModalExpand === "function" ? setIsModalExpand : setLocalExpanded;
+    typeof setIsModalExpand === "function"
+      ? setIsModalExpand
+      : setLocalExpanded;
   const containerStyle = {
     width: expanded ? "100vw" : "100%",
     maxHeight: expanded ? "100dvh" : "50dvh",
-    height: expanded
-      ? "100dvh"
-      : height
-        ? height
-        : isSmall
-          ? "350px"
-          : "350px",
+    height: expanded ? "100dvh" : height ? height : isSmall ? "350px" : "350px",
     paddingBottom: "0px",
-    position: "relative",
-    zIndex: 0,
   };
   const center = useMemo(
     () => ({
       lat: parseFloat(location?.lat),
       lng: parseFloat(location?.lng),
     }),
-    [location?.lat, location?.lng]
+    [location?.lat, location?.lng],
   );
 
   const options = useMemo(
@@ -79,7 +74,7 @@ const GoogleMapComponent = ({
       gestureHandling: mapmodal ? "greedy" : "auto",
       styles: theme.palette.mode === "dark" ? darkStyles : grayMapStyle,
     }),
-    [mapmodal, theme.palette.mode]
+    [mapmodal, theme.palette.mode],
   );
 
   const { isLoaded } = useJsApiLoader(googleMapsLoaderOptions);
@@ -167,8 +162,15 @@ const GoogleMapComponent = ({
         bounds.extend(new window.google.maps.LatLng(path.lat, path.lng));
       });
 
-      // Fit the map to the new polygon bounds
-      if (!fromVendor) {
+      // Fit the map to the new polygon bounds. In the vendor flow, skip the fit
+
+      const lat = parseFloat(location?.lat);
+      const lng = parseFloat(location?.lng);
+      const markerInsideNewZone =
+        !isNaN(lat) &&
+        !isNaN(lng) &&
+        bounds.contains(new window.google.maps.LatLng(lat, lng));
+      if (!fromVendor || !markerInsideNewZone) {
         map.fitBounds(bounds);
       }
     }
@@ -179,10 +181,49 @@ const GoogleMapComponent = ({
       const lat = parseFloat(location.lat);
       const lng = parseFloat(location.lng);
       if (!isNaN(lat) && !isNaN(lng)) {
+        const mapCenter = map.getCenter?.();
+        const isDragSync =
+          mapCenter &&
+          Math.abs(mapCenter.lat() - lat) < 0.0001 &&
+          Math.abs(mapCenter.lng() - lng) < 0.0001;
         map.panTo({ lat, lng });
+        const targetZoom = polygonPaths ? 9 : 17;
+        const currentZoom = map.getZoom?.() ?? zoom;
+        if (!isDragSync && currentZoom < targetZoom) {
+          map.setZoom(targetZoom);
+          setZoom(targetZoom);
+        }
       }
     }
   }, [map, location]);
+
+  useEffect(() => {
+    if (!map || !zoomToLocationToken) return;
+    const targetZoom = polygonPaths ? 9 : 17;
+    if (location?.lat && location?.lng) {
+      const lat = parseFloat(location.lat);
+      const lng = parseFloat(location.lng);
+      if (!isNaN(lat) && !isNaN(lng)) {
+        map.panTo({ lat, lng });
+      }
+    }
+    map.setZoom(targetZoom);
+    setZoom(targetZoom);
+  }, [zoomToLocationToken]);
+
+  // Expanding/shrinking resizes the map container; Google Maps leaves the
+  // newly exposed area blank until a "resize" event fires. Trigger it after
+  // the CSS resize settles and restore the center (resize keeps the old
+  // top-left corner otherwise).
+  useEffect(() => {
+    if (!map) return;
+    const id = setTimeout(() => {
+      const prevCenter = map.getCenter?.();
+      window.google?.maps?.event?.trigger(map, "resize");
+      if (prevCenter) map.setCenter(prevCenter);
+    }, 200);
+    return () => clearTimeout(id);
+  }, [expanded, map]);
 
   const MapContent = (
     <Stack
@@ -191,14 +232,13 @@ const GoogleMapComponent = ({
         boxShadow: expanded ? "none" : "inset 0px 4px 4px rgba(0, 0, 0, 0.1)",
         p: "4px",
         position: "relative",
-        isolation: "isolate",
         width: expanded ? "100vw" : "100%",
         height: expanded ? "100dvh" : "auto",
       }}
     >
       <Stack
         position="absolute"
-        zIndex={5}
+        zIndex={1}
         left={left ? left : "15px"}
         bottom={bottom ? bottom : "6%"}
         direction="column"
@@ -231,10 +271,13 @@ const GoogleMapComponent = ({
           <RemoveIcon color="primary" />
         </IconButton>
       </Stack>
-      {(!mapmodal || expanded) && (
+      {/* In mapmodal mode the expand/shrink control lives in MapModal's
+          bottom-right control stack (also available in inline fullscreen), so
+          the in-map copy is only for standalone consumers. */}
+      {!mapmodal && (
         <Stack
           position="absolute"
-          zIndex={5}
+          zIndex={2}
           sx={{
             right: { xs: "10px", sm: "12px" },
             top: expanded ? { xs: "10px", sm: "12px" } : undefined,
@@ -252,7 +295,7 @@ const GoogleMapComponent = ({
       )}
       <GoogleMap
         mapContainerStyle={containerStyle}
-        center={map ? undefined : (center ?? centerPosition)}
+        center={map ? undefined : center ?? centerPosition}
         onLoad={onLoad}
         zoom={zoom}
         onUnmount={onUnmount}
@@ -323,45 +366,51 @@ const GoogleMapComponent = ({
           }
         }}
         options={options}
-      />
-      {!locationLoading ? (
-        <img
-          src={pickMarker.src}
-          style={{
-            zIndex: 4,
-            position: "absolute",
-            marginTop: -63,
-            marginLeft: -32,
-            left: "50%",
-            top: "50%",
-            height: "60px",
-            width: "45px",
-            pointerEvents: "none",
-          }}
-          alt="map"
-        />
-      ) : (
-        <Stack
-          alignItems="center"
-          style={{
-            zIndex: 4,
-            position: "absolute",
-            marginTop: -37,
-            marginLeft: -11,
-            left: "50%",
-            top: "50%",
-            minHeight: "300px",
-            pointerEvents: "none",
-          }}
-        >
-          <CircularProgress />
-        </Stack>
-      )}
+      >
+        {!locationLoading ? (
+          <img
+            src={pickMarker.src}
+            style={{
+              zIndex: 3,
+              position: "absolute",
+              marginTop: -63,
+              marginLeft: -32,
+              left: "50%",
+              top: "50%",
+              height: "60px",
+              width: "45px",
+              pointerEvents: "none",
+            }}
+            alt="map"
+          />
+        ) : (
+          <Stack
+            alignItems="center"
+            style={{
+              zIndex: 3,
+              position: "absolute",
+              marginTop: -37,
+              marginLeft: -11,
+              left: "50%",
+              top: "50%",
+              minHeight: "300px",
+            }}
+          >
+            <CircularProgress />
+          </Stack>
+        )}
+      </GoogleMap>
     </Stack>
   );
 
+  // In MapModal (`mapmodal`) the parent wrapper itself goes fullscreen when
+  // expanded, so render the map INLINE — its search bar and close button float
+  // above the map. The old nested <Modal> here sat at MUI's default z-index
+  // (1300), *below* MapModal's 1600, so the fullscreen map was hidden behind a
+  // white wrapper. Inline also keeps the map instance mounted (no remount →
+  // no blank tiles). Other consumers keep the nested-Modal fullscreen.
   return isLoaded ? (
-    expanded ? (
+    expanded && !mapmodal ? (
       <Modal open={expanded} onClose={() => setExpanded(false)}>
         <Stack
           sx={{
