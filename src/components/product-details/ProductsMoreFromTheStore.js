@@ -9,7 +9,7 @@ const STATIC_MORE_ITEMS = [
   {
     "id": 65,
     "name": "Avia Men's Tenon",
-    "image_full_url": "https://6ammart-dev.6amdev.xyz/storage/app/public/product/2024-10-29-6720ca16a11cf.png",
+    "image_full_url": "/static/productimage.svg",
     "price": 120,
     "discounted_price": 90,
     "discount": 25,
@@ -20,7 +20,7 @@ const STATIC_MORE_ITEMS = [
   {
     "id": 126,
     "name": "YOTAMI Womens Tops",
-    "image_full_url": "https://6ammart-dev.6amdev.xyz/storage/app/public/product/2024-10-29-6720d11e0b7da.png",
+    "image_full_url": "/static/productimage.svg",
     "price": 150,
     "discounted_price": 112.5,
     "discount": 25,
@@ -31,7 +31,7 @@ const STATIC_MORE_ITEMS = [
   {
     "id": 49,
     "name": "Men's Jeans Pant",
-    "image_full_url": "https://6ammart-dev.6amdev.xyz/storage/app/public/product/2024-10-29-6720c943ae303.png",
+    "image_full_url": "/static/productimage.svg",
     "price": 49,
     "discounted_price": 43.12,
     "discount": 12,
@@ -42,7 +42,7 @@ const STATIC_MORE_ITEMS = [
   {
     "id": 475,
     "name": "Men's Black Leather Sandals",
-    "image_full_url": "https://6ammart-dev.6amdev.xyz/storage/app/public/product/2026-04-29-69f1a447d1082.WebP",
+    "image_full_url": "/static/productimage.svg",
     "price": 2500,
     "discounted_price": 1875,
     "discount": 25,
