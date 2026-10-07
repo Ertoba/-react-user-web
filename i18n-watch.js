@@ -15,10 +15,10 @@ console.log(`📁 app directory exists: ${appExists}`);
 // Build watch patterns based on existing directories
 const watchPatterns = [];
 if (srcExists) {
-    watchPatterns.push("src/**/*.{js,jsx,ts,tsx}");
+    watchPatterns.push("src");
 }
 if (appExists) {
-    watchPatterns.push("app/**/*.{js,jsx,ts,tsx}");
+    watchPatterns.push("app");
 }
 
 if (watchPatterns.length === 0) {
@@ -29,7 +29,37 @@ if (watchPatterns.length === 0) {
 console.log("📂 Watching patterns:", watchPatterns);
 
 const watcher = chokidar.watch(watchPatterns, {
-    ignored: [/node_modules/, /\.git/, /\.next/, /\.DS_Store/, /src\/language/],
+    ignored: (watchedPath, stats) => {
+        const normalizedPath = String(watchedPath)
+            .replace(/\\/g, "/")
+            .replace(/^\.\//, "");
+
+        const ignoredDirectory =
+            normalizedPath === "src/language" ||
+            normalizedPath.startsWith("src/language/") ||
+            normalizedPath.includes("/src/language/") ||
+            normalizedPath === "node_modules" ||
+            normalizedPath.startsWith("node_modules/") ||
+            normalizedPath.includes("/node_modules/") ||
+            normalizedPath === ".git" ||
+            normalizedPath.startsWith(".git/") ||
+            normalizedPath.includes("/.git/") ||
+            normalizedPath === ".next" ||
+            normalizedPath.startsWith(".next/") ||
+            normalizedPath.includes("/.next/") ||
+            normalizedPath.endsWith("/.DS_Store") ||
+            normalizedPath === ".DS_Store";
+
+        if (ignoredDirectory) {
+            return true;
+        }
+
+        if (stats?.isFile()) {
+            return !/\.(js|jsx|ts|tsx)$/i.test(normalizedPath);
+        }
+
+        return false;
+    },
     persistent: true,
     usePolling: true, // Force polling for better compatibility
     interval: 1000, // Check every second
