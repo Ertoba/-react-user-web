@@ -22,10 +22,20 @@ export const profileInfoSlice = createSlice({
     setCouponType: (state, action) => {
       state.couponType = action.payload;
     },
+    clearProSubscription: (state) => {
+      if (state.profileInfo) {
+        state.profileInfo = { ...state.profileInfo, pro_subscription: null };
+      }
+    },
   },
 });
 
 // Action creators are generated for each case reducer function
-export const { setUser, setLogoutUser, setCouponInfo, setCouponType } =
-  profileInfoSlice.actions;
+export const {
+  setUser,
+  setLogoutUser,
+  setCouponInfo,
+  setCouponType,
+  clearProSubscription,
+} = profileInfoSlice.actions;
 export default profileInfoSlice.reducer;
