@@ -241,13 +241,12 @@ const TrendingBiteCard = ({ item, onClick }: TrendingBiteCardProps) => {
             {item.storeName}
             <VerifiedStoreBadge
               verified={item.storeVerified}
-              fontSize="14px"
+              fontSize={14}
               sx={{
                 paddingInlineStart: "3px",
                 verticalAlign: "middle",
                 marginInlineStart: 0,
               }}
-              containerSx={{ display: "inline" }}
             />
           </Typography>
         </Stack>

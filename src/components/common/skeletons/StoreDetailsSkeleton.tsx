@@ -176,11 +176,7 @@ const StoreDetailsSkeleton = () => {
               {/* Service card grid */}
               <CustomStackFullWidth direction="row" flexWrap="wrap" gap={2}>
                 {Array.from({ length: 8 }).map((_, i) => (
-                  <ProductCardSimmer
-                    key={i}
-                    cardWidth={undefined}
-                    maxWidth={undefined}
-                  />
+                  <ProductCardSimmer key={i} marginBottom={0} />
                 ))}
               </CustomStackFullWidth>
             </CustomStackFullWidth>

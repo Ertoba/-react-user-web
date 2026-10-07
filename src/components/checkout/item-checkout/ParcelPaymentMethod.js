@@ -335,7 +335,9 @@ const ParcelPaymentMethod = (props) => {
             </Stack>
 
             <Stack direction="row" flexWrap="wrap" gap={1.5}>
-              {${1}key={item?.gateway ?? index}
+              {configData?.active_payment_method_list?.map((item, index) => (
+                <Stack
+                  key={index}
                   sx={{
                     flex: "1 1 calc(50% - 6px)",
                     minWidth: "140px",

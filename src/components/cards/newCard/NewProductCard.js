@@ -1435,7 +1435,7 @@ export const RentalInfoSection = ({
 
 // ─── Main Component ────────────────────────────────────────────────────────
 
-const NewProductCard = ({
+const NewProductCardInteractive = ({
   item,
   variant = "vertical", // "vertical" | "horizontal" | "bogo"
   onCardClick,
@@ -1446,14 +1446,6 @@ const NewProductCard = ({
   isRental = false,
   horizontalStyle,
 }) => {
-  // "bogo" is a read-only row card (no cart controls of its own — the BOGO
-  // item-details modal owns one shared stepper/button for the whole
-  // bundle), so it skips every cart/wishlist/module hook below entirely.
-  // Safe because a given mounted instance's `variant` never changes across
-  // its own re-renders — this branch is always taken, or never.
-  if (variant === "bogo") {
-    return <NewProductCardBogo item={item} />;
-  }
 
   const theme = useTheme();
   const { t } = useTranslation();
@@ -2445,6 +2437,14 @@ const NewProductCard = ({
       />
     </>
   );
+};
+
+const NewProductCard = (props) => {
+  if (props.variant === "bogo") {
+    return <NewProductCardBogo item={props.item} />;
+  }
+
+  return <NewProductCardInteractive {...props} />;
 };
 
 export default NewProductCard;

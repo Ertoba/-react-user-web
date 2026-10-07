@@ -40,9 +40,9 @@ const FoodDetailModal = dynamic(
 );
 const ModuleModal = dynamic(() => import("components/cards/ModuleModal"));
 
-const VerifiedStoreBadge = VerifiedStoreBadgeJs as React.FC<{
+const VerifiedStoreBadge = VerifiedStoreBadgeJs as unknown as React.FC<{
   verified?: boolean | number;
-  fontSize?: string;
+  fontSize?: number;
   sx?: any;
   color?: string;
 }>;
@@ -955,7 +955,7 @@ const ReelsModal = ({
                 </Typography>
                 <VerifiedStoreBadge
                   verified={item.storeVerified}
-                  fontSize="13px"
+                  fontSize={13}
                   color="#1c6641"
                   sx={{ marginInlineStart: "0px", flexShrink: 0 }}
                 />
