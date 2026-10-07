@@ -10,6 +10,7 @@ import FooterComponent from "../footer";
 import HeaderComponent from "../header";
 import BottomNav from "../header/BottomNav";
 import { MainLayoutRoot } from "./LandingLayout";
+import SearchProductModal from "../home/search/SearchProductModal";
 import useGetLandingPage from "api-manage/hooks/react-query/useGetLandingPage";
 import {
 	isWebsiteTestModeEnabled,
@@ -97,6 +98,7 @@ const MainLayout = ({ children, configData }) => {
 				/>
 			</footer>
 			{isSmall && page !== "parcel" && <BottomNav />}
+			<SearchProductModal />
 			{Number(effectiveConfigData?.ai_chat_status) === 1 && <AiChatBotLauncher />}
 		</MainLayoutRoot>
 	);

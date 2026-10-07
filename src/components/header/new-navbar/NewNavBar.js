@@ -47,6 +47,7 @@ import useGetGroupedCart from "../../../api-manage/hooks/react-query/add-cart/us
 import useGetGuest from "../../../api-manage/hooks/react-query/guest/useGetGuest";
 import AllCartDrawer from "./AllCartDrawer";
 import { getCurrentModuleType } from "helper-functions/getCurrentModuleType";
+import { ModuleTypes } from "helper-functions/moduleTypes";
 import { getModuleIdentifier, saveModuleParam } from "utils/moduleParamManager";
 
 const AuthModal = dynamic(() => import("components/auth/AuthModal"));
@@ -57,6 +58,11 @@ const ModuleTab = styled(Box)(({ theme, active }) => ({
   padding: "10px 24px",
   cursor: "pointer",
   whiteSpace: "nowrap",
+  // Never let a tab shrink below its nowrap label — a long module name would
+  // otherwise overflow its own background and overlap the neighboring tabs.
+  // The row scrolls horizontally instead (same approach as MobileNavBar).
+  flexShrink: 0,
+  minWidth: "max-content",
   userSelect: "none",
   transition: "color 0.2s, background-color 0.2s",
   color: active ? theme.palette.neutral[1000] : theme.palette.neutral[500],
@@ -250,7 +256,10 @@ const NewNavBar = ({ configData }) => {
   // On the home & search pages the navbar search must stay hidden while the
   // ModuleSearchBanner is still visible; elsewhere it follows scroll only.
   const isSearchAwarePage =
-    router.pathname === "/home" || router.pathname === "/search";
+    router.pathname === "/home" ||
+    router.pathname.startsWith("/home/") ||
+    router.pathname === "/search";
+  const isProfilePage = router.pathname === "/profile";
 
   // ── Redux ──
   const { cartList } = useSelector((state) => state.cart);
@@ -266,9 +275,10 @@ const NewNavBar = ({ configData }) => {
   // ModuleSearchBanner has scrolled out of view. Also hidden for modules that
   // don't have item-level search (rental, ride-share, parcel, ride).
   const showNavSearch =
-    scrollTrigger &&
     !isSearchlessModule &&
-    (!isSearchAwarePage || !searchBannerInView);
+    !isProfilePage &&
+    !isLandingPage &&
+    (isSearchAwarePage ? scrollTrigger && !searchBannerInView : true);
 
   // ── Local state ──
   const [moduleType, setModuleType] = useState("");
@@ -299,7 +309,7 @@ const NewNavBar = ({ configData }) => {
     const matched = modules.find(
       (m) =>
         String(m?.slug) === String(urlModuleParam) ||
-        String(m?.id) === String(urlModuleParam)
+        String(m?.id) === String(urlModuleParam),
     );
     if (!matched) return;
     const current = selectedModule?.slug || selectedModule?.id;
@@ -374,8 +384,10 @@ const NewNavBar = ({ configData }) => {
   }, [selectedModule]);
 
   const totalWishList =
-    moduleType === "rental"
+    moduleType === ModuleTypes.RENTAL
       ? (wishLists?.vehicles?.length || 0) + (wishLists?.providers?.length || 0)
+      : moduleType === ModuleTypes.SERVICE
+      ? (wishLists?.service?.length || 0) + (wishLists?.store?.length || 0)
       : (wishLists?.item?.length || 0) + (wishLists?.store?.length || 0);
 
   const handleWishlistClick = (page) =>
@@ -432,135 +444,142 @@ const NewNavBar = ({ configData }) => {
 
       {token ? (
         <Stack direction="row" alignItems="center" spacing="12px">
-        <AccountLanguageButton />
-        <Box
-          ref={anchorRef}
-          onClick={() => setOpenPopover(true)}
-          sx={{
-            display: "inline-flex",
-            alignItems: "center",
-            pl: "4px",
-            pr: "12px",
-            height: "36px",
-            borderRadius: "8px",
-            backgroundColor: "primary.main",
-            cursor: "pointer",
-            flexShrink: 0,
-            overflow: "hidden",
-            "&:hover": { opacity: 0.9 },
-          }}
-        >
-          {/* Avatar or fallback icon */}
+          <AccountLanguageButton />
           <Box
+            ref={anchorRef}
+            onClick={() => setOpenPopover(true)}
             sx={{
-              width: 28,
-              height: 28,
-              borderRadius: "50%",
-              overflow: "hidden",
-              display: "flex",
+              display: "inline-flex",
               alignItems: "center",
-              justifyContent: "center",
+              pl: "4px",
+              pr: "12px",
+              height: "36px",
+              borderRadius: "8px",
+              backgroundColor: "primary.main",
+              cursor: "pointer",
               flexShrink: 0,
-              mr: "5px",
-              ...(profileInfo?.image_full_url && { p: "3px" }),
-            }}
-          >
-            {profileInfo?.image_full_url ? (
-              <Avatar
-                alt={profileInfo?.f_name}
-                src={profileInfo?.image_full_url}
-                sx={{ width: "100%", height: "100%", borderRadius: "50%" }}
-              />
-            ) : (
-              <Box
-                sx={{
-                  width: 28,
-                  height: 28,
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                }}
-              >
-                <i
-                  className="fi fi-rr-circle-user"
-                  style={{ fontSize: "16px", display: "flex", lineHeight: 1, color: "#fff" }}
-                />
-              </Box>
-            )}
-          </Box>
-          {/* First name */}
-          <Typography
-            sx={{
-              fontSize: "15px",
-              fontWeight: 700,
-              color: "#fff",
-              lineHeight: 1.1,
-              letterSpacing: "-0.4px",
-              whiteSpace: "nowrap",
               overflow: "hidden",
-              textOverflow: "ellipsis",
-              maxWidth: "100px",
+              "&:hover": { opacity: 0.9 },
             }}
           >
-            {profileInfo?.f_name ?? profileInfo?.name?.split(" ")[0] ?? t("User")}
-          </Typography>
-        </Box>
+            {/* Avatar or fallback icon */}
+            <Box
+              sx={{
+                width: 28,
+                height: 28,
+                borderRadius: "50%",
+                overflow: "hidden",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                flexShrink: 0,
+                mr: "5px",
+                ...(profileInfo?.image_full_url && { p: "3px" }),
+              }}
+            >
+              {profileInfo?.image_full_url ? (
+                <Avatar
+                  alt={profileInfo?.f_name}
+                  src={profileInfo?.image_full_url}
+                  sx={{ width: "100%", height: "100%", borderRadius: "50%" }}
+                />
+              ) : (
+                <Box
+                  sx={{
+                    width: 28,
+                    height: 28,
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}
+                >
+                  <i
+                    className="fi fi-rr-circle-user"
+                    style={{
+                      fontSize: "16px",
+                      display: "flex",
+                      lineHeight: 1,
+                      color: "#fff",
+                    }}
+                  />
+                </Box>
+              )}
+            </Box>
+            {/* First name */}
+            <Typography
+              sx={{
+                fontSize: "15px",
+                fontWeight: 700,
+                color: "#fff",
+                lineHeight: 1.1,
+                letterSpacing: "-0.4px",
+                whiteSpace: "nowrap",
+                overflow: "hidden",
+                textOverflow: "ellipsis",
+                maxWidth: "100px",
+              }}
+            >
+              {profileInfo?.f_name ??
+                profileInfo?.name?.split(" ")[0] ??
+                t("User")}
+            </Typography>
+          </Box>
         </Stack>
       ) : (
         <Stack direction="row" alignItems="center" spacing="12px">
-        <AccountLanguageButton />
-        <Box
-          ref={anchorRef}
-          onClick={() => setOpenPopover(true)}
-          sx={{
-            display: "inline-flex",
-            alignItems: "center",
-            pl: "4px",
-            pr: "12px",
-            height: "36px",
-            borderRadius: "8px",
-            backgroundColor: "primary.main",
-            cursor: "pointer",
-            flexShrink: 0,
-            overflow: "hidden",
-            "&:hover": { opacity: 0.9 },
-          }}
-        >
+          <AccountLanguageButton />
           <Box
+            ref={anchorRef}
+            onClick={() => setOpenPopover(true)}
             sx={{
-              width: 36,
-              height: 36,
-              display: "flex",
+              display: "inline-flex",
               alignItems: "center",
-              justifyContent: "center",
+              pl: "4px",
+              pr: "12px",
+              height: "36px",
+              borderRadius: "8px",
+              backgroundColor: "primary.main",
+              cursor: "pointer",
               flexShrink: 0,
-              p: "8px",
+              overflow: "hidden",
+              "&:hover": { opacity: 0.9 },
             }}
           >
-            <i
-              className="fi fi-rr-circle-user"
-              style={{
-                fontSize: "16px",
+            <Box
+              sx={{
+                width: 36,
+                height: 36,
                 display: "flex",
-                lineHeight: 1,
-                color: "#fff",
+                alignItems: "center",
+                justifyContent: "center",
+                flexShrink: 0,
+                p: "8px",
               }}
-            />
+            >
+              <i
+                className="fi fi-rr-circle-user"
+                style={{
+                  fontSize: "16px",
+                  display: "flex",
+                  lineHeight: 1,
+                  color: "#fff",
+                }}
+              />
+            </Box>
+            <Typography
+              sx={{
+                fontSize: "16px",
+                fontWeight: 700,
+                color: "#fff",
+                lineHeight: 1.1,
+                letterSpacing: "-0.48px",
+                textTransform: "capitalize",
+                whiteSpace: "nowrap",
+              }}
+            >
+              {t("Login")}
+            </Typography>
           </Box>
-          <Typography
-            sx={{
-              fontSize: "16px",
-              fontWeight: 700,
-              color: "#fff",
-              lineHeight: 1.1,
-              letterSpacing: "-0.48px",
-              textTransform: "capitalize",
-              whiteSpace: "nowrap",
-            }}
-          >
-            {t("Login")}
-          </Typography>
-        </Box>
         </Stack>
       )}
     </Stack>
@@ -648,15 +667,37 @@ const NewNavBar = ({ configData }) => {
     dispatch(setSelectedModule(mod));
     const moduleIdentifier = getModuleIdentifier(mod);
     saveModuleParam(mod?.id, mod?.slug);
+    // Section query keys already carry getModuleId(), so each module owns a
+    // separate cache entry and switching cannot serve the previous module's
+    // data. A blanket invalidateQueries() here additionally threw away every
+    // unrelated entry too — config, modules, zone, landing page — so every
+    // switch refetched the whole app and switching back was never cached.
+    //
+    // /home's getServerSideProps only loads config and page metadata, neither
+    // of which depends on the module, so stay shallow when already on /home
+    // and skip the server round trip.
+    if (isOnHome) {
+      router.push(
+        {
+          pathname: "/home",
+          query: { ...router.query, module: moduleIdentifier },
+        },
+        undefined,
+        { shallow: true },
+      );
+      return;
+    }
     router.push({ pathname: "/home", query: { module: moduleIdentifier } });
   };
 
   // ── Module bar ──
   const renderModuleBar = () => {
     if (!modules?.length) return null;
-    if (router.pathname === "/profile") return null;
-    if (router.pathname === "/") return null;
-    if (router.pathname === "/checkout") return null;
+    const isHomeOrNested =
+      router.pathname === "/home" ||
+      router.pathname.startsWith("/home/") ||
+      router.pathname.startsWith("/search");
+    if (!isHomeOrNested) return null;
     return (
       <ModuleBarWrapper hidden={scrollTrigger}>
         <CustomContainer>

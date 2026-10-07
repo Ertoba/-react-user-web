@@ -21,6 +21,7 @@ import wishListReducer from "../slices/wishList";
 import storeResDataReducer from "../slices/storeRegistrationData";
 import rentalCategoriesLists from "../slices/rentalCategories";
 import rentalSearch from "../slices/rentalSearch";
+import searchProductModalReducer from "../slices/searchProductModal";
 import zoneDataReducer from "../slices/zoneData";
 
 //register all reducers here
@@ -45,6 +46,7 @@ export const rootReducer = combineReducers({
   cashbackList: cashbackReducer,
   brands: brandsReducer,
   storeRegData: storeResDataReducer,
+  searchProductModal: searchProductModalReducer,
   zoneData: zoneDataReducer,
   rentalCategoriesLists: rentalCategoriesLists,
   rentalSearch: rentalSearch,
