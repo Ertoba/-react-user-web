@@ -76,8 +76,10 @@ export const getCurrentZoneIds = () => {
 export const zoneWiseModule = (data) => {
   const currentZoneIds = getCurrentZoneIds();
   return filterOutRiderShareModules(data)?.filter((moduleItem) => {
+    // V4.2 already scopes the module list to the requested zones.
+    if (!Array.isArray(moduleItem?.zones)) return true;
     const zoneIds = moduleItem?.zones?.map((zone) => zone.id);
-    return currentZoneIds?.some((id) => zoneIds?.includes(id));
+    return currentZoneIds?.some((id) => zoneIds?.some((zoneId) => String(zoneId) === String(id)));
   });
 };
 
