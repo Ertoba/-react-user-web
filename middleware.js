@@ -67,7 +67,11 @@ export function middleware(request) {
     const cartListCookie = request.cookies.get("cart-list");
     const cartListValue = cartListCookie?.value;
 
-    if (!cartListValue || cartListValue === "0") {
+    // Only redirect when the cookie explicitly says the cart is empty. On
+    // the very first visit the cookie isn't set yet (the client writes it
+    // after the cart fetch resolves) — bouncing to /home in that case was
+    // the cause of the "redirected the first time, ok the second time" bug.
+    if (cartListValue === "0") {
       const url = new URL("/home", request.url);
       return NextResponse.redirect(url);
     }
@@ -79,5 +83,7 @@ export function middleware(request) {
 }
 
 export const config = {
-  matcher: ["/:path*"], // Match all routes
+  matcher: [
+    "/((?!_next/static|_next/image|favicon.ico|.*\\.sw\\.js|firebase-messaging-sw\\.js|workbox-.*\\.js|.*\\.(?:png|jpg|jpeg|gif|svg|ico|webp|woff|woff2|ttf|otf|eot|mp4|webm|mp3|wav|pdf|zip)).*)",
+  ],
 };

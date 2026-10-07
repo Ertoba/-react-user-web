@@ -2,6 +2,11 @@ const nextConfig = {
   distDir: process.env.MILI_QA === '1' ? '.next-qa' : '.next',
   reactStrictMode: true,
   outputFileTracingRoot: __dirname,
+  // Hide Next.js dev-mode indicator (bottom-left "N" badge)
+  devIndicators: {
+    buildActivity: false,
+    appIsrStatus: false,
+  },
   experimental: {
     swcPlugins: [],
   },
