@@ -77,7 +77,7 @@ const StoreButton = styled(Button)(({ theme }) => ({
   },
 }));
 
-const DEFAULT_TITLE = "Download the 6amMart App for Exclusive Rewards!";
+const DEFAULT_TITLE = "Download the MILI App for Exclusive Rewards!";
 
 const MobileAppBanner = () => {
   const theme = useTheme();

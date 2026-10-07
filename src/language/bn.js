@@ -700,7 +700,7 @@ export const bengali = {
   "Become a store owner": "كن صاحب متجر",
   "Become A Seller": "كن بائعا",
   "Register as seller and open shop in 6amMart to start your business":
-    "سجل كبائع وافتح متجرًا في 6ammart لبدء عملك",
+    "سجل كبائع وافتح متجرًا في MILI لبدء عملك",
   "Lorem ipsum dolor sit amet, consectetur adipiscing elit.":
     "العميل مهم جدا ، العميل سيتبعه.",
   "Select location first to start exploring shops & restaurants near you":
@@ -846,7 +846,7 @@ export const bengali = {
   eBusiness: "الأعمال الإلكترونية",
   Solution: "حل",
   "6amMart is a Laravel and Flutter Framework-based multi-vendor food, grocery, eCommerce, parcel, and pharmacy delivery system. It has six modules to cover all your business functionality.":
-    "6amMart عبارة عن نظام متعدد البائعين للأغذية والبقالة والتجارة الإلكترونية والطرود والصيدليات قائم على Laravel و Flutter Framework. يحتوي على ست وحدات لتغطية جميع وظائف عملك.",
+    "MILI عبارة عن نظام متعدد البائعين للأغذية والبقالة والتجارة الإلكترونية والطرود والصيدليات قائم على Laravel و Flutter Framework. يحتوي على ست وحدات لتغطية جميع وظائف عملك.",
   "Featured Store": "المتجر المميز",
   "Close fullscreen": "إغلاق ملء الشاشة",
   Fullscreen: "تكبير الشاشة",

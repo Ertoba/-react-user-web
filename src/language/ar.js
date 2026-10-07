@@ -50,9 +50,9 @@ export const arabic = {
   "/km": "/كم",
   "1k+ km": "1K+ كم",
   "24/7 Helpline": "24/7 خط المساعدة",
-  "6amMart": "6amMart",
+  "6amMart": "MILI",
   "6amMart is a Laravel and Flutter Framework-based multi-vendor food, grocery, eCommerce, parcel, and pharmacy delivery system. It has six modules to cover all your business functionality.":
-    "6Ammart عبارة عن نظام توصيل متعدد البائعين ، والبقالة ، والتجارة الإلكترونية ، والتجارة الإلكترونية ، والتجارة الإلكترونية ، والطرز ، ونظام توصيل الصيدلة ، 6Ammart عبارة عن نظام توصيل الصيدلة ، وتجارة الإلكترون ، والتجارة الإلكترونية ، والطرد ، ونظام توصيل الصيدلة. لديها ست وحدات لتغطية جميع وظائف عملك.",
+    "MILI عبارة عن نظام توصيل متعدد البائعين ، والبقالة ، والتجارة الإلكترونية ، والتجارة الإلكترونية ، والتجارة الإلكترونية ، والطرز ، ونظام توصيل الصيدلة ، MILI عبارة عن نظام توصيل الصيدلة ، وتجارة الإلكترون ، والتجارة الإلكترونية ، والطرد ، ونظام توصيل الصيدلة. لديها ست وحدات لتغطية جميع وظائف عملك.",
   "A Module has been selected.": "تم تحديد وحدة.",
   "A location where you want to pick up the parcel":
     "الموقع الذي تريد استلام الطرد منه",
@@ -1103,7 +1103,7 @@ export const arabic = {
   "New Arrival Stores": "متاجر وصول جديدة",
   "New Arrivals": "وصل حديثًا",
   "New On": "جديد",
-  "New On StackFood": "جديد على stackfood",
+  "New On StackFood": "جديد على MILI",
   "New chat": "محادثة جديدة",
   "New delivery address selected.": "عنوان التسليم الجديد المحدد.",
   "New location has been set.": "تم تعيين موقع جديد.",
@@ -1558,7 +1558,7 @@ export const arabic = {
   "Register as delivery man and earn money": "سجل كرجل توصيل وكسب المال",
   "Register as seller and open shop in": "سجل كبائع ومحل مفتوح في",
   "Register as seller and open shop in 6amMart to start your business":
-    "سجل كبائع ومتجر مفتوح في 6Ammart لبدء عملك",
+    "سجل كبائع ومتجر مفتوح في MILI لبدء عملك",
   "Remaining Balance": "الرصيد المتبقي",
   "Remaining Bill": "الفاتورة المتبقية",
   "Remaining Wallet Balance": "توازن المحفظة المتبقية",
@@ -1961,7 +1961,7 @@ export const arabic = {
   "Theme mode": "وضع الموضوع",
   "They create a account on": "يقومون بإنشاء حساب على",
   "They create a account on 6amMart using your code and place their first order":
-    "يقومون بإنشاء حساب على 6Ammart باستخدام الكود الخاص بك ويضعون طلبهم الأول",
+    "يقومون بإنشاء حساب على MILI باستخدام الكود الخاص بك ويضعون طلبهم الأول",
   This: "هذا",
   "This Variation needs to be selected in between minimum":
     "يجب اختيار هذا الاختلاف بين الحد الأدنى",
