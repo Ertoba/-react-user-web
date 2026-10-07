@@ -18,7 +18,17 @@ import { omitStyleProps } from "../../utils/styleProps";
 export const AppBarStyle = styled(AppBar, { shouldForwardProp: omitStyleProps('scrolling', 'isSmall') })(({ theme, scrolling, isSmall }) => ({
   top: !scrolling ? "0" : isSmall ? "0px" : "-30px",
   background: `${theme.palette.mode === "light" && "#fff !important"}`,
+  boxShadow: "none",
   transition: "all 0.4s ease",
+  [theme.breakpoints.down("md")]: {
+    transform: "translateY(0)",
+    transition:
+      "transform 0.32s cubic-bezier(0.33, 1, 0.68, 1), box-shadow 0.28s ease",
+    willChange: "transform",
+    "html.mobile-nav-collapsed &": {
+      transform: "translateY(calc(-1 * var(--mobile-nav-collapse, 116px)))",
+    },
+  },
   // WebkitAnimation: !isSmall && scrolling ? "fadeInUp 0.4s" : "fadeInDown 0.4s",
   // animation: !isSmall && scrolling ? "fadeInUp 0.4s" : "fadeInDown 0.4s",
   // "@keyframes fadeInUp": {
