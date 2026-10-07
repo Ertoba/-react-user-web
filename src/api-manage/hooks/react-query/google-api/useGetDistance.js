@@ -1,9 +1,24 @@
 import { useQuery } from "react-query";
-import { onSingleErrorResponse } from "../../../api-error-response/ErrorResponses";
-import { GoogleApi } from "../googleApi";
+import { distance_api } from "../../../ApiRoutes";
+import {
+  onErrorResponse,
+  onSingleErrorResponse,
+} from "../../../api-error-response/ErrorResponses";
+import MainApi from "../../../MainApi";
+import { getApiContent } from "../../../getApiContent";
 const getDistance = async (origin, destination, mode) => {
-  const response = await GoogleApi.distanceApi(origin, destination, mode);
-  return response?.data ?? null;
+  if ((origin, destination)) {
+    const { data } = await MainApi.get(
+      `${distance_api}?origin_lat=${origin?.lat}&origin_lng=${
+        origin?.lng
+      }&destination_lat=${
+        destination.lat ? destination.lat : destination?.latitude
+      }&destination_lng=${
+        destination.lng ? destination.lng : destination?.longitude
+      }&mode=${mode || "WALK"}`
+    );
+    return getApiContent(data);
+  }
 };
 
 export default function useGetDistance(origin, destination, mode) {

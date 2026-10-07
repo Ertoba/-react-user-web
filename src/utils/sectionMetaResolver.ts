@@ -1,4 +1,5 @@
 import { fetchPageMetadata, processMetadata } from "utils/fetchPageMetaData";
+import { getApiList } from "api-manage/getApiContent";
 import {
   getSectionDefaultLabel,
   SECTION_BACKEND_KEY_MAP,
@@ -67,7 +68,7 @@ export const findModuleTypeByParam = async (
 ): Promise<string | null> => {
   if (!param) return null;
   try {
-    const url = `${process.env.NEXT_PUBLIC_BASE_URL}/api/v1/module`;
+    const url = `${(process.env.NEXT_PUBLIC_BASE_URL || "").replace(/\/+$/, "")}/api/v1/module`;
     const res = await fetch(url, {
       method: "GET",
       headers: {
@@ -75,11 +76,12 @@ export const findModuleTypeByParam = async (
         "X-server": "server",
         "X-localization": language,
         origin: process.env.NEXT_CLIENT_HOST_URL || "",
+        "ngrok-skip-browser-warning": "true",
       },
     });
     if (!res.ok) return null;
     const json = await res.json();
-    const modules: any[] = Array.isArray(json) ? json : json?.data ?? [];
+    const modules: any[] = getApiList<any>(json) ?? [];
     const numericParam = Number(param);
     const isNumeric = Number.isFinite(numericParam);
     const match = modules.find((item) => {

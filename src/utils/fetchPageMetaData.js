@@ -4,9 +4,8 @@ export const fetchPageMetadata = async (pageName, id = null, language = 'en') =>
 
     try {
         const url = id
-            ? `${process.env.NEXT_PUBLIC_BASE_URL}/api/v1/get-page-meta-data?page_name=${pageName}&id=${id}`
-            : `${process.env.NEXT_PUBLIC_BASE_URL}/api/v1/get-page-meta-data?page_name=${pageName}`
-        console.log({ url })
+            ? `${(process.env.NEXT_PUBLIC_BASE_URL || "").replace(/\/+$/, "")}/api/v1/get-page-meta-data?page_name=${pageName}&id=${id}`
+            : `${(process.env.NEXT_PUBLIC_BASE_URL || "").replace(/\/+$/, "")}/api/v1/get-page-meta-data?page_name=${pageName}`
         const metaRes = await fetch(url, {
             method: 'GET',
             headers: {
@@ -14,12 +13,12 @@ export const fetchPageMetadata = async (pageName, id = null, language = 'en') =>
                 'X-server': 'server',
                 'X-localization': language,
                 origin: process.env.NEXT_CLIENT_HOST_URL,
+                'ngrok-skip-browser-warning': 'true',
             },
         })
 
         if (metaRes.ok) {
             const data = await metaRes.json()
-            console.log("vvvvvf", data)
             return data
         }
 
