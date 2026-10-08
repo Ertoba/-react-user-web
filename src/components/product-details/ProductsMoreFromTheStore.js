@@ -81,7 +81,7 @@ const ProductsMoreFromTheStore = ({ productDetails }) => {
   useEffect(() => {
     if (isServiceModule) {
       setMoreItem(STATIC_MORE_ITEMS);
-    } else {
+    } else if (productDetails?.id) {
       refetch();
     }
   }, [isServiceModule, productDetails?.id]);

@@ -130,13 +130,16 @@ const HomePageComponents = ({
   );
   useEffect(() => {
     refetchFailedPayment();
+  }, []);
 
-    // Parcel is not store-based. V4.2 offline payment options are
-    // store-scoped and require store_id, so skip them for parcel.
-    if (moduleType !== ModuleTypes.PARCEL) {
+  // Do not preload store-scoped offline payment methods on every home-page
+  // visit. Older production APIs require store_id, which caused the global
+  // "store id field is required" toast before a store/order was selected.
+  useEffect(() => {
+    if (openPaymentModal && failedPayment && moduleType !== ModuleTypes.PARCEL) {
       refetchOfflinePaymentOptions();
     }
-  }, []);
+  }, [openPaymentModal, failedPayment?.id, moduleType]);
 
   const zoneid =
     typeof window !== "undefined" ? localStorage.getItem("zoneid") : undefined;

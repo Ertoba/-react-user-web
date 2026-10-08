@@ -7,6 +7,7 @@ import SEO from "../../src/components/seo";
 import CustomContainer from "../../src/components/container";
 import { NoSsr } from "@mui/material";
 import { setConfigData } from "redux/slices/configData";
+import { getApiContent } from "../../src/api-manage/getApiContent";
 
 const Index = ({ configData, productDetailsData,  }) => {
   const dispatch = useDispatch();
@@ -102,10 +103,12 @@ export const getServerSideProps = async (context) => {
       },
     }
   );
-  const config = await configRes.json();
+  const config = getApiContent(await configRes.json());
   const productId = context.query.id;
-  const moduleId = context.query.module || context.query.module_id;
-  const productTypeRaw = context.query?.product_type;
+  const moduleId =
+    context.query.module ||
+    context.query.module_id ||
+    req.cookies.selectedModule;
   const campaign = context.query?.campaign;
   const isCampaign = campaign === "1";
   const productDetailsRes = await fetch(
@@ -115,12 +118,16 @@ export const getServerSideProps = async (context) => {
     {
       method: "GET",
       headers: {
-        moduleId: moduleId,
+        ...(moduleId ? { moduleId: String(moduleId) } : {}),
+        "X-software-id": 33571750,
+        "X-server": "server",
+        origin: process.env.NEXT_CLIENT_HOST_URL,
         "X-localization": language,
       },
     }
   );
-  const productDetailsData = await productDetailsRes.json();
+  const productDetailsData =
+    getApiContent(await productDetailsRes.json()) ?? null;
  
 
   return {
