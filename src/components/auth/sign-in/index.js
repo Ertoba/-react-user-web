@@ -52,7 +52,7 @@ import {
 } from "components/auth/sign-in/loginHepler";
 import OtpLogin from "components/auth/sign-in/OtpLogin";
 import * as Yup from "yup";
-import { isRecoveryPhone } from "utils/recoveryValidation.mjs";
+import { isRecoveryPhone, normalizeOtpPhone } from "utils/recoveryValidation.mjs";
 
 import CloseIcon from "@mui/icons-material/Close";
 import { getCurrentModuleType } from "helper-functions/getCurrentModuleType";
@@ -422,7 +422,7 @@ const onlyOtp =
     },
   });
   const otpHandleChange = (value) => {
-    otpLoginFormik.setFieldValue("phone", `+${value}`);
+    otpLoginFormik.setFieldValue("phone", normalizeOtpPhone(value));
   };
   const handleClick = () => {
     window.open("/terms-and-conditions");

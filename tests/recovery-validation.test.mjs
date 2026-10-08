@@ -1,7 +1,15 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { recoveryValidation } from '../src/utils/recoveryValidation.mjs';
+import { recoveryValidation, normalizeOtpPhone } from '../src/utils/recoveryValidation.mjs';
 const schema = method => recoveryValidation({ method, country: 'ge', t: value => value });
+
+test('OTP input removes a repeated Georgian dial code while keeping incomplete numbers invalid', async () => {
+  assert.equal(normalizeOtpPhone('995995555123456'), '+995555123456');
+  assert.equal(normalizeOtpPhone('+995 555 123 456'), '+995555123456');
+  assert.equal(normalizeOtpPhone('+12025550123'), '+12025550123');
+  await schema('phone').validate({ phone: normalizeOtpPhone('995995555123456') });
+  await assert.rejects(schema('phone').validate({ phone: normalizeOtpPhone('99599555512345') }));
+});
 
 test('phone recovery rejects missing and malformed numbers and accepts Georgian numbers with the dial code', async () => {
   for (const phone of ['', '+995', '+995123', '+99559510033', '+9955551234567', 'not-a-phone']) {

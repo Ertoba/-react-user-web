@@ -1,5 +1,12 @@
 import * as Yup from 'yup';
 
+export function normalizeOtpPhone(value) {
+  let digits = String(value ?? '').replace(/\D/g, '');
+  // The controlled country picker can prepend Georgia's dial code again.
+  if (digits.startsWith('995995')) digits = digits.slice(3);
+  return digits ? `+${digits}` : '';
+}
+
 export function isRecoveryPhone(value, country) {
   const phone = String(value ?? '').trim();
   if (String(country).toLowerCase() === 'ge') return /^\+?995\d{9}$/.test(phone);
