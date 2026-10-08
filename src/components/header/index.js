@@ -6,7 +6,7 @@ import { useSelector } from "react-redux";
 import SecondNavBar from "./second-navbar/SecondNavbar";
 import TopNavBar from "./top-navbar/TopNavBar";
 import useGetZoneId from "api-manage/hooks/react-query/google-api/useGetZone";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import WebsiteTestModeBanner from "./WebsiteTestModeBanner";
 
 const HeaderComponent = ({ configData: initialConfigData }) => {
@@ -18,6 +18,19 @@ const HeaderComponent = ({ configData: initialConfigData }) => {
   const theme = useTheme();
   const isSmall = useMediaQuery(theme.breakpoints.down("md"));
   const scrolling = useScrollTrigger();
+  const headerRef = useRef(null);
+
+  useEffect(() => {
+    const header = headerRef.current;
+    if (!header) return;
+    const updateHeight = () => document.documentElement.style.setProperty(
+      "--mili-header-height", `${header.offsetHeight}px`
+    );
+    updateHeight();
+    const observer = new ResizeObserver(updateHeight);
+    observer.observe(header);
+    return () => observer.disconnect();
+  }, []);
 
   // ✅ read localStorage on first CLIENT render (state initializer runs during render on client)
   const [location] = useState(() => {
@@ -54,7 +67,7 @@ const HeaderComponent = ({ configData: initialConfigData }) => {
   }, [zoneData]);
 
   return (
-    <AppBarStyle scrolling={location || token ? scrolling : false} isSmall={isSmall}>
+    <AppBarStyle ref={headerRef} scrolling={location || token ? scrolling : false} isSmall={isSmall}>
       <Box>
         <NoSsr>
           <Card sx={{ boxShadow: "none" }}>

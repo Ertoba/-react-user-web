@@ -268,7 +268,7 @@ const MainLayout = ({ children, configData, onHappyHourActiveChange }) => {
       <CustomStackFullWidth
         sx={{
           marginTop: {
-            xs: withWebsiteTestModeOffset(
+            xs: router.pathname === "/profile" ? "var(--mili-header-height, 56px)" : withWebsiteTestModeOffset(
               mobileMarginTop,
               websiteTestModeOffset,
             ),

@@ -52,6 +52,7 @@ import {
 } from "components/auth/sign-in/loginHepler";
 import OtpLogin from "components/auth/sign-in/OtpLogin";
 import * as Yup from "yup";
+import { isRecoveryPhone } from "utils/recoveryValidation.mjs";
 
 import CloseIcon from "@mui/icons-material/Close";
 import { getCurrentModuleType } from "helper-functions/getCurrentModuleType";
@@ -410,7 +411,9 @@ const onlyOtp =
     validationSchema: Yup.object({
       phone: Yup.string()
         .required(t("Please give a phone number"))
-        .min(10, t("Phone number must be exactly 10 digits")),
+        .test("phone", t("Enter a valid phone number."), value =>
+          isRecoveryPhone(value, configData?.country)
+        ),
     }),
     onSubmit: async (values, helpers) => {
       try {

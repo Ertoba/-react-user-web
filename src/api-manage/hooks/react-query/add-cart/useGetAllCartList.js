@@ -6,6 +6,8 @@ import { getToken, getGuestId } from "helper-functions/getToken";
 import { getApiList } from "../../../getApiContent";
 
 const getData = async (guestId, store_id) => {
+  // Explicit refetch bypasses React Query's enabled flag.
+  if (!store_id) return [];
   try {
     const query = new URLSearchParams();
     // `customer_or_guest` endpoint — send guest_id whenever we hold one so a

@@ -31,12 +31,11 @@ import { getCartListModuleWise } from "helper-functions/getCartListModuleWise";
 import ModuleWiseNav from "./ModuleWiseNav";
 import WishListCardView from "../../wishlist";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
-import useGetAllCartList from "../../../api-manage/hooks/react-query/add-cart/useGetAllCartList";
+import useGetGroupedCart from "../../../api-manage/hooks/react-query/add-cart/useGetGroupedCart";
 import { setCartList } from "redux/slices/cart";
 import { clearOfflinePaymentInfo } from "redux/slices/offlinePaymentData";
 import LocalShippingOutlinedIcon from "@mui/icons-material/LocalShippingOutlined";
 import { getModule } from "helper-functions/getLanguage";
-import { handleProductValueWithOutDiscount } from "utils/CustomFunctions";
 import useGetGuest from "../../../api-manage/hooks/react-query/guest/useGetGuest";
 import ThemeSwitches from "../top-navbar/ThemeSwitches";
 import CallToAdmin from "../../CallToAdmin";
@@ -102,7 +101,7 @@ const Cart = ({ isLoading,refetch }) => {
 
 export const Taxi = ({ isLoading, label, color }) => {
   const [sideDrawerOpen, setSideDrawerOpen] = useState(false);
-  const { refetch } = useGetAllCartList();
+  const { refetch } = useGetGroupedCart();
   const { cartList } = useSelector((state) => state.cart);
   const handleIconClick = () => {
     setSideDrawerOpen(true);
@@ -285,10 +284,9 @@ const SecondNavBar = ({ configData }) => {
   }, [guestData]);
 
   const {
-    data,
     refetch: cartListRefetch,
     isLoading,
-  } = useGetAllCartList(guestId);
+  } = useGetGroupedCart();
 
   const {
     data: bookingLists,
@@ -306,39 +304,14 @@ const SecondNavBar = ({ configData }) => {
     }
   }, [moduleType]);
 
-  const setItemIntoCart = () => {
-    return data?.map((item) => ({
-      ...item?.item,
-      cartItemId: item?.id,
-      totalPrice:
-        handleProductValueWithOutDiscount({
-          ...item?.item,
-          selectedOption:
-            getModule()?.module_type !== "food"
-              ? getOtherModuleVariation(item?.item?.variations, item?.variation)
-              : [],
-        }) * item?.quantity,
-      selectedAddons: item?.item?.addons,
-      quantity: item?.quantity,
-      food_variations: item?.item?.food_variations,
-      itemBasePrice: item?.item?.price,
-      selectedOption:
-        getModule()?.module_type !== "food"
-          ? getOtherModuleVariation(item?.item?.variations, item?.variation)
-          : getSelectedVariations(item?.item?.food_variations),
-    }));
-  };
-
   useEffect(() => {
     if (moduleType === "rental") {
       dispatch(setCartList(bookingLists));
       if (bookingLists?.carts?.length > 0) {
         cookie.set("cart-list", bookingLists?.carts?.length);
       }
-    } else {
-      dispatch(setCartList(setItemIntoCart()));
     }
-  }, [data, moduleType, bookingLists, location]);
+  }, [moduleType, bookingLists]);
 
   useEffect(() => {
     if (offlineInfoStep !== 0) {
