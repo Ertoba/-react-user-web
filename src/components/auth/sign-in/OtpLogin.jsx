@@ -23,17 +23,14 @@ const OtpLogin = ({
   configData,
   isRemember,
   getActiveLoginType,
-  onlyOtp
+  onlyOtp,
+  inlineLayout = false,
 }) => {
   const theme = useTheme();
   const lanDirection = getLanguage() ? getLanguage() : "ltr";
-  return (
-    <CustomStackFullWidth>
-      <Typography fontSize="18px" fontWeight="600" textAlign="left" mb="1rem">
-        {t("Sign In")}
-      </Typography>
-      <form onSubmit={otpLoginFormik.handleSubmit} noValidate>
-        <CustomStackFullWidth sx={{ gap: "14px" }}>
+
+  const formContent = (
+    <CustomStackFullWidth sx={{ gap: "14px" }}>
           <CustomPhoneInput
             value={otpLoginFormik.values.phone}
             onHandleChange={otpHandleChange}
@@ -106,7 +103,20 @@ const OtpLogin = ({
             {t("Get OTP ")}
           </LoadingButton>
         </CustomStackFullWidth>
-      </form>
+  );
+
+  return (
+    <CustomStackFullWidth>
+      <Typography fontSize="18px" fontWeight="600" textAlign="left" mb="1rem">
+        {t("Sign In")}
+      </Typography>
+      {inlineLayout ? (
+        formContent
+      ) : (
+        <form onSubmit={otpLoginFormik.handleSubmit} noValidate>
+          {formContent}
+        </form>
+      )}
       {!onlyOtp && (
         <Typography
           onClick={getActiveLoginType}
