@@ -2065,5 +2065,17 @@ export const georgian = {
   "What are the payment options?": "გადახდის რა მეთოდებია ხელმისაწვდომი?",
   "Show me today's best deals": "მაჩვენე დღევანდელი საუკეთესო შეთავაზებები",
   "Find stores near me": "იპოვე ობიექტები ჩემთან ახლოს",
-  "Recommend something popular": "მირჩიე რამე პოპულარული"
+  "Recommend something popular": "მირჩიე რამე პოპულარული",
+  "Addresses": "მისამართები",
+  "Orders & Trips": "შეკვეთები და მგზავრობები",
+  "Track Orders": "შეკვეთების თვალყურის დევნება",
+  "Monthly Cart List": "ყოველთვიური კალათის სია",
+  "Available Coupons": "ხელმისაწვდომი კუპონები",
+  "Subscription Plan": "გამოწერის გეგმა",
+  "Settings": "პარამეტრები",
+  "Log Out": "გასვლა",
+  "Are you sure you want to logout?": "დარწმუნებული ხართ, რომ გსურთ გასვლა?",
+  "Login or Signup": "შესვლა ან რეგისტრაცია",
+  "To get more personalised & smooth experience please log in or sign up": "უფრო პერსონალიზებული და გამართული გამოცდილებისთვის გთხოვთ, შეხვიდეთ ან დარეგისტრირდეთ",
+  "Login/Signup": "შესვლა/რეგისტრაცია"
 };

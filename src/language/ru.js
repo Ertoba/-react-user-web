@@ -1868,5 +1868,18 @@ export const russian = {
   "What are the payment options?": "Какие способы оплаты доступны?",
   "Show me today's best deals": "Покажи лучшие предложения на сегодня",
   "Find stores near me": "Найди магазины рядом со мной",
-  "Recommend something popular": "Посоветуй что-нибудь популярное"
+  "Recommend something popular": "Посоветуй что-нибудь популярное",
+  "Addresses": "Адреса",
+  "Orders & Trips": "Заказы и поездки",
+  "Track Orders": "Отслеживание заказов",
+  "Monthly Cart List": "Ежемесячный список корзины",
+  "Available Coupons": "Доступные купоны",
+  "Subscription Plan": "План подписки",
+  "Inbox": "Входящие",
+  "Settings": "Настройки",
+  "Log Out": "Выйти",
+  "Are you sure you want to logout?": "Вы уверены, что хотите выйти?",
+  "Login or Signup": "Войти или зарегистрироваться",
+  "To get more personalised & smooth experience please log in or sign up": "Для более персонализированного и удобного использования войдите или зарегистрируйтесь",
+  "Login/Signup": "Войти/Регистрация"
 };

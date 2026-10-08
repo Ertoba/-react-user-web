@@ -88,7 +88,7 @@ const BodySection = ({
         />
       </CustomPaperBigCard>
 
-      {page === "profile-settings" && !editProfile && !addAddress && (
+      {(page === "profile-settings" || page === "addresses") && !editProfile && !addAddress && (
         <CustomPaperBigCard padding="10px" noboxshadow={isSmall ? "" : "true"}>
           <Address
             configData={configData}

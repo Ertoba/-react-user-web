@@ -267,20 +267,26 @@ const MainLayout = ({ children, configData, onHappyHourActiveChange }) => {
       </header>
       <CustomStackFullWidth
         sx={{
-          marginTop: {
-            xs: router.pathname === "/profile" ? "var(--mili-header-height, 56px)" : withWebsiteTestModeOffset(
-              mobileMarginTop,
-              websiteTestModeOffset,
-            ),
-            md: withWebsiteTestModeOffset(
-              desktopMdMarginTop,
-              websiteTestModeOffset,
-            ),
-            lg: withWebsiteTestModeOffset(
-              desktopLgMarginTop,
-              websiteTestModeOffset,
-            ),
-          },
+          marginTop:
+            isSmall && router.pathname === "/profile" && !page
+              ? "0px"
+              : {
+                  xs:
+                    router.pathname === "/profile"
+                      ? "var(--mili-header-height, 56px)"
+                      : withWebsiteTestModeOffset(
+                          mobileMarginTop,
+                          websiteTestModeOffset,
+                        ),
+                  md: withWebsiteTestModeOffset(
+                    desktopMdMarginTop,
+                    websiteTestModeOffset,
+                  ),
+                  lg: withWebsiteTestModeOffset(
+                    desktopLgMarginTop,
+                    websiteTestModeOffset,
+                  ),
+                },
         }}
       >
         {/* Reserve viewport height while content is still fetching so the

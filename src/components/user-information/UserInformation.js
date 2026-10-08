@@ -20,12 +20,14 @@ import BodySection from "./BodySection";
 import UserDashBoard from "./UserDashBoard";
 import UserDetails from "./UserDetails";
 import useScrollToTop from "api-manage/hooks/custom-hooks/useScrollToTop";
+import MobileProfileOverview from "./MobileProfileOverview";
 
 const UserInformation = ({ page, configData, orderId }) => {
 	const theme = useTheme();
 	useScrollToTop()
 	const [accountDeleteStatus, setAccountDeleteStatus] = useState(true);
 	const isSmall = useMediaQuery(theme.breakpoints.down("md"));
+	const isV42Mobile = useMediaQuery("(max-width:1180px)");
 	const dispatch = useDispatch();
 	const router = useRouter();
 	const handleSuccess = (res) => {
@@ -52,6 +54,19 @@ const UserInformation = ({ page, configData, orderId }) => {
 	const deleteUserHandler = () => {
 		mutate();
 	};
+
+	if (isV42Mobile && userToken && !page) {
+		return (
+			<PushNotificationLayout>
+				<MobileProfileOverview
+					data={data}
+					isLoading={isLoading}
+					configData={configData}
+					token={userToken}
+				/>
+			</PushNotificationLayout>
+		);
+	}
 
 	return (
 		<PushNotificationLayout>
