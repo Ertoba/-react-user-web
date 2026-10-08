@@ -1,4 +1,5 @@
 import {
+  Avatar,
   Box,
   Drawer,
   IconButton,
@@ -7,12 +8,19 @@ import {
   useTheme,
 } from "@mui/material";
 import { t } from "i18next";
+import { useRouter } from "next/router";
+import { useSelector } from "react-redux";
 import useGetGroupedCart from "../../api-manage/hooks/react-query/add-cart/useGetGroupedCart";
 import AccountMenuPanel from "./second-navbar/account-popover/AccountMenuPanel";
 import { CustomButtonPrimary } from "styled-components/CustomButtons.style";
 
 const ProfileDrawer = ({ open, onClose, onSignInClick }) => {
   const theme = useTheme();
+  const router = useRouter();
+  const profileInfo = useSelector((state) => state.profileInfo?.profileInfo);
+  const displayName = [profileInfo?.f_name, profileInfo?.l_name]
+    .filter(Boolean)
+    .join(" ");
   const { refetch: cartListRefetch } = useGetGroupedCart();
 
   let token;
@@ -109,7 +117,52 @@ const ProfileDrawer = ({ open, onClose, onSignInClick }) => {
           gap: "12px",
         }}
       >
-        {/* Login/Signup intro card */}
+        {/* Signed-in profile card, separate from the guest login experience. */}
+        {token && (
+          <Stack
+            direction="row"
+            alignItems="center"
+            spacing={2}
+            sx={{
+              backgroundColor: "background.secondary",
+              borderRadius: "16px",
+              px: "16px",
+              py: "20px",
+            }}
+          >
+            <Avatar
+              src={profileInfo?.image_full_url || undefined}
+              alt={displayName || t("Profile")}
+              sx={{ width: 56, height: 56, bgcolor: "primary.main" }}
+            >
+              {displayName?.charAt(0)?.toUpperCase() || "?"}
+            </Avatar>
+            <Box sx={{ minWidth: 0, flex: 1 }}>
+              <Typography
+                sx={{ fontWeight: 700, fontSize: "18px", color: "text.primary" }}
+                noWrap
+              >
+                {displayName || t("Your Profile")}
+              </Typography>
+              <Typography sx={{ fontSize: "13px", color: "text.secondary" }} noWrap>
+                {profileInfo?.phone || profileInfo?.email || ""}
+              </Typography>
+            </Box>
+            <CustomButtonPrimary
+              variant="outlined"
+              onClick={() => {
+                onClose?.();
+                router.push({ pathname: "/profile", query: { page: "profile-settings" } });
+              }}
+              sx={{ flexShrink: 0, minWidth: 64, borderRadius: "10px", px: 1.5 }}
+            >
+              {t("Edit")}
+            </CustomButtonPrimary>
+          </Stack>
+        )}
+
+        {/* Guests only: login/signup intro card. */}
+        {!token && (
         <Box
           sx={{
             backgroundColor: "background.secondary",
@@ -172,6 +225,7 @@ const ProfileDrawer = ({ open, onClose, onSignInClick }) => {
             {t("Login/Signup")}
           </CustomButtonPrimary>
         </Box>
+        )}
 
         {/* Menu panel */}
         <AccountMenuPanel
