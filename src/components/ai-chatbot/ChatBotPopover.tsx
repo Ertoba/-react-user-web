@@ -77,6 +77,36 @@ const ChatBotPopover = ({ open, onClose }: ChatBotPopoverProps) => {
   const { t } = useTranslation();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+  const [mobileViewport, setMobileViewport] = useState({
+    height: 0,
+    offsetTop: 0,
+  });
+
+  useEffect(() => {
+    if (!isMobile || !open || typeof window === "undefined") return;
+
+    const viewport = window.visualViewport;
+    if (!viewport) {
+      setMobileViewport({ height: window.innerHeight, offsetTop: 0 });
+      return;
+    }
+
+    const syncViewport = () => {
+      setMobileViewport({
+        height: Math.round(viewport.height),
+        offsetTop: Math.round(viewport.offsetTop),
+      });
+    };
+
+    syncViewport();
+    viewport.addEventListener("resize", syncViewport);
+    viewport.addEventListener("scroll", syncViewport);
+
+    return () => {
+      viewport.removeEventListener("resize", syncViewport);
+      viewport.removeEventListener("scroll", syncViewport);
+    };
+  }, [isMobile, open]);
 
   const queryClient = useQueryClient();
   const router = useRouter();
@@ -664,7 +694,20 @@ const ChatBotPopover = ({ open, onClose }: ChatBotPopoverProps) => {
             position: "fixed",
             zIndex: 100000,
             ...(isMobile
-              ? { inset: 0 }
+              ? {
+                  top: mobileViewport.offsetTop,
+                  left: 0,
+                  right: 0,
+                  bottom: "auto",
+                  height:
+                    mobileViewport.height > 0
+                      ? `${mobileViewport.height}px`
+                      : "100dvh",
+                  maxHeight:
+                    mobileViewport.height > 0
+                      ? `${mobileViewport.height}px`
+                      : "100dvh",
+                }
               : { right: 24, bottom: 96, width: 380, height: 560 }),
             display: "flex",
             flexDirection: "column",
@@ -685,6 +728,9 @@ const ChatBotPopover = ({ open, onClose }: ChatBotPopoverProps) => {
                 theme.palette.primary.main
               } 0%, ${alpha(theme.palette.primary.main, 0.85)} 100%)`,
               color: "#fff",
+              flexShrink: 0,
+              position: "relative",
+              zIndex: 2,
             }}
           >
             <Stack direction="row" alignItems="center" spacing={1.25}>

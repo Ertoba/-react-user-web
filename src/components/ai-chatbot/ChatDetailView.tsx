@@ -354,7 +354,7 @@ const ChatDetailView = ({
                         ),
                       }}
                     >
-                      {formatDayLabel(m.createdAt)}
+                      {t(formatDayLabel(m.createdAt))}
                     </Box>
                   </Stack>
                 )}
@@ -539,6 +539,8 @@ const ChatDetailView = ({
           py: 1,
           borderTop: `1px solid ${theme.palette.divider}`,
           backgroundColor: theme.palette.background.paper,
+          flexShrink: 0,
+          pb: "max(8px, env(safe-area-inset-bottom))",
         }}
       >
         <Stack

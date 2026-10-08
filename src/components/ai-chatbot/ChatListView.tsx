@@ -309,7 +309,7 @@ const ChatListView = ({
                           sx={{ flexShrink: 0 }}
                         >
                           <Typography fontSize={11} color="text.secondary">
-                            {formatRelativeTime(c.updatedAt)}
+                            {t(formatRelativeTime(c.updatedAt))}
                           </Typography>
                           {canDelete && (
                             <Tooltip title={t("Delete chat") as string}>
