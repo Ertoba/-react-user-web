@@ -1,10 +1,9 @@
 import { AppBarStyle } from "./NavBar.style";
 
-import { Card, NoSsr, useMediaQuery, useScrollTrigger, useTheme } from "@mui/material";
+import { NoSsr, useMediaQuery, useScrollTrigger, useTheme } from "@mui/material";
 import { Box } from "@mui/system";
 import { useSelector } from "react-redux";
-import SecondNavBar from "./second-navbar/SecondNavbar";
-import TopNavBar from "./top-navbar/TopNavBar";
+import NewNavBar from "./new-navbar/NewNavBar";
 import useGetZoneId from "api-manage/hooks/react-query/google-api/useGetZone";
 import { useEffect, useRef, useState } from "react";
 import WebsiteTestModeBanner from "./WebsiteTestModeBanner";
@@ -70,11 +69,8 @@ const HeaderComponent = ({ configData: initialConfigData }) => {
     <AppBarStyle ref={headerRef} scrolling={location || token ? scrolling : false} isSmall={isSmall}>
       <Box>
         <NoSsr>
-          <Card sx={{ boxShadow: "none" }}>
-            <TopNavBar configData={configData} />
-          </Card>
           <WebsiteTestModeBanner configData={configData} />
-          <SecondNavBar configData={configData} />
+          <NewNavBar configData={configData} />
         </NoSsr>
       </Box>
     </AppBarStyle>
