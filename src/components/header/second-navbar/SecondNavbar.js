@@ -543,6 +543,8 @@ const SecondNavBar = ({ configData }) => {
               onClose={() => setOpenPopover(false)}
               open={openPopover}
               cartListRefetch={cartListRefetch}
+              token={token}
+              onSignInClick={() => setOpenSignIn(true)}
             />
           </Toolbar>
         </CustomContainer>
