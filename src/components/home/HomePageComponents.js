@@ -130,7 +130,12 @@ const HomePageComponents = ({
   );
   useEffect(() => {
     refetchFailedPayment();
-    refetchOfflinePaymentOptions();
+
+    // Parcel is not store-based. V4.2 offline payment options are
+    // store-scoped and require store_id, so skip them for parcel.
+    if (moduleType !== ModuleTypes.PARCEL) {
+      refetchOfflinePaymentOptions();
+    }
   }, []);
 
   const zoneid =

@@ -28,6 +28,9 @@ export const getParcelIcon = (name = "") => {
 
 const ParcelCard = styled(Card)(({ theme }) => ({
 	padding: "20px",
+	[theme.breakpoints.down("sm")]: {
+		padding: "12px",
+	},
 	cursor: "pointer",
 	border: "1px solid",
 	borderColor: "#EAEEF2",
@@ -67,11 +70,15 @@ const ParcelCategoryCard = (props) => {
 	return (
     <CustomStackFullWidth>
 			<ParcelCard {...props} onClick={handleClick} sx={{borderColor:props?.selected ? theme.palette.primary.main : ""}}>
-				<Stack direction="row" alignItems="center" gap={3}>
+				<Stack
+					direction="row"
+					alignItems="center"
+					gap={{ xs: 1.25, sm: 2, md: 3 }}
+				>
 					<Box
 						sx={{
-							width: "72px",
-							height: "72px",
+							width: { xs: "48px", sm: "60px", md: "72px" },
+							height: { xs: "48px", sm: "60px", md: "72px" },
 							flexShrink: 0,
 							display: "flex",
 							alignItems: "center",
@@ -80,14 +87,18 @@ const ParcelCategoryCard = (props) => {
 							backgroundColor: "transparent",
 							color: theme.palette.primary.main,
 							img: {
-								width: "72px",
-								height: "72px",
+								width: "100%",
+								height: "100%",
 								objectFit: "contain",
 								backgroundColor: "transparent",
 							},
 						}}>
 						{Icon ? (
-							<Icon sx={{ fontSize: "54px" }} />
+							<Icon
+								sx={{
+									fontSize: { xs: "36px", sm: "46px", md: "54px" },
+								}}
+							/>
 						) : (
 							<NextImage
 								width={72}
@@ -97,7 +108,13 @@ const ParcelCategoryCard = (props) => {
 							/>
 						)}
 						</Box>
-						<Stack width="100%">
+						<Stack
+							sx={{
+								width: "100%",
+								minWidth: 0,
+								flex: 1,
+							}}
+						>
 							<Tooltip
 								title={data?.name || ""}
 								placement="bottom"
@@ -121,9 +138,13 @@ const ParcelCategoryCard = (props) => {
 									component="h3"
 									sx={{
 										overflow: "hidden",
-										textOverflow: "ellipsis",
-										whiteSpace: "nowrap",
+										display: "-webkit-box",
+										WebkitLineClamp: 2,
+										WebkitBoxOrient: "vertical",
+										whiteSpace: "normal",
 										width: "100%",
+										lineHeight: 1.3,
+										overflowWrap: "anywhere",
 									}}
 								>
 									{data?.name}
@@ -133,7 +154,12 @@ const ParcelCategoryCard = (props) => {
 								fontSize={{ xs: "12px", sm: "14px", md: "14px" }}
 								color={theme.palette.neutral[400]}
 								className={classes.multiLineEllipsis}
-								maxHeight="40px"
+								sx={{
+									lineHeight: 1.3,
+									overflowWrap: "anywhere",
+									minWidth: 0,
+									maxHeight: { xs: "34px", sm: "40px" },
+								}}
 							>
 								{data?.description}
 							</Typography>
