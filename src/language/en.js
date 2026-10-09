@@ -2772,5 +2772,11 @@ export const english = {
   "Payment gateway": "Payment gateway",
   "Card payment": "Card payment",
   "Online Payment": "Online Payment",
-  "Online payment unavailable": "Online payment unavailable"
+  "Online payment unavailable": "Online payment unavailable",
+  "Contact Info": "Contact Info",
+  "Location not found": "Location not found",
+  "Select payment method": "Select payment method",
+  "Payment pending": "Payment pending",
+  "Try another payment method": "Try another payment method",
+  "Your payment method could not be loaded.": "Your payment method could not be loaded."
 };
