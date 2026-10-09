@@ -78,3 +78,12 @@
 - **Critical backend Offers route collision**: `routes/api/v1/api.php` registers `offers/items` and `offers/stores` first to the real Customer ItemController actions, then registers duplicate URL/method aliases to `MiliV4CompatibilityController`, whose handlers return empty item/store arrays. This can shadow the real offers and cause empty results. Minimal corrective **DRAFT backend PR #5**: https://github.com/Ertoba/portal-backend/pull/5 removes only the two redundant empty aliases and adds OffersRouteResolutionTest. Not merged or deployed pending isolated PHP/Laravel test and route-cache check.
 - Free Delivery filtering uses store.free_delivery=1; combined item search applies free_delivery to the parent store. Nearby uses server-side distance sorting for items/stores with latitude/longitude headers derived from client currentLatLng. Missing position supplies 0/0; results should not be called location-certified without valid coordinates.
 - No server/production deployment has occurred. Current production code/route cache and true live API responses not inspected.
+
+## 2026-10-09 — Backend Offers route correction merged (final)
+
+- Backend PR https://github.com/Ertoba/portal-backend/pull/5 **MERGED** with GitHub main commit `d246e9c1c28e32c00b32d7a3ece799557a41652b` (confirmed via GitHub).
+- Two duplicate empty compatibility aliases for `GET /api/v1/offers/items` and `GET /api/v1/offers/stores` were removed. The pre-existing real V4.2 controller handlers and all other compatibility aliases remain.
+- New backend `OffersRouteResolutionTest` confirms both URL/method combinations resolve to `App\Http\Controllers\Api\V1\Customer\Item\ItemController@offerItems/@offerStores`.
+- Scoped CI `Offers Route Regression` run `37877873380` **passed** PHP lint, locked Composer installation, isolated app bootstrap, and both Laravel controller-route assertions. Workflow is PR-scoped and does not deploy.
+- React PR #5 routing fix already merged at `7febb08762fd281c56ec7d402ed3c1048ee0ac79`; current React main has further docs commit `40b11bab231586aee13775146de4c3d92842d601` before this note.
+- Neither updated React nor updated Laravel GitHub main has been deployed by these operations to production; live `mili.ge` rendering, backend route cache, offers data count, free-delivery & nearby location accuracy must be verified on staging/production before marking the feature operational.
