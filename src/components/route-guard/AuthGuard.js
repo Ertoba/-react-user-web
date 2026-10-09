@@ -1,13 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
-import { useSelector } from "react-redux";
 
 const AuthGuard = (props) => {
-  const { children, from } = props;
+  const { children, from, requireToken = false } = props;
   const router = useRouter();
-  const {orderId}=router.query;
   const [checked, setChecked] = useState(false);
-  const { configData } = useSelector((state) => state.configData);
   useEffect(
     () => {
       if (!router.isReady) {
@@ -15,15 +12,13 @@ const AuthGuard = (props) => {
       }
       const token = localStorage.getItem("token");
       const guest = localStorage.getItem("guest_id");
-      if ((token || guest)) {
-        setChecked(true);
-      } else if (guest && configData?.guest_checkout_status === 1) {
-        setChecked(true);
-      }
-      else if((token || guest) && orderId){
+      // Personal account pages require a signed-in user, not just the guest ID
+      // that checkout creates for anonymous visitors.
+      if (requireToken ? Boolean(token) : Boolean(token || guest)) {
         setChecked(true);
       }
       else {
+        setChecked(false);
         router.push(
           {
             pathname: "/",
@@ -35,7 +30,7 @@ const AuthGuard = (props) => {
       }
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [router.isReady]
+    [router.isReady, router.asPath, requireToken]
   );
 
   if (!checked) {
