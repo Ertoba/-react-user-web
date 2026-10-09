@@ -2169,5 +2169,11 @@ export const georgian = {
   "Payment pending": "გადახდა მოლოდინშია",
   "Payment failed": "გადახდა ვერ შესრულდა",
   "Try another payment method": "სცადეთ გადახდის სხვა მეთოდი",
-  "Your payment method could not be loaded.": "გადახდის მეთოდების ჩატვირთვა ვერ მოხერხდა."
+  "Your payment method could not be loaded.": "გადახდის მეთოდების ჩატვირთვა ვერ მოხერხდა.",
+  "User": "მომხმარებელი",
+  "Custom Service": "მორგებული მომსახურება",
+  "Requested Services": "მოთხოვნილი მომსახურებები",
+  "No monthly cart items found": "ყოველთვიური კალათის ჩანაწერები ვერ მოიძებნა",
+  "Subscribe Now": "გამოწერა ახლავე",
+  "Available on": "ხელმისაწვდომია"
 };
