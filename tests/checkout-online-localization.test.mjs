@@ -91,3 +91,13 @@ test("both checkout payment pickers show a localized disabled-provider state", (
     assert.match(source, /Online payment is temporarily unavailable/);
   }
 });
+
+test("parcel payment modal keeps pending gateway selection isolated until Update", () => {
+  const source = readFileSync(new URL("../src/components/checkout/DeliveryInfo.js", import.meta.url), "utf8");
+  assert.match(source, /const \[draftPaymentMethod, setDraftPaymentMethod\]/);
+  assert.match(source, /const closePaymentPicker = \(\) => \{[\s\S]*?setDraftPaymentMethod\(selectedPaymentMethod \|\| paymentMethod\)/);
+  assert.match(source, /const confirmPaymentPicker = \(selected\) => \{[\s\S]*?setPaymentMethod\(selected\);[\s\S]*?setSelectedPaymentMethod\(selected\)/);
+  assert.equal((source.match(/setPaymentMethod=\{setDraftPaymentMethod\}/g) ?? []).length, 2);
+  assert.equal((source.match(/setSelectedPaymentMethod=\{confirmPaymentPicker\}/g) ?? []).length, 2);
+  assert.equal((source.match(/setOpen=\{closePaymentPicker\}/g) ?? []).length, 2);
+});
