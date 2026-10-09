@@ -1983,5 +1983,15 @@ export const russian = {
   "Available on": "Доступно в",
   "Theme": "Тема",
   "Delete Account": "Удалить аккаунт",
-  "Deleting your account will remove all your orders, addresses, wallet balance and personal data permanently.": "При удалении аккаунта ваши заказы, адреса, баланс кошелька и персональные данные будут удалены безвозвратно."
+  "Deleting your account will remove all your orders, addresses, wallet balance and personal data permanently.": "При удалении аккаунта ваши заказы, адреса, баланс кошелька и персональные данные будут удалены безвозвратно.",
+  "Grocery": "Продукты",
+  "Pharmacy": "Аптека",
+  "Shop": "Магазин",
+  "Rental": "Аренда",
+  "Market": "Маркет",
+  "Markets": "Маркеты",
+  "Service": "Услуги",
+  "Taxi": "Такси",
+  "Medicine": "Лекарство",
+  "Medicine & Health": "Лекарства и здоровье"
 };
