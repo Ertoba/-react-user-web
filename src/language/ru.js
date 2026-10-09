@@ -1980,5 +1980,8 @@ export const russian = {
   "Requested Services": "Запрошенные услуги",
   "No monthly cart items found": "Элементы ежемесячной корзины не найдены",
   "Subscribe Now": "Подписаться сейчас",
-  "Available on": "Доступно в"
+  "Available on": "Доступно в",
+  "Theme": "Тема",
+  "Delete Account": "Удалить аккаунт",
+  "Deleting your account will remove all your orders, addresses, wallet balance and personal data permanently.": "При удалении аккаунта ваши заказы, адреса, баланс кошелька и персональные данные будут удалены безвозвратно."
 };
