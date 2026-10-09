@@ -77,6 +77,25 @@ const DeliveryInfo = ({
   const { t } = useTranslation();
   const [openPaymentModal, setOpenPaymentModal] = useState(false);
   const [paymentMethodImage, setPaymentMethodImage] = useState("");
+  const [draftPaymentMethod, setDraftPaymentMethod] = useState(paymentMethod);
+  const [draftPaymentMethodImage, setDraftPaymentMethodImage] = useState("");
+
+  // Confirming, not tapping a radio, commits a payment change to the order.
+  const openPaymentPicker = () => {
+    setDraftPaymentMethod(selectedPaymentMethod || paymentMethod);
+    setDraftPaymentMethodImage(paymentMethodImage);
+    setOpenPaymentModal(true);
+  };
+  const closePaymentPicker = () => {
+    setDraftPaymentMethod(selectedPaymentMethod || paymentMethod);
+    setDraftPaymentMethodImage(paymentMethodImage);
+    setOpenPaymentModal(false);
+  };
+  const confirmPaymentPicker = (selected) => {
+    setPaymentMethod(selected);
+    setSelectedPaymentMethod(selected);
+    setOpenPaymentModal(false);
+  };
   React.useEffect(() => {
     if (paymentMethod === "cash_on_delivery") {
       setPaymentMethodImage(money.src);
@@ -498,7 +517,7 @@ const DeliveryInfo = ({
               </Typography>
             </Stack>
             <IconButton
-              onClick={() => setOpenPaymentModal(true)}
+              onClick={openPaymentPicker}
               sx={{
                 width: 36,
                 height: 36,
@@ -517,7 +536,7 @@ const DeliveryInfo = ({
               direction="row"
               alignItems="center"
               gap="12px"
-              onClick={() => setOpenPaymentModal(true)}
+              onClick={openPaymentPicker}
               sx={{
                 mt: 2,
                 cursor: "pointer",
@@ -562,7 +581,7 @@ const DeliveryInfo = ({
           <Drawer
             anchor="bottom"
             open={openPaymentModal}
-            onClose={() => setOpenPaymentModal(false)}
+            onClose={closePaymentPicker}
             PaperProps={{
               sx: {
                 borderTopLeftRadius: "20px",
@@ -587,7 +606,7 @@ const DeliveryInfo = ({
               }}
             />
             <IconButton
-              onClick={() => setOpenPaymentModal(false)}
+              onClick={closePaymentPicker}
               sx={{
                 backgroundColor: theme.palette.neutral[300],
                 borderRadius: "50%",
@@ -602,8 +621,8 @@ const DeliveryInfo = ({
             </IconButton>
             <Box sx={{ overflowY: "auto", flex: 1 }}>
               <PaymentMethod
-                setPaymentMethod={setPaymentMethod}
-                paymentMethod={paymentMethod}
+                setPaymentMethod={setDraftPaymentMethod}
+                paymentMethod={draftPaymentMethod}
                 paidBy={paidBy}
                 isLoading={isLoading}
                 orderPlace={orderPlace}
@@ -613,25 +632,25 @@ const DeliveryInfo = ({
                 parcel="true"
                 offlinePaymentOptions={offlinePaymentOptions}
                 getParcelPayment={getParcelPayment}
-                setOpen={setOpenPaymentModal}
-                setSelectedPaymentMethod={setSelectedPaymentMethod}
+                setOpen={closePaymentPicker}
+                setSelectedPaymentMethod={confirmPaymentPicker}
                 walletBalance={walletBalance}
                 payableAmount={payableAmount}
-                paymentMethodImage={paymentMethodImage}
-                setPaymentMethodImage={setPaymentMethodImage}
+                paymentMethodImage={draftPaymentMethodImage}
+                setPaymentMethodImage={setDraftPaymentMethodImage}
               />
             </Box>
           </Drawer>
         ) : (
           <Modal
             open={openPaymentModal}
-            onClose={() => setOpenPaymentModal(false)}
+            onClose={closePaymentPicker}
             aria-labelledby="modal-modal-title"
             aria-describedby="modal-modal-description"
           >
             <Box sx={modalStyle}>
               <IconButton
-                onClick={() => setOpenPaymentModal(false)}
+                onClick={closePaymentPicker}
                 sx={{
                   backgroundColor: theme.palette.neutral[300],
                   borderRadius: "50%",
@@ -646,8 +665,8 @@ const DeliveryInfo = ({
               </IconButton>
 
               <PaymentMethod
-                setPaymentMethod={setPaymentMethod}
-                paymentMethod={paymentMethod}
+                setPaymentMethod={setDraftPaymentMethod}
+                paymentMethod={draftPaymentMethod}
                 paidBy={paidBy}
                 isLoading={isLoading}
                 orderPlace={orderPlace}
@@ -657,12 +676,12 @@ const DeliveryInfo = ({
                 parcel="true"
                 offlinePaymentOptions={offlinePaymentOptions}
                 getParcelPayment={getParcelPayment}
-                setOpen={setOpenPaymentModal}
-                setSelectedPaymentMethod={setSelectedPaymentMethod}
+                setOpen={closePaymentPicker}
+                setSelectedPaymentMethod={confirmPaymentPicker}
                 walletBalance={walletBalance}
                 payableAmount={payableAmount}
-                paymentMethodImage={paymentMethodImage}
-                setPaymentMethodImage={setPaymentMethodImage}
+                paymentMethodImage={draftPaymentMethodImage}
+                setPaymentMethodImage={setDraftPaymentMethodImage}
               />
             </Box>
           </Modal>
