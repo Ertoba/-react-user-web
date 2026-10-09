@@ -7,6 +7,7 @@ import ProfileTab from "./ProfileTab";
 import Divider from "@mui/material/Divider";
 import ProfileBody from "./ProfileBody";
 import Address from "../address";
+import AddAddressComponent from "../address/add-new-address/AddAddressComponent";
 import { menuData } from "../header/second-navbar/account-popover/menuData";
 import Router from "next/router";
 import { useMediaQuery, useTheme } from "@mui/material";
@@ -30,6 +31,7 @@ const BodySection = ({
   const [editAddress, setEditAddress] = useState(null);
   const theme = useTheme();
   const isSmall = useMediaQuery(theme.breakpoints.down("md"));
+  const isV42Mobile = useMediaQuery("(max-width:1180px)");
   const { data, isLoading, refetch } = useGetAddressList();
   const handleActivePage = (item) => {
     Router.push(
@@ -42,53 +44,64 @@ const BodySection = ({
     );
 
   };
+  const isBareMobileCard = isV42Mobile &&
+    ["my-orders", "inbox", "monthly-cart-list", "coupons", "track-order"].includes(page);
+
   return (
-    <CustomStackFullWidth spacing={4} >
-      <CustomPaperBigCard
-        padding={page === "my-orders" || page === "inbox" ? "0px" : "10px"}
-        noboxshadow={
-          isSmall
-            ? page === "my-orders" || page === "inbox"
-              ? "true"
-              : ""
-            : "true"
-        }
-        backgroundcolor={
-          isSmall &&
-          (page === "my-orders" || page === "inbox") &&
-          theme.palette.background.default
-        }
-      >
-        {!isSmall && userToken && (
-          <ProfileTab
+    <CustomStackFullWidth spacing={4}>
+      {page === "addresses" ? (
+        addAddress && (
+          <CustomPaperBigCard padding="10px" noboxshadow={isV42Mobile ? "" : "true"}>
+            <AddAddressComponent
+              setAddAddress={setAddAddress}
+              configData={configData}
+              editAddress={editAddress}
+              addressRefetch={refetch}
+              setEditAddress={setEditAddress}
+            />
+          </CustomPaperBigCard>
+        )
+      ) : (
+        <CustomPaperBigCard
+          padding={isBareMobileCard ? "0px" : "10px"}
+          noboxshadow={isV42Mobile && isBareMobileCard ? "true" : !isV42Mobile ? "true" : ""}
+          backgroundcolor={isBareMobileCard ? theme.palette.background.default : undefined}
+        >
+          {!isV42Mobile && userToken && (
+            <ProfileTab
+              deleteUserHandler={deleteUserHandler}
+              isLoadingDelete={isLoadingDelete}
+              accountDeleteStatus={accountDeleteStatus}
+              setAccountDeleteStatus={setAccountDeleteStatus}
+              page={page}
+              menuData={menuData}
+              handlePage={handleActivePage}
+              setEditProfile={setEditProfile}
+            />
+          )}
+          {!isV42Mobile && <Divider />}
+
+          <ProfileBody
+            key={`${page}-${orderId || "no-order"}`}
+            page={page}
+            configData={configData}
+            orderId={orderId}
+            editProfile={editProfile}
+            setEditProfile={setEditProfile}
+            addAddress={addAddress}
+            setAddAddress={setAddAddress}
+            editAddress={editAddress}
+            refetch={refetch}
+            setEditAddress={setEditAddress}
             deleteUserHandler={deleteUserHandler}
-            isLoadingDelete={isLoadingDelete}
             accountDeleteStatus={accountDeleteStatus}
             setAccountDeleteStatus={setAccountDeleteStatus}
-            page={page}
-            menuData={menuData}
-            handlePage={handleActivePage}
-            setEditProfile={setEditProfile}
+            isLoadingDelete={isLoadingDelete}
           />
-        )}
-        {!isSmall && <Divider />}
+        </CustomPaperBigCard>
+      )}
 
-        <ProfileBody
-          key={`${page}-${orderId || 'no-order'}`}
-          page={page}
-          configData={configData}
-          orderId={orderId}
-          editProfile={editProfile}
-          setEditProfile={setEditProfile}
-          addAddress={addAddress}
-          setAddAddress={setAddAddress}
-          editAddress={editAddress}
-          refetch={refetch}
-          setEditAddress={setEditAddress}
-        />
-      </CustomPaperBigCard>
-
-      {(page === "profile-settings" || page === "addresses") && !editProfile && !addAddress && (
+      {(page === "profile-settings" || page === "addresses") && !addAddress && (
         <CustomPaperBigCard padding="10px" noboxshadow={isSmall ? "" : "true"}>
           <Address
             configData={configData}
