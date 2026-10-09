@@ -108,3 +108,19 @@ test("profile mobile titles are translated in Georgian and Russian", () => {
     }
   }
 });
+
+test("V4.2 Settings retains theme, language and two-step account deletion", () => {
+  const settings = source("src/components/settings/index.js");
+  assert.match(settings, /<ThemeSwitches noText\s*\/>/);
+  assert.match(settings, /<CustomLanguage countryCode=\{countryCode\} language=\{language\}\s*\/>/);
+  assert.match(settings, /typeof deleteUserHandler === "function"/);
+  assert.match(settings, /<DeleteAccount/);
+  assert.match(settings, /openModal=\{deleteModalOpen\}/);
+  assert.match(settings, /onClick=\{\(\) => setDeleteModalOpen\(true\)\}/);
+  for (const language of ["ka", "ru"]) {
+    const locale = source(`src/language/${language}.js`);
+    for (const key of ["Theme", "Delete Account", "Deleting your account will remove all your orders, addresses, wallet balance and personal data permanently."]) {
+      assert(locale.includes(JSON.stringify(key) + ": "), `${language}: ${key}`);
+    }
+  }
+});
