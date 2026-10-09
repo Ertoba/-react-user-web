@@ -127,3 +127,8 @@
 - Original V4.2 ZIP `src/components/settings/index.js` includes theme/language rows and a confirmed Delete Account modal, whereas MILI main had the older two large settings cards (Theme/Language only); migrated the V4.2 row-based layout while retaining MILI's existing `DeleteAccount` component and backend delete hook.
 - The deletion action is gated by the existing callback and an explicit confirmation modal; no automatic or new data deletion mechanism has been introduced.
 - Localized Theme, Delete Account and permanent-deletion warning strings in Georgian/Russian. Added a regression guard for settings controls.
+
+### Reactive mobile navigation localization
+
+- V4.2 `BottomNav.js` constructed translated text via `t("...")` once at module import. If user changed language after initial load, labels could stay in the original language. Preserved its original four tab definitions and routes while using literal translation keys and the `useTranslation` hook at render time.
+- Added a targeted regression test to verify mobile Offers, Orders, Favourite and Profile labels remain language-reactive.
