@@ -3,7 +3,7 @@ import dynamic from "next/dynamic";
 import { Box, NoSsr, Stack, Typography, useTheme } from "@mui/material";
 import { useRouter } from "next/router";
 import { useSelector } from "react-redux";
-import { t } from "i18next";
+import { useTranslation } from "react-i18next";
 import { getCurrentModuleType } from "helper-functions/getCurrentModuleType";
 import { toast } from "react-hot-toast";
 import { getToken } from "helper-functions/getToken";
@@ -16,27 +16,27 @@ const AuthModal = dynamic(() => import("components/auth/AuthModal"));
 const NAV_ITEMS = [
   {
     key: "offers",
-    label: t("Offers"),
+    label: "Offers",
     icon: "fi fi-rr-badge-percent",
     path: "/home/offers",
   },
   {
     key: "orders",
-    label: t("Orders"),
+    label: "Orders",
     icon: "fi fi-rr-receipt",
     path: "/profile?page=my-orders",
     requireAuth: true,
   },
   {
     key: "favourite",
-    label: t("Favourite"),
+    label: "Favourite",
     icon: "fi fi-rr-heart",
     openWishlist: true,
     requireAuth: true,
   },
   {
     key: "profile",
-    label: t("Profile"),
+    label: "Profile",
     icon: "fi fi-rr-user",
     openProfile: true,
   },
@@ -44,6 +44,7 @@ const NAV_ITEMS = [
 
 const BottomNav = () => {
   const router = useRouter();
+  const { t } = useTranslation();
   const theme = useTheme();
   const { profileInfo } = useSelector((state) => state.profileInfo);
   const { selectedModule } = useSelector((state) => state.utilsData);
