@@ -14,3 +14,12 @@
 - Full browsers QA failed on the **same baseline**: production-audit workflow on original `main` SHA `5f7bbc5` (run `37801366466`) and PR #2 (run `37817051427`) had the identical Chromium/Firefox/WebKit summary per browser: 36 passed, 328 failed, 164 blocked, 96 excluded, and 0/4 interactions passed. This strongly suggests existing fixture/runtime/test environment defects; it does not prove UI patch correctness.
 - Next: isolate baseline QA failures separately and run targeted signed-in/guest popup smoke and visual checks for this PR before merge.
 - Do not merge or deploy until verified. No changes to `main` or production have been made by this audit.
+
+## 2026-10-09 — ZIP blob parity verification and focused regression tests
+
+- Independently computed Git blob SHA1 for files inside the original V4.2 ZIP and matched the GitHub `main` tree at `5f7bbc5`.
+- **Byte-identical:** `NewNavBar.js`, `MobileNavBar.js`, `AuthLanding.jsx`, `AuthModal.jsx`, `BottomNav.js`, `ProfileDrawer.js`, `HomeCategoryBrowser.tsx`, `ModuleHomeSidebarLayout.tsx`, `ManageSearch.js`, `NavCategory.js`, `MobileSearchOverlay.js`, `MobileSearchPageBar.js`, and `pages/home/index.js`.
+- **Differ intentionally/review needed:** `UserInformation.js`, `MainLayout.js`, `SignInForm.js`, `OtpLogin.jsx`, `AccountMenuPanel.js`, `AccountLanguageButton.js`, `pages/profile/index.js`, `pages/_app.js`. Preserve MILI behavior and re-test rather than overwriting.
+- The original V4.2 dropdown wrapper contained the full `AccountMenuPanel` and RTL anchor alignment; this branch restores that design wiring to the active MILI navbar.
+- `tests/v42-account-ui.test.mjs` validates JSX wiring in both desktop navbars, modal/OTP entry points, authenticated vs guest mobile routes, and a stubbed runtime of the actual dropdown wrapper in RTL/LTR guest/auth modes.
+- Old full-browser test failures remain an unresolved independent blocker for claiming full end-to-end readiness. The scoped regression test covers component wiring but cannot establish a true authenticated browser session by itself.
