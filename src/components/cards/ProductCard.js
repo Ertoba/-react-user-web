@@ -739,7 +739,11 @@ const ProductCard = (props) => {
               sx={{ wordBreak: "break-word" }}
               component="h4"
             >
-              {item?.generic_name[0]}
+              {Array.isArray(item?.generic_name)
+                ? item.generic_name[0] ?? ""
+                : typeof item?.generic_name === "string"
+                  ? item.generic_name
+                  : ""}
             </Typography>
           ) : (
             <Stack direction="row" alignItems="center" spacing={0.5}>
