@@ -60,7 +60,7 @@ const MenuBar = (props) => {
                         {/*  alt={item?.name}*/}
                         {/*/>*/}
                       </ListItemIcon>
-                      <ListItemText primary={t(item?.label ?? item?.name)} />
+                      <ListItemText primary={t(item?.name)} />
                     </ListItem>
                   </MenuItem>
                   <Divider />
