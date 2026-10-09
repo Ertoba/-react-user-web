@@ -1,8 +1,8 @@
 # MILI React — final context (V4.2 UI audit)
 
-## 2026-10-09 — Draft PR #2 status
+## 2026-10-09 — Draft PR #2 status (historical, before merge)
 
-- Production website: `mili.ge`; this PR has **not** been merged into `main` or deployed.
+- Production website: `mili.ge`; **at the time of this draft snapshot**, PR #2 had not been merged into `main` or deployed.
 - Comparison base: `main` at commit `5f7bbc52324826bac39866afd447c8816de7106b`.
 - V4.2 reference: user-supplied `React-user-website private licemze.zip` / `6amMart React`.
 - Candidate branch: `audit/v42-ui-selective-20261008`.
@@ -12,8 +12,8 @@
 - Existing OTP fixes, AI, Georgian/Russian, product/store/cart/service flows have not been replaced.
 - Static code checks job (lint, TS, typography tests) passed for PR #2.
 - Full browsers QA failed on the **same baseline**: production-audit workflow on original `main` SHA `5f7bbc5` (run `37801366466`) and PR #2 (run `37817051427`) had the identical Chromium/Firefox/WebKit summary per browser: 36 passed, 328 failed, 164 blocked, 96 excluded, and 0/4 interactions passed. This strongly suggests existing fixture/runtime/test environment defects; it does not prove UI patch correctness.
-- Next: isolate baseline QA failures separately and run targeted signed-in/guest popup smoke and visual checks for this PR before merge.
-- Do not merge or deploy until verified. No changes to `main` or production have been made by this audit.
+- Next action at this stage: isolate baseline QA failures separately and run targeted signed-in/guest popup smoke and visual checks. Subsequent merge status appears below.
+- At this draft stage, no changes to `main` or production had yet been made. See final integration status below.
 
 ## 2026-10-09 — ZIP blob parity verification and focused regression tests
 
@@ -23,3 +23,13 @@
 - The original V4.2 dropdown wrapper contained the full `AccountMenuPanel` and RTL anchor alignment; this branch restores that design wiring to the active MILI navbar.
 - `tests/v42-account-ui.test.mjs` validates JSX wiring in both desktop navbars, modal/OTP entry points, authenticated vs guest mobile routes, and a stubbed runtime of the actual dropdown wrapper in RTL/LTR guest/auth modes.
 - Old full-browser test failures remain an unresolved independent blocker for claiming full end-to-end readiness. The scoped regression test covers component wiring but cannot establish a true authenticated browser session by itself.
+
+## 2026-10-09 — PR #2 merged into main (verified)
+
+- PR: https://github.com/Ertoba/-react-user-web/pull/2
+- **MERGED** on 2026-10-09 at 02:41 UTC, squash commit `f8585360af837b4ee13dd00489bbffb2a9ac81a4`; main ref confirmed pointing to that SHA immediately after merge.
+- Actual source changes limited to `src/components/header/second-navbar/account-popover/index.js` and `src/components/header/second-navbar/SecondNavbar.js`. Added `tests/v42-account-ui.test.mjs` and this context file.
+- The final candidate `checks` job (TypeScript, lint, typography tests, and new targeted V4.2 account tests) completed successfully in run `37875313296`.
+- Full Chromium/Firefox/WebKit QA had not completed at the point of merge and previously failed on the unmodified main baseline. Its existing blockers are tracked separately in https://github.com/Ertoba/-react-user-web/issues/3.
+- **MILI production deployment was NOT performed by this change**. A main merge is not proof that `mili.ge` uses the new bundle. Production rollout requires controlled build, a candidate smoke check, and deployment verification.
+- Do not call the full V4.2 UI pixel-perfect or production browser-certified until authenticated/guest visual smoke and baseline browser QA issues are resolved.
