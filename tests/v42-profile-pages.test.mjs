@@ -134,3 +134,20 @@ test("bottom account navigation updates when switching language", () => {
   }
   assert.match(src, /\{t\(item\.label\)\}/);
 });
+
+test("profile module tabs use translated names without altering selection keys", () => {
+  for (const file of [
+    "src/components/user-information/ModuleTabbedLayout.js",
+    "src/components/user-information/MonthlyCartListPage.js",
+  ]) {
+    const src = source(file);
+    assert.equal((src.match(/\{t\(mod\.module_name\)\}/g) ?? []).length, 2);
+    assert.match(src, /mod\.id/);
+  }
+  for (const language of ["ka", "ru"]) {
+    const locale = source(`src/language/${language}.js`);
+    for (const moduleName of ["Grocery", "Pharmacy", "Shop", "Food", "Parcel", "Rental"]) {
+      assert(locale.includes(JSON.stringify(moduleName) + ": "), `${language}: ${moduleName}`);
+    }
+  }
+});
