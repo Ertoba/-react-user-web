@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
+import { getActivePaymentGatewayOptions, isDigitalPaymentEnabled } from "helper-functions/checkoutPaymentGateways.mjs";
 import { useRouter } from "next/router";
 import {
   alpha,
@@ -262,6 +263,7 @@ const OtherModulePayment = (props) => {
     configData?.partial_payment_method === "both" ||
     configData?.partial_payment_method === null ||
     configData?.partial_payment_method === "";
+  const activeDigitalGateways = getActivePaymentGatewayOptions(configData);
 
   // ── Derived layout flags ──────────────────────────────────────────────────
   const showWalletCard =
@@ -584,7 +586,7 @@ const OtherModulePayment = (props) => {
         {isZoneDigital?.digital_payment &&
           paidBy !== "receiver" &&
           forprescription !== "true" &&
-          configData?.digital_payment_info?.digital_payment &&
+          isDigitalPaymentEnabled(configData) &&
           (!isPartialPaymentActive || allowDigitalForPartialPayment) && (
             <Stack spacing={1.25} mb={2}>
               <Stack direction="row" alignItems="baseline" gap={0.75}>
@@ -601,7 +603,7 @@ const OtherModulePayment = (props) => {
               </Stack>
 
               <Stack direction="row" flexWrap="wrap" gap={1.5}>
-                {configData?.active_payment_method_list?.map((item, index) => (
+                {activeDigitalGateways.map((item, index) => (
                   <Stack
                     key={index}
                     sx={{
@@ -641,6 +643,11 @@ const OtherModulePayment = (props) => {
                     />
                   </Stack>
                 ))}
+                {activeDigitalGateways.length === 0 && (
+                  <Typography fontSize="13px" color="text.secondary" role="status">
+                    {t("Online payment is temporarily unavailable. Please select another payment method.")}
+                  </Typography>
+                )}
               </Stack>
             </Stack>
           )}
