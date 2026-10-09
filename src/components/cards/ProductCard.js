@@ -83,6 +83,7 @@ import NextImage from "components/NextImage";
 import useTextEllipsis from "api-manage/hooks/custom-hooks/useTextEllipsis";
 import { formatProductName, formatStoreName } from "utils/georgianText";
 import VerifiedStoreBadge from "./VerifiedStoreBadge";
+import { getGenericNameText } from "helper-functions/getGenericNameText";
 
 export const CardWrapper = styled(Card)(
   ({
@@ -739,11 +740,7 @@ const ProductCard = (props) => {
               sx={{ wordBreak: "break-word" }}
               component="h4"
             >
-              {Array.isArray(item?.generic_name)
-                ? item.generic_name[0] ?? ""
-                : typeof item?.generic_name === "string"
-                  ? item.generic_name
-                  : ""}
+              {getGenericNameText(item?.generic_name)}
             </Typography>
           ) : (
             <Stack direction="row" alignItems="center" spacing={0.5}>
