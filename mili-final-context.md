@@ -60,3 +60,13 @@
 - Added `tests/search-results.test.mjs`; the Production QA Audit `checks` job (ESLint, TypeScript, Node tests) passed on PR head `da9c08c82154c41a42a8f19632efde184282de1f`, workflow run `37876369743`.
 - Full browser QA was **still running at time of merge**; unrelated existing fixture/hydration failures are tracked in issue #3. Do not claim that these fixes were visually smoke-tested on deployed `mili.ge`.
 - **No production deploy** has occurred. Existing production bundle may still display prior bugs until controlled build/smoke and deployment.
+
+## 2026-10-09 — V4.2 offers/free-delivery/nearby loading audit (candidate)
+
+- Audited main `ce6cbafc610011817cd4a538ba9a5ed5c1679ab8` against the user-provided original V4.2 React ZIP.
+- **Verified regression:** `pages/home/[...slug].tsx` passes `routeSection` to `ModuleWiseLayout`, but the MILI layout dropped that prop and never forwarded it to `HomePageComponents`. The sidebar then falls back to `overviewContent`, so visiting `/home/offers`, `/home/free-delivery`, and `/home/nearby` fails to select their corresponding section. Original V4.2 layout forwards both `routeSection` and `routeCategory`.
+- Fix branch `fix/v42-section-route-propagation-20261009` restores these two prop forwards with no changes to other MILI logic.
+- `tests/v42-home-sections.test.mjs` adds guards for the nested route data flow, all four module section definitions, dedicated offers API URLs, and combined-search `quick_action=free_delivery|nearby` API parameter flow.
+- Offers hooks request `/api/v1/offers/items` and `/api/v1/offers/stores` and render product/store sections; free-delivery and nearby use `/api/v1/get-combined-data` with fixed `quick_action` values.
+- Nearby depends on `currentLatLng` client storage: Axios sends lat/lng, falling back to zeros. Server-side availability of offers endpoints, accuracy of backend free-delivery/nearby filtering, and the live mili.ge pages **could not be verified** with accessible runtime; do not claim backend is certified.
+- Production not touched. Run Node/TS checks and browser smoke; report deployment separately.
