@@ -11,7 +11,7 @@ import HomePageComponents from "../home/HomePageComponents";
 import ModuleSelect from "../module-select/ModuleSelect";
 import { getModuleIdentifier, saveModuleParam } from "../../utils/moduleParamManager";
 
-const ModuleWiseLayout = ({ configData, landingPageData }) => {
+const ModuleWiseLayout = ({ configData, landingPageData, routeSection, routeCategory }) => {
 	const [rerender, setRerender] = useState(false);
 	const { selectedModule } = useSelector((state) => state.utilsData);
 	const { data, refetch } = useGetModule();
@@ -79,6 +79,8 @@ const ModuleWiseLayout = ({ configData, landingPageData }) => {
 				key={rerender}
 				configData={configData}
 				landingPageData={landingPageData}
+				routeSection={routeSection}
+				routeCategory={routeCategory}
 			/>
 		</CustomStackFullWidth>
 	);
