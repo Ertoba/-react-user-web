@@ -16,6 +16,7 @@ import { alpha } from "@mui/system";
 import CustomImageContainer from "components/CustomImageContainer";
 import { getToken } from "helper-functions/getToken";
 import { t } from "i18next";
+import { getActivePaymentGatewayOptions, isDigitalPaymentEnabled } from "helper-functions/checkoutPaymentGateways.mjs";
 import { useRouter } from "next/router";
 import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -145,6 +146,7 @@ const ParcelPaymentMethod = (props) => {
 
   const showCOD =
     configData?.cash_on_delivery && getParcelPayment()[0]?.cash_on_delivery;
+  const activeDigitalGateways = getActivePaymentGatewayOptions(configData);
 
   // Full-width when the sibling card is absent
   const walletGridSm = showCOD ? 6 : 12;
@@ -318,7 +320,7 @@ const ParcelPaymentMethod = (props) => {
       {/* ── Pay Via Online ─────────────────────────────────────────────── */}
       {paidBy !== "receiver" &&
         forprescription !== "true" &&
-        configData?.digital_payment_info?.digital_payment &&
+        isDigitalPaymentEnabled(configData) &&
         getParcelPayment()[0]?.digital_payment && (
           <Stack spacing={1.25} mb={2}>
             <Stack direction="row" alignItems="baseline" gap={0.75}>
@@ -335,7 +337,7 @@ const ParcelPaymentMethod = (props) => {
             </Stack>
 
             <Stack direction="row" flexWrap="wrap" gap={1.5}>
-              {configData?.active_payment_method_list?.map((item, index) => (
+              {activeDigitalGateways.map((item, index) => (
                 <Stack
                   key={index}
                   sx={{
@@ -376,6 +378,11 @@ const ParcelPaymentMethod = (props) => {
                   />
                 </Stack>
               ))}
+              {activeDigitalGateways.length === 0 && (
+                <Typography fontSize="13px" color="text.secondary" role="status">
+                  {t("Online payment is temporarily unavailable. Please select another payment method.")}
+                </Typography>
+              )}
             </Stack>
           </Stack>
         )}
