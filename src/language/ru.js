@@ -1974,5 +1974,11 @@ export const russian = {
   "Payment pending": "Ожидание оплаты",
   "Payment failed": "Не удалось выполнить оплату",
   "Try another payment method": "Попробуйте другой способ оплаты",
-  "Your payment method could not be loaded.": "Не удалось загрузить способы оплаты."
+  "Your payment method could not be loaded.": "Не удалось загрузить способы оплаты.",
+  "User": "Пользователь",
+  "Custom Service": "Индивидуальная услуга",
+  "Requested Services": "Запрошенные услуги",
+  "No monthly cart items found": "Элементы ежемесячной корзины не найдены",
+  "Subscribe Now": "Подписаться сейчас",
+  "Available on": "Доступно в"
 };
