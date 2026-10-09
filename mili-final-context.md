@@ -70,3 +70,11 @@
 - Offers hooks request `/api/v1/offers/items` and `/api/v1/offers/stores` and render product/store sections; free-delivery and nearby use `/api/v1/get-combined-data` with fixed `quick_action` values.
 - Nearby depends on `currentLatLng` client storage: Axios sends lat/lng, falling back to zeros. Server-side availability of offers endpoints, accuracy of backend free-delivery/nearby filtering, and the live mili.ge pages **could not be verified** with accessible runtime; do not claim backend is certified.
 - Production not touched. Run Node/TS checks and browser smoke; report deployment separately.
+
+## 2026-10-09 — Offers / Free Delivery / Nearby route fix merged and backend audit
+
+- React PR: https://github.com/Ertoba/-react-user-web/pull/5 — **merged to main**, squash SHA `7febb08762fd281c56ec7d402ed3c1048ee0ac79` confirmed on main. The change forwards `routeSection` and `routeCategory` through `ModuleWiseLayout`, allowing nested `/home/offers`, `/home/free-delivery`, `/home/nearby` to select the intended components. Static CI checks passed; full browser QA still in progress at merge, baseline caveats remain.
+- Backend `Ertoba/portal-backend` main SHA audited: `e8fc69b905b38d9c4c63aabeac00da30897c0676`.
+- **Critical backend Offers route collision**: `routes/api/v1/api.php` registers `offers/items` and `offers/stores` first to the real Customer ItemController actions, then registers duplicate URL/method aliases to `MiliV4CompatibilityController`, whose handlers return empty item/store arrays. This can shadow the real offers and cause empty results. Minimal corrective **DRAFT backend PR #5**: https://github.com/Ertoba/portal-backend/pull/5 removes only the two redundant empty aliases and adds OffersRouteResolutionTest. Not merged or deployed pending isolated PHP/Laravel test and route-cache check.
+- Free Delivery filtering uses store.free_delivery=1; combined item search applies free_delivery to the parent store. Nearby uses server-side distance sorting for items/stores with latitude/longitude headers derived from client currentLatLng. Missing position supplies 0/0; results should not be called location-certified without valid coordinates.
+- No server/production deployment has occurred. Current production code/route cache and true live API responses not inspected.
