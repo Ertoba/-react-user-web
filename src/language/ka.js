@@ -2178,5 +2178,15 @@ export const georgian = {
   "Available on": "ხელმისაწვდომია",
   "Theme": "თემა",
   "Delete Account": "ანგარიშის წაშლა",
-  "Deleting your account will remove all your orders, addresses, wallet balance and personal data permanently.": "ანგარიშის წაშლისას სამუდამოდ წაიშლება თქვენი შეკვეთები, მისამართები, საფულის ნაშთი და პირადი მონაცემები."
+  "Deleting your account will remove all your orders, addresses, wallet balance and personal data permanently.": "ანგარიშის წაშლისას სამუდამოდ წაიშლება თქვენი შეკვეთები, მისამართები, საფულის ნაშთი და პირადი მონაცემები.",
+  "Grocery": "მარკეტი",
+  "Pharmacy": "აფთიაქი",
+  "Shop": "მაღაზია",
+  "Rental": "ქირაობა",
+  "Market": "მარკეტი",
+  "Markets": "მარკეტები",
+  "Service": "მომსახურება",
+  "Taxi": "ტაქსი",
+  "Medicine": "მედიკამენტი",
+  "Medicine & Health": "მედიკამენტები და ჯანმრთელობა"
 };
