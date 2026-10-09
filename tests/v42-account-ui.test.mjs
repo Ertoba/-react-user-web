@@ -2,6 +2,7 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import ts from "typescript";
+import vm from "node:vm";
 
 /**
  * Focused, dependency-free regression guards for V4.2 account navigation.
@@ -109,4 +110,80 @@ test("Account menu keeps logout confirmation and guest-only entry", () => {
   ]) {
     assert(menu.includes(required), `AccountMenuPanel missing ${required}`);
   }
+});
+
+/**
+ * Execute the actual popover function with stubbed React/MUI rendering so we
+ * cover prop forwarding for both authenticated and guest sessions without
+ * requiring the legacy API fixtures that block full-browser QA.
+ */
+const renderAccountPopover = ({ direction, token }) => {
+  const path = "src/components/header/second-navbar/account-popover/index.js";
+  const js = ts.transpileModule(source(path), {
+    compilerOptions: {
+      module: ts.ModuleKind.CommonJS,
+      target: ts.ScriptTarget.ES2020,
+      jsx: ts.JsxEmit.ReactJSX,
+      esModuleInterop: true,
+    },
+    fileName: path,
+    reportDiagnostics: true,
+  });
+  assert.equal(js.diagnostics?.length ?? 0, 0);
+  const reactJsx = (type, props) => ({ type, props });
+  const requiredModules = {
+    react: { __esModule: true, default: {} },
+    "react/jsx-runtime": { jsx: reactJsx, jsxs: reactJsx },
+    "@mui/material": { Fade: "Fade", Popover: "Popover" },
+    "./AccountMenuPanel": { __esModule: true, default: "AccountMenuPanel" },
+    "helper-functions/getLanguage": { getLanguage: () => direction },
+  };
+  const module = { exports: {} };
+  vm.runInNewContext(js.outputText, {
+    module,
+    exports: module.exports,
+    require: (name) => {
+      assert(Object.hasOwn(requiredModules, name), `Unexpected dependency ${name}`);
+      return requiredModules[name];
+    },
+  }, { filename: path });
+
+  const onSignInClick = () => "open modal";
+  const onClose = () => "close dropdown";
+  const cartListRefetch = () => "refetch grouped cart";
+  const render = module.exports.default({
+    open: true,
+    anchorEl: "profile",
+    token,
+    onClose,
+    onSignInClick,
+    cartListRefetch,
+  });
+  return { render, onSignInClick, onClose, cartListRefetch };
+};
+
+test("V4.2 account popover handles guest Login/Signup and RTL geometry", () => {
+  const { render, onSignInClick, onClose } = renderAccountPopover({
+    direction: "rtl",
+    token: undefined,
+  });
+  assert.equal(render.type, "Popover");
+  assert.equal(render.props.anchorOrigin.horizontal, "left");
+  assert.equal(render.props.transformOrigin.horizontal, "left");
+  assert.equal(render.props.onClose, onClose);
+  const panel = render.props.children;
+  assert.equal(panel.type, "AccountMenuPanel");
+  assert.equal(panel.props.token, undefined);
+  assert.equal(panel.props.onSignInClick, onSignInClick);
+});
+
+test("V4.2 account popover preserves auth token and cart refetch in LTR", () => {
+  const { render, cartListRefetch } = renderAccountPopover({
+    direction: "ltr",
+    token: "test-session-token",
+  });
+  assert.equal(render.props.anchorOrigin.horizontal, "right");
+  const panel = render.props.children;
+  assert.equal(panel.props.token, "test-session-token");
+  assert.equal(panel.props.cartListRefetch, cartListRefetch);
 });
