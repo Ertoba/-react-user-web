@@ -1,5 +1,6 @@
 import { Box, Typography, useMediaQuery, useTheme } from "@mui/material";
 import { useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
 import useGetModule from "api-manage/hooks/react-query/useGetModule";
 import { setModules } from "redux/slices/configData";
@@ -23,6 +24,7 @@ const ModuleTabbedLayout = ({
   mobileBareContent = false,
 }) => {
   const theme = useTheme();
+  const { t } = useTranslation();
   const dispatch = useDispatch();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
   const bareContent = isMobile && mobileBareContent;
@@ -115,7 +117,7 @@ const ModuleTabbedLayout = ({
                     textTransform: "capitalize",
                   }}
                 >
-                  {mod.module_name}
+                  {t(mod.module_name)}
                 </Typography>
               </Box>
             );
@@ -174,7 +176,7 @@ const ModuleTabbedLayout = ({
                     whiteSpace: "nowrap",
                   }}
                 >
-                  {mod.module_name}
+                  {t(mod.module_name)}
                 </Typography>
               </Box>
             );
