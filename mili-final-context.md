@@ -34,7 +34,7 @@
 - **MILI production deployment was NOT performed by this change**. A main merge is not proof that `mili.ge` uses the new bundle. Production rollout requires controlled build, a candidate smoke check, and deployment verification.
 - Do not call the full V4.2 UI pixel-perfect or production browser-certified until authenticated/guest visual smoke and baseline browser QA issues are resolved.
 
-## 2026-10-09 — Search sorting and pharmacy list-view candidate
+## 2026-10-09 — Search sorting and pharmacy list-view candidate (historical)
 
 - Reported URL: `mili.ge/search?search=category&id=670&name=მედიკამენტები&data_type=category&module=afliaqi`.
 - Reported symptoms: default/price sorting selections did not affect product order; clicking List View blanked the page.
@@ -50,4 +50,13 @@
   - Guarded refetch on sorting changes; retain infinite pagination and existing filtering.
   - Defensive generic-name formatting for null, string, number and array values in legacy horizontal pharmacy card.
   - Targeted regression checks in `tests/search-results.test.mjs`.
-- Status: candidate only pending CI/QA. No production deploy requested by this change. Preserve MILI OTP/AI/i18n, item/cart/API behavior.
+- Status at candidate stage: pending CI/QA; historical draft note. See merged status below.
+
+## 2026-10-09 — Search sorting / list view merged to main
+
+- GitHub PR #4: https://github.com/Ertoba/-react-user-web/pull/4
+- **MERGED** at 2026-10-09T02:51:48Z. Merge SHA `2e53e2747ad9b9a4d86d19efb48afc0adab27e80`. Main branch ref verified at exactly this SHA immediately after merge.
+- Implemented server-backed search sort mapping and guarded refetch, default reset, mobile sort selection prop fix, and safe optional pharmacy generic name rendering for list view.
+- Added `tests/search-results.test.mjs`; the Production QA Audit `checks` job (ESLint, TypeScript, Node tests) passed on PR head `da9c08c82154c41a42a8f19632efde184282de1f`, workflow run `37876369743`.
+- Full browser QA was **still running at time of merge**; unrelated existing fixture/hydration failures are tracked in issue #3. Do not claim that these fixes were visually smoke-tested on deployed `mili.ge`.
+- **No production deploy** has occurred. Existing production bundle may still display prior bugs until controlled build/smoke and deployment.
