@@ -89,9 +89,11 @@ const UserInformation = ({ page, configData, orderId }) => {
 		);
 	}
 
-	return (
-		<PushNotificationLayout>
-			<CustomStackFullWidth>
+  // Inbox and order details already register their own push handler.
+  const hasOwnPushNotificationLayout =
+    activePage === "inbox" || (activePage === "my-orders" && Boolean(orderId));
+  const pageContent = (
+    <CustomStackFullWidth>
           {isV42Mobile && activePage && (
             <Box
               sx={{
@@ -234,9 +236,11 @@ const UserInformation = ({ page, configData, orderId }) => {
 						</CustomContainer>
 					</Grid>
 				</Grid>
-			</CustomStackFullWidth>
-		</PushNotificationLayout>
-	);
+    </CustomStackFullWidth>
+  );
+  return hasOwnPushNotificationLayout ? pageContent : (
+    <PushNotificationLayout>{pageContent}</PushNotificationLayout>
+  );
 };
 
 export default UserInformation;
