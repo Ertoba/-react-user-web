@@ -121,3 +121,9 @@
 - Added `profileMobilePageTitles.mjs`, `profileAccess.mjs`, `tests/v42-profile-pages.test.mjs`, and six missing `ka` and six missing `ru` strings.
 - Unchanged: MILI brand, OTP, AI, user/store/checkout logic, payment config and API calls. Demo screenshots are **not** evidence of authenticated MILI production; do not copy 6amMart logo/USD/demo subscription pricing/US contact information.
 - Candidate branch `fix/v42-profile-mobile-parity-20261009` awaits checks; no production deploy. Verify actual authenticated vs guest profile, address addition, multi-module tabs, referral/loyalty and Pro live API on staging before production.
+
+### Additional Settings parity finding
+
+- Original V4.2 ZIP `src/components/settings/index.js` includes theme/language rows and a confirmed Delete Account modal, whereas MILI main had the older two large settings cards (Theme/Language only); migrated the V4.2 row-based layout while retaining MILI's existing `DeleteAccount` component and backend delete hook.
+- The deletion action is gated by the existing callback and an explicit confirmation modal; no automatic or new data deletion mechanism has been introduced.
+- Localized Theme, Delete Account and permanent-deletion warning strings in Georgian/Russian. Added a regression guard for settings controls.
