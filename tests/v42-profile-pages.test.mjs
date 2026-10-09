@@ -124,3 +124,13 @@ test("V4.2 Settings retains theme, language and two-step account deletion", () =
     }
   }
 });
+
+test("bottom account navigation updates when switching language", () => {
+  const src = source("src/components/header/BottomNav.js");
+  assert.match(src, /const \{ t \} = useTranslation\(\)/);
+  for (const label of ["Offers", "Orders", "Favourite", "Profile"]) {
+    assert(src.includes(`label: "${label}"`), `missing literal key: ${label}`);
+    assert(!src.includes(`label: t("${label}")`), `label frozen at module import: ${label}`);
+  }
+  assert.match(src, /\{t\(item\.label\)\}/);
+});
