@@ -2753,7 +2753,7 @@ export const english = {
   "{{percent}}% off on {{module}}": "{{percent}}% off on {{module}}",
   "{{percent}}% off on {{module}} (on orders above {{min}})": "{{percent}}% off on {{module}} (on orders above {{min}})",
   "{{percent}}% off on {{module}} (up to {{cap}})": "{{percent}}% off on {{module}} (up to {{cap}})",
-  "{{percent}}% off on {{module}} (up to {{cap}}) (on orders above {{min}})": "{{percent}}% off on {{module}} (up to {{cap}}) (on orders above {{min}})",,
+  "{{percent}}% off on {{module}} (up to {{cap}}) (on orders above {{min}})": "{{percent}}% off on {{module}} (up to {{cap}}) (on orders above {{min}})",
   "Search instructions...": "Search instructions...",
   "No instructions found": "No instructions found",
   "Online payment is temporarily unavailable. Please select another payment method.": "Online payment is temporarily unavailable. Please select another payment method.",
