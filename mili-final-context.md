@@ -132,3 +132,8 @@
 
 - V4.2 `BottomNav.js` constructed translated text via `t("...")` once at module import. If user changed language after initial load, labels could stay in the original language. Preserved its original four tab definitions and routes while using literal translation keys and the `useTranslation` hook at render time.
 - Added a targeted regression test to verify mobile Offers, Orders, Favourite and Profile labels remain language-reactive.
+
+### Module tabs translated within account
+
+- `ModuleTabbedLayout.js` (Orders & Trips/Coupons) and `MonthlyCartListPage.js` previously rendered `mod.module_name` untranslated; they now render `t(mod.module_name)` while selection continues to use the original module IDs/types.
+- Added missing common module label translations to Georgian/Russian for Grocery, Pharmacy, Shop, Rental, Market(s), Service, Taxi and Medicine; existing Georgian module display strings remain untouched if not keyed in the locale.
