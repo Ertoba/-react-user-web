@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
+import { mayAccessRoute } from "helper-functions/profileAccess.mjs";
 
 const AuthGuard = (props) => {
   const { children, from, requireToken = false } = props;
@@ -14,7 +15,7 @@ const AuthGuard = (props) => {
       const guest = localStorage.getItem("guest_id");
       // Personal account pages require a signed-in user, not just the guest ID
       // that checkout creates for anonymous visitors.
-      if (requireToken ? Boolean(token) : Boolean(token || guest)) {
+      if (mayAccessRoute({ token, guestId: guest, requireToken })) {
         setChecked(true);
       }
       else {
