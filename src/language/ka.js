@@ -2175,5 +2175,8 @@ export const georgian = {
   "Requested Services": "მოთხოვნილი მომსახურებები",
   "No monthly cart items found": "ყოველთვიური კალათის ჩანაწერები ვერ მოიძებნა",
   "Subscribe Now": "გამოწერა ახლავე",
-  "Available on": "ხელმისაწვდომია"
+  "Available on": "ხელმისაწვდომია",
+  "Theme": "თემა",
+  "Delete Account": "ანგარიშის წაშლა",
+  "Deleting your account will remove all your orders, addresses, wallet balance and personal data permanently.": "ანგარიშის წაშლისას სამუდამოდ წაიშლება თქვენი შეკვეთები, მისამართები, საფულის ნაშთი და პირადი მონაცემები."
 };
