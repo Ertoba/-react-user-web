@@ -105,3 +105,19 @@
 - Checkout i18n: 92 new Georgian and 93 Russian keys plus missing English additions; courier tips, payer selection, delivery instructions, address and postal-code controls, Pro benefit labels, and payment availability. This is a **targeted checkout/parcel repair**, not full site translation parity; broader missing keys remain.
 - React PR #6 static CI `37883182411`: **PASSED** ESLint, TypeScript, and Node regression tests at `09ea90a4d00537b4b0df6483e4ed0aff434c532f`. Chromium/Firefox/WebKit browser QA still running at merge; do not claim full browser QA passed.
 - **Production deployment not performed.** `mili.ge` may still show the prior bundle until controlled production update. Backend online choices still require configured provider `is_active=1`, live gateway mode and live status, digital payment global + zone enabled. No live card transaction has been placed or verified.
+
+## 2026-10-09 — V4.2 mobile profile 12-screen parity audit & scoped repairs
+
+- Reference screenshots: original 6amMart V4.2 mobile account landing and subpages for Addresses, Orders & Trips, Track Orders, Monthly Cart List, Coupons, Referral, Loyalty Points, Subscription Plan, and footer; user added two more profile screenshots in the follow-up.
+- Confirmed **byte-identical to source ZIP**: `ProfileOrdersPage.js`, `ProfileOrdersList.js`, `MonthlyCartListPage.js`, `CouponsTabbedPage.js`, `ModuleTabbedLayout.js`, `SubscriptionPlanPage.js`, `BottomNav.js`, `ProfileDrawer.js`. Existing MILI `MobileProfileOverview.js` is a custom, intentionally retained account page; do NOT overwrite it with the demo.
+- **Actual regressions**:
+  - `BodySection.js` dropped V4.2's `AddAddressComponent` route, so selecting Add Address on `/profile?page=addresses` showed no form. Restored the component and its refetch/edit callbacks.
+  - Profile guest account access used only a `guest_id` in global `AuthGuard`, allowing requests from protected account subpages to fail with `Unauthenticated`. `/profile` now requires a customer token; other public guest routes remain usable.
+  - Original V4.2 mobile subpages have sticky page-specific back/title bar and no legacy desktop profile-stat cards. MILI was still rendering old account details. Added mobile subpage header, preserved order-tab back-link and module context, and skipped desktop widget on small widths.
+  - Profile inbox and order details wrap their own push notification handler; avoid double subscription wrapper.
+  - `MonthlyCartListPage` could remain blank on deep links if Redux module list was uninitialized. `ProfileBody` now requests module list when needed.
+  - Account menu `hidden` flags now handle both numeric `0` and serialized string `"0"` from API for Wallet/Loyalty/Referral/Pro/Monthly Cart.
+  - `BodySection` now forwards delete-account state/actions through to `Settings`.
+- Added `profileMobilePageTitles.mjs`, `profileAccess.mjs`, `tests/v42-profile-pages.test.mjs`, and six missing `ka` and six missing `ru` strings.
+- Unchanged: MILI brand, OTP, AI, user/store/checkout logic, payment config and API calls. Demo screenshots are **not** evidence of authenticated MILI production; do not copy 6amMart logo/USD/demo subscription pricing/US contact information.
+- Candidate branch `fix/v42-profile-mobile-parity-20261009` awaits checks; no production deploy. Verify actual authenticated vs guest profile, address addition, multi-module tabs, referral/loyalty and Pro live API on staging before production.
