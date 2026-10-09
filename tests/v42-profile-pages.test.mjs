@@ -46,7 +46,10 @@ test("all V4.2 mobile account sections have their own titles and content routes"
   for (const [key, title] of profileSections) {
     assert.equal(PROFILE_MOBILE_PAGE_TITLES[key], title, key);
     assert.match(menu, new RegExp(`profilePath\\("${key}"\\)`), `${key} missing account link`);
-    assert(body.includes(`"${key}"`), `${key} missing content handler`);
+    const contentSource = key === "addresses"
+      ? source("src/components/user-information/BodySection.js")
+      : body;
+    assert(contentSource.includes(`"${key}"`), `${key} missing content handler`);
   }
   assert.equal(getProfileMobileTitle("my-orders", true), "Order Details");
   assert.equal(getProfileMobileTitle("my-orders"), "Orders & Trips");
@@ -64,7 +67,7 @@ test("subpages show a back arrow, preserve module context and skip legacy accoun
 
 test("Addresses + invokes an actual AddAddress form, not a blank section", () => {
   const src = source("src/components/user-information/BodySection.js");
-  assert.match(src, /page === "addresses" \? \(/[\s\S]*?<AddAddressComponent/);
+  assert.match(src, /page === "addresses" \? \([\s\S]*?<AddAddressComponent/);
   assert.match(src, /addressRefetch=\{refetch\}/);
   assert.match(src, /setAddAddress=\{setAddAddress\}/);
   assert.match(src, /!addAddress && \(/);
