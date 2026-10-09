@@ -34,6 +34,7 @@ const HighToLow = ({ handleSortBy, sortBy }) => {
   const id = open ? "simple-popover" : undefined;
 
   const sortOptions = [
+    { name: t("Default"), value: "default" },
     { name: t("High to Low"), value: "high" },
     { name: t("Low to High"), value: "low" },
   ];

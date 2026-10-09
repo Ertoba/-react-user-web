@@ -54,7 +54,7 @@ const MobileSideDrawer = (props) => {
             </Stack>
             <Stack  justifyContent="center" alignItems="center">
               {currentTab !== 0 && (
-                <NewSortBy handleSortBy={handleSortByNew} sortBy={newSort} />
+                <NewSortBy handleSortBy={handleSortByNew} newSort={newSort} />
               )}
             </Stack>
             <CustomBoxFullWidth>

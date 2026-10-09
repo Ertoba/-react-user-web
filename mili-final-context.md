@@ -33,3 +33,21 @@
 - Full Chromium/Firefox/WebKit QA had not completed at the point of merge and previously failed on the unmodified main baseline. Its existing blockers are tracked separately in https://github.com/Ertoba/-react-user-web/issues/3.
 - **MILI production deployment was NOT performed by this change**. A main merge is not proof that `mili.ge` uses the new bundle. Production rollout requires controlled build, a candidate smoke check, and deployment verification.
 - Do not call the full V4.2 UI pixel-perfect or production browser-certified until authenticated/guest visual smoke and baseline browser QA issues are resolved.
+
+## 2026-10-09 — Search sorting and pharmacy list-view candidate
+
+- Reported URL: `mili.ge/search?search=category&id=670&name=მედიკამენტები&data_type=category&module=afliaqi`.
+- Reported symptoms: default/price sorting selections did not affect product order; clicking List View blanked the page.
+- Root causes identified in code:
+  - `src/components/home/search/index.js` tracked `sortBy` and `newSort` locally but did not include `sort_by` in API `pageParams`, so selecting sort did not reach `useGetSearchPageData`.
+  - The search hook is disabled by default and only fetched through a scroll intersection sentinel, so sorting while sentinel is out of view could also fail to fetch; a guarded refetch is required when selection changes.
+  - `src/components/cards/ProductCard.js` used `item?.generic_name[0]` in its pharmacy-only list view. Optional chaining on `item` does not guard `generic_name`, so missing data causes a render-time TypeError.
+  - Mobile `NewSortBy` received `sortBy` prop instead of `newSort`.
+- Candidate branch: `fix/search-sort-list-view-20261009` from main `7d6b3dd`.
+- Fixes:
+  - Backend price sort values `high -> price_high_low`, `low -> price_low_high`; `default` resets sort.
+  - Store sort values `fast_delivery` and `nearby` are sent via `sort_by`; default omits it.
+  - Guarded refetch on sorting changes; retain infinite pagination and existing filtering.
+  - Defensive generic-name formatting for null, string, number and array values in legacy horizontal pharmacy card.
+  - Targeted regression checks in `tests/search-results.test.mjs`.
+- Status: candidate only pending CI/QA. No production deploy requested by this change. Preserve MILI OTP/AI/i18n, item/cart/API behavior.

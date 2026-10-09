@@ -24,6 +24,7 @@ import {
   setStoreSelectedItems2,
 } from "redux/slices/categoryIds";
 import { isBeerModule } from "helper-functions/moduleTerminology";
+import { getSearchSortParam } from "./getSearchSortParam";
 
 const SearchResult = (props) => {
   const {
@@ -235,6 +236,7 @@ const SearchResult = (props) => {
     filterValue,
     rating_count,
     minMax,
+    sort_by: getSearchSortParam(currentTab, sortBy, newSort),
     module: getCurrentModuleType(),
   };
 
@@ -247,8 +249,16 @@ const SearchResult = (props) => {
     isFetchingNextPage,
     isLoading: isLoadingSearch,
   } = useGetSearchPageData(pageParams, handleSuccess);
-  console.log({searchData});
-  
+  // Search queries are disabled until the scroll sentinel triggers them.
+  // A sort selection must refetch even when that sentinel is offscreen.
+  const previousSortRef = useRef({ sortBy, newSort });
+  useEffect(() => {
+    const previous = previousSortRef.current;
+    if (previous.sortBy === sortBy && previous.newSort === newSort) return;
+    previousSortRef.current = { sortBy, newSort };
+    setIsEmpty(false);
+    serachRefetch();
+  }, [sortBy, newSort, serachRefetch]);
 
   // Update items container height when data changes
   useEffect(() => {
@@ -321,42 +331,10 @@ const SearchResult = (props) => {
   };
 
   const handleSortBy = (value) => {
-    setSortBy(value);
-    setFilterValue((prevValues) => {
-      let newFilterValues = new Set([...prevValues]);
-      if (value === "low") {
-        if (newFilterValues?.has("high")) {
-          newFilterValues?.delete("high");
-        }
-      } else {
-        // Assuming the only other option is "high2Low"
-        if (newFilterValues?.has("low")) {
-          newFilterValues?.delete("low");
-        }
-      }
-      newFilterValues.add(value);
-      return [...newFilterValues];
-    });
+    setSortBy(value === "default" ? "" : value);
   };
   const handleSortByNew = (value) => {
     setNewSort(value);
-    setFilterValue((prevValues) => {
-      let newFilterValues = new Set([...prevValues]);
-
-      // Clear "default," "nearby," and "distance" if already present
-      ["default", "fast_delivery", "nearby"].forEach((item) => {
-        if (newFilterValues.has(item)) {
-          newFilterValues.delete(item);
-        }
-      });
-
-      // Add the new value from "default", "nearby", or "distance"
-      if (["default", "fast_delivery", "nearby"].includes(value)) {
-        newFilterValues.add(value);
-      }
-
-      return [...newFilterValues];
-    });
   };
 
   const handleCheckbox = (value, e) => {
@@ -418,8 +396,6 @@ const SearchResult = (props) => {
     minMax,
     selectedBrands,
   ]);
-  console.log({inView});
-  
 
   const handleCurrentTab = (value) => {
     setCurrentTab(value);
