@@ -1,4 +1,4 @@
-import { Grid, Typography, useMediaQuery, useTheme } from "@mui/material";
+import { Box, Grid, IconButton, Typography, useMediaQuery, useTheme } from "@mui/material";
 import { Stack } from "@mui/system";
 import { useDeleteProfile } from "api-manage/hooks/react-query/profile/useDeleteProfile";
 import { getToken } from "helper-functions/getToken";
@@ -21,6 +21,7 @@ import UserDashBoard from "./UserDashBoard";
 import UserDetails from "./UserDetails";
 import useScrollToTop from "api-manage/hooks/custom-hooks/useScrollToTop";
 import MobileProfileOverview from "./MobileProfileOverview";
+import { getProfileMobileTitle } from "./profileMobilePageTitles.mjs";
 
 const UserInformation = ({ page, configData, orderId }) => {
 	const theme = useTheme();
@@ -28,6 +29,7 @@ const UserInformation = ({ page, configData, orderId }) => {
 	const [accountDeleteStatus, setAccountDeleteStatus] = useState(true);
 	const isSmall = useMediaQuery(theme.breakpoints.down("md"));
 	const isV42Mobile = useMediaQuery("(max-width:1180px)");
+	const activePage = typeof page === "string" ? page : null;
 	const dispatch = useDispatch();
 	const router = useRouter();
 	const handleSuccess = (res) => {
@@ -55,6 +57,25 @@ const UserInformation = ({ page, configData, orderId }) => {
 		mutate();
 	};
 
+  const handleMobileBack = () => {
+    const moduleParam = typeof router.query.module === "string" ? router.query.module : null;
+    const preservedModule = moduleParam ? { module: moduleParam } : {};
+    if (activePage === "my-orders" && orderId) {
+      router.push({
+        pathname: "/profile",
+        query: {
+          ...preservedModule,
+          page: "my-orders",
+          ...(router.query.orderTabModule
+            ? { orderTabModule: router.query.orderTabModule }
+            : {}),
+        },
+      });
+      return;
+    }
+    router.push({ pathname: "/profile", query: preservedModule });
+  };
+
 	if (isV42Mobile && userToken && !page) {
 		return (
 			<PushNotificationLayout>
@@ -68,10 +89,51 @@ const UserInformation = ({ page, configData, orderId }) => {
 		);
 	}
 
-	return (
-		<PushNotificationLayout>
-			<CustomStackFullWidth>
+  // Inbox and order details already register their own push handler.
+  const hasOwnPushNotificationLayout =
+    activePage === "inbox" || (activePage === "my-orders" && Boolean(orderId));
+  const pageContent = (
+    <CustomStackFullWidth>
+          {isV42Mobile && activePage && (
+            <Box
+              sx={{
+                position: "sticky",
+                top: 0,
+                zIndex: 1251,
+                display: "flex",
+                alignItems: "center",
+                gap: "8px",
+                px: "8px",
+                minHeight: "64px",
+                backgroundColor: "background.paper",
+                borderRadius: "0 0 16px 16px",
+                boxShadow: "0 1px 2px rgba(0,0,0,0.05)",
+              }}
+            >
+              <IconButton
+                aria-label={t("Back")}
+                onClick={handleMobileBack}
+                sx={{ p: "8px", color: "text.primary" }}
+              >
+                <i
+                  className="fi fi-rr-arrow-small-left"
+                  style={{ fontSize: "20px", lineHeight: 1, display: "flex" }}
+                />
+              </IconButton>
+              <Typography
+                sx={{
+                  fontSize: "18px",
+                  fontWeight: 700,
+                  color: "neutral.1050",
+                  lineHeight: 1.1,
+                }}
+              >
+                {t(getProfileMobileTitle(activePage, Boolean(orderId)))}
+              </Typography>
+            </Box>
+          )}
 				<Grid container gap="10px">
+					{!isV42Mobile && (
 					<UserInfoGrid
 						userToken={userToken}
 						container
@@ -158,6 +220,7 @@ const UserInformation = ({ page, configData, orderId }) => {
 							</Stack>
 						</CustomContainer>
 					</UserInfoGrid>
+          )}
 					<Grid item xs={12} sm={12} md={12}>
 						<CustomContainer>
 							<BodySection
@@ -173,9 +236,11 @@ const UserInformation = ({ page, configData, orderId }) => {
 						</CustomContainer>
 					</Grid>
 				</Grid>
-			</CustomStackFullWidth>
-		</PushNotificationLayout>
-	);
+    </CustomStackFullWidth>
+  );
+  return hasOwnPushNotificationLayout ? pageContent : (
+    <PushNotificationLayout>{pageContent}</PushNotificationLayout>
+  );
 };
 
 export default UserInformation;

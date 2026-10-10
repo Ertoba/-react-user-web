@@ -621,7 +621,7 @@ const MonthlyCartListPage = ({ configData }) => {
                     textTransform: "capitalize",
                   }}
                 >
-                  {mod.module_name}
+                  {t(mod.module_name)}
                 </Typography>
               </Box>
             );
@@ -673,7 +673,7 @@ const MonthlyCartListPage = ({ configData }) => {
                     whiteSpace: "nowrap",
                   }}
                 >
-                  {mod.module_name}
+                  {t(mod.module_name)}
                 </Typography>
               </Box>
             );

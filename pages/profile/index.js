@@ -75,7 +75,7 @@ const Index = () => {
       />
       <MainLayout configData={configData} landingPageData={landingPageData}>
         <NoSsr>
-          <AuthGuard from={router.pathname.replace("/", "")}>
+          <AuthGuard from={router.pathname.replace("/", "")} requireToken>
             <UserInformation
               page={page}
               configData={configData}

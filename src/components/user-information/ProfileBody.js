@@ -69,12 +69,16 @@ const ProfileBody = ({
     (m) => String(m.id) === String(urlModuleId),
   );
   const isServiceBooking = activeModule?.module_type === ModuleTypes.SERVICE;
+  // Direct links to the monthly cart must load modules even when the user
+  // has not visited /home. Orders/coupons also load them through their tabbar.
+  const needsProfileModules = !modulesLoaded &&
+    (!!urlModuleId || page === "monthly-cart-list");
   const isModuleLookupPending = !!urlModuleId && !modulesLoaded;
 
   const { data: fetchedModules, refetch: refetchModules } = useGetModule();
   useEffect(() => {
-    if (isModuleLookupPending) refetchModules();
-  }, [isModuleLookupPending, refetchModules]);
+    if (needsProfileModules) refetchModules();
+  }, [needsProfileModules, refetchModules]);
   useEffect(() => {
     if (fetchedModules?.length) dispatch(setModules(fetchedModules));
   }, [fetchedModules, dispatch]);

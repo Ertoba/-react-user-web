@@ -123,7 +123,7 @@ const AccountMenuPanel = ({
       icon: "fi fi-rr-wallet",
       path: profilePath("wallet"),
       requireAuth: true,
-      hidden: configData?.customer_wallet_status === 0,
+      hidden: Number(configData?.customer_wallet_status ?? 1) === 0,
     },
     {
       key: "monthly-cart-list",
@@ -131,7 +131,7 @@ const AccountMenuPanel = ({
       icon: "fi fi-rr-shopping-cart",
       path: profilePath("monthly-cart-list"),
       requireAuth: true,
-      hidden: !configData?.monthly_order_reminder,
+      hidden: Number(configData?.monthly_order_reminder ?? 0) === 0,
     },
     {
       key: "coupons",
@@ -147,7 +147,7 @@ const AccountMenuPanel = ({
       icon: "fi fi-rr-badge",
       path: profilePath("loyalty-points"),
       requireAuth: true,
-      hidden: configData?.loyalty_point_status === 0,
+      hidden: Number(configData?.loyalty_point_status ?? 1) === 0,
     },
     {
       key: "referral",
@@ -155,7 +155,7 @@ const AccountMenuPanel = ({
       icon: "fi fi-rr-share",
       path: profilePath("referral-code"),
       requireAuth: true,
-      hidden: configData?.ref_earning_status === 0,
+      hidden: Number(configData?.ref_earning_status ?? 1) === 0,
     },
     {
       key: "subscription-plan",
@@ -163,7 +163,7 @@ const AccountMenuPanel = ({
       icon: "fi fi-rr-crown",
       path: profilePath("subscription-plan"),
       requireAuth: true,
-      hidden: configData?.pro_member_status === 0,
+      hidden: Number(configData?.pro_member_status ?? 0) === 0,
     },
     {
       key: "inbox",
