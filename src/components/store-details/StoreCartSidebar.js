@@ -747,18 +747,22 @@ const StoreCartSidebar = ({
   // cart/list?store_id=X (see store-details/index.js). Falls back to
   // filtering the global cartList by the current store_id when empty.
   const { storeCartList, cartList } = useSelector((state) => state.cart);
+  // The route parameter may be a slug (e.g. /store/musi), not a numeric
+  // store ID. Use the resolved store's ID for all cart scoping.
   const currentStoreId =
-    router?.query?.id ?? router?.query?.storeId ?? router?.query?.store_id;
+    storeDetails?.id ?? router?.query?.storeId ?? router?.query?.store_id;
+  const scopedStoreItems = (items) =>
+    (Array.isArray(items) ? items : []).filter(
+      (item) =>
+        currentStoreId != null &&
+        String(item?.store_id ?? item?.store?.id ?? item?.item?.store_id) ===
+          String(currentStoreId),
+    );
+  const scopedFetchedCart = scopedStoreItems(storeCartList);
   const storeScopedCart =
-    Array.isArray(storeCartList) && storeCartList.length > 0
-      ? storeCartList
-      : currentStoreId != null
-      ? (Array.isArray(cartList) ? cartList : [])?.filter(
-          (i) => String(i?.store_id) === String(currentStoreId),
-        )
-      : Array.isArray(cartList)
-      ? cartList
-      : [];
+    scopedFetchedCart.length > 0
+      ? scopedFetchedCart
+      : scopedStoreItems(cartList);
   const { configData } = useSelector((state) => state.configData);
   console.log({ cartList, storeCartList, storeScopedCart });
 
