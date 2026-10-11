@@ -500,9 +500,8 @@ const ReelsModal = ({
     setHasVideo(true);
     startBufferingTimer();
 
-    // Also kick off a background chunked download so the blob is cached for
-    // the next time the user opens this reel (instant replay).
-    preloadReel(item.id).catch(() => undefined);
+    // Do not download the same video a second time in the background.
+    // Competing full-file fetches can stall playback on mobile networks.
 
     return () => {
       cancelled = true;
