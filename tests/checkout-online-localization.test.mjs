@@ -48,6 +48,11 @@ const checkoutKeys = [
   "Who Will Pay?",
   "Choose which person will pay for the charges",
   "Select your instruction",
+  "Leave at the door",
+  "Avoid ringing bell",
+  "Leave with security",
+  "Hand it to me",
+  "Something went wrong",
   "Delivery Instruction",
   "Add at least one option to pay your order.",
   "Select a payment method to proceed.",
@@ -100,4 +105,13 @@ test("parcel payment modal keeps pending gateway selection isolated until Update
   assert.equal((source.match(/setPaymentMethod=\{setDraftPaymentMethod\}/g) ?? []).length, 2);
   assert.equal((source.match(/setSelectedPaymentMethod=\{confirmPaymentPicker\}/g) ?? []).length, 2);
   assert.equal((source.match(/setOpen=\{closePaymentPicker\}/g) ?? []).length, 2);
+});
+
+
+test("delivery instructions translate display labels without altering submitted API values", () => {
+  const select = readFileSync(new URL("../src/components/checkout/DeliveryInfo.js", import.meta.url), "utf8");
+  assert.match(select, /name: t\\(i\\?\\.instruction \\?\\? ""\\)/);
+  assert.match(select, /setCustomerInstruction\\(selected\\?\\.instruction \\?\\? ""\\)/);
+  const radio = readFileSync(new URL("../src/components/checkout/DeliveryInstruction.jsx", import.meta.url), "utf8");
+  assert.match(radio, /label=\\{t\\(instruction\\.instruction\\)\\}/);
 });
