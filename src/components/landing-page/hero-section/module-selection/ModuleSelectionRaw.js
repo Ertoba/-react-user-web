@@ -97,7 +97,7 @@ const ArrowWrapper = styled(Box)(({ theme }) => ({
 
 const getDisplayCount = (count) => {
   const value = Number(count) || 0;
-  return value > 2 ? `${value - 1}+` : `${value}`;
+  return `${value}`;
 };
 
 const getModuleSummary = (item, t) => {
@@ -106,7 +106,14 @@ const getModuleSummary = (item, t) => {
   if (moduleType === "parcel") return "";
 
   if (moduleType === "ecommerce") {
-    return `${getDisplayCount(item?.items_count)} ${t("Product")}`;
+    // The module catalog may omit items_count in V4.2. Do not show
+    // "0 products" when the only known number is the store count.
+    if (item?.items_count != null && Number.isFinite(Number(item.items_count))) {
+      return `${getDisplayCount(item.items_count)} ${t("Product")}`;
+    }
+    return item?.stores_count != null
+      ? `${getDisplayCount(item.stores_count)} ${t("Stores")}`
+      : "";
   }
 
   const storeCount = getDisplayCount(item?.stores_count);
