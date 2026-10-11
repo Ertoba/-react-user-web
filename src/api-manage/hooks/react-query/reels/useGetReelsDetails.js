@@ -6,9 +6,10 @@ import { getApiContent } from "../../../getApiContent";
 
 const getData = async (reelId, guestId) => {
   const guestParam = guestId ? `&guest_id=${guestId}` : "";
+  // Metadata/stats request must return JSON, not a partial video download.
+  // Streaming media is handled separately by the Next.js reel proxy.
   const { data } = await MainApi.get(
-    `${reels_details_api}?reel_id=${reelId}&stream=1${guestParam}`,
-    { headers: { Range: "bytes=0-2097151" } }
+    `${reels_details_api}?reel_id=${reelId}${guestParam}`,
   );
   return getApiContent(data);
 };
