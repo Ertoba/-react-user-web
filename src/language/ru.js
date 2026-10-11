@@ -1993,5 +1993,10 @@ export const russian = {
   "Service": "Услуги",
   "Taxi": "Такси",
   "Medicine": "Лекарство",
-  "Medicine & Health": "Лекарства и здоровье"
+  "Medicine & Health": "Лекарства и здоровье",
+  "Leave at the door": "Оставьте у двери",
+  "Avoid ringing bell": "Не звоните в дверь",
+  "Leave with security": "Оставьте у охраны",
+  "Hand it to me": "Передайте лично мне",
+  "Something went wrong": "Произошла ошибка"
 };
