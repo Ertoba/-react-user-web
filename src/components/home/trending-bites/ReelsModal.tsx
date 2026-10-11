@@ -11,6 +11,7 @@ import {
   alpha,
   Avatar,
   Box,
+  Button,
   CircularProgress,
   Dialog,
   IconButton,
@@ -84,7 +85,7 @@ const buildProxyUrl = (reelId: number): string => {
   if (loc?.lat) params.set("lat", String(loc.lat));
   if (loc?.lng) params.set("lng", String(loc.lng));
   if (guestId) params.set("guest_id", guestId);
-  return `/api/reels/stream?${params.toString()}`;
+  return `/reels-stream?${params.toString()}`;
 };
 
 // Size of each Range chunk (2 MB).
@@ -145,19 +146,22 @@ export const preloadReel = (reelId: number): Promise<string | null> => {
         const res = await fetch(url, {
           headers: { Range: `bytes=${offset}-${end}` },
         });
-        if (!res.ok && res.status !== 206) return null;
+        if (!res.ok || (offset > 0 && res.status !== 206)) return null;
+        if (!res.headers.get("content-type")?.toLowerCase().startsWith("video/")) return null;
 
         // "bytes 0-2097151/21281243" → total = 21281243
         if (total === Infinity) {
           const cr = res.headers.get("content-range");
           const m = cr && cr.match(/\/(\d+)$/);
           if (m) total = parseInt(m[1], 10);
+          else if (res.status === 206) return null; // Cannot safely assemble an unknown partial range.
         }
 
         const buf = await res.arrayBuffer();
         if (buf.byteLength === 0) break;
         chunks.push(new Uint8Array(buf));
         offset += buf.byteLength;
+        if (total === Infinity) total = offset; // A full 200 response needs only one fetch.
 
         notifyProgress(reelId, offset, total);
       }
@@ -242,6 +246,8 @@ const ReelsModal = ({
   const [isMuted, setIsMuted] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
   const [isBuffering, setIsBuffering] = useState(false);
+  const [videoError, setVideoError] = useState(false);
+  const [retrySerial, setRetrySerial] = useState(0);
   const [progress, setProgress] = useState(0);
   const [likedMap, setLikedMap] = useState<Record<number, boolean>>({});
   const [likeBurst, setLikeBurst] = useState(false);
@@ -370,6 +376,7 @@ const ReelsModal = ({
     setProgress(0);
     setBuffered(0);
     setIsBuffering(true);
+    setVideoError(false);
     setHasVideo(false);
 
     // videoMounted ensures this effect re-runs once the Dialog has rendered
@@ -378,7 +385,20 @@ const ReelsModal = ({
     if (!video) return;
 
     let cancelled = false;
-    const abort = new AbortController();
+    let bufferingTimer: ReturnType<typeof setTimeout> | null = null;
+    const clearBufferingTimer = () => {
+      if (bufferingTimer !== null) clearTimeout(bufferingTimer);
+      bufferingTimer = null;
+    };
+    const startBufferingTimer = () => {
+      clearBufferingTimer();
+      bufferingTimer = setTimeout(() => {
+        if (!cancelled && video.readyState < 3) {
+          setIsBuffering(false);
+          setVideoError(true);
+        }
+      }, 20000);
+    };
 
     const tryPlay = () => {
       video.muted = isMuted;
@@ -394,15 +414,32 @@ const ReelsModal = ({
     };
 
     const onCanPlay = () => {
+      clearBufferingTimer();
       setIsBuffering(false);
+      setVideoError(false);
       tryPlay();
     };
     const onPlaying = () => {
+      clearBufferingTimer();
       setIsBuffering(false);
+      setVideoError(false);
       setIsPlaying(true);
     };
     const onPause = () => setIsPlaying(false);
-    const onWaiting = () => setIsBuffering(true);
+    const onWaiting = () => {
+      setIsBuffering(true);
+      startBufferingTimer();
+    };
+    const onError = () => {
+      clearBufferingTimer();
+      setIsBuffering(false);
+      setIsPlaying(false);
+      setVideoError(true);
+    };
+    const onStalled = () => {
+      setIsBuffering(true);
+      startBufferingTimer();
+    };
     const onTimeUpdate = () => {
       if (!video.duration) return;
       setProgress((video.currentTime / video.duration) * 100);
@@ -422,14 +459,19 @@ const ReelsModal = ({
     video.addEventListener("waiting", onWaiting);
     video.addEventListener("timeupdate", onTimeUpdate);
     video.addEventListener("progress", onBufferProgress);
+    video.addEventListener("error", onError);
+    video.addEventListener("stalled", onStalled);
 
     const removeListeners = () => {
+      clearBufferingTimer();
       video.removeEventListener("canplay", onCanPlay);
       video.removeEventListener("playing", onPlaying);
       video.removeEventListener("pause", onPause);
       video.removeEventListener("waiting", onWaiting);
       video.removeEventListener("timeupdate", onTimeUpdate);
       video.removeEventListener("progress", onBufferProgress);
+      video.removeEventListener("error", onError);
+      video.removeEventListener("stalled", onStalled);
     };
 
     // ── Cache hit — instant play ──
@@ -438,6 +480,7 @@ const ReelsModal = ({
       video.muted = isMuted;
       video.src = cached;
       setHasVideo(true);
+      startBufferingTimer();
       if (video.readyState >= 3) tryPlay();
       return () => {
         removeListeners();
@@ -455,6 +498,7 @@ const ReelsModal = ({
     video.muted = isMuted;
     video.src = proxyUrl;
     setHasVideo(true);
+    startBufferingTimer();
 
     // Also kick off a background chunked download so the blob is cached for
     // the next time the user opens this reel (instant replay).
@@ -462,13 +506,12 @@ const ReelsModal = ({
 
     return () => {
       cancelled = true;
-      abort.abort();
       removeListeners();
       video.pause();
       video.src = "";
       video.load();
     };
-  }, [open, item?.id, videoMounted]);
+  }, [open, item?.id, videoMounted, retrySerial]);
 
   // Sync muted state to video element
   useEffect(() => {
@@ -744,6 +787,30 @@ const ReelsModal = ({
                 />
               </Box>
             </Box>
+          )}
+
+          {/* A failed stream should show a retry action instead of spinning forever. */}
+          {videoError && (
+            <Stack
+              spacing={2}
+              alignItems="center"
+              justifyContent="center"
+              sx={{ position: "absolute", inset: 0, zIndex: 6, backgroundColor: alpha("#000", 0.65) }}
+            >
+              <Typography sx={{ color: "#fff", textAlign: "center" }}>
+                {t("Something went wrong")}
+              </Typography>
+              <Button
+                variant="contained"
+                size="small"
+                onClick={() => {
+                  reelVideoCache.delete(item.id);
+                  setRetrySerial((n) => n + 1);
+                }}
+              >
+                {t("Please Try Again")}
+              </Button>
+            </Stack>
           )}
 
           {/* Mute toggle */}
