@@ -605,7 +605,7 @@ const ItemCheckout = (props) => {
           : 0
         : 0;
       formData.append("extra_packaging_amount", resolvedPackagingAmount);
-      formData.append("cutlery", cartPrefs?.addCutlery ? 1 : cutlery ? 1 : 0);
+      formData.append("cutlery", currentModuleType === ModuleTypes.FOOD && (cartPrefs?.addCutlery || cutlery) ? 1 : 0);
       formData.append(
         "unavailable_item_note",
         cartPrefs?.unavailableChoice ?? unavailable_item_note ?? "",
@@ -618,7 +618,7 @@ const ItemCheckout = (props) => {
       formData.append("password", formik.values.password);
       return formData;
     } else {
-      const resolvedCutlery = cartPrefs?.addCutlery ? 1 : cutlery ? 1 : 0;
+      const resolvedCutlery = currentModuleType === ModuleTypes.FOOD && (cartPrefs?.addCutlery || cutlery) ? 1 : 0;
       const resolvedUnavailableNote =
         cartPrefs?.unavailableChoice ?? unavailable_item_note;
       const resolvedPackagingAmount = cartPrefs?.extraPackaging
