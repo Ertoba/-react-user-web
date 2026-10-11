@@ -10,19 +10,12 @@ const nextConfig = {
       exclude: ['error', 'warn'], // Keep error and warn, remove log, info, debug, etc.
     } : false,
   },
+  // Disable the server-side image optimizer until a verified remote host
+  // allowlist is available. This prevents arbitrary image URL fetches,
+  // including attempts to access link-local cloud metadata endpoints.
+  // Remote image URLs continue to render directly in the browser.
   images: {
-    remotePatterns: [
-      {
-        protocol: 'http',
-        hostname: '**', // allows all https domains
-        pathname: '/**',
-      },
-      {
-        protocol: 'https',
-        hostname: '**', // allows all https domains
-        pathname: '/**',
-      },
-    ],
+    unoptimized: true,
   },
   eslint: {
     ignoreDuringBuilds: true,
