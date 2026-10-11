@@ -12,7 +12,6 @@ import {
 import useClearCart from "api-manage/hooks/react-query/add-cart/useClearCart";
 import useDeleteCartItem from "api-manage/hooks/react-query/add-cart/useDeleteCartItem";
 import CartStoreCard from "components/cards/newCard/CartStoreCard";
-import { handleStoreRedirect } from "helper-functions/handleStoreRedirect";
 import { getGuestId, getToken } from "helper-functions/getToken";
 import { getCurrentModuleType } from "helper-functions/getCurrentModuleType";
 import { useRouter } from "next/router";
@@ -179,8 +178,15 @@ const AllCartDrawer = ({ open, onClose, cartData = [], refetch }) => {
   };
 
   const handleViewCart = (store) => {
+    if (!store?.slug && !store?.id) return;
     onClose();
-    handleStoreRedirect(store, router);
+    router.push({
+      pathname: `/store/${encodeURIComponent(store.slug || store.id)}`,
+      query: {
+        ...(router.query.module ? { module: router.query.module } : { module: currentModuleType }),
+        openCart: "1",
+      },
+    });
   };
 
   return (
