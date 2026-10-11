@@ -174,6 +174,18 @@ const StoreDetails = ({ storeDetails, configData }) => {
   const theme = useTheme();
   const isSmall = useMediaQuery(theme.breakpoints.down("sm"));
   const router = useRouter();
+  // Open the existing store cart when arriving from the global View Cart button.
+  useEffect(() => {
+    if (!router.isReady || router.query.openCart !== "1") return;
+    setCartDrawerOpen(true);
+    const { openCart, ...restQuery } = router.query;
+    router.replace(
+      { pathname: router.pathname, query: restQuery },
+      undefined,
+      { shallow: true, scroll: false },
+    );
+  }, [router.isReady, router.query.openCart]);
+
   const storeZoneId = useMemo(() => {
     const rawValue = router.query.store_zone_id ?? storeDetails?.zone_id;
     const value = Array.isArray(rawValue) ? rawValue[0] : rawValue;
