@@ -830,7 +830,7 @@ const StoreCartSidebar = ({
     dispatch(
       setCartPrefs({
         extraPackaging,
-        addCutlery,
+        addCutlery: getCurrentModuleType() === ModuleTypes.FOOD && addCutlery,
         unavailableChoice,
         monthlySubscribe: monthlyOrder,
       }),
@@ -1569,7 +1569,7 @@ const StoreCartSidebar = ({
                     </Stack>
                   )}
 
-                  {getCurrentModuleType() !== ModuleTypes.GROCERY && (
+                  {getCurrentModuleType() === ModuleTypes.FOOD && (
                     <Stack
                       direction="row"
                       alignItems="center"
