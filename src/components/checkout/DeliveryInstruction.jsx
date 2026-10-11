@@ -65,7 +65,7 @@ const DeliveryInstruction = (props) => {
                                         <FormControlLabel
                                             value={instruction.instruction}
                                             control={<Radio />}
-                                            label={instruction.instruction}
+                                            label={t(instruction.instruction)}
                                             sx={{
                                                 border: `1px solid ${alpha(theme.palette.neutral[500], 0.1)}`,
                                                 borderRadius: "10px",
