@@ -110,8 +110,8 @@ test("parcel payment modal keeps pending gateway selection isolated until Update
 
 test("delivery instructions translate display labels without altering submitted API values", () => {
   const select = readFileSync(new URL("../src/components/checkout/DeliveryInfo.js", import.meta.url), "utf8");
-  assert.match(select, /name: t\\(i\\?\\.instruction \\?\\? ""\\)/);
-  assert.match(select, /setCustomerInstruction\\(selected\\?\\.instruction \\?\\? ""\\)/);
+  assert.ok(select.includes('name: t(i?.instruction ?? "")'));
+  assert.ok(select.includes('setCustomerInstruction(selected?.instruction ?? "")'));
   const radio = readFileSync(new URL("../src/components/checkout/DeliveryInstruction.jsx", import.meta.url), "utf8");
-  assert.match(radio, /label=\\{t\\(instruction\\.instruction\\)\\}/);
+  assert.ok(radio.includes('label={t(instruction.instruction)}'));
 });
