@@ -6,6 +6,7 @@ import Router from "next/router";
 import { setConfigData } from "redux/slices/configData";
 import StoreDetails from "../../../src/components/store-details";
 import { config_api, store_details_api } from "api-manage/ApiRoutes";
+import { getApiContent } from "api-manage/getApiContent";
 import SEO from "../../../src/components/seo";
 import { NoSsr } from "@mui/material";
 import useScrollToTop from "api-manage/hooks/custom-hooks/useScrollToTop";
@@ -118,8 +119,12 @@ export const getServerSideProps = async (context) => {
       throw new Error("One or more API calls failed.");
     }
 
-    const configData = await configRes.json();
-    const storeDetails = await storeDetailsRes.json();
+    const configData = getApiContent(await configRes.json());
+    const storeDetails = getApiContent(await storeDetailsRes.json());
+
+    if (!storeDetails?.id) {
+      throw new Error("Store details response has no store ID");
+    }
 
     return {
       props: {
