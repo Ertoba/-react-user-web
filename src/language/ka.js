@@ -2188,5 +2188,10 @@ export const georgian = {
   "Service": "მომსახურება",
   "Taxi": "ტაქსი",
   "Medicine": "მედიკამენტი",
-  "Medicine & Health": "მედიკამენტები და ჯანმრთელობა"
+  "Medicine & Health": "მედიკამენტები და ჯანმრთელობა",
+  "Leave at the door": "დატოვეთ კართან",
+  "Avoid ringing bell": "არ დარეკოთ ზარი",
+  "Leave with security": "დატოვეთ დაცვასთან",
+  "Hand it to me": "პირადად გადმომეცით",
+  "Something went wrong": "დაფიქსირდა შეცდომა"
 };
