@@ -365,7 +365,9 @@ const DeliveryInfo = ({
                 }}
                 options={(deliveryInstruction ?? []).map((i) => ({
                   id: i?.id,
-                  name: i?.instruction,
+                  // Translate only the visible label; keep the API instruction
+                  // unchanged for the order payload and existing selection.
+                  name: t(i?.instruction ?? ""),
                 }))}
                 placeholder={t("Select your instruction")}
                 searchPlaceholder={t("Search instructions...")}
