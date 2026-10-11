@@ -10,6 +10,13 @@ const nextConfig = {
       exclude: ['error', 'warn'], // Keep error and warn, remove log, info, debug, etc.
     } : false,
   },
+  // Nginx sends /api/* to Laravel, so Next's reel streaming API must be
+  // reachable via a public path that falls through to the Next.js server.
+  async rewrites() {
+    return [
+      { source: '/reels-stream', destination: '/api/reels/stream' },
+    ];
+  },
   // Disable the server-side image optimizer until a verified remote host
   // allowlist is available. This prevents arbitrary image URL fetches,
   // including attempts to access link-local cloud metadata endpoints.
