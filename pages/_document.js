@@ -75,17 +75,17 @@ class CustomDocument extends Document {
           <meta name="theme-color" content="#111827" />
           <link
             rel="icon"
-            type="image/png"
-            href="/static/mili-customer-favicon-brand-20260731.png?v=20260731"
+            type="image/svg+xml"
+            href="/static/mili-mark-20261013.svg?v=20261013"
           />
           <link
             rel="shortcut icon"
-            href="/static/mili-customer-favicon-brand-20260731.png?v=20260731"
+            href="/static/mili-mark-20261013.svg?v=20261013"
           />
           <link
             rel="apple-touch-icon"
             sizes="180x180"
-            href="/apple-touch-icon.png?v=20260731"
+            href="/apple-touch-icon.png?v=20261013"
           />
 
           {/* ✅ Analytics scripts */}
