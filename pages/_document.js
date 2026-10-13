@@ -72,7 +72,7 @@ class CustomDocument extends Document {
             src="https://appleid.cdn-apple.com/appleauth/static/jsapi/appleid/1/en_US/appleid.auth.js"
             async
           />
-          <meta name="theme-color" content="#111827" />
+          <meta name="theme-color" content="#039D55" />
           <link
             rel="icon"
             type="image/svg+xml"
@@ -87,6 +87,8 @@ class CustomDocument extends Document {
             sizes="180x180"
             href="/apple-touch-icon.png?v=20261013"
           />
+
+          <link rel="manifest" href="/site.webmanifest?v=20261013" />
 
           {/* ✅ Analytics scripts */}
           {analyticsConfig.google_tag_manager && (
