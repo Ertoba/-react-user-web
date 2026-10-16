@@ -157,10 +157,15 @@ const TrackOrder = ({ configData, trackOrderData }) => {
     },
     {
       label:
-        trackOrderData?.module?.module_type === "food"
+        trackOrderData?.order_status === "handover"
+          ? "Ready for delivery"
+          : trackOrderData?.module?.module_type === "food"
           ? "Food is on the way"
           : "items is on the way",
-      time: trackOrderData?.picked_up,
+      time:
+        trackOrderData?.order_status === "handover"
+          ? trackOrderData?.handover
+          : trackOrderData?.picked_up,
       img: outForDelivery.src,
     },
     {

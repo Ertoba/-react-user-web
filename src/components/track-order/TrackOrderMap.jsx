@@ -46,7 +46,7 @@ const TrackOrderMap = ({
             ? trackOrderData?.receiver_details?.longitude
             : trackOrderData?.store?.longitude
         }
-        isStore={trackOrderData?.order_status === "picked_up" || trackOrderData?.order_status === "handover" ? false : true}
+        isStore={trackOrderData?.order_status === "picked_up" ? false : true}
         store={trackOrderData?.store}
         deliveryMan={trackOrderData?.delivery_man}
         receiver={trackOrderData?.delivery_address}
