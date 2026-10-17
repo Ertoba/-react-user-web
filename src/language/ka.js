@@ -2193,5 +2193,22 @@ export const georgian = {
   "Avoid ringing bell": "არ დარეკოთ ზარი",
   "Leave with security": "დატოვეთ დაცვასთან",
   "Hand it to me": "პირადად გადმომეცით",
-  "Something went wrong": "დაფიქსირდა შეცდომა"
+  "Something went wrong": "დაფიქსირდა შეცდომა",
+  "Add To Cart": "კალათაში დამატება",
+  "Add Coupon": "კუპონის დამატება",
+  "Active": "აქტიური",
+  "Completed": "დასრულებული",
+  "Cancelled": "გაუქმებული",
+  "Loading": "იტვირთება",
+  "Retry": "ხელახლა ცდა",
+  "Order History": "შეკვეთების ისტორია",
+  "Order Handover": "შეკვეთის გადაცემა",
+  "Out for Delivery": "მიწოდებისთვის გამზადებული",
+  "Waiting for confirmation": "დადასტურებას ელოდება",
+  "Ready for delivery": "მიწოდებისთვის მზადაა",
+  "Delivery Tips": "მიწოდების რჩევები",
+  "Grand Total": "სრული ჯამი",
+  "Warning": "გაფრთხილება",
+  "No data found": "მონაცემები ვერ მოიძებნა",
+  "No items found": "ნივთები ვერ მოიძებნა"
 };

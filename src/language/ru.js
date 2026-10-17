@@ -1998,5 +1998,22 @@ export const russian = {
   "Avoid ringing bell": "Не звоните в дверь",
   "Leave with security": "Оставьте у охраны",
   "Hand it to me": "Передайте лично мне",
-  "Something went wrong": "Произошла ошибка"
+  "Something went wrong": "Произошла ошибка",
+  "Add To Cart": "Добавить в корзину",
+  "Add Coupon": "Добавить купон",
+  "Active": "Активен",
+  "Completed": "Завершено",
+  "Cancelled": "Отменено",
+  "Loading": "Загрузка",
+  "Retry": "Повторить",
+  "Order History": "История заказов",
+  "Order Handover": "Передача заказа",
+  "Out for Delivery": "Готово к доставке",
+  "Waiting for confirmation": "Ожидание подтверждения",
+  "Ready for delivery": "Готово к доставке",
+  "Delivery Tips": "Советы по доставке",
+  "Grand Total": "Общая сумма",
+  "Warning": "Предупреждение",
+  "No data found": "Данные не найдены",
+  "No items found": "Товары не найдены"
 };
