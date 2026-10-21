@@ -238,3 +238,12 @@
 - Recent main GitHub Actions: React FAIL (typography and 3 browser jobs), Customer FAIL (quality gate), Vendor FAIL (Flutter analyze), Delivery PASS. An independent hourly condition watcher is configured to report **new** regressions/status recoveries; historical failures must not be mistaken for newly introduced ones.
 - **Release gate:** full V4.2 parity, API integration, builds, E2E and notification/payment tests are NOT certified. No server deploy, database migration, PM2 restart, production rebuild, or Play submission authorized by this checkpoint. Do not mark the complete V4.2 migration finished.
 - When staging changes, preserve unrelated changes on main and use reviewed isolated diffs; record real commit SHAs / PRs and unresolved validation failures here. Do not merge unverified service/rental dependencies simply to make folder counts equal.
+
+
+## 2026-10-21 — Verified V4.2 QA repair (React PR #8)
+
+- `Ertoba/-react-user-web` PR #8 (https://github.com/Ertoba/-react-user-web/pull/8) was squash-merged to `main` at `acb933da40a005aee28bbdedecc921c387061a52`. Only Georgian and Russian locale files changed: `src/language/ka.js` and `src/language/ru.js`. A malformed CR/comma line split after the "Something went wrong" key caused the checkout localization regression test to ignore the translated value. Both strings and runtime meaning were preserved; comma placement was corrected.
+- PR head `a0081c563bd1799165926980efdba663970e6ba9` passed the React `checks` job (ESLint, TypeScript, Node/typography); Playwright browser QA was still running at the merge point and has pre-existing independent baseline fixture failures. No assertion of full E2E certification.
+- Vendor PR #2 (https://github.com/Ertoba/vendor-app/pull/2) stages V4.2 ETA/BOGO/Bundle order parsing and replaces the unrelated counter template with actual model regression tests. Vendor analyzer and Flutter tests had passed on its PR branch; Android ARM64 smoke build still in progress at checkpoint. Not merged at this checkpoint.
+- Customer PR #13 (https://github.com/Ertoba/mart-app/pull/13) stages updates to outdated locale-startup test expectations based on MILI's Georgian default; full QA in progress at checkpoint. No Customer runtime behavior changed and no merge yet.
+- All production deployments, database migrations, server builds and app store submissions remain deferred. Activation/purchase-code/license files were not transferred or modified. These are small verified QA repairs, NOT full V4.2+Rental feature migration completion.
