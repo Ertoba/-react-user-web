@@ -1998,7 +1998,7 @@ export const russian = {
   "Avoid ringing bell": "Не звоните в дверь",
   "Leave with security": "Оставьте у охраны",
   "Hand it to me": "Передайте лично мне",
-  "Something went wrong": "Произошла ошибка",
+  "Something went wrong": "Произошла ошибка",
   "Add To Cart": "Добавить в корзину",
   "Add Coupon": "Добавить купон",
   "Active": "Активен",
