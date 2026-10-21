@@ -238,3 +238,14 @@
 - Recent main GitHub Actions: React FAIL (typography and 3 browser jobs), Customer FAIL (quality gate), Vendor FAIL (Flutter analyze), Delivery PASS. An independent hourly condition watcher is configured to report **new** regressions/status recoveries; historical failures must not be mistaken for newly introduced ones.
 - **Release gate:** full V4.2 parity, API integration, builds, E2E and notification/payment tests are NOT certified. No server deploy, database migration, PM2 restart, production rebuild, or Play submission authorized by this checkpoint. Do not mark the complete V4.2 migration finished.
 - When staging changes, preserve unrelated changes on main and use reviewed isolated diffs; record real commit SHAs / PRs and unresolved validation failures here. Do not merge unverified service/rental dependencies simply to make folder counts equal.
+
+
+## 2026-10-21 — QA-safe five-repository integration branches created
+
+- Prepared `upgrade/full-v42-rental-20261021` candidate branches in all five repos: `portal-backend` from `cba4c0d3ef6e6974ba8efbbbcabb90330daf10b6`, `-react-user-web` from `8829ed3ad67cbf7f8e6c13cb7b92bf14ac9cbfd4`, `mart-app` from `817d4378d8e490c1a24b160611d0095ce2cca572`, `vendor-app` from `c603832ec1e509952487be286e94f969ff830779`, `delivery-app` from `1477eb3974781531b52bd6ff90b7250bf8442f60`.
+- The supplied Rental archive contains full Rental Backend/User/Vendor/React packages and V2.1-to-V2.2 patch bundles. Track patches separately; do not overwrite MILI implementations indiscriminately.
+- Local interim `mili-v42-rental-source-staging-20261021.zip` is **NOT MERGEABLE**: 31 Dart files include placeholder `return const SizedBox();` widgets. Restore real upstream implementations and verify API contracts rather than using stubs.
+- The Rental Backend add-on includes VehicleService, RentalCartService, ProviderReportService, RentalWishlistService and other services not found under the same path/name on current main. React RentalCartPage/VehicleSearchPage are relocated into `src/components/home/module-wise-components/rental/components/`, and must not be duplicated.
+- Backend Rental report-index migration `2026_09_01_100003_add_rental_report_indexes.php` is already on main; avoid duplicate migration.
+- Newest React main QA run `39542926854` failed; Customer and Vendor production QA remain failed; Delivery last main QA passed. Hourly monitoring exists, but no feature-parity E2E certification has occurred.
+- **No activation, purchase-code, or license-validation files are authorized to be imported or modified.** Exclude env/secrets/private keys/build caches. Main remains unchanged by branch preparation. This commit documents a safety checkpoint only, not completed V4.2 integration.
