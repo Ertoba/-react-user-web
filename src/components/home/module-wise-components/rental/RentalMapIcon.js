@@ -4,13 +4,13 @@ import { Box } from '@mui/material';
 const RentalMapIcon = ({ lat, lng, isSelected }) => {
   return (
     <Box
-
+     
     >
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        width={isSelected ? "16" : "12"}
-        height={isSelected ? "16" : "12"}
-        viewBox="0 0 12 12"
+      <svg 
+        xmlns="http://www.w3.org/2000/svg" 
+        width={isSelected ? "16" : "12"} 
+        height={isSelected ? "16" : "12"} 
+        viewBox="0 0 12 12" 
         fill="none"
         style={{
           transition: 'all 0.2s ease-in-out'
@@ -34,3 +34,4 @@ const RentalMapIcon = ({ lat, lng, isSelected }) => {
 };
 
 export default RentalMapIcon;
+
