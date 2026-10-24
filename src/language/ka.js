@@ -2193,7 +2193,7 @@ export const georgian = {
   "Avoid ringing bell": "არ დარეკოთ ზარი",
   "Leave with security": "დატოვეთ დაცვასთან",
   "Hand it to me": "პირადად გადმომეცით",
-  "Something went wrong": "დაფიქსირდა შეცდომა",
+  "Something went wrong": "დაფიქსირდა შეცდომა",
   "Add To Cart": "კალათაში დამატება",
   "Add Coupon": "კუპონის დამატება",
   "Active": "აქტიური",
