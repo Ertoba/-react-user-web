@@ -1,0 +1,42 @@
+name: React Focused Runtime Smoke
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - ".qa/browser-audit.mjs"
+      - ".github/workflows/react-focused-runtime-smoke.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  chromium-root-runtime:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      QA_BROWSERS: chromium
+      QA_WIDTHS: "390"
+      QA_ROUTES: "/"
+      QA_SKIP_INTERACTIONS: "1"
+      QA_VERBOSE_ERRORS: "1"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: yarn
+      - run: npm install -g yarn@1.22.22
+      - run: yarn install --frozen-lockfile
+      - run: npm ci --prefix .qa
+      - run: node .qa/node_modules/playwright/cli.js install --with-deps chromium
+      - run: python3 .qa/inventory.py
+      - name: Run isolated homepage smoke and print browser runtime exceptions
+        run: node .qa/run.mjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: react-root-smoke
+          path: .qa/results/
+          if-no-files-found: warn

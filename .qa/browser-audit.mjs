@@ -118,10 +118,13 @@ export async function audit() {
           reports.push(row);
           fs.appendFileSync(ledger, JSON.stringify(row)+'\n');
           console.log(`${row.status.toUpperCase()} ${engine} ${width} ${route}: ${row.failures.join(',')} fixtures=${row.fixturesMissing.length}`);
+          if (process.env.QA_VERBOSE_ERRORS === '1' && row.status === 'failed') {
+            console.log(JSON.stringify({ route, errors: row.errors.slice(0, 3), warnings: row.warnings.slice(0, 3), navigationError: row.navigationError, httpStatus: row.httpStatus }, null, 2));
+          }
           await context.close();
         }
       }
-      interactions.push(...await auditInteractions(browser,engine));
+      if (process.env.QA_SKIP_INTERACTIONS !== '1') interactions.push(...await auditInteractions(browser,engine));
     } finally { await browser.close(); }
   }
   const summary = { expected: engines.length*widths.length*routes.length, completed: reports.length, routes: routes.length, widths, browsers: engines, passed: reports.filter(r=>r.status==='passed').length, failed: reports.filter(r=>r.status==='failed').length, blocked: reports.filter(r=>r.status==='blocked').length, excluded: reports.filter(r=>r.status==='excluded').length, reviewNotes: 'Geometry heuristics are review candidates, not proof of clipping or accessibility compliance. Excluded rental routes are disabled stubs, not tested functionality. WebKit is not a physical Safari/iOS test. External providers are blocked; no production orders or payments are sent.' };
