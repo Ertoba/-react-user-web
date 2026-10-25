@@ -1,7 +1,7 @@
 import { useTheme } from "@emotion/react";
 import { Typography, useMediaQuery } from "@mui/material";
 import { Router, useRouter } from "next/router";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { useTranslation } from "react-i18next";
 import { CustomStackFullWidth } from "styled-components/CustomStyles.style";
@@ -48,7 +48,12 @@ const RouteLinks = (props) => {
     router.push(href, undefined, { shallow: true });
   };
   const theme = useTheme();
-  const isXsmall = useMediaQuery(theme.breakpoints.down("sm"));
+  // Server-side markup and the initial browser render must have identical text.
+  const matchesSmall = useMediaQuery(theme.breakpoints.down("sm"));
+  const [isXsmall, setIsXsmall] = useState(false);
+  useEffect(() => {
+    setIsXsmall(matchesSmall);
+  }, [matchesSmall]);
   console.log({ configData });
 
   const formatFooterLink = (text) =>

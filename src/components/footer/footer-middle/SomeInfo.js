@@ -1,6 +1,6 @@
 import { useTheme } from "@emotion/react";
 import { Box, Typography, alpha, useMediaQuery } from "@mui/material";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   CustomStackFullWidth,
   CustomTypographyBold,
@@ -10,7 +10,12 @@ import Link from "next/link";
 const SomeInfo = (props) => {
   const { icon, title, info, t, href } = props;
   const theme = useTheme();
-  const isXsmall = useMediaQuery(theme.breakpoints.down("sm"));
+  // Responsive text/structure must not differ on the first hydrated frame.
+  const matchesSmall = useMediaQuery(theme.breakpoints.down("sm"));
+  const [isXsmall, setIsXsmall] = useState(false);
+  useEffect(() => {
+    setIsXsmall(matchesSmall);
+  }, [matchesSmall]);
   const formattedTitle = isXsmall ? t(title).toLocaleUpperCase("ka-GE") : t(title);
   const iconSize = isXsmall ? 38 : 50;
   const titleSx = {

@@ -3,7 +3,7 @@ import EmailOutlinedIcon from "@mui/icons-material/EmailOutlined";
 import LocationOnOutlinedIcon from "@mui/icons-material/LocationOnOutlined";
 import PhoneOutlinedIcon from "@mui/icons-material/PhoneOutlined";
 import { Box, alpha } from "@mui/system";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { getCurrentModuleType } from "helper-functions/getCurrentModuleType";
 import { ModuleTypes } from "helper-functions/moduleTypes";
@@ -34,7 +34,14 @@ const FooterMiddle = (props) => {
     zoneid = localStorage.getItem("zoneid");
   }
   const theme = useTheme();
-  const isSmall = useMediaQuery(theme.breakpoints.down("sm"));
+  // Keep the first client render identical to SSR. The footer renders
+  // different DOM trees at mobile widths; changing trees during hydration
+  // causes React #418 and breaks navigation across otherwise healthy pages.
+  const matchesSmall = useMediaQuery(theme.breakpoints.down("sm"));
+  const [isSmall, setIsSmall] = useState(false);
+  useEffect(() => {
+    setIsSmall(matchesSmall);
+  }, [matchesSmall]);
   let token;
   const businessLogo = miliLogoSrc;
   const formatMobileFooterLink = (text) => t(text).toLocaleUpperCase("ka-GE");
