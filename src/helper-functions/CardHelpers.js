@@ -1,5 +1,18 @@
 import { store } from "redux/store";
 
+/**
+ * Format a plain number (non-currency) using config's decimal precision.
+ * Restored from the licensed 6amMart V4.2 React source for Rental views.
+ */
+export const formatNumber = (value, fallbackDecimals = 2) => {
+  if (value == null || value === "") return "";
+  const num = Number(value);
+  if (isNaN(num)) return "";
+  const { configData } = store?.getState()?.configData || {};
+  const decimals = Number.parseInt(configData?.digit_after_decimal_point ?? fallbackDecimals);
+  return num.toFixed(isNaN(decimals) ? fallbackDecimals : decimals);
+};
+
 // export const getAmountWithSign = (amount, needDecimal = true) => {
 //   const stores = store?.getState();
 //   const { configData } = stores?.configData || {};
