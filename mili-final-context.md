@@ -247,3 +247,10 @@
 - Vendor PR #2 (https://github.com/Ertoba/vendor-app/pull/2) stages V4.2 ETA/BOGO/Bundle order parsing and replaces the unrelated counter template with actual model regression tests. Vendor analyzer and Flutter tests had passed on its PR branch; Android ARM64 smoke build still in progress at checkpoint. Not merged at this checkpoint.
 - Customer PR #13 (https://github.com/Ertoba/mart-app/pull/13) stages updates to outdated locale-startup test expectations based on MILI's Georgian default; full QA in progress at checkpoint. No Customer runtime behavior changed and no merge yet.
 - All production deployments, database migrations, server builds and app store submissions remain deferred. Activation/purchase-code/license files were not transferred or modified. These are small verified QA repairs, NOT full V4.2+Rental feature migration completion.
+
+## 2026-10-25 — Direct fixes and QA checkpoint
+
+- Direct `main` commits, user-authorized and compared with uploaded official V4.2 archives: React formatter `781f4ca`, React tests `68b0293`; Vendor BOGO home `da45068`, ETA `8c77cdf`, BOGO/Bundle models `f1ce81c`, V4.2 model tests replacing obsolete counter smoke `fd501bb`; Customer Georgian locale-startup test correction `b4aa377`.
+- Backend Keepz: `c720d0e` identity helper, `9623469` callback/status lookup guard, `3112607` recovery guard, `a73069b` tests, `1463149` CI. Keepz Status Integrity Action `40210941687` PASS (syntax/unit only; NOT live payment certified). Official response requires `integratorOrderId`.
+- Vendor analyzer after model parity had zero compile errors; prior QA failed only obsolete DI-less counter test, now replaced. New Vendor and Customer QA pending; React source checks PASS but browsers pending. No server operations or builds/deployments executed.
+- OPEN: P0 client-supplied delivery distance, P0 production Laravel shared-storage permissions, iOS/Web Firebase mismatch, vendor iOS bundle mismatch, Keepz financial/refund E2E, Android/iOS notifications, full browser E2E. Verdict **NO-GO**.
