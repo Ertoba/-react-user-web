@@ -21,6 +21,7 @@ jobs:
       QA_ROUTES: "/"
       QA_SKIP_INTERACTIONS: "1"
       QA_VERBOSE_ERRORS: "1"
+      QA_MODE: dev
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -32,7 +33,7 @@ jobs:
       - run: npm ci --prefix .qa
       - run: node .qa/node_modules/playwright/cli.js install --with-deps chromium
       - run: python3 .qa/inventory.py
-      - name: Run isolated homepage smoke and print browser runtime exceptions
+      - name: Run homepage in React development mode to reveal hydration component stack
         run: node .qa/run.mjs
       - uses: actions/upload-artifact@v4
         if: always()
