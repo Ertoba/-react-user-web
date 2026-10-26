@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { recoveryValidation, normalizeOtpPhone, recoveryOtpRequestSucceeded } from '../src/utils/recoveryValidation.mjs';
+import { recoveryValidation, normalizeOtpPhone, recoveryOtpRequestSucceeded, availableRecoveryMethods, selectRecoveryMethod } from '../src/utils/recoveryValidation.mjs';
 const schema = method => recoveryValidation({ method, country: 'ge', t: value => value });
 
 test('OTP input removes a repeated Georgian dial code while keeping incomplete numbers invalid', async () => {
@@ -46,4 +46,16 @@ test('Georgian country-picker recovery input normalizes repeated prefixes idempo
   assert.equal(normalizeOtpPhone(''), '', 'empty widget state stays empty');
   await schema('phone').validate({ phone: e164 });
   await assert.rejects(schema('phone').validate({ phone: normalizeOtpPhone('995') }));
+});
+
+test('recovery choices expose both enabled channels while preserving selected method', () => {
+  const base = { centralize_login: { otp_login_status: 1 } };
+  const channels = availableRecoveryMethods({ ...base, is_sms_active: 1, is_mail_active: '1' });
+  assert.deepEqual(channels, ['phone','email']);
+  assert.equal(selectRecoveryMethod(channels, 'email'), 'email');
+  assert.equal(selectRecoveryMethod(channels, 'bogus'), 'phone');
+  assert.equal(selectRecoveryMethod(['email'], 'phone'), 'email');
+  assert.deepEqual(availableRecoveryMethods({ ...base, is_sms_active: '0', is_mail_active: false }), []);
+  assert.deepEqual(availableRecoveryMethods({ is_sms_active: 1, is_mail_active: 1 }), []);
+  assert.deepEqual(availableRecoveryMethods({ ...base, is_sms_active: false, is_mail_active: 1 }), ['email']);
 });
