@@ -3,8 +3,18 @@ name: Production QA Audit
 on:
   push:
     branches: [main, audit/production-qa-2026-09-06]
+    # Source-only QA: context/report commits must not cancel the 90-minute
+    # browser matrix currently running against the latest source changes.
+    paths-ignore:
+      - "mili-final-context.md"
+      - "Documentation/**"
+      - "**/*.md"
   pull_request:
     branches: [main]
+    paths-ignore:
+      - "mili-final-context.md"
+      - "Documentation/**"
+      - "**/*.md"
   workflow_dispatch:
 
 permissions:
