@@ -6,6 +6,7 @@ on:
     paths:
       - ".qa/browser-audit.mjs"
       - ".qa/fixtures.mjs"
+      - "scripts/check-qa-fixture-contracts.mjs"
       - "src/components/footer/footer-middle/**"
       - ".github/workflows/react-focused-runtime-smoke.yml"
   workflow_dispatch:
@@ -34,6 +35,8 @@ jobs:
       - run: npm ci --prefix .qa
       - run: node .qa/node_modules/playwright/cli.js install --with-deps chromium
       - run: python3 .qa/inventory.py
+      - name: Validate synthetic API fixtures against Backend V4.2 wire shapes
+        run: node scripts/check-qa-fixture-contracts.mjs
       - name: Run production-build homepage hydration smoke
         run: node .qa/run.mjs
       - uses: actions/upload-artifact@v4

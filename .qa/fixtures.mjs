@@ -32,6 +32,65 @@ const list = (key, values = []) => ({ total_size: values.length, limit: 10, offs
 
 // Explicit local responses. Missing contracts return 501 and are recorded by the audit.
 export function responseFor(path, method, search = new URLSearchParams()) {
+  // Explicit synthetic empty/present contracts, derived from the Backend V4.2
+  // responseFormatter() resources. None of these hit real payments or orders.
+  if (path === '/api/v1/happy-hour/running') return {
+    is_running: false, happy_hour: null,
+  };
+  if (path === '/api/v1/module/top-offer') return {
+    discount: 0, discount_type: null,
+  };
+  if (path === '/api/v1/customer/reels/list') return {
+    total_size: 0, limit: 10, offset: 1, reels: [],
+  };
+  if (path === '/api/v1/bogo/home') return {
+    is_live: false, title: 'სატესტო BOGO შეთავაზებები',
+    description: '', total_offers: 0, offers: [],
+  };
+  if (path === '/api/v1/customer/order/last') return null;
+  if (path === '/api/v1/stores/quick-delivery') return list('stores');
+  if (path === '/api/v1/bundle/home') return { data: [] };
+  if (path === '/api/v1/app-download-section') return {
+    download_user_app_section_status: 0,
+    download_user_app_title: null,
+    download_user_app_links: { playstore_url: null, apple_store_url: null },
+  };
+
+  if (path === '/api/v1/delivery-charge/coverage-list') return {
+    type: 'distance_wise', coverage: [],
+  };
+  if (path === '/api/v1/cashback/getCashback') return {
+    id: null, calculated_amount: 0, cashback_amount: 0,
+    cashback_type: '', min_purchase: 0, max_discount: 0,
+  };
+  if (path === '/api/v1/customer/cart/discount-eligibility') return {
+    source: null, percentage: 0, min_purchase: 0,
+    max_discount: null, qualifying_amount: 0, shortfall: 0,
+    is_qualified: false, discount_amount: 0,
+  };
+  if (path === '/api/v1/customer/order/checkout-summary') return {
+    tax: {
+      tax_amount: 0, tax_status: 'excluded', tax_included: 0,
+      total_price: 12.5, pro_discount: 0, store_discount_amount: 0,
+      discount_source: null, ref_bonus_amount: 0,
+    },
+    delivery: {
+      delivery_charge: 3, delivery_charge_before_pro_discount: 3,
+      original_delivery_charge: 3, base_delivery_charge: 3,
+      min_delivery_charge: 3, surge_amount: 0, free_delivery_by: null,
+      pro_customer_savings: 0, vehicle_id: null,
+    },
+    surge: null,
+    pro: {
+      status: false, type: null, discount: 0,
+      delivery_savings: 0, total_savings: 0,
+    },
+    cashback: {
+      id: null, calculated_amount: 0, cashback_amount: 0,
+      cashback_type: '', min_purchase: 0, max_discount: 0,
+    },
+    delivery_options: null,
+  };
   if (path === '/api/v1/config') return config;
   if (path === '/api/v1/config/get-analytic-scripts') return [];
   if (path === '/api/v1/rental/vehicle/category-list') return { vehicles: [] };
