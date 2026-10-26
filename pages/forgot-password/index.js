@@ -8,22 +8,28 @@ import SEO from "../../src/components/seo";
 import { useDispatch, useSelector } from "react-redux";
 import { useGetConfigData } from "../../src/api-manage/hooks/useGetConfigData";
 import { setConfigData } from "../../src/redux/slices/configData";
+import { getCommonServerSideProps } from "utils/serverSidePropsHelper";
 
-const index = () => {
+const index = ({ configData: serverConfigData }) => {
   // eslint-disable-next-line react-hooks/rules-of-hooks
   const dispatch = useDispatch();
   // eslint-disable-next-line react-hooks/rules-of-hooks
-  const { landingPageData, configData } = useSelector(
+  const { landingPageData, configData: reduxConfigData } = useSelector(
     (state) => state.configData
   );
+  // A hard reload must have config on the first render: passing null through
+  // MainLayout/Header and nested recovery components causes a client exception.
+  const configData = serverConfigData ?? reduxConfigData;
   // eslint-disable-next-line react-hooks/rules-of-hooks
   const { data: dataConfig, refetch: configRefetch } = useGetConfigData();
   // eslint-disable-next-line react-hooks/rules-of-hooks
   useEffect(() => {
-    if (!configData) {
+    if (serverConfigData) {
+      dispatch(setConfigData(serverConfigData));
+    } else if (!reduxConfigData) {
       configRefetch();
     }
-  }, [configData]);
+  }, [serverConfigData, reduxConfigData, dispatch]);
   // eslint-disable-next-line react-hooks/rules-of-hooks
   useEffect(() => {
     if (dataConfig) {
@@ -53,3 +59,6 @@ const index = () => {
 };
 
 export default index;
+
+export const getServerSideProps = async (context) =>
+  getCommonServerSideProps(context, "home_page");

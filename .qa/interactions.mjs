@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
-import { config, storageSeed } from './fixtures.mjs';
+import { storageSeed } from './fixtures.mjs';
 import { beginCase } from './mock-server.mjs';
 
 export async function auditInteractions(browser, engine) {
@@ -19,26 +19,40 @@ export async function auditInteractions(browser, engine) {
     await context.route('**/*', async route => {
       const request = route.request(), url = new URL(request.url());
       if (!['127.0.0.1','localhost'].includes(url.hostname)) return route.abort('blockedbyclient');
-      if (url.pathname === '/api/v1/config') return route.fulfill({ json: { ...config, ai_chat_status: 1, is_sms_active: name !== 'recovery-email', is_mail_active: true, firebase_otp_verification: 0 } });
       if (url.pathname === '/api/v1/customer/ai-chat/send' || url.pathname === '/api/v1/auth/forgot-password') {
         submitted++; lastPayload = request.postDataJSON();
         await new Promise(resolve => setTimeout(resolve,300));
-        return route.fulfill({ json: { message: 'სატესტო პასუხი მზად არის', metadata: {} } });
+        return route.fulfill({ json: url.pathname.includes('/ai-chat/')
+          ? { content: 'სატესტო პასუხი მზად არის', conversation_id: 101, metadata: {} }
+          : { message: 'სატესტო პასუხი მზად არის', errors: [] } });
       }
       return route.continue();
     });
     const page = await context.newPage();
-    const errors = [];
+    const errors = [], consoleErrors = [], httpErrors = [];
     page.on('pageerror', e => errors.push(String(e)));
+    page.on('console', entry => {
+      if (entry.type() === 'error') consoleErrors.push(entry.text().slice(0, 800));
+    });
+    page.on('response', response => {
+      if (response.status() >= 400) {
+        const u = new URL(response.url());
+        if (['127.0.0.1', 'localhost'].includes(u.hostname)) {
+          httpErrors.push({ path: u.pathname, status: response.status() });
+        }
+      }
+    });
     const row = { browser: engine, name, status: 'passed' };
     try {
       if (name.startsWith('chat-')) {
         await page.goto(`${base}/home?module=grocery`, { waitUntil:'networkidle', timeout:30000 });
-        const opener = page.getByRole('button', { name: 'AI ჩატ-ასისტენტი', exact:true });
+        const opener = page.getByTestId('mili-ai-launcher');
         await opener.click();
         const dialog = page.getByRole('dialog');
         await dialog.waitFor({ state:'visible' });
+        await dialog.getByTestId('mili-ai-new-chat').click();
         const composer = dialog.locator('textarea').first();
+        await composer.waitFor({ state:'visible' });
         await composer.fill('სად ვიყიდო ახალი პროდუქტები?');
         await composer.press('Enter');
         await composer.press('Enter');
@@ -82,6 +96,22 @@ export async function auditInteractions(browser, engine) {
       row.status='failed'; row.error=String(error); row.submitted=submitted;
       row.recoveryInput = await page.locator('input[type="tel"],input[name="email"]').first().inputValue().catch(()=>null);
       row.pageText = await page.locator('body').innerText().catch(()=>null);
+      // Print only local synthetic QA page diagnostics, never live tokens or
+      // request payloads. These runs use 127.0.0.1 fixtures exclusively.
+      if (process.env.QA_VERBOSE_ERRORS === '1') {
+        console.log(JSON.stringify({
+          interaction: name,
+          url: page.url(),
+          submitted,
+          recoveryFormFound: await page.locator('form').count(),
+          phoneInputCount: await page.locator('input[type="tel"]').count(),
+          emailInputCount: await page.locator('input[name="email"]').count(),
+          pageTextSample: (row.pageText || '').slice(0, 800),
+          runtimeErrors: errors.slice(0, 2),
+          consoleErrors: consoleErrors.slice(0, 3),
+          httpErrors: httpErrors.slice(0, 5),
+        }));
+      }
       await page.screenshot({ path:new URL(`./results/interaction-${engine}-${name}.png`,import.meta.url).pathname.replace(/^\/([A-Za-z]:)/,'$1'), fullPage:true }).catch(()=>{});
     }
     results.push(row);
