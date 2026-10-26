@@ -7,6 +7,20 @@ on:
       - ".qa/browser-audit.mjs"
       - ".qa/fixtures.mjs"
       - "scripts/check-qa-fixture-contracts.mjs"
+      - "pages/home/index.js"
+      - "src/components/layout/MainLayout.js"
+      - "tests/home-ai-chat-singleton.test.mjs"
+      - "src/components/footer/footer-middle/**"
+      - ".github/workflows/react-focused-runtime-smoke.yml"
+  pull_request:
+    branches: [main]
+    paths:
+      - ".qa/browser-audit.mjs"
+      - ".qa/fixtures.mjs"
+      - "scripts/check-qa-fixture-contracts.mjs"
+      - "pages/home/index.js"
+      - "src/components/layout/MainLayout.js"
+      - "tests/home-ai-chat-singleton.test.mjs"
       - "src/components/footer/footer-middle/**"
       - ".github/workflows/react-focused-runtime-smoke.yml"
   workflow_dispatch:
@@ -37,6 +51,8 @@ jobs:
       - run: python3 .qa/inventory.py
       - name: Validate synthetic API fixtures against Backend V4.2 wire shapes
         run: node scripts/check-qa-fixture-contracts.mjs
+      - name: Guard against duplicate floating AI assistant
+        run: node --test tests/home-ai-chat-singleton.test.mjs
       - name: Run production-build homepage hydration smoke
         run: node .qa/run.mjs
       - uses: actions/upload-artifact@v4
