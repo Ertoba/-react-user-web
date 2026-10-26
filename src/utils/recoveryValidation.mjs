@@ -23,3 +23,13 @@ export function recoveryValidation({ method, country, t }) {
       : Yup.string().notRequired(),
   });
 }
+
+/** Never advance to OTP entry when the provider rejected the OTP request. */
+export function recoveryOtpRequestSucceeded(response) {
+  if (!response || typeof response !== 'object') return false;
+  if (response.success === false || response.status === false) return false;
+  if (response.errors != null) {
+    return Array.isArray(response.errors) && response.errors.length === 0;
+  }
+  return true;
+}
