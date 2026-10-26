@@ -20,7 +20,7 @@ jobs:
     env:
       QA_BROWSERS: chromium
       QA_WIDTHS: "390"
-      QA_ROUTES: "/"
+      QA_ROUTES: "/,/home,/checkout"
       QA_SKIP_INTERACTIONS: "1"
       QA_VERBOSE_ERRORS: "1"
     steps:
