@@ -1,4 +1,4 @@
-import { recoveryValidation } from "../../../utils/recoveryValidation.mjs";
+import { recoveryValidation, recoveryOtpRequestSucceeded } from "../../../utils/recoveryValidation.mjs";
 import React, {useEffect, useRef, useState} from "react";
 import {alpha, Box, InputAdornment, Stack, Typography, useTheme} from "@mui/material";
 import { useFormik } from "formik";
@@ -82,18 +82,13 @@ const ForgotPasswordNumberForm = ({
     },
   });
   const onSuccessHandler = (res) => {
-    if (res) {
-      if (res?.errors?.length > 0) {
-        goNext();
-        toast.error(res?.errors[0].message);
-      } else {
-        goNext();
-        toast.success(res.message);
-      }
-
-      // goNext();
-      //toast.success(res.message);
+    if (!res) return;
+    if (!recoveryOtpRequestSucceeded(res)) {
+      toast.error(res?.errors?.[0]?.message || t("Something went wrong"));
+      return;
     }
+    goNext();
+    toast.success(res.message);
   };
 
   const { mutate, isLoading } = useForgotPassword({
