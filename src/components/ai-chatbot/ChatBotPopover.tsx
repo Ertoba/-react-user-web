@@ -33,7 +33,7 @@ import { getModuleIdentifier, saveModuleParam } from "utils/moduleParamManager";
 import CustomModal from "components/modal";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { toast } from "react-hot-toast";
 import { useTranslation } from "react-i18next";
 import { useQueryClient } from "react-query";
@@ -42,6 +42,7 @@ import { setSelectedModule } from "redux/slices/utils";
 import { addWishList, removeWishListItem } from "redux/slices/wishList";
 import ChatDetailView from "./ChatDetailView";
 import ChatListView from "./ChatListView";
+import { createSingleFlightGate } from "./singleFlightGate.mjs";
 import {
   mapApiConversation,
   normalizeMetadata,
@@ -118,6 +119,7 @@ const ChatBotPopover = ({ open, onClose }: ChatBotPopoverProps) => {
   const [conversations, setConversations] = useState<ChatConversation[]>([]);
   const [activeId, setActiveId] = useState<string | null>(null);
   const [isTyping, setIsTyping] = useState(false);
+  const sendGateRef = useRef(createSingleFlightGate());
   const [addingProductId, setAddingProductId] = useState<number | null>(null);
   const [productModal, setProductModal] = useState<{
     product: ChatProduct;
@@ -251,7 +253,9 @@ const ChatBotPopover = ({ open, onClose }: ChatBotPopoverProps) => {
   const handleSend = useCallback(
     async (text: string, opts?: { conversationIdOverride?: string }) => {
       const sendingFromId = opts?.conversationIdOverride ?? activeId;
-      if (!sendingFromId) return;
+      // React state commits asynchronously: two rapid Enter presses can reach
+      // this callback before isTyping updates. Claim synchronously instead.
+      if (!sendingFromId || !text.trim() || !sendGateRef.current.enter()) return;
       const isLocalOnly = !/^\d+$/.test(sendingFromId);
       const userMsg: ChatMessage = {
         id: makeId(),
@@ -314,7 +318,6 @@ const ChatBotPopover = ({ open, onClose }: ChatBotPopoverProps) => {
               : c
           )
         );
-        setIsTyping(false);
 
         queryClient.refetchQueries(["ai-chat-conversations"]);
 
@@ -328,6 +331,8 @@ const ChatBotPopover = ({ open, onClose }: ChatBotPopoverProps) => {
           err?.response?.data?.errors?.[0]?.message ||
           (t("Failed to send message") as string);
         toast.error(message);
+      } finally {
+        sendGateRef.current.leave();
         setIsTyping(false);
       }
     },
@@ -667,6 +672,7 @@ const ChatBotPopover = ({ open, onClose }: ChatBotPopoverProps) => {
 
   const handleQuickStart = useCallback(
     async (text: string) => {
+      if (sendGateRef.current.busy) return;
       const id = makeId();
       const fresh: ChatConversation = {
         id,
