@@ -10,6 +10,10 @@ on:
       - "pages/home/index.js"
       - "src/components/layout/MainLayout.js"
       - "tests/home-ai-chat-singleton.test.mjs"
+      - "src/components/ai-chatbot/ChatBotPopover.tsx"
+      - "src/components/ai-chatbot/ChatDetailView.tsx"
+      - "src/components/ai-chatbot/singleFlightGate.mjs"
+      - "tests/ai-chat-single-flight.test.mjs"
       - "src/components/footer/footer-middle/**"
       - ".github/workflows/react-focused-runtime-smoke.yml"
   pull_request:
@@ -21,6 +25,10 @@ on:
       - "pages/home/index.js"
       - "src/components/layout/MainLayout.js"
       - "tests/home-ai-chat-singleton.test.mjs"
+      - "src/components/ai-chatbot/ChatBotPopover.tsx"
+      - "src/components/ai-chatbot/ChatDetailView.tsx"
+      - "src/components/ai-chatbot/singleFlightGate.mjs"
+      - "tests/ai-chat-single-flight.test.mjs"
       - "src/components/footer/footer-middle/**"
       - ".github/workflows/react-focused-runtime-smoke.yml"
   workflow_dispatch:
