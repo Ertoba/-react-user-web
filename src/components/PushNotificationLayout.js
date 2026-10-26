@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "firebase/messaging";
-import { fetchToken, onMessageListener } from "../firebase";
+import { fetchToken, subscribeToMessages } from "../firebase";
 import { toast } from "react-hot-toast";
 import {
   IconButton,
@@ -131,13 +131,30 @@ const PushNotificationLayout = ({
     }
   };
 
+  // One foreground FCM subscription per component mount. Clean it up on
+  // unmount, including if browser support detection resolves after unmount.
   useEffect(() => {
-    onMessageListener()
-      .then((payload) => {
-        setNotification(payload.data);
-        // toast.success(payload.data.title)
+    let cancelled = false;
+    let unsubscribe = () => {};
+
+    subscribeToMessages((payload) => {
+      if (!cancelled && payload?.data) setNotification(payload.data);
+    })
+      .then((stop) => {
+        if (cancelled) stop?.();
+        else unsubscribe = stop ?? (() => {});
       })
-      .catch((err) => toast(err));
+      .catch((err) => {
+        if (!cancelled) console.error("FCM foreground listener failed", err);
+      });
+
+    return () => {
+      cancelled = true;
+      unsubscribe();
+    };
+  }, []);
+
+  useEffect(() => {
     if (notification) {
       if (pathName === "chat" && notification.type === "message") {
         refetch();

@@ -64,6 +64,15 @@ export const fetchToken = async (setTokenFound, setFcmToken) => {
   }
 };
 
+// Register a long-lived foreground listener and return Firebase's unsubscribe.
+ // A Promise that resolves on the first message cannot be safely recreated every
+ // time a notification changes; that leaks multiple listeners and duplicates toasts.
+export const subscribeToMessages = async (onPayload) => {
+  const messaging = await getMessagingObject();
+  if (!messaging) return () => {};
+  return onMessage(messaging, onPayload);
+};
+
 // onMessageListener function
 export const onMessageListener = async () =>
   new Promise(async (resolve, reject) => {
