@@ -33,3 +33,17 @@ export function recoveryOtpRequestSucceeded(response) {
   }
   return true;
 }
+
+/** Enables only actual configured recovery channels; string "0" is disabled. */
+export function availableRecoveryMethods(config) {
+  if (!config?.centralize_login) return [];
+  const enabled = value => value === true || value === 1 || value === '1';
+  return [
+    ...(enabled(config.is_sms_active) ? ['phone'] : []),
+    ...(enabled(config.is_mail_active) ? ['email'] : []),
+  ];
+}
+
+export function selectRecoveryMethod(methods, preferred) {
+  return methods.includes(preferred) ? preferred : (methods[0] ?? '');
+}
