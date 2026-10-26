@@ -1,6 +1,6 @@
-import { recoveryValidation, recoveryOtpRequestSucceeded, normalizeOtpPhone } from "../../../utils/recoveryValidation.mjs";
+import { recoveryValidation, recoveryOtpRequestSucceeded, normalizeOtpPhone, availableRecoveryMethods, selectRecoveryMethod } from "../../../utils/recoveryValidation.mjs";
 import React, {useEffect, useRef, useState} from "react";
-import {alpha, Box, InputAdornment, Stack, Typography, useTheme} from "@mui/material";
+import {alpha, Box, InputAdornment, Stack, Typography, ToggleButton, ToggleButtonGroup, useTheme} from "@mui/material";
 import { useFormik } from "formik";
 import { CustomStackFullWidth, CustomTextField } from "styled-components/CustomStyles.style";
 import { useTranslation } from "react-i18next";
@@ -44,26 +44,10 @@ const ForgotPasswordNumberForm = ({
   const [openSignIn, setOpenSignIn] = useState(false);
   const [modalFor, setModalFor] = useState("sign-in");
 
+  const recoveryMethods = availableRecoveryMethods(configData);
   useEffect(() => {
-    const { centralize_login,is_mail_active,is_sms_active
-    } = configData || {};
-    if (centralize_login) {
-      const { phone_verification_status, email_verification_status } =
-        centralize_login;
-     if(is_mail_active && is_sms_active){
-       setHasVerificationMethod(true)
-       setPhoneOrEmail("phone")
-      }
-     else if (is_sms_active) {
-       setHasVerificationMethod(true)
-        setPhoneOrEmail("phone");
-      } else if (is_mail_active) {
-        setHasVerificationMethod(true)
-        setPhoneOrEmail("email");
-      }else{
-       setHasVerificationMethod(false)
-     }
-    }
+    setHasVerificationMethod(recoveryMethods.length > 0);
+    setPhoneOrEmail(current => selectRecoveryMethod(recoveryMethods, current));
   }, [configData]);
 
   const phoneFormik = useFormik({
@@ -132,6 +116,22 @@ const text1=t("Please enter the registered")
         <Stack>
           <Typography fontSize="12px">{t(`${text1} ${phoneOrEmail==="phone"?"phone number":"email"} ${text2}`)}</Typography>
         </Stack>
+        {recoveryMethods.length > 1 && (
+          <ToggleButtonGroup
+            exclusive
+            fullWidth
+            size="small"
+            value={phoneOrEmail || null}
+            onChange={(_, method) => {
+              if (method && recoveryMethods.includes(method)) setPhoneOrEmail(method);
+            }}
+            aria-label={t("Recovery method")}
+            sx={{ mt: 2 }}
+          >
+            <ToggleButton value="phone" aria-label={t("Phone")}>{t("Phone")}</ToggleButton>
+            <ToggleButton value="email" aria-label={t("Email")}>{t("Email")}</ToggleButton>
+          </ToggleButtonGroup>
+        )}
         <form noValidate onSubmit={phoneFormik.handleSubmit}>
           <CustomStackFullWidth mt="2rem">
             {phoneOrEmail === "phone" ? (

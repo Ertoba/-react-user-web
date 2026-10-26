@@ -87,7 +87,7 @@ const ForgotPassword = ({ configData }) => {
   };
   const handleSubmitOtp= (values,onSuccessHandler,mutate) => {
     handleFirstForm(values);
-    if (configData?.firebase_otp_verification === 1) {
+    if (configData?.firebase_otp_verification === 1 && values?.verification_method !== "email") {
       sendOTP(values?.phone);
     } else {
       mutate(values, { onSuccess: onSuccessHandler, onError: onErrorResponse });
@@ -145,7 +145,7 @@ const ForgotPassword = ({ configData }) => {
 
   const formSubmitHandler = (values) => {
     handleFirstForm(values);
-    if (configData?.firebase_otp_verification === 1) {
+    if (configData?.firebase_otp_verification === 1 && phoneOrEmail !== "email") {
       const tempValues = {
         phoneNumber: values?.phone,
         sessionInfo: verificationId,
