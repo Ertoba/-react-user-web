@@ -36,3 +36,14 @@ test('OTP recovery advances only after a successful provider response', () => {
     assert.equal(recoveryOtpRequestSucceeded(rejected), false);
   }
 });
+
+test('Georgian country-picker recovery input normalizes repeated prefixes idempotently', async () => {
+  const raw = '995995555123456';
+  const e164 = normalizeOtpPhone(raw);
+  assert.equal(e164, '+995555123456');
+  assert.equal(normalizeOtpPhone(e164), e164, 'normalization must be stable');
+  assert.equal(normalizeOtpPhone('995'), '+995', 'incomplete dial code stays invalid');
+  assert.equal(normalizeOtpPhone(''), '', 'empty widget state stays empty');
+  await schema('phone').validate({ phone: e164 });
+  await assert.rejects(schema('phone').validate({ phone: normalizeOtpPhone('995') }));
+});
