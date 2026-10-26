@@ -5,6 +5,7 @@ on:
     branches: [main]
     paths:
       - ".qa/browser-audit.mjs"
+      - ".qa/fixtures.mjs"
       - "src/components/footer/footer-middle/**"
       - ".github/workflows/react-focused-runtime-smoke.yml"
   workflow_dispatch:
