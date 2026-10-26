@@ -19,6 +19,8 @@ on:
       - ".qa/interactions.mjs"
       - ".qa/mock-server.mjs"
       - "tests/ai-chat-a11y-qa.test.mjs"
+      - "pages/forgot-password/index.js"
+      - "tests/recovery-ssr-config.test.mjs"
       - "src/components/footer/footer-middle/**"
       - ".github/workflows/react-focused-runtime-smoke.yml"
   pull_request:
@@ -39,6 +41,8 @@ on:
       - ".qa/interactions.mjs"
       - ".qa/mock-server.mjs"
       - "tests/ai-chat-a11y-qa.test.mjs"
+      - "pages/forgot-password/index.js"
+      - "tests/recovery-ssr-config.test.mjs"
       - "src/components/footer/footer-middle/**"
       - ".github/workflows/react-focused-runtime-smoke.yml"
   workflow_dispatch:
