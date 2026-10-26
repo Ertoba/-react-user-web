@@ -338,3 +338,10 @@
 
 - Backend `main` squash commit `60ebbb7c9c5ccb2d21d6e31551d7d50cb6ba9a16`, [PR #9](https://github.com/Ertoba/portal-backend/pull/9), brought the `Customer Delivery Distance Security` GitHub Actions **push and pull_request filters into parity**. Formerly changes only to `PlaceOrderRequest.php` or `CheckoutSummaryRequest.php` on PR would skip this security test, and key checkout/fee traits and service were not watched. Added `PlaceNewOrderTrait.php`, `CheckoutSummaryTrait.php`, `DeliveryFeeTrait.php`, `DeliveryChargeService.php` to both triggers and their PHP syntax checks. Existing tests unchanged. PR run [40266960863](https://github.com/Ertoba/portal-backend/actions/runs/40266960863) **PASS**. Main run should be rechecked separately.
 - This is CI hardening, not code coverage proof across all 6amMart V4.2 features, real orders or production setup. Full React browser QA / staging E2E and external key/payment/FCM/signing blockers are not released.
+
+
+## 2026-10-26 — Production source exposure and main regression rerun
+
+- Rechecked GitHub metadata: all five main MILI repositories (`portal-backend`, `-react-user-web`, `mart-app`, `vendor-app`, `delivery-app`) currently report `visibility=public`. Audit owner must decide whether these should be private given private-license source and in-repo signing material; changing visibility alone cannot retract data cloned or seen before.
+- Backend `main` Keepz run [40266216065](https://github.com/Ertoba/portal-backend/actions/runs/40266216065) **PASS**, and `main` trusted-distance expanded CI [40267026299](https://github.com/Ertoba/portal-backend/actions/runs/40267026299) **PASS**. React complete three-browser Production QA [40265024482](https://github.com/Ertoba/-react-user-web/actions/runs/40265024482) still in progress at check.
+- Existing MILI GitHub QA hourly condition watcher was re-enabled 2026-10-26 for future meaningful regression/recovery/status alerts; this is **monitoring**, not unattended feature development, autonomous production deployment or continuous SSH operations.
