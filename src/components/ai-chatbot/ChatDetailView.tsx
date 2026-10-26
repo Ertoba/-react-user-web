@@ -223,7 +223,7 @@ const ChatDetailView = ({
 
   const handleSend = () => {
     const trimmed = draft.trim();
-    if (!trimmed) return;
+    if (!trimmed || isTyping) return;
     isNearBottomRef.current = true;
     onSend(trimmed);
     setDraft("");
@@ -590,7 +590,7 @@ const ChatDetailView = ({
           />
           <IconButton
             onClick={handleSend}
-            disabled={!draft.trim()}
+            disabled={!draft.trim() || isTyping}
             aria-label={t("Send") as string}
             sx={{
               flexShrink: 0,
