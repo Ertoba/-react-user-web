@@ -1,4 +1,4 @@
-import { recoveryValidation, recoveryOtpRequestSucceeded } from "../../../utils/recoveryValidation.mjs";
+import { recoveryValidation, recoveryOtpRequestSucceeded, normalizeOtpPhone } from "../../../utils/recoveryValidation.mjs";
 import React, {useEffect, useRef, useState} from "react";
 import {alpha, Box, InputAdornment, Stack, Typography, useTheme} from "@mui/material";
 import { useFormik } from "formik";
@@ -103,7 +103,7 @@ const ForgotPasswordNumberForm = ({
   };
   const lanDirection = getLanguage() ? getLanguage() : "ltr";
   const handleOnChange = (value) => {
-    phoneFormik.setFieldValue("phone", `+${value}`);
+    phoneFormik.setFieldValue("phone", normalizeOtpPhone(value));
   };
   const handleEmailChange=(value)=>{
     phoneFormik.setFieldValue("email",value)
