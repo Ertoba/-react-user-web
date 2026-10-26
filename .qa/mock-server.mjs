@@ -1,6 +1,6 @@
 import http from 'node:http';
 import fs from 'node:fs';
-import { responseFor } from './fixtures.mjs';
+import { responseFor, config } from './fixtures.mjs';
 fs.mkdirSync(new URL('./results/', import.meta.url), { recursive: true });
 const log = new URL('./results/api.jsonl', import.meta.url);
 fs.writeFileSync(log, '');
@@ -20,6 +20,23 @@ export const mockServer = http.createServer((req, res) => {
   }
   let body = responseFor(url.pathname, req.method, url.searchParams);
   if (url.pathname === '/api/v1/config' && activeCase?.endsWith(':/maintainance')) body = { ...body, maintenance_mode: true };
+  // Browser context interception cannot change config fetched by Next SSR.
+  // Use a local interaction-only fixture so both server-rendered and client
+  // requests see exactly the same enabled authentication options.
+  if (activeCase?.startsWith('interaction:')) {
+    const kind = activeCase.split(':').at(-1);
+    if (url.pathname === '/api/v1/config') {
+      body = {
+        ...config,
+        ai_chat_status: 1,
+        is_sms_active: kind !== 'recovery-email',
+        is_mail_active: true,
+        firebase_otp_verification: 0,
+      };
+    }
+    if (url.pathname === '/api/v1/customer/ai-chat/conversations' ||
+        url.pathname === '/api/v1/customer/ai-chat/messages') body = { data: [] };
+  }
   const status = body === undefined ? 501 : 200;
   // No payloads, tokens or contact information are recorded.
   const row = { case: activeCase, method: req.method, path: url.pathname, status };
