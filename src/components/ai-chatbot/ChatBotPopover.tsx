@@ -696,6 +696,12 @@ const ChatBotPopover = ({ open, onClose }: ChatBotPopoverProps) => {
         <Box
           role="dialog"
           aria-label={t("AI Assistant") as string}
+          onKeyDown={(event) => {
+            if (event.key === "Escape") {
+              event.stopPropagation();
+              onClose();
+            }
+          }}
           sx={{
             position: "fixed",
             zIndex: 100000,
