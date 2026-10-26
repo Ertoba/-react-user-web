@@ -50,6 +50,12 @@ on:
 permissions:
   contents: read
 
+# Newer commits supersede a slower browser run on the same PR/branch.
+# Keep different PRs and the main branch independent.
+concurrency:
+  group: react-focused-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   chromium-root-runtime:
     runs-on: ubuntu-latest
