@@ -6,12 +6,12 @@ importScripts(
 );
 // // Initialize the Firebase app in the service worker by passing the generated config
 const firebaseConfig = {
-  apiKey: "AIzaSyD0Z911mOoWCVkeGdjhIKwWFPRgvd6ZyAw",
-  authDomain: "stackmart-500c7.firebaseapp.com",
-  projectId: "stackmart-500c7",
-  storageBucket: "stackmart-500c7.appspot.com",
-  messagingSenderId: "491987943015",
-  appId: "1:491987943015:web:d8bc7ab8dbc9991c8f1ec2",
+  apiKey: "AIzaSyArLid_ik38oXXqKRGG60HqO03zzLuMz4Y",
+  authDomain: "portal-9524e.firebaseapp.com",
+  projectId: "portal-9524e",
+  storageBucket: "portal-9524e.firebasestorage.app",
+  messagingSenderId: "100879464630",
+  appId: "1:100879464630:web:4feeb9cd982d48242cce17",
   measurementId: "",
 };
 

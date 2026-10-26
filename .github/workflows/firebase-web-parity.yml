@@ -1,0 +1,31 @@
+name: Firebase Web Config Parity
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "src/firebase.js"
+      - "public/firebase-messaging-sw.js"
+      - "scripts/check-firebase-web-parity.mjs"
+      - ".github/workflows/firebase-web-parity.yml"
+  pull_request:
+    paths:
+      - "src/firebase.js"
+      - "public/firebase-messaging-sw.js"
+      - "scripts/check-firebase-web-parity.mjs"
+      - ".github/workflows/firebase-web-parity.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  firebase-config-parity:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - run: node scripts/check-firebase-web-parity.mjs
