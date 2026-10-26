@@ -524,6 +524,7 @@ const ChatListView = ({
         }}
       >
         <Button
+          data-testid="mili-ai-new-chat"
           onClick={onNewChat}
           variant="contained"
           fullWidth
