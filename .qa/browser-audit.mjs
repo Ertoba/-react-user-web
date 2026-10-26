@@ -109,6 +109,15 @@ export async function audit() {
             row.loadedNotoFaces?.length===0 && 'font-not-loaded',
           ].filter(Boolean);
           row.status = row.failures.length ? 'failed' : row.fixturesMissing.length || row.finalPath !== expectedPath ? 'blocked' : 'passed';
+          // This path exports a client-only wrapper for other components,
+          // not a customer-facing Next page. Next's file-system router exposes
+          // it as a blank URL; track it explicitly as a technical exclusion,
+          // never as a passed application feature.
+          if (sourcePath === '/custom-no-ssr') {
+            row.status = 'excluded';
+            row.exclusionReason =
+              'Internal client-only helper exposed by the Next pages directory; not a customer-facing route.';
+          }
           // These retained routes import deliberate return-null rental stubs.
           // Record the navigation without certifying an unavailable feature.
           if (sourcePath.startsWith('/rental/')) {
