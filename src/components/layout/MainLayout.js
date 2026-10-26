@@ -329,7 +329,7 @@ const MainLayout = ({ children, configData, onHappyHourActiveChange }) => {
       <SearchProductModal />
       <FloatingCartButton />
       {Number(effectiveConfigData?.ai_chat_status) === 1 && (
-        <AiChatBotLauncher />
+        <AiChatBotLauncher happyHourBannerActive={happyHourActive} />
       )}
     </MainLayoutRoot>
   );
