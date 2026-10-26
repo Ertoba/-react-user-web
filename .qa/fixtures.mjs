@@ -53,6 +53,21 @@ export function responseFor(path, method, search = new URLSearchParams()) {
   if (/\/stores\/details\//.test(path)) return store;
   if (/\/items\/details\//.test(path)) return item;
   if (path === '/api/v1/customer/cart/list') return [cartItem];
+  // Real backend v4.2 CartController::groupedByStore returns store-group resources.
+  // The global navbar calls get-all on every route; without this contract
+  // the QA browser matrix wrongly blocks every page with HTTP 501.
+  if (path === '/api/v1/customer/cart/get-all') return [{
+    store: {
+      id: store.id, name: store.name, slug: store.slug,
+      module_type: store.module_type, logo_full_url: store.logo_full_url,
+      delivery_time: store.delivery_time, min_delivery_time: 20,
+      max_delivery_time: 30, item_count: 1, distance: 2000, distance_km: 2,
+    },
+    carts: [{
+      ...cartItem, module_id: 1, store_id: store.id,
+      bogo_details: null, bundle_details: null,
+    }],
+  }];
   if (path === '/api/v1/customer/address/list') return list('addresses', [address]);
   if (path === '/api/v1/customer/wish-list') return { item: [item], store: [store] };
   if (path === '/api/v1/customer/order/details') return [{ id: 1, item_details: item, quantity: 1, price: 12.5, variation: [], add_ons: [], discount_on_item: 0, total_add_on_price: 0 }];
