@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { recoveryValidation, normalizeOtpPhone } from '../src/utils/recoveryValidation.mjs';
+import { recoveryValidation, normalizeOtpPhone, recoveryOtpRequestSucceeded } from '../src/utils/recoveryValidation.mjs';
 const schema = method => recoveryValidation({ method, country: 'ge', t: value => value });
 
 test('OTP input removes a repeated Georgian dial code while keeping incomplete numbers invalid', async () => {
@@ -21,4 +21,18 @@ test('email recovery validates the selected method independently of a stale disc
   await assert.rejects(schema('email').validate({ phone: '+995555123456', email: '', verification_method: 'phone' }));
   await assert.rejects(schema('email').validate({ email: 'invalid' }));
   await schema('email').validate({ email: 'qa@example.test', phone: '' });
+});
+
+test('OTP recovery advances only after a successful provider response', () => {
+  assert.equal(recoveryOtpRequestSucceeded({ message: 'OTP sent' }), true);
+  assert.equal(recoveryOtpRequestSucceeded({ errors: [], message: 'OTP sent' }), true);
+  for (const rejected of [
+    undefined, null, false, '',
+    { errors: [{ code: 'invalid_number', message: 'Rejected' }] },
+    { errors: 'provider_error' },
+    { errors: { phone: ['rejected'] } },
+    { success: false }, { status: false },
+  ]) {
+    assert.equal(recoveryOtpRequestSucceeded(rejected), false);
+  }
 });
