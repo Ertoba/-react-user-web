@@ -85,6 +85,20 @@ export async function auditInteractions(browser, engine) {
       row.status='failed'; row.error=String(error); row.submitted=submitted;
       row.recoveryInput = await page.locator('input[type="tel"],input[name="email"]').first().inputValue().catch(()=>null);
       row.pageText = await page.locator('body').innerText().catch(()=>null);
+      // Print only local synthetic QA page diagnostics, never live tokens or
+      // request payloads. These runs use 127.0.0.1 fixtures exclusively.
+      if (process.env.QA_VERBOSE_ERRORS === '1') {
+        console.log(JSON.stringify({
+          interaction: name,
+          url: page.url(),
+          submitted,
+          recoveryFormFound: await page.locator('form').count(),
+          phoneInputCount: await page.locator('input[type="tel"]').count(),
+          emailInputCount: await page.locator('input[name="email"]').count(),
+          pageTextSample: (row.pageText || '').slice(0, 800),
+          runtimeErrors: errors.slice(0, 2),
+        }));
+      }
       await page.screenshot({ path:new URL(`./results/interaction-${engine}-${name}.png`,import.meta.url).pathname.replace(/^\/([A-Za-z]:)/,'$1'), fullPage:true }).catch(()=>{});
     }
     results.push(row);
