@@ -21,10 +21,17 @@ firebase?.initializeApp(firebaseConfig);
 const messaging = firebase?.messaging();
 
 messaging.onBackgroundMessage(function (payload) {
-  const notificationTitle = payload.notification.title;
-  const notificationOptions = {
-    body: payload.notification.body,
-  };
+  // Firebase automatically shows notification+data and notification-only
+  // messages in the background. Showing them again creates duplicates.
+  if (payload?.notification) return;
 
-  self.registration.showNotification(notificationTitle, notificationOptions);
+  // Data-only messages need an explicit notification; never dereference a
+  // missing payload.notification, which used to throw in background handlers.
+  const title = payload?.data?.title;
+  if (typeof title !== "string" || !title.trim()) return;
+
+  const options = {
+    body: payload?.data?.body ?? "",
+  };
+  self.registration.showNotification(title, options);
 });
