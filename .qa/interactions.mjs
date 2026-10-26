@@ -29,8 +29,19 @@ export async function auditInteractions(browser, engine) {
       return route.continue();
     });
     const page = await context.newPage();
-    const errors = [];
+    const errors = [], consoleErrors = [], httpErrors = [];
     page.on('pageerror', e => errors.push(String(e)));
+    page.on('console', entry => {
+      if (entry.type() === 'error') consoleErrors.push(entry.text().slice(0, 800));
+    });
+    page.on('response', response => {
+      if (response.status() >= 400) {
+        const u = new URL(response.url());
+        if (['127.0.0.1', 'localhost'].includes(u.hostname)) {
+          httpErrors.push({ path: u.pathname, status: response.status() });
+        }
+      }
+    });
     const row = { browser: engine, name, status: 'passed' };
     try {
       if (name.startsWith('chat-')) {
@@ -97,6 +108,8 @@ export async function auditInteractions(browser, engine) {
           emailInputCount: await page.locator('input[name="email"]').count(),
           pageTextSample: (row.pageText || '').slice(0, 800),
           runtimeErrors: errors.slice(0, 2),
+          consoleErrors: consoleErrors.slice(0, 3),
+          httpErrors: httpErrors.slice(0, 5),
         }));
       }
       await page.screenshot({ path:new URL(`./results/interaction-${engine}-${name}.png`,import.meta.url).pathname.replace(/^\/([A-Za-z]:)/,'$1'), fullPage:true }).catch(()=>{});
