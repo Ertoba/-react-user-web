@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
-import { config, storageSeed } from './fixtures.mjs';
+import { storageSeed } from './fixtures.mjs';
 import { beginCase } from './mock-server.mjs';
 
 export async function auditInteractions(browser, engine) {
@@ -19,11 +19,12 @@ export async function auditInteractions(browser, engine) {
     await context.route('**/*', async route => {
       const request = route.request(), url = new URL(request.url());
       if (!['127.0.0.1','localhost'].includes(url.hostname)) return route.abort('blockedbyclient');
-      if (url.pathname === '/api/v1/config') return route.fulfill({ json: { ...config, ai_chat_status: 1, is_sms_active: name !== 'recovery-email', is_mail_active: true, firebase_otp_verification: 0 } });
       if (url.pathname === '/api/v1/customer/ai-chat/send' || url.pathname === '/api/v1/auth/forgot-password') {
         submitted++; lastPayload = request.postDataJSON();
         await new Promise(resolve => setTimeout(resolve,300));
-        return route.fulfill({ json: { message: 'სატესტო პასუხი მზად არის', metadata: {} } });
+        return route.fulfill({ json: url.pathname.includes('/ai-chat/')
+          ? { content: 'სატესტო პასუხი მზად არის', conversation_id: 101, metadata: {} }
+          : { message: 'სატესტო პასუხი მზად არის', errors: [] } });
       }
       return route.continue();
     });
@@ -34,11 +35,13 @@ export async function auditInteractions(browser, engine) {
     try {
       if (name.startsWith('chat-')) {
         await page.goto(`${base}/home?module=grocery`, { waitUntil:'networkidle', timeout:30000 });
-        const opener = page.getByRole('button', { name: 'AI ჩატ-ასისტენტი', exact:true });
+        const opener = page.getByTestId('mili-ai-launcher');
         await opener.click();
         const dialog = page.getByRole('dialog');
         await dialog.waitFor({ state:'visible' });
+        await dialog.getByTestId('mili-ai-new-chat').click();
         const composer = dialog.locator('textarea').first();
+        await composer.waitFor({ state:'visible' });
         await composer.fill('სად ვიყიდო ახალი პროდუქტები?');
         await composer.press('Enter');
         await composer.press('Enter');
