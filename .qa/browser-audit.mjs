@@ -118,8 +118,8 @@ export async function audit() {
           reports.push(row);
           fs.appendFileSync(ledger, JSON.stringify(row)+'\n');
           console.log(`${row.status.toUpperCase()} ${engine} ${width} ${route}: ${row.failures.join(',')} fixtures=${row.fixturesMissing.length}`);
-          if (process.env.QA_VERBOSE_ERRORS === '1' && row.status === 'failed') {
-            console.log(JSON.stringify({ route, errors: row.errors.slice(0, 3), warnings: row.warnings.slice(0, 3), navigationError: row.navigationError, httpStatus: row.httpStatus }, null, 2));
+          if (process.env.QA_VERBOSE_ERRORS === '1' && row.status !== 'passed') {
+            console.log(JSON.stringify({ route, status: row.status, failures: row.failures, fixturesMissing: row.fixturesMissing, finalPath: row.finalPath, errors: row.errors.slice(0, 3), warnings: row.warnings.slice(0, 3), navigationError: row.navigationError, httpStatus: row.httpStatus }, null, 2));
           }
           await context.close();
         }
