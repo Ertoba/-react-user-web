@@ -1,4 +1,160 @@
-# MILI React — final context (V4.2 UI audit)
+# MILI — authoritative final context (V4.2)
+
+> **CURRENT SOURCE OF TRUTH:** use the 2026-10-27 snapshot below for the current workstation, repository, validation, and production-readiness state. Every later section is retained as dated history and is not a current production assertion when it conflicts with this snapshot.
+
+## 2026-10-27 — Authoritative recovery and production-management snapshot
+
+### Current verdict
+
+- The deleted local development environment has been reconstructed inside the single workspace `C:\Users\miro\Desktop\მილი`.
+- All five canonical repositories have full Git history and clean `main` branches. Vendor and Delivery recovery fixes were pushed and their remote SHAs were verified.
+- Public production availability is currently healthy, but the full V4.2 production release remains **NO-GO / NOT CERTIFIED**. This recovery did not deploy, restart, migrate, seed, modify Firebase, run a real Keepz transaction, or change production data.
+- The laptop no longer has an authorized production SSH private key. Port 22 is reachable, but authenticated internal production state cannot be re-verified until the owner restores a key under the protected local `ops/secrets/` directory. Do not treat the 2026-10-25 internal server SHAs as current facts.
+
+### Canonical workspace and rebuild paths
+
+- Sole active workspace: `C:\Users\miro\Desktop\მილი`.
+- Source repositories: `C:\Users\miro\Desktop\მილი\repos`.
+- Sole rebuild/cache root: `C:\Users\miro\Desktop\მილი\build-workspace`.
+- Final artifacts: `C:\Users\miro\Desktop\მილი\artifacts`.
+- Toolchain: `C:\Users\miro\Desktop\მილი\tools`.
+- Operations/runbooks: `C:\Users\miro\Desktop\მილი\ops`.
+- Context/audits: `C:\Users\miro\Desktop\მილი\context`.
+- Reports: `C:\Users\miro\Desktop\მილი\reports`.
+- Windows Flutter/Dart tools must use the ephemeral `M:` SUBST alias created by `ops/Enter-MiliEnvironment.ps1`. It points to the same `მილი` directory and works around a Dart LSP Unicode-path transport failure; it creates no files outside the workspace.
+- Do not create a MILI clone, build directory, dependency cache, QA report, or temporary worktree elsewhere on the Desktop.
+
+Recovered historical files were moved into the workspace:
+
+- `context/history/mili-final-context-legacy-20261015.md`;
+- `context/audits/MILI_V42_FULL_AUDIT-20261025.txt`;
+- `context/audits/MILI-OFFICIAL-V42-ORDER-FLOW-AUDIT-CONTEXT-20261026.txt`.
+
+### Current repository state
+
+| Component | Current validated/pushed `main` | State |
+|---|---|---|
+| Backend/Admin | `7f5aa272ef6ecd993bad0218093fceaf2e8522df` | clean, equals `origin/main` |
+| Customer Flutter | `b0489615d2be85483a867e9cf3b29166b8ecafa0` | clean, equals `origin/main` |
+| Vendor Flutter | `99ca2df8968b7d1329a376da5b6bf14052b40d8a` | clean, pushed; GitHub Production QA success |
+| Delivery Flutter | `80a4674c8af79d0e354622cff7bfa4b714b4b26d` | clean, pushed; GitHub Production QA success |
+| React Web | application/build baseline `8f2cfcdde98acf94e0a0944abb532a6011a6c02a` | clean before this documentation update; this context-only commit advances `main` without changing the application tree |
+
+Vendor commit `99ca2df` restores official V4.2 BOGO/Happy Hour/Service notification contracts, safe notification ID parsing, local-notification terminated-launch recovery, Bundle/notification regressions, the Flutter 3.47.5 lock, and accurate Georgian handover wording. Delivery commit `80a4674` synchronizes the Flutter 3.47.5 SDK-pinned lockfile.
+
+### Restored local toolchain
+
+- Flutter `3.47.5`, Dart `3.13.4`, revision `6a19cca564` at `tools/flutter-3.47.5`.
+- Java `17.0.18`.
+- Node `22.20.0`, npm `10.9.3`, Yarn `1.22.22`.
+- Portable PHP `8.3.36` NTS with the Laravel test extensions at `tools/php-8.3.36-nts`.
+- Local Composer `2.10.3` at `tools/composer`.
+- `ops/Enter-MiliEnvironment.ps1` pins Pub, Gradle, Yarn, npm, Composer, Playwright, TEMP, and build caches under `build-workspace/`.
+- Management entry points: `ops/scripts/Get-MiliRepoStatus.ps1`, `Test-MiliProductionPublic.ps1`, `Invoke-MiliProductionPreflight.ps1`, and `Compare-OfficialV42.ps1`.
+
+### Official V4.2 and private-license boundary
+
+- The owner-authorized official packages remain protected comparison inputs. No archive was copied into a repository or deployed.
+- Activation, license, purchase-code, installer, updater-gate, and related sources are prohibited from every MILI `main`, application build, backend deployment, report body, and log.
+- The final comparison denied 56 Backend activation-related paths before classification. Only explicitly selected activation-free files were materialized under `official-review/sanitized/`; that directory is never a deployment source.
+- Official update practice was followed: compare the V4.1→V4.2 changed-file trees, preserve customizations, merge semantics instead of replacing customized files, and validate the resulting application.
+- Final report: `reports/official-v42/MILI-OFFICIAL-V42-PARITY-VERDICT-20261027.md`; machine evidence: `official-v42-parity-20261027-140527.csv` and `official-v42-summary-20261027-140527.json`.
+
+Final changed-file parity:
+
+| Component | Official delta | Identical | Customized/different | Missing path | Classification |
+|---|---:|---:|---:|---:|---|
+| Backend/Admin | 3,578 | 3,381 | 142 | 55 | missing paths are coherent AI/Reels/Tax/RideShare architecture refactors; do not copy individually |
+| Customer | 578 | 539 | 31 | 8 | docs/scripts plus a packaging-root Dart file already byte-identical at its correct app path; no runtime gap |
+| Vendor | 265 | 101 | 156 | 8 | docs/editor/generated iOS plus inlined/unused helpers; proven notification gap fixed in `99ca2df` |
+| Delivery | 123 | 14 | 105 | 4 | generated iOS ephemeral files plus documentation; no runtime gap |
+| React | 407 | 318 | 89 | 0 | no missing V4.2 changed-file path |
+
+The Backend 55-path delta is not permission to add isolated files. MILI already has functional AI, Reels, and Tax implementations under a different/custom module architecture; mixing the official modular controllers/services/resources into it would duplicate route and service contracts. Any future migration must be one coherent non-activation module migration with staging acceptance.
+
+### Official order-flow verdict
+
+Direct official source verification closed the prior audit gap:
+
+- The normalized official and MILI modular Vendor order controller, DeliveryMan order controller, `OrderNotifier`, and order-notification message classes have the same order-flow semantics.
+- Vendor flow intentionally allows `confirmed → processing → handover` without requiring `delivery_man_id` first.
+- `handover` means **ready for handover / ready for delivery**, not necessarily already physically handed to a courier.
+- A courier can claim an unassigned processing/handover order; assignment and the `accepted` timestamp are recorded while the current processing/handover status may remain.
+- `picked_up` and `delivered` are later courier lifecycle events. Vendor continues after handover only for self-delivery/take-away cases.
+- Do not add a `delivery_man_id` guard to Vendor handover and do not reorder these statuses based only on UI intuition.
+- Vendor Georgian labels now say `გადასაცემად მზადაა` and `გადაწიე, როცა შეკვეთა გადასაცემად მზადაა`.
+
+### Validation evidence
+
+| Component | Local validation | Result |
+|---|---|---|
+| Backend | PHP 8.3.36 syntax sweep | PASS — 2,483/2,483 source files |
+| Backend | Routes/Keepz/OTP/gateway PHPUnit selection | PASS — 33/33 tests, 587 assertions; 1 PHPUnit deprecation |
+| Backend | complete 82-test suite | NOT GREEN — 36 missing-schema errors and 4 fixture/example failures because the full SQLite suite does not provision required tables/fixtures; targeted security suite remains green |
+| Customer | Flutter 3.47.5 active analyzer | PASS with warning/info debt, no compile errors |
+| Customer | full Flutter tests | PASS — 729/729 |
+| Vendor | Flutter 3.47.5 active analyzer | PASS with warning/info debt, no compile errors |
+| Vendor | full Flutter tests | PASS — 51/51 |
+| Vendor | Android ARM64 debug APK | PASS; `artifacts/debug/mili-vendor-v42-notification-20261027-debug.apk`, SHA-256 `3B983110B02B06D709593456541CDCB6D2824B9B4D2E89AD075645CAB4DEBD5D` |
+| Delivery | Flutter 3.47.5 active analyzer | PASS with warning/info debt, no compile errors |
+| Delivery | full Flutter tests | PASS — 51/51 |
+| React | Node source tests | PASS — 57/57 |
+| React | Next type generation + TypeScript | PASS |
+| React | Next lint | PASS exit 0 with existing Hook/image warnings |
+| React | Next 15.5.9 production build | PASS; no Rental `formatNumber` missing-export warning |
+
+The first Vendor Android build also reported future migration warnings for Kotlin `2.2.20`, Java 8 compatibility in dependencies, and plugins still applying KGP. These are not current build failures but must be handled before a future Flutter version makes Built-in Kotlin mandatory.
+
+GitHub evidence:
+
+- Vendor Production QA success on `99ca2df`: https://github.com/Ertoba/vendor-app/actions/runs/40443661201
+- Delivery Production QA success on `80a4674`: https://github.com/Ertoba/delivery-app/actions/runs/40443947897
+- Customer Production QA success on `b048961`.
+- Backend read-only preflight and current distance/Keepz/OTP workflows are successful on their recorded `main` commits.
+- React focused runtime smoke success on `219b35b`: https://github.com/Ertoba/-react-user-web/actions/runs/40318086580
+- React broad Production QA failure on the same application line: https://github.com/Ertoba/-react-user-web/actions/runs/40318086588 — Service routes and synthetic fixture coverage remain blockers; local source/build success is not full browser certification.
+
+### Current public production observation
+
+At `2026-10-27T19:42:56+04:00`, the workspace public probe recorded HTTP 200 for:
+
+- `https://mili.ge/`;
+- `https://mili.ge/api/v1/config`;
+- `https://mili.ge/login/admin`;
+- `https://admin.mili.ge/` → Admin login;
+- `https://vendor.mili.ge/` → Vendor login;
+- `https://store.mili.ge/` → main site.
+
+Evidence: `reports/production/public-probe-20261027-194256.json`. SSH port 22 is reachable.
+
+This proves only public availability. It does **not** verify authenticated sessions, active server Git SHAs, dirty worktrees, Laravel migrations, queues, Reverb, PM2/Supervisor mappings, storage permissions, database configuration, Google Routes credentials, Keepz settlement, Firebase/APNs/FCM, or rollback packages.
+
+The last internal read-only audit on 2026-10-25 observed Backend release `5d75e93`, React release `d1f816f`, queue/Reverb running, and PM2 `mili-react-279`. Those values are now historical and must be replaced only by a fresh authenticated inventory. No recovery action deployed GitHub `main` to production.
+
+### Keepz authoritative integration rules
+
+Keepz decisions must follow https://www.developers.keepz.me/:
+
+- Test and production base URLs remain separate.
+- Requests/responses use the documented hybrid AES-256-CBC + RSA OAEP-SHA256 envelope; private keys and decrypted payment data must never be logged.
+- Callbacks are asynchronous status notifications. Return HTTP 200 only after safe receipt; reconcile missed callbacks with Get Order Status.
+- Treat `integratorOrderId` as the provider binding/idempotency identity.
+- Do not blindly retry validation/auth errors. Cancellation is allowed only for `INITIAL`/`PROCESSING`; refund is allowed only for documented success/refund states and completes asynchronously, so poll/reconcile status.
+- Real order, refund, settlement, saved-card, subscription, or split-distribution tests require explicit owner authorization and Keepz test credentials. No such transaction occurred during recovery.
+
+### Remaining production blockers
+
+1. Restore an owner-authorized SSH private key inside `ops/secrets/` and run the read-only production preflight/inventory.
+2. Verify active Backend/React releases, service processes, permissions, migrations, dirty state, disk, and rollback snapshots before any deploy.
+3. Configure and staging-test the restricted server-side Google Routes key, billing, quotas, cache/fail-closed behavior, and representative delivery quotes.
+4. Complete Keepz test callback/status/retry/cancel/refund/split/reconciliation acceptance without using live customer transactions.
+5. Resolve Firebase project/bundle/APNs/VAPID consistency and run real-device foreground/background/killed notification tests.
+6. Resolve the publicly tracked Customer keystore ownership/rotation decision before any store release.
+7. Complete React Service route/fixture/authenticated browser E2E and the full browser matrix.
+8. Repair the Backend full-suite SQLite migration/fixture harness; do not hide its current 36 errors/4 failures.
+9. Build signed Android/iOS release artifacts from immutable SHAs with checksums and device acceptance.
+
+Until these gates pass with rollback evidence, production deployment remains **NO-GO**.
 
 ## 2026-10-09 — Draft PR #2 status (historical, before merge)
 
