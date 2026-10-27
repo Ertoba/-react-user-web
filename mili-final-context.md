@@ -34,13 +34,15 @@ Recovered historical files were moved into the workspace:
 
 | Component | Current validated/pushed `main` | State |
 |---|---|---|
-| Backend/Admin | `7f5aa272ef6ecd993bad0218093fceaf2e8522df` | clean, equals `origin/main` |
+| Backend/Admin | `afa23e6b4e421abd8781c0ae95c8dd2f0d0dcae0` | clean, equals `origin/main`; workstation bootstrap/runbook versioned |
 | Customer Flutter | `b0489615d2be85483a867e9cf3b29166b8ecafa0` | clean, equals `origin/main` |
 | Vendor Flutter | `99ca2df8968b7d1329a376da5b6bf14052b40d8a` | clean, pushed; GitHub Production QA success |
 | Delivery Flutter | `80a4674c8af79d0e354622cff7bfa4b714b4b26d` | clean, pushed; GitHub Production QA success |
 | React Web | application/build baseline `8f2cfcdde98acf94e0a0944abb532a6011a6c02a` | clean before this documentation update; this context-only commit advances `main` without changing the application tree |
 
 Vendor commit `99ca2df` restores official V4.2 BOGO/Happy Hour/Service notification contracts, safe notification ID parsing, local-notification terminated-launch recovery, Bundle/notification regressions, the Flutter 3.47.5 lock, and accurate Georgian handover wording. Delivery commit `80a4674` synchronizes the Flutter 3.47.5 SDK-pinned lockfile.
+
+Backend commits `12c31b1` and `afa23e6` version the secret-free generic Windows workspace bootstrap, multi-repository status checker, and workstation production-management runbook. Machine-specific SSH keys, known-hosts, server overrides, and provider configuration remain local under `ops/` and are never committed.
 
 ### Restored local toolchain
 
