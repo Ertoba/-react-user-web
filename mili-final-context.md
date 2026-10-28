@@ -134,8 +134,13 @@ binding explicitly selects PHP 8.3.
   HTTP 200 and no API error was observed.
 - Live PM2 error log was empty and recent Nginx access records contained zero
   5xx responses at final audit.
-- No new Nginx severity appeared after the switch. The only recent severity was
-  an unrelated external-client TLS alert approximately 11.5 hours earlier.
+- During the later soak, Nginx recorded two expected security-rule denials for
+  an external scanner requesting `/.htaccess` and `/.htpasswd`; there was no
+  upstream/application error. An older unrelated external-client TLS alert was
+  also present.
+- The queue worker exits successfully and is respawned by Supervisor every hour
+  because its command deliberately uses `--max-time=3600`; the soak restart was
+  `exit status 0; expected`, not a crash.
 
 ### Public endpoints
 
