@@ -64,7 +64,10 @@ const TaxiSearchPanel = ({
   const [open, setOpen] = useState(false);
   const [tripType, setTripType] = useState("distance_wise");
   const [duration, setDuration] = useState(rentalSearch?.duration || "");
-  const [selectedDate, setSelectedDate] = useState(dayjs);
+  const [selectedDate, setSelectedDate] = useState(() => {
+    const initialDate = dayjs(rentalSearch?.selectedDate);
+    return initialDate.isValid() ? initialDate : dayjs();
+  });
   // Destination Location
   const [locations, setLocations] = useState({
     ...configData?.default_location,
@@ -606,7 +609,7 @@ const TaxiSearchPanel = ({
           />
 
           <DateTimePicker
-            value={dayjs(rentalSearch?.selectedDate)}
+            value={selectedDate}
             handleDateChange={handleDateChange}
             label="Pickup Time"
             sx={{

@@ -12,19 +12,9 @@ import CloseIcon from "@mui/icons-material/Close";
 import useGetRentalSearch from "components/home/module-wise-components/rental/rental-api-manage/hooks/react-query/search/useGetRentalSearch";
 import { useSelector } from "react-redux";
 import { useRouter } from "next/router";
-export const fTime = (selectedDate) => {
-  const userDate = new Date(selectedDate);
-  return userDate
-    .toLocaleString("en-US", {
-      year: "numeric",
-      month: "2-digit",
-      day: "2-digit",
-      hour: "2-digit",
-      minute: "2-digit",
-      hour12: true,
-    })
-    .replace(/(\d+)\/(\d+)\/(\d+),\s(\d+:\d+\s[AP]M)/, "$3-$1-$2 $4");
-};
+import { formatRentalSearchDate } from "./rentalSearchDate.mjs";
+
+export const fTime = formatRentalSearchDate;
 
 const RentalCarFilterSection = ({ isSticky, api_endpoint }) => {
   const router = useRouter();
