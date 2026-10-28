@@ -1,8 +1,155 @@
 # MILI — authoritative final context (V4.2)
 
-> **CURRENT SOURCE OF TRUTH:** use the 2026-10-27 snapshot below for the current workstation, repository, validation, and production-readiness state. Every later section is retained as dated history and is not a current production assertion when it conflicts with this snapshot.
+> **CURRENT SOURCE OF TRUTH:** use the 2026-10-28 snapshot below for the current
+> workstation, source, authenticated production, and release-readiness state.
+> Every older section is retained only as dated history and is not a current
+> assertion when it conflicts with this snapshot.
 
-## 2026-10-27 — Authoritative recovery and production-management snapshot
+## 2026-10-28 — Authenticated production-management snapshot
+
+### Current verdict
+
+- The deleted local development environment is restored inside the sole
+  workspace C:\Users\miro\Desktop\მილი. Repositories, tools, caches, reports,
+  context, and artifacts remain under this directory.
+- The owner-authorized Ed25519 production key is restored only under the
+  ignored local ops/secrets directory. Batch authentication and the pinned
+  workspace host key succeed; no password or private-key content was recorded
+  or committed.
+- A fresh authenticated read-only production inventory completed at
+  2026-10-28T05:39:21Z. It did not deploy, pull, checkout, restart, migrate,
+  seed, change permissions/configuration, execute a Keepz transaction, request
+  an FCM token, or modify production data.
+- Public production is available, core services are running, and the database
+  is reachable. Full V4.2 production release remains **NO-GO / NOT CERTIFIED**
+  because the actual releases trail main and confirmed security/configuration/
+  rollback blockers remain.
+- Canonical evidence:
+  [authenticated production inventory](../../reports/production/authenticated-inventory-20261028-053921.md)
+  and [fresh public probe](../../reports/production/public-probe-20261028-092657.json).
+
+### Canonical local workspace
+
+- Sole workspace: C:\Users\miro\Desktop\მილი
+- Repositories: C:\Users\miro\Desktop\მილი\repos
+- Rebuild/cache root: C:\Users\miro\Desktop\მილი\build-workspace
+- Artifacts: C:\Users\miro\Desktop\მილი\artifacts
+- Toolchain: C:\Users\miro\Desktop\მილი\tools
+- Operations and protected local SSH material: C:\Users\miro\Desktop\მილი\ops
+- Reports: C:\Users\miro\Desktop\მილი\reports
+- Flutter/Dart continues to use the ephemeral M: alias created by
+  ops/Enter-MiliEnvironment.ps1; it points to the same workspace and creates no
+  second project tree.
+
+Management entry points now include:
+
+- ops/scripts/Install-MiliSshKey.ps1 for one-time interactive key recovery;
+- ops/scripts/Get-MiliRepoStatus.ps1 for clean-main verification;
+- ops/scripts/Test-MiliProductionPublic.ps1 for dated public probes;
+- ops/scripts/Invoke-MiliProductionPreflight.ps1 for pinned-host-key,
+  passwordless, read-only checks against the actual runtime Backend path;
+- ops/scripts/Compare-OfficialV42.ps1 for activation-filtered parity evidence.
+
+### Canonical source state
+
+| Component | Current source main | State |
+|---|---|---|
+| Backend/Admin | 8e5a75e53954471f3bc2e2469e8d2fbfdcc14b31 | clean and exactly pushed to origin/main; production preflight now understands KEY = VALUE, APP_ENV=live, and unsafe .env modes |
+| Customer Flutter | b0489615d2be85483a867e9cf3b29166b8ecafa0 | clean, equals origin/main |
+| Vendor Flutter | 99ca2df8968b7d1329a376da5b6bf14052b40d8a | clean, equals origin/main; notification recovery validated |
+| Delivery Flutter | 80a4674c8af79d0e354622cff7bfa4b714b4b26d | clean, equals origin/main |
+| React Web | application/operations baseline c301039043fe0a935d98f48c91d55ad58d20070c | clean and equal to origin/main before this context-only update; the commit containing this snapshot advances documentation without changing runtime application code |
+
+Previous validation remains current for unchanged application trees: Backend
+targeted security tests 33/33 pass while the full SQLite suite still has its
+documented schema/fixture failures; Customer tests 729/729 pass; Vendor and
+Delivery tests 51/51 pass; React tests 57/57, type generation/TypeScript, lint,
+and production build pass. React broad Service/fixture browser QA remains red.
+
+### Authenticated production mapping
+
+The directories /var/www/mili and /var/www/store_react are dirty non-runtime
+workspaces, not live symlinks and not safe deployment sources.
+
+| Runtime | Serving path/process | Runtime SHA/state | Source drift at audit |
+|---|---|---|---|
+| Backend HTTP | Nginx root /var/www/mili-release-5d75e93/public | 5d75e93c31917a2c231f749f7d8ea3d77f1ff871; dirty hybrid with 30 status entries | 31 commits behind Backend main at audit; 32 after the preflight documentation fix |
+| Backend queue | Supervisor queue-worker; CWD /var/www/mili-release-5d75e93 | running as www-data | same hybrid release |
+| Backend Reverb | Supervisor reverb; CWD /var/www/mili-release-5d75e93 | running as www-data | same hybrid release |
+| React | PM2 mili-react-279; CWD /var/www/store_react-release-d1 | clean d1f816f7138a9f44ad345b4c867beb8cd2fd0cd6 | 47 commits behind React c301039 baseline |
+
+The Backend release contains selected later hotfix files that are
+byte-equivalent to current main, generated cache drift, shared-storage symlink
+effects, and additional current-main AI/Tax files. Never run git pull, reset,
+clean, or an in-place checkout there. The non-runtime workspaces are also
+heavily dirty: Backend HEAD d246e9c with 5,141 status entries and React HEAD
+e2298ac with 1,649.
+
+Host/runtime evidence:
+
+- Ubuntu 24.04.4 LTS; root disk 39% used; inode use 14%; about 6.2 GB memory
+  available at audit time.
+- Nginx, PHP 8.2 FPM, Supervisor, MariaDB, and pm2-root are active and enabled;
+  Nginx configuration syntax passes.
+- TLS for mili.ge/admin/vendor/store expires 2027-01-15T05:28:01Z.
+- Database connection succeeds.
+- Live release knows 406 ran migrations and zero pending; the newer Backend
+  workspace sees 407 ran and zero pending, including the later Rental index.
+- jobs and failed_jobs both contain zero rows.
+- Keepz is present, active, live-mode, split-enabled, and required selected
+  credential fields are configured. No values were printed and no provider
+  transaction was attempted.
+- FCM service-account fields and Firebase web API key are configured. No OAuth
+  token or device delivery was attempted.
+- Mail fields are configured, the scheduler has a system cron entry, and
+  maintenance mode is disabled.
+
+### Confirmed production blockers
+
+1. Live .env is root:root mode 0644 and is readable by other local users.
+2. GOOGLE_ROUTES_API_KEY is absent from effective live configuration; billing,
+   restrictions, quota, fail-closed behavior, and representative route quotes
+   are not certified.
+3. Shared /var/www/mili/storage/logs is root:root mode 0775 and the directory is
+   not writable by www-data. Existing files currently mask the new-file/log
+   rotation failure risk.
+4. The live Backend has no Laravel config cache.
+5. The Backend runtime is a dirty hybrid and both Backend/React releases trail
+   their clean source main branches.
+6. The application backup directory has no database dump. /var/backups has code
+   archives but no verified DB backup; a hosting-provider snapshot was not
+   independently verified.
+7. Keepz callback/status/retry/cancel/refund/split/settlement, FCM/APNs/VAPID
+   real-device delivery, Google Routes live accuracy, signed mobile releases,
+   and React full browser acceptance remain unverified.
+8. Customer release-signing key ownership/rotation and the Backend full-suite
+   SQLite harness remain unresolved.
+
+The next state-changing production session requires explicit owner approval, a
+fresh verified database backup/provider snapshot, immutable releases built from
+exact clean main SHAs, a documented atomic switch/rollback command, and
+post-switch public plus authenticated smoke tests.
+
+### Official V4.2/private-license boundary
+
+- Official private packages remain protected comparison inputs outside the
+  workspace. No archive was copied to a repository or production.
+- Activation, license, purchase-code, installer, updater-gate, and related
+  files/logic remain prohibited from every MILI main, application, Backend,
+  artifact, report body, and deployment.
+- The activation-filtered 2026-10-27 parity report remains authoritative for
+  selective V4.2 feature comparison. No missing official file is permission to
+  copy a partial module architecture.
+- No license or activation source was transferred during SSH restoration or
+  the authenticated production audit.
+
+---
+
+> **SUPERSEDED SNAPSHOT:** the 2026-10-27 section below is retained only as
+> historical recovery evidence. Its missing-SSH and unauthenticated-production
+> statements were replaced by the 2026-10-28 snapshot above.
+
+## 2026-10-27 — Superseded recovery and production-management snapshot
 
 ### Current verdict
 
