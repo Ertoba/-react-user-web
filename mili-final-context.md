@@ -19,7 +19,7 @@ transaction or real-device FCM delivery was used as a health check.
 Canonical evidence:
 
 - [Production restoration record](../../reports/production/production-restoration-20261028T191014Z.md)
-- [Final public probe](../../reports/production/public-probe-20261028-231248.json)
+- [Final post-soak public probe](../../reports/production/public-probe-20261029-035310.json)
 - [Production-management runbook](../../ops/runbooks/PRODUCTION-MANAGEMENT.md)
 - [Machine-readable production mapping](../../ops/config/production.json)
 - [Official V4.2 parity verdict](../../reports/official-v42/MILI-OFFICIAL-V42-PARITY-VERDICT-20261027.md)
