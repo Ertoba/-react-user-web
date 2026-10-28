@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { getCanonicalRedirectUrl } from "./src/utils/middlewareRedirectUrl.mjs";
 
 // Define the protected routes
 const protectedRoutes = ["/rental/cart"];
@@ -43,14 +44,14 @@ export function middleware(request) {
   // If no module param in URL but we have one saved, and route is not excluded, add it
   if (!hasModuleParam && moduleFromCookie && !shouldSkipModule) {
     searchParams.set("module", moduleFromCookie);
-    const response = NextResponse.redirect(request.nextUrl);
+    const response = NextResponse.redirect(getCanonicalRedirectUrl(request));
     return response;
   }
 
   // Remove legacy module_id if module exists (keep only module)
   if (searchParams.has("module") && searchParams.has("module_id")) {
     searchParams.delete("module_id");
-    const response = NextResponse.redirect(request.nextUrl);
+    const response = NextResponse.redirect(getCanonicalRedirectUrl(request));
     return response;
   }
 
@@ -59,7 +60,7 @@ export function middleware(request) {
     const moduleId = searchParams.get("module_id");
     searchParams.delete("module_id");
     searchParams.set("module", moduleId);
-    const response = NextResponse.redirect(request.nextUrl);
+    const response = NextResponse.redirect(getCanonicalRedirectUrl(request));
     return response;
   }
 
@@ -72,7 +73,10 @@ export function middleware(request) {
     // after the cart fetch resolves) — bouncing to /home in that case was
     // the cause of the "redirected the first time, ok the second time" bug.
     if (cartListValue === "0") {
-      const url = new URL("/home", request.url);
+      const url = getCanonicalRedirectUrl(request, {
+        pathname: "/home",
+        search: "",
+      });
       return NextResponse.redirect(url);
     }
   }
