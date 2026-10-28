@@ -54,7 +54,7 @@ Management entry points now include:
 
 | Component | Current source main | State |
 |---|---|---|
-| Backend/Admin | 8e5a75e53954471f3bc2e2469e8d2fbfdcc14b31 | clean and exactly pushed to origin/main; production preflight now understands KEY = VALUE, APP_ENV=live, and unsafe .env modes |
+| Backend/Admin | 144e74d401f652513ba5e0f53ab74b4a67d0a22b | clean and exactly pushed to origin/main; production preflight now understands KEY = VALUE, APP_ENV=live, and unsafe .env modes; synthetic-gate CI passes |
 | Customer Flutter | b0489615d2be85483a867e9cf3b29166b8ecafa0 | clean, equals origin/main |
 | Vendor Flutter | 99ca2df8968b7d1329a376da5b6bf14052b40d8a | clean, equals origin/main; notification recovery validated |
 | Delivery Flutter | 80a4674c8af79d0e354622cff7bfa4b714b4b26d | clean, equals origin/main |
@@ -64,7 +64,9 @@ Previous validation remains current for unchanged application trees: Backend
 targeted security tests 33/33 pass while the full SQLite suite still has its
 documented schema/fixture failures; Customer tests 729/729 pass; Vendor and
 Delivery tests 51/51 pass; React tests 57/57, type generation/TypeScript, lint,
-and production build pass. React broad Service/fixture browser QA remains red.
+and production build pass. Backend read-only release preflight run
+https://github.com/Ertoba/portal-backend/actions/runs/40639997942 passes on
+144e74d. React broad Service/fixture browser QA remains red.
 
 ### Authenticated production mapping
 
@@ -73,7 +75,7 @@ workspaces, not live symlinks and not safe deployment sources.
 
 | Runtime | Serving path/process | Runtime SHA/state | Source drift at audit |
 |---|---|---|---|
-| Backend HTTP | Nginx root /var/www/mili-release-5d75e93/public | 5d75e93c31917a2c231f749f7d8ea3d77f1ff871; dirty hybrid with 30 status entries | 31 commits behind Backend main at audit; 32 after the preflight documentation fix |
+| Backend HTTP | Nginx root /var/www/mili-release-5d75e93/public | 5d75e93c31917a2c231f749f7d8ea3d77f1ff871; dirty hybrid with 30 status entries | 31 commits behind Backend main at audit; 33 after the two preflight/CI ops commits |
 | Backend queue | Supervisor queue-worker; CWD /var/www/mili-release-5d75e93 | running as www-data | same hybrid release |
 | Backend Reverb | Supervisor reverb; CWD /var/www/mili-release-5d75e93 | running as www-data | same hybrid release |
 | React | PM2 mili-react-279; CWD /var/www/store_react-release-d1 | clean d1f816f7138a9f44ad345b4c867beb8cd2fd0cd6 | 47 commits behind React c301039 baseline |
