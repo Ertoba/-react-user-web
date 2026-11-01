@@ -74,15 +74,24 @@ adaptive foreground were verified. The pinned toolchain emits future Kotlin/KGP
 migration warnings; no untested framework/plugin upgrade was mixed into this
 bug-fix batch.
 
-**Installation/device acceptance is pending.** At 15:59 +04, `adb devices -l`
-listed no device; Pixel 6a `29301JEGR18798` was disconnected. These newly built
-APKs are not claimed installed or runtime-accepted. Reconnect/authorize USB,
-then use `adb install -r` to preserve application data. Do not uninstall/clear
-data to bypass a signing conflict without the owner's direction. Remaining
-device checks are flags, Keepz hosted sheet/cancel/bank return, owner-supervised
-paid completion, Vendor launcher/native splash/BOGO, and Courier income/details.
-No real financial transaction or new order acceptance was performed by this
-batch. The Backend and deployed React application SHAs are unchanged.
+**Installation completed on Pixel 6a `29301JEGR18798`.** The device reconnected
+and authorized ADB after the earlier 15:59 disconnected check. All three APKs
+were successfully installed with `adb install -r`, without uninstalling or
+clearing data. Package-manager update times on 2026-11-01 +04 are Customer
+16:16:45, Vendor 16:16:55 and Delivery 16:17:01; their original 2026-10-29
+first-install times remain unchanged. SHA-256 of each installed `base.apk`
+matches the corresponding artifact above exactly.
+
+Cold-launch smoke at 16:18 +04: all three returned `Status: ok`, resumed their
+expected `MainActivity`, and had live processes after four seconds. The sampled
+new-process logs contained no fatal/unhandled exception or build-time
+`markNeedsBuild` exception. This is launch smoke, not full feature acceptance.
+Remaining owner-led device checks are flags, Keepz hosted sheet/cancel/bank
+return, owner-supervised paid completion, Vendor launcher/native splash/BOGO,
+and Courier income/details. Opening Keepz Pay/Retry can change payment intents,
+so it is not an automatic read-only test. No real financial transaction or new
+order acceptance was performed by this batch. Backend and deployed React
+application SHAs are unchanged.
 
 ## Production restoration outcome — 2026-10-28/29
 
