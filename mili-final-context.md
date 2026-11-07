@@ -59,11 +59,12 @@ active production release. New codes exceed both Play and current source:
 Version name remains `4.2.0`; a CLI build-number override is recorded without
 modifying application `main`. The requested release run is `20261107-production`,
 using [new key metadata](../../ops/config/android-signing/20261107-upload-reset/upload-keys.json).
-Serial full-ABI signed release compilation started at 12:31 +04. Final results,
-artifact checksums and registration status must be updated here after verification;
-no in-progress AAB is represented as upload-ready.
+Serial full-ABI signed release compilation started at 12:31 +04 and the final
+resumed run completed successfully at **2026-11-07 17:34:50 +04**. All three signed
+AABs are technically verified; Play upload eligibility remains pending the
+scheduled upload-key activation below. No AAB was uploaded or rolled out.
 
-### AAB verification progress
+### Final signed production AABs
 
 Customer compiled successfully in 1526.2 seconds. Its initial post-build scan
 mistook Google's public library-version metadata for a credential file. An exact
@@ -72,11 +73,11 @@ weakening other private-file checks. The failed manifest was preserved, the same
 fresh signed AAB was reverified without recompilation or timestamp changes, and
 Vendor/Delivery continued serially in the same production run.
 
-| App | Current result | Bytes | SHA-256 |
+| App | Final signed candidate | Bytes | SHA-256 |
 |---|---|---:|---|
 | Customer | [Verified signed candidate v55](../../artifacts/production/android/20261107-production/mili-customer-main-6b0d98f-v55-pending-upload-key-reset.aab) | 110083676 | `50689AAFBEECD49588178C35F7660AE9581A05D262A148FBC04583FB3CA96EC9` |
 | Vendor | [Verified signed candidate v39](../../artifacts/production/android/20261107-production/mili-vendor-main-3d87c5d-v39-pending-upload-key-reset.aab) | 87513976 | `526AA2961E4B474500BA4049D20A53DE5226EAAB4DDD736FF05BD8CD4CE1F9BB` |
-| Delivery | v41 incremental retry running after transient Google Maven DNS failure | — | — |
+| Delivery | [Verified signed candidate v41](../../artifacts/production/android/20261107-production/mili-delivery-main-396aef5-v41-pending-upload-key-reset.aab) | 77907717 | `4700AC6D38AECB119E138A12FC2A9C688A6B2164272C54DF522428ED56FFBCF0` |
 
 Customer gates passed: JAR signature and exact NEW upload signer, bundletool
 validation, package `ge.mili.customer`, version `4.2.0+55`, minSdk 24 / targetSdk
@@ -106,10 +107,27 @@ initially hit the no-overwrite guard safely; it was fixed and integration-tested
 without modifying either completed file. Partial-run recovery preserves previous
 failed-manifest snapshots and all original finalized-artifact timestamps/hashes.
 
+Delivery's successful incremental retry completed in 502.8 seconds; both previously
+missing pinned Google Maven JARs downloaded on 17:31. The final AAB passed the same
+signature/new-signer/bundletool/package/version/SDK/ABI/private-file gates:
+`ge.mili.delivery`, `4.2.0+41`, minSdk 24 / targetSdk 36, debuggable false.
+Its six ELF64 libraries pass static 16KB LOAD alignment/congruence, with
+`PAGE_ALIGNMENT_16K` requested. Customer/Vendor retained their original AAB bytes,
+hashes and timestamps. All final AAB copies and mapping/symbol hashes were checked
+again, and all temporary Android signing-property hard links were removed.
+
+Static native reports: [Customer: 8 ELF64 libraries](../../build-workspace/production/android/20261107-production/customer/verification-16kb/16kb-static-report.json),
+[Vendor: 6](../../build-workspace/production/android/20261107-production/vendor/verification-16kb/16kb-static-report.json),
+[Delivery: 6](../../build-workspace/production/android/20261107-production/delivery/verification-16kb/16kb-static-report.json).
+All 20 pass LOAD alignment/congruence. These are static checks only, not generated
+APK ZIP alignment, 16KB-device runtime, financial-flow QA or Google Play acceptance.
+
 The [production run manifest](../../artifacts/production/android/20261107-production/production-build-manifest.json)
-is authoritative for build results; the timestamped failed-manifest snapshot is
-historical recovery evidence, not the final result. Registration remains pending
-until the scheduled Google activation below.
+now has `status=verified-builds-complete` and all three components. Timestamped
+failed-manifest snapshots are historical recovery evidence, not the final result.
+`safeToUploadAllToExistingPlayApps=false` correctly remains until Google activates
+the new upload keys and the registered fingerprints are checked after the scheduled
+times. Filenames retain the explicit `pending-upload-key-reset` qualifier.
 
 ### New upload keys — not Play app-signing upgrades
 
@@ -170,6 +188,15 @@ against the GitHub release asset digest. Java must use its ASCII path
 `M:/tools/bundletool/bundletool-all-1.18.3.jar`. Pinned Flutter and dependency
 lockfiles are retained; no framework/plugin upgrade or activation code import
 is included in this rebuild.
+Android production builds/signature checks used existing Android Studio JBR
+**21.0.9**; the separately restored system Java 17 listed historically below is
+not this release compiler. Kotlin/Gradle forward-compatibility warnings were
+recorded, not "fixed" through an unrequested framework upgrade.
+
+No off-workspace backup was created. The new private upload keystores and signing
+configuration are currently only in the protected MILI directory. A separate
+secure backup is still required to survive deletion of this workspace; the owner
+was asked for an explicit backup destination or to retain a backup themselves.
 
 ## 2026-11-01 — Mobile live-debug fixes
 
