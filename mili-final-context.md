@@ -41,6 +41,8 @@ workstation tooling/documentation only; the deployed Backend application remains
 `ff94f1f` and was not redeployed.
 The verified metadata-filter recovery, explicit resume path, and static ELF64
 checker were subsequently pushed as `298b0f738838701ef5818123e3ca8f52372fbf08`.
+General partial-run recovery and its PowerShell 5.1 single-record guard were
+pushed as `3a5cb8c` and `065b94187ed378cbad64f8fc7f85f0f9b455a223`.
 
 ### Verified source and version plan
 
@@ -73,8 +75,8 @@ Vendor/Delivery continued serially in the same production run.
 | App | Current result | Bytes | SHA-256 |
 |---|---|---:|---|
 | Customer | [Verified signed candidate v55](../../artifacts/production/android/20261107-production/mili-customer-main-6b0d98f-v55-pending-upload-key-reset.aab) | 110083676 | `50689AAFBEECD49588178C35F7660AE9581A05D262A148FBC04583FB3CA96EC9` |
-| Vendor | Compiling v39 | — | — |
-| Delivery | Queued v41 | — | — |
+| Vendor | [Verified signed candidate v39](../../artifacts/production/android/20261107-production/mili-vendor-main-3d87c5d-v39-pending-upload-key-reset.aab) | 87513976 | `526AA2961E4B474500BA4049D20A53DE5226EAAB4DDD736FF05BD8CD4CE1F9BB` |
+| Delivery | v41 incremental retry running after transient Google Maven DNS failure | — | — |
 
 Customer gates passed: JAR signature and exact NEW upload signer, bundletool
 validation, package `ge.mili.customer`, version `4.2.0+55`, minSdk 24 / targetSdk
@@ -83,6 +85,26 @@ exclusion. Its R8 mapping is preserved beside the AAB. Eight ELF64 libraries pas
 static LOAD alignment/congruence, with `PAGE_ALIGNMENT_16K` requested in bundle
 config. This does not certify generated-APK ZIP alignment, 16KB device runtime,
 Google Play acceptance, or payment-flow acceptance.
+
+Vendor compiled successfully in 1487.6 seconds and passed the same release
+signature/package/version/SDK/ABI/private-file gates (`ge.mili.vendor`,
+`4.2.0+39`, minSdk 24 / targetSdk 36, debuggable false). Its six ELF64 libraries
+pass static 16KB LOAD alignment/congruence and request `PAGE_ALIGNMENT_16K`;
+generated-APK ZIP/runtime/Play acceptance are not certified.
+
+Delivery's first build and Flutter's automatic retry stopped at
+`:shared_preferences_android:generateReleaseLintModel` because DNS resolution of
+`dl.google.com` prevented downloading the pinned AndroidX datastore 1.1.3 JARs.
+On owner-requested continuation at 17:21 +04, DNS and the exact official Maven
+artifact URL were reachable with HTTP 200. This is a dependency-download failure,
+not an application-code change. Preserve Customer/Vendor verified AABs and retry
+only Delivery using its existing validated staging tree and cached build outputs.
+Do not regenerate upload keys or overwrite either completed AAB.
+At 17:26 +04 the runner had reverified and retained both finalized AABs unchanged
+and restarted only Delivery's missing bundle. A PS5.1 single-record array issue
+initially hit the no-overwrite guard safely; it was fixed and integration-tested
+without modifying either completed file. Partial-run recovery preserves previous
+failed-manifest snapshots and all original finalized-artifact timestamps/hashes.
 
 The [production run manifest](../../artifacts/production/android/20261107-production/production-build-manifest.json)
 is authoritative for build results; the timestamped failed-manifest snapshot is
