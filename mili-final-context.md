@@ -39,6 +39,8 @@ The staging/debug/production/key-generation tools and runbook were pushed to
 Backend `main` as `0070a913f558242a2d6359abeee363c6123e92bd`. This commit changes
 workstation tooling/documentation only; the deployed Backend application remains
 `ff94f1f` and was not redeployed.
+The verified metadata-filter recovery, explicit resume path, and static ELF64
+checker were subsequently pushed as `298b0f738838701ef5818123e3ca8f52372fbf08`.
 
 ### Verified source and version plan
 
@@ -58,6 +60,34 @@ using [new key metadata](../../ops/config/android-signing/20261107-upload-reset/
 Serial full-ABI signed release compilation started at 12:31 +04. Final results,
 artifact checksums and registration status must be updated here after verification;
 no in-progress AAB is represented as upload-ready.
+
+### AAB verification progress
+
+Customer compiled successfully in 1526.2 seconds. Its initial post-build scan
+mistook Google's public library-version metadata for a credential file. An exact
+path/size/three-field/client/version check corrected the false positive without
+weakening other private-file checks. The failed manifest was preserved, the same
+fresh signed AAB was reverified without recompilation or timestamp changes, and
+Vendor/Delivery continued serially in the same production run.
+
+| App | Current result | Bytes | SHA-256 |
+|---|---|---:|---|
+| Customer | [Verified signed candidate v55](../../artifacts/production/android/20261107-production/mili-customer-main-6b0d98f-v55-pending-upload-key-reset.aab) | 110083676 | `50689AAFBEECD49588178C35F7660AE9581A05D262A148FBC04583FB3CA96EC9` |
+| Vendor | Compiling v39 | — | — |
+| Delivery | Queued v41 | — | — |
+
+Customer gates passed: JAR signature and exact NEW upload signer, bundletool
+validation, package `ge.mili.customer`, version `4.2.0+55`, minSdk 24 / targetSdk
+36, debuggable false, ARMv7/ARM64/x86-64 Flutter release libraries, and private-file
+exclusion. Its R8 mapping is preserved beside the AAB. Eight ELF64 libraries passed
+static LOAD alignment/congruence, with `PAGE_ALIGNMENT_16K` requested in bundle
+config. This does not certify generated-APK ZIP alignment, 16KB device runtime,
+Google Play acceptance, or payment-flow acceptance.
+
+The [production run manifest](../../artifacts/production/android/20261107-production/production-build-manifest.json)
+is authoritative for build results; the timestamped failed-manifest snapshot is
+historical recovery evidence, not the final result. Registration remains pending
+until the scheduled Google activation below.
 
 ### New upload keys — not Play app-signing upgrades
 
@@ -82,13 +112,21 @@ matching Console certificate and effective-state evidence before calling AABs
 upload-ready. Pending candidates are named `pending-upload-key-reset.aab`.
 
 All three new PEM certificates were submitted through the authenticated Console
-on 2026-11-07; each request changed to **processing**. New Nov 7 request-received
-notifications were observed for Customer/Vendor. Console nevertheless displays
-October 16 effective dates (Customer 09:53, Vendor/Delivery 09:59), inconsistent
-with today's new requests/key generation. Preserve that literal evidence; do not
-invent a future approval date or infer activation from a past date. All three
-remain pending until the expected new upload fingerprint and processing completion
-are verified. See the [reset-state record](../../ops/config/android-signing/20261107-upload-reset/play-reset-status.json).
+on 2026-11-07; each request changed to **processing**. The App signing page's
+banners show stale October 16 dates. This was resolved by expanding the **new
+Nov 7 reset-received notifications**: each identifies the matching NEW certificate
+SHA-1 and explicitly states the following activation time and upload prohibition
+until then. Use those matching notifications, not the stale banners:
+
+| App | Google notification activation (UTC) | Asia/Tbilisi |
+|---|---|---|
+| Customer | 2026-11-09 08:33 | **2026-11-09 12:33 +04** |
+| Vendor | 2026-11-09 08:28 | **2026-11-09 12:28 +04** |
+| Delivery | 2026-11-09 08:36 | **2026-11-09 12:36 +04** |
+
+All three remain pending on Nov 7. Do not upload before the scheduled times;
+verify the expected active upload fingerprint and processing completion afterward.
+See the [reset-state record](../../ops/config/android-signing/20261107-upload-reset/play-reset-status.json).
 
 Authenticated Console app-signing SHA-256 values remain unchanged:
 
