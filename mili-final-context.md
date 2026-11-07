@@ -1,8 +1,115 @@
 # MILI — authoritative final context (V4.2)
 
-> Current workstation/mobile source context as of 2026-11-01. The production
+> Current workstation/mobile source context as of 2026-11-07. The production
 > mapping below was last authenticated during the 2026-10-28/29 restoration;
-> this mobile debugging batch did not modify or re-audit production.
+> mobile debugging and Android release preparation did not deploy or re-audit
+> the Backend/React production runtimes.
+
+## 2026-11-07 — Play AAB rebuild and new upload keys
+
+The owner requested production AAB rebuilds of all three current application
+`main` branches, strict production/debug folder separation within MILI, and new
+upload keys instead of searching for previously lost private keystores.
+
+### Exclusive build and artifact directories
+
+| Purpose | Workspace-relative path |
+|---|---|
+| Production source exports, build outputs and logs | `build-workspace/production/android/<run>/<app>/` |
+| Final production AABs and verification manifest | `artifacts/production/android/<run>/` |
+| Debug source exports, build outputs and logs | `build-workspace/debug/android/<run>/<app>/` |
+| Final debug APKs and verification manifest | `artifacts/debug/android/<run>/` |
+| Shared tool/dependency caches | `build-workspace/cache/` |
+| Private upload keys and signing configuration | `ops/secrets/android-signing/<app>/<key-run>/` |
+| Public certificates and non-secret key metadata | `ops/config/android-signing/<key-run>/` |
+
+All paths are under `C:\Users\miro\Desktop\მილი`; M: is its ASCII alias, not
+another workspace. Never recreate obsolete Desktop/build or Desktop/6ammart.
+Each run is immutable. Existing 2026-11-01 debug APKs remain historical evidence;
+older empty `artifacts/release/` directories are not upload sources.
+
+Canonical workstation tools are versioned under Backend
+`scripts/workstation/`, with thin local entry points under `ops/scripts/`.
+The staging helper exports the exact clean pushed application SHA, omits Git
+metadata and private key/configuration files, and builds inside the selected
+mode's export, never in an app checkout's old debug build tree. No global Flutter
+build-directory setting is changed. See the
+[Android release runbook](../backend-admin/Documentation/MILI-android-release-builds.md).
+The staging/debug/production/key-generation tools and runbook were pushed to
+Backend `main` as `0070a913f558242a2d6359abeee363c6123e92bd`. This commit changes
+workstation tooling/documentation only; the deployed Backend application remains
+`ff94f1f` and was not redeployed.
+
+### Verified source and version plan
+
+The authenticated Console All app bundles table was sorted by version code
+descending on 2026-11-07. These maxima include uploaded bundles, not just the
+active production release. New codes exceed both Play and current source:
+
+| App | Current application `main` | Git code | Play maximum | New AAB code |
+|---|---|---:|---:|---:|
+| Customer | `6b0d98f42fc25358474c3b8466eafe98aaa559bc` | 54 | 50 | 55 |
+| Vendor | `3d87c5d573b18fca15d9eb8e37ed9695fbf16675` | 38 | 34 | 39 |
+| Delivery | `396aef537b4521315a24ce6370198009e3141cc3` | 40 | 37 | 41 |
+
+Version name remains `4.2.0`; a CLI build-number override is recorded without
+modifying application `main`. The requested release run is `20261107-production`,
+using [new key metadata](../../ops/config/android-signing/20261107-upload-reset/upload-keys.json).
+Serial full-ABI signed release compilation started at 12:31 +04. Final results,
+artifact checksums and registration status must be updated here after verification;
+no in-progress AAB is represented as upload-ready.
+
+### New upload keys — not Play app-signing upgrades
+
+On explicit owner instruction, new per-app RSA-3072/SHA256withRSA upload keys were
+generated once as `20261107-upload-reset`. Private JKS files and generated signing
+properties are restricted to the current Windows owner and SYSTEM; passwords are
+random, not printed, and absent from Git, public metadata and artifacts.
+Public PEM/DER certificates cannot reconstruct private keys. The owner must keep
+a separate secure backup; do not copy outside MILI without an explicit destination.
+
+| App | NEW upload certificate SHA-256 |
+|---|---|
+| Customer | `FE:B2:A5:92:67:A9:0F:78:9D:8E:97:C5:48:BB:2A:70:F9:7F:3E:15:0C:EB:74:8B:73:56:D3:65:EA:F4:94:EB` |
+| Vendor | `FB:2E:46:95:5E:EA:C1:6F:51:B3:E1:71:13:8F:4E:34:DE:DF:2B:00:B6:59:B9:27:1D:97:0B:88:AC:A6:41:69` |
+| Delivery | `9D:9B:99:B0:46:2C:67:60:70:D2:FE:EA:5E:2D:81:38:49:BF:97:12:4E:F8:CF:6E:88:36:63:AA:57:FC:34:3E` |
+
+Keys initially remain `pending-registration`. Submit only public PEM certificates
+through **Upload key > Request reset**, not **App signing > Upgrade key**.
+Do not publish Console changes or start rollout as part of this rebuild request.
+An acknowledged reset request is not proof that the new signer is active; require
+matching Console certificate and effective-state evidence before calling AABs
+upload-ready. Pending candidates are named `pending-upload-key-reset.aab`.
+
+All three new PEM certificates were submitted through the authenticated Console
+on 2026-11-07; each request changed to **processing**. New Nov 7 request-received
+notifications were observed for Customer/Vendor. Console nevertheless displays
+October 16 effective dates (Customer 09:53, Vendor/Delivery 09:59), inconsistent
+with today's new requests/key generation. Preserve that literal evidence; do not
+invent a future approval date or infer activation from a past date. All three
+remain pending until the expected new upload fingerprint and processing completion
+are verified. See the [reset-state record](../../ops/config/android-signing/20261107-upload-reset/play-reset-status.json).
+
+Authenticated Console app-signing SHA-256 values remain unchanged:
+
+- Customer: `D0:BA:E5:29:36:57:94:64:2A:45:D8:74:AD:D3:C9:B6:7E:56:82:2A:08:AD:8A:16:A6:8F:14:04:17:94:C5:71`.
+- Vendor: `44:68:4F:3C:B9:97:8F:DD:12:3F:64:E9:C7:24:97:DE:C2:D5:A9:95:60:5B:3B:47:D3:98:4E:25:0F:39:9D:D6`.
+- Delivery: `35:7C:23:56:E9:65:72:82:54:80:42:83:3F:EC:E6:14:D0:10:0E:5B:91:FF:5E:D5:48:71:B3:58:24:87:8E:97`.
+
+The supplied Vendor deployment certificate matches its Console app-signing SHA-256
+`44:68:4F:3C:B9:97:8F:DD:12:3F:64:E9:C7:24:97:DE:C2:D5:A9:95:60:5B:3B:47:D3:98:4E:25:0F:39:9D:D6`.
+The supplied pre-reset upload certificate has SHA-256
+`25:62:DC:21:59:E3:E9:C9:E1:6A:FC:37:A8:98:F7:73:3E:3B:0A:E8:ED:99:27:0A:54:58:30:5F:7D:9E:49:E5`
+(created 2026-10-14), superseding older historical upload-fingerprint assertions.
+Keep Play app-signing fingerprints in Digital Asset Links/API provider mappings;
+do not replace them with the new upload-key fingerprints.
+
+Validation tool: official Google bundletool 1.18.3, SHA-256
+`A099CFA1543F55593BC2ED16A70A7C67FE54B1747BB7301F37FDFD6D91028E29`, verified
+against the GitHub release asset digest. Java must use its ASCII path
+`M:/tools/bundletool/bundletool-all-1.18.3.jar`. Pinned Flutter and dependency
+lockfiles are retained; no framework/plugin upgrade or activation code import
+is included in this rebuild.
 
 ## 2026-11-01 — Mobile live-debug fixes
 
@@ -45,12 +152,13 @@ the [fix/rebuild record](../../reports/live-debug/LIVE-DEBUG-FIXES-20261101.md)
 tracks final outputs and device verification. Backend/runtime production,
 private-license/activation code and financial transactions were not changed.
 
-Build entry point: `ops/scripts/Build-MiliDebugApps.ps1` (or the workspace VS Code
+Historical 2026-11-01 build entry point: `ops/scripts/Build-MiliDebugApps.ps1` (or the workspace VS Code
 task “MILI: serial debug rebuilds from main”). It verifies clean
 `main == origin/main`, uses locked dependencies and serial builds, writes logs
 and a SHA-256 manifest under `build-workspace/logs`, and places final APKs under
 `artifacts/debug`. These ARM64 builds target the Pixel test device, not a signed
-store release.
+store release. The 2026-11-07 directory contract above supersedes this older
+runner's flat log/output locations for all future builds.
 
 ### Current debug artifacts — 2026-11-01
 
