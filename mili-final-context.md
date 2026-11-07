@@ -1,8 +1,8 @@
 # MILI — authoritative final context (V4.2)
 
-> Current workstation/mobile source context as of 2026-11-07. The production
-> mapping below was last authenticated during the 2026-10-28/29 restoration;
-> mobile debugging and Android release preparation did not deploy or re-audit
+> Current workstation/mobile context and read-only production source-parity check:
+> 2026-11-07. The historical restoration audit remains dated 2026-10-28/29.
+> Android release preparation and the Nov 7 inspection did not deploy or restart
 > the Backend/React production runtimes.
 
 ## 2026-11-07 — Play AAB rebuild and new upload keys
@@ -17,6 +17,8 @@ upload keys instead of searching for previously lost private keystores.
 |---|---|
 | Production source exports, build outputs and logs | `build-workspace/production/android/<run>/<app>/` |
 | Final production AABs and verification manifest | `artifacts/production/android/<run>/` |
+| Device-specific production APK conversion work/logs | `build-workspace/production/android/<device-run>/device-apks/` |
+| Final production device APK sets and installation evidence | `artifacts/production/android/<device-run>/device-apks/` |
 | Debug source exports, build outputs and logs | `build-workspace/debug/android/<run>/<app>/` |
 | Final debug APKs and verification manifest | `artifacts/debug/android/<run>/` |
 | Shared tool/dependency caches | `build-workspace/cache/` |
@@ -98,9 +100,9 @@ Delivery's first build and Flutter's automatic retry stopped at
 `dl.google.com` prevented downloading the pinned AndroidX datastore 1.1.3 JARs.
 On owner-requested continuation at 17:21 +04, DNS and the exact official Maven
 artifact URL were reachable with HTTP 200. This is a dependency-download failure,
-not an application-code change. Preserve Customer/Vendor verified AABs and retry
-only Delivery using its existing validated staging tree and cached build outputs.
-Do not regenerate upload keys or overwrite either completed AAB.
+not an application-code change. Customer/Vendor verified AABs were preserved;
+only Delivery was retried using its existing validated staging tree and cached
+build outputs. No upload keys were regenerated or completed AABs overwritten.
 At 17:26 +04 the runner had reverified and retained both finalized AABs unchanged
 and restarted only Delivery's missing bundle. A PS5.1 single-record array issue
 initially hit the no-overwrite guard safely; it was fixed and integration-tested
@@ -144,12 +146,13 @@ a separate secure backup; do not copy outside MILI without an explicit destinati
 | Vendor | `FB:2E:46:95:5E:EA:C1:6F:51:B3:E1:71:13:8F:4E:34:DE:DF:2B:00:B6:59:B9:27:1D:97:0B:88:AC:A6:41:69` |
 | Delivery | `9D:9B:99:B0:46:2C:67:60:70:D2:FE:EA:5E:2D:81:38:49:BF:97:12:4E:F8:CF:6E:88:36:63:AA:57:FC:34:3E` |
 
-Keys initially remain `pending-registration`. Submit only public PEM certificates
-through **Upload key > Request reset**, not **App signing > Upgrade key**.
-Do not publish Console changes or start rollout as part of this rebuild request.
-An acknowledged reset request is not proof that the new signer is active; require
-matching Console certificate and effective-state evidence before calling AABs
-upload-ready. Pending candidates are named `pending-upload-key-reset.aab`.
+Keys remain `pending-registration` until their scheduled activation. Public PEMs
+were submitted through **Upload key > Request reset**, not **App signing > Upgrade
+key**; do not submit duplicate resets. Do not publish Console changes or start
+rollout as part of this rebuild request. An acknowledged reset request is not proof
+that the new signer is active; require matching Console certificate and effective
+state before calling AABs upload-ready. Pending candidates retain the
+`pending-upload-key-reset.aab` suffix.
 
 All three new PEM certificates were submitted through the authenticated Console
 on 2026-11-07; each request changed to **processing**. The App signing page's
@@ -197,6 +200,97 @@ No off-workspace backup was created. The new private upload keystores and signin
 configuration are currently only in the protected MILI directory. A separate
 secure backup is still required to survive deletion of this workspace; the owner
 was asked for an explicit backup destination or to retain a backup themselves.
+
+### Current Pixel 6a installation — 2026-11-07
+
+The owner explicitly requested the NEW signatures and authorized deleting the
+three old installations before reinstalling. All three release APK sets were
+prepared and verified **before the first uninstall**. Only `ge.mili.customer`,
+`ge.mili.vendor` and `ge.mili.delivery` were uninstalled on Pixel 6a
+`29301JEGR18798`. Their local data/sessions were reset; no server-side account,
+order or financial transaction was deleted or modified.
+
+No Flutter recompilation was needed: official pinned bundletool generated
+device-specific APKs directly from the verified production AABs above, using the
+same NEW per-app upload certificates (Customer `FE:B2:…:94:EB`, Vendor
+`FB:2E:…:41:69`, Delivery `9D:9B:…:34:3E`; full fingerprints above).
+All three application source SHAs still matched live GitHub `main` before install.
+The original Play AAB bytes/hashes were rechecked and remain unchanged.
+
+| App / package | Installed version | Fresh first-install time (+04) | Installed base APK SHA-256 |
+|---|---|---|---|
+| Customer / `ge.mili.customer` | `4.2.0+55` | 2026-11-07 17:58:43 | `E56953CB0358B07499A5632CFBE622CDD6A63901F85B4660738B1CC894A11659` |
+| Vendor / `ge.mili.vendor` | `4.2.0+39` | 2026-11-07 17:58:50 | `428AF99DDFCA387448A819E14A2CC15855CFE4C10D1AD07E6B792FEB5537312E` |
+| Delivery / `ge.mili.delivery` | `4.2.0+41` | 2026-11-07 17:58:56 | `C456317BCD731AB77B62ED39C7D83865F9201A71657DB60E22368842F3A36A3E` |
+
+Each installation consists of the release base plus ARM64, English and xxhdpi
+splits. All 12 APKs passed signature checks against their expected new certificate;
+all 12 installed APK hashes exactly match the generated payload. Release manifests
+remain non-debuggable. First-install times changed from Oct 29, confirming fresh
+installations rather than data-preserving updates. All temporary password files
+were removed; private keystores were neither regenerated nor copied into artifacts.
+
+Evidence: [installation manifest](../../artifacts/production/android/20261107-device-new-signature-install/device-apks/device-install-manifest.json)
+and [cold-launch smoke](../../artifacts/production/android/20261107-device-new-signature-install/device-apks/cold-launch-smoke.json).
+Conversion work is confined to
+`build-workspace/production/android/20261107-device-new-signature-install/device-apks/`;
+final device APK sets/evidence are confined to
+`artifacts/production/android/20261107-device-new-signature-install/device-apks/`.
+The separate `20261107-device-new-signature` directory contains only an earlier
+read-only device-spec preflight, not final installation outputs.
+
+At 17:59:44–54 +04 all three cold launches returned `Status: ok`, retained a live
+process after four seconds, and had zero sampled fatal/unhandled/build-during-build
+exception patterns. This is launch smoke only, not login, payment, order acceptance,
+full feature QA or 16KB-device certification. These locally upload-key-signed APKs
+are **not** Google Play's app-signing identity; provider/App Links configuration
+was not changed. Play upload remains pending the Nov 9 activation schedule above.
+
+The verified installer and release runbook were pushed to Backend `main` as
+`3006174d487c0ccce56fac3a8e8f7472fcc33be1`; workstation changes only, no runtime deploy.
+
+### Backend/Admin and React production versus main — 2026-11-07
+
+After installation the owner requested checking both production applications
+against their latest `main`. Authenticated pinned-host SSH observations ran at
+17:59:48–18:00:59 +04; public GET probes completed by 18:02:26 +04.
+
+| Component | Actual production Git HEAD | GitHub main at audit | Difference |
+|---|---|---|---|
+| Backend/Admin | `ff94f1fdd38e095675aa9c99a27236859b785eeb` | `3006174d487c0ccce56fac3a8e8f7472fcc33be1` | Seven workstation/runbook files only |
+| React | `f6968b346819325797d517f4e2abea68d895baf8` | `8ff8e2ba8e0df5f5ac8517accbb6620ed61d00ce` | This context document only |
+
+Production is **not literally checked out at the newest main commit IDs**.
+However, there are no newer tracked application-source changes missing from
+either deployed application; the newer commits are documentation/workstation
+tools. This context update advances React main again without changing runtime
+code. No deployment was performed merely to match documentation-only SHAs.
+
+Backend `/var/www/mili-current` still resolves to the `ff94f1f` release; Nginx
+uses its `public` root and React port 3002. React PM2 process is online in the
+`f6968b3` release, with the expected Next BUILD_ID; its tracked tree is clean.
+Nginx, PHP 8.3 FPM, Supervisor and MariaDB are active. Queue/Reverb are running
+PHP 8.3 from the correct Backend release. The preserved React rollback remains
+online; no rollback or restart was performed.
+
+Important qualification: Backend has **14 tracked deployment/generated-path
+changes**, not a fully clean worktree: three generated `bootstrap/cache` PHP
+files, the tracked `public/build` placeholder replaced by real Vite output, and
+storage placeholders beneath the persistent storage link. Excluding exactly
+`bootstrap/cache/**`, `public/build` and `storage/**`, its tracked source diff
+against the deployed HEAD is empty. The Vite manifest hash matches the original
+release evidence; generated-cache semantics were not audited. The historical
+Oct 28 `runtimeDirtyEntries=0` assertion is therefore superseded, not current.
+
+Public home, API config, Admin login and the Admin/Vendor/Store host redirects
+all returned HTTP 200. No authenticated user-session, payment, notification,
+queue-content or migration acceptance is claimed. Production files, database,
+services and financial state were not modified by this read-only check.
+
+Exact evidence and path lists:
+[Nov 7 production/main audit](../../reports/production/20261107-production-main-audit.md).
+The separately dated restoration section below preserves its original broader
+audit results and must not be read as newly revalidated in full.
 
 ## 2026-11-01 — Mobile live-debug fixes
 
@@ -247,7 +341,7 @@ and a SHA-256 manifest under `build-workspace/logs`, and places final APKs under
 store release. The 2026-11-07 directory contract above supersedes this older
 runner's flat log/output locations for all future builds.
 
-### Current debug artifacts — 2026-11-01
+### Historical debug artifacts — 2026-11-01
 
 | App | APK | Package / version | Bytes |
 |---|---|---|---:|
@@ -268,6 +362,9 @@ Customer's packaged flags and Vendor's Georgian copy/proportional transparent
 adaptive foreground were verified. The pinned toolchain emits future Kotlin/KGP
 migration warnings; no untested framework/plugin upgrade was mixed into this
 bug-fix batch.
+
+The following Nov 1 installation is historical and was superseded by the
+owner-authorized Nov 7 fresh installations above.
 
 **Installation completed on Pixel 6a `29301JEGR18798`.** The device reconnected
 and authorized ADB after the earlier 15:59 disconnected check. All three APKs
