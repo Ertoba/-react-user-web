@@ -1,7 +1,8 @@
 # MILI — authoritative final context (V4.2)
 
 > Current context: 2026-11-08. Backend Map/Keepz fixes are deployed at `6f538fc`;
-> Customer/Courier fixes are pushed and release rebuilds are in progress.
+> Customer v56 / Courier v42 are rebuilt, verified and updated on Pixel 6a
+> without uninstalling or clearing data. All final changes are pushed to main.
 > Historical Nov 7 and Oct 28/29 evidence is retained below with its original date.
 
 ## 2026-11-08 — Developer Map / Keepz audit fixes and safe rollout
@@ -34,6 +35,19 @@ map/payment/API static analysis passed. Backend financial suite **37 tests / 184
 assertions**, no errors/failures/skips, independently rerun against memory SQLite
 with stray provider HTTP blocked. Existing PHPUnit XML-schema deprecation remains.
 No protected official activation/license sources were read or copied.
+
+Exact-commit GitHub checks succeeded:
+[Customer QA](https://github.com/Ertoba/mart-app/actions/runs/42483512777),
+[Courier QA](https://github.com/Ertoba/delivery-app/actions/runs/42483518593),
+[Backend integrity](https://github.com/Ertoba/portal-backend/actions/runs/42483917444),
+[Backend OTP](https://github.com/Ertoba/portal-backend/actions/runs/42483917428).
+Backend main then advanced to CI-only `35b4110c37afcc0c07ec5a3c3c335976772e07ab`,
+adding the new owned-status/receipt/recovery tests and triggers to ongoing CI.
+Its [expanded financial CI](https://github.com/Ertoba/portal-backend/actions/runs/42486762563)
+also passed. Runtime PHP is unchanged from deployed `6f538fc`; no redeploy is
+needed for a workflow-only commit.
+Backend main is now `b7bb26c75a58f9e6ac4aca1cc82095375296f526`: the later change
+fixes workstation build-result array/recovery handling only, not deployed PHP.
 
 History correction: Customer `966ee69` → V4.2 import `546ebef` really removed the
 tracking polyline pipeline. Backend already used Routes v2 before V4.2; a response
@@ -71,6 +85,13 @@ The initial Windows CRLF export was rejected and corrected to exact Git LF bytes
 Server Git exclusion-pathspec diff crashes were bypassed with independent Git-blob
 hash verification; a fully pristine deployment checkout is not claimed.
 
+Five-minute soak at 13:32:40–43 UTC remained healthy: jobs/failed_jobs zero,
+217 tables, no config cache. Artisan separately confirmed 407 present migration
+files ran / zero pending; its ledger has 408 rows. A read-only public-landmark
+route probe returned actual Routes-v2 encoded geometry (245 characters,
+4502 metres, 968 seconds), HTTP 200. No personal location/provider key was logged:
+[live road-route probe](../../reports/live-debug/20261108-map-keepz/live-road-route-probe.json).
+
 React remains production `f6968b346819325797d517f4e2abea68d895baf8`, port 3002;
 only this context document changed on React main, so no web rebuild/deploy was
 needed. Vendor source/app also remains unchanged.
@@ -78,21 +99,54 @@ needed. Vendor source/app also remains unchanged.
 Exact deployment / rollback / source evidence:
 [production rollout](../../reports/production/20261108-map-keepz-deployment.md).
 
-### Mobile release rebuild in progress
+### Verified mobile releases and data-preserving device update
 
-New run `20261108-map-keepz-production` builds Customer **4.2.0+56** and Courier
-**4.2.0+42** from the pushed SHAs above, using the SAME Nov 7 new upload keys.
+Run `20261108-map-keepz-production` completed verification at **2026-11-08
+14:10:21 UTC / 18:10:21 +04**, from the exact pushed application SHAs above.
+Both use the SAME Nov 7 new upload keys, never regenerated or replaced.
 Work/logs stay under `build-workspace/production/android/20261108-map-keepz-production/`;
 final bundles/manifests under `artifacts/production/android/20261108-map-keepz-production/`.
 The dated entry point is `ops/scripts/Build-MiliMapKeepzRelease20261108.ps1`.
 Vendor does not need a rebuild. No old artifact or key was overwritten.
 
-The currently installed Nov 7 Customer v55 / Courier v41 do **not** yet contain
-these Nov 8 fixes. Final signing/package/hash checks and a data-preserving device
-update remain pending build completion. Use the generalized installer with
-`-UpdateExisting`, selected customer/delivery components and explicit v56/v42;
-do not uninstall or reset data. Google Play signing activation remains pending
-the Nov 9 schedule below; no Play upload/rollout occurred.
+| App | Final signed AAB | Bytes | SHA-256 |
+|---|---|---:|---|
+| Customer `4.2.0+56` | [Nov 8 Customer](../../artifacts/production/android/20261108-map-keepz-production/mili-customer-main-9afb21c-v56-pending-upload-key-reset.aab) | 110098923 | `D6DA5A594C4C067107CA8299FA2AF6E9461AA886C70DF7E2853416E37B9B4539` |
+| Courier `4.2.0+42` | [Nov 8 Courier](../../artifacts/production/android/20261108-map-keepz-production/mili-delivery-main-06662dd-v42-pending-upload-key-reset.aab) | 77483617 | `403A24391BD29BE903E509FF3F954718A54D497C28C01C41DD2782F864967FA1` |
+
+Compilation took 1435.8 / 1617.5 seconds respectively. Both passed JAR signature,
+exact new signer, bundletool/package/version/release/ABI/private-file checks.
+Fourteen ELF64 libraries (Customer 8 / Courier 6) pass static 16KB LOAD alignment;
+both bundles request `PAGE_ALIGNMENT_16K`. The final
+[build manifest](../../artifacts/production/android/20261108-map-keepz-production/production-build-manifest.json)
+is `verified-builds-complete`.
+
+A PS5.1 empty/single-result array unwrap failed metadata append after Courier's
+verified AAB/mapping were copied. The failed snapshot is preserved. The runner
+fix and explicit resume fully reverified both existing binaries without recompiling
+or overwriting either final file. Exact orphan AAB/symbol adoption requires matching
+source/stage/version/signer/hash and is never a general overwrite permission.
+
+At **14:12:34 UTC / 18:12:34 +04**, Pixel 6a `29301JEGR18798` was updated with
+Customer v56 and Courier v42 using `-UpdateExisting`, not uninstall/reinstall.
+Installed old signers were verified first; all selected APK sets were prepared
+before writing. All eight installed APK hashes match generated payloads, and
+the Nov 7 first-install times remain Customer 17:58:43 / Courier 17:58:56.
+Vendor v39 remains unchanged (last update Nov 7 17:58:50). No app data clear ran.
+
+Device run work/logs: `build-workspace/production/android/20261108-map-keepz-device-update/device-apks/`;
+final APK sets and evidence: `artifacts/production/android/20261108-map-keepz-device-update/device-apks/`.
+Evidence: [device manifest](../../artifacts/production/android/20261108-map-keepz-device-update/device-apks/device-install-manifest.json),
+[launch smoke](../../artifacts/production/android/20261108-map-keepz-device-update/device-apks/cold-launch-smoke.json),
+[APK ZIP alignment](../../artifacts/production/android/20261108-map-keepz-device-update/device-apks/apk-zip-alignment.json).
+Both cold launches passed at 18:13:24–30 +04, live after four seconds, zero sampled
+fatal/unhandled patterns. All eight generated APKs pass 16KB ZIP alignment checks.
+Temporary password files and staging signing links were removed.
+
+Pixel uses 4096-byte pages; 16KB-device runtime and real bank/3DS/payment acceptance
+are not certified. These are local upload-key signatures, not Google Play's app
+signing identity. Play activation remains pending the Nov 9 schedule below;
+no Play upload/rollout occurred. Preserve the separate debug directories below.
 
 ## 2026-11-07 — Play AAB rebuild and new upload keys
 
@@ -141,7 +195,7 @@ The authenticated Console All app bundles table was sorted by version code
 descending on 2026-11-07. These maxima include uploaded bundles, not just the
 active production release. New codes exceed both Play and current source:
 
-| App | Current application `main` | Git code | Play maximum | New AAB code |
+| App | Application `main` at Nov 7 build | Git code | Play maximum | New AAB code |
 |---|---|---:|---:|---:|
 | Customer | `6b0d98f42fc25358474c3b8466eafe98aaa559bc` | 54 | 50 | 55 |
 | Vendor | `3d87c5d573b18fca15d9eb8e37ed9695fbf16675` | 38 | 34 | 39 |
@@ -290,7 +344,11 @@ configuration are currently only in the protected MILI directory. A separate
 secure backup is still required to survive deletion of this workspace; the owner
 was asked for an explicit backup destination or to retain a backup themselves.
 
-### Current Pixel 6a installation — 2026-11-07
+### Historical Pixel 6a fresh installation — 2026-11-07
+
+Customer v55 and Courier v41 below were superseded by the Nov 8 data-preserving
+v56/v42 updates above. Vendor v39 remains current; original first-install facts
+and hashes below are retained as dated history.
 
 The owner explicitly requested the NEW signatures and authorized deleting the
 three old installations before reinstalling. All three release APK sets were
@@ -400,7 +458,7 @@ and rebuilding the debug applications. All six reported bugs are implemented:
 
 Pushed mobile source SHAs:
 
-| Component | Current `main` |
+| Component | Pushed main at Nov 1 build |
 |---|---|
 | Customer | `6b0d98f42fc25358474c3b8466eafe98aaa559bc` |
 | Vendor | `3d87c5d573b18fca15d9eb8e37ed9695fbf16675` (fix `4dcf67e` plus the existing CI-generated branding commit) |
