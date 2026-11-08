@@ -1,9 +1,98 @@
 # MILI — authoritative final context (V4.2)
 
-> Current workstation/mobile context and read-only production source-parity check:
-> 2026-11-07. The historical restoration audit remains dated 2026-10-28/29.
-> Android release preparation and the Nov 7 inspection did not deploy or restart
-> the Backend/React production runtimes.
+> Current context: 2026-11-08. Backend Map/Keepz fixes are deployed at `6f538fc`;
+> Customer/Courier fixes are pushed and release rebuilds are in progress.
+> Historical Nov 7 and Oct 28/29 evidence is retained below with its original date.
+
+## 2026-11-08 — Developer Map / Keepz audit fixes and safe rollout
+
+The supplied Customer/Courier developer audit was checked against actual code,
+full local Git history and current official 6amMart/Keepz/Flutter/Google guidance.
+The owner superseded an interim main-only instruction with explicit safe
+production deployment and rebuild authorization. No real financial transaction,
+cash reset or order acceptance was used for testing.
+
+### Fixed and pushed
+
+| Component | Pushed main | Result |
+|---|---|---|
+| Customer | `9afb21cb9de7254e44c5a699e6ab15d9ebfa4e4e` | Parcel opens owned Keepz sheet directly, retains the same order across dismiss/fail/retry, and blocks unsafe changed-draft duplicates; Parcel and tracking road polylines restored; details use store-to-customer (parcel sender-to-receiver) independently of courier assignment |
+| Courier | `06662dd2f49a5ec994f41300fd072970a9913605` | Cash transfer stays in one inline WebView sheet; no browser window/double back; success requires matching payment ID plus paid AND settled Backend proof; capability checked before any create POST |
+| Backend | `6f538fc862a7a96ab6ca90ca2a3e76045bb3e64a` | Authenticated owned cash-status/capability contract; new Keepz cash payments atomically record paid state, ledger mutation and idempotent receipt; legacy payment records are not retrospectively settled |
+
+Map state is screen-local, bounded, stale-response guarded and reused for stable
+endpoints; courier GPS updates the marker without querying a new route each tick.
+Loading/no-route/error and retry are distinct. No straight-line substitute is
+presented as a road route. Sensitive API/WebView logging was removed. Courier's
+new embedded cash flow is Keepz-only; unsupported gateways fail before POST.
+HTTPS bank/3DS pages remain inline; unverified custom-bank schemes are blocked.
+Pending-order/payment retry dedupe is in-memory; cross-restart dedupe and real
+bank/3DS acceptance are not claimed.
+
+Verification: Customer full suite **767 passed**, Courier **88 passed**; focused
+map/payment/API static analysis passed. Backend financial suite **37 tests / 184
+assertions**, no errors/failures/skips, independently rerun against memory SQLite
+with stray provider HTTP blocked. Existing PHPUnit XML-schema deprecation remains.
+No protected official activation/license sources were read or copied.
+
+History correction: Customer `966ee69` → V4.2 import `546ebef` really removed the
+tracking polyline pipeline. Backend already used Routes v2 before V4.2; a response
+format migration is not the proven cause. Courier's browser/double-back flow was
+byte-identical before/after V4.2 (`64a5883` → `65dc4a0`), and Parcel's generic
+payment routing also predated V4.2. These are fixed current bugs, not all newly
+introduced V4.2 regressions. Exact baselines, contracts and primary sources:
+[history / financial boundary](../../reports/live-debug/20261108-map-keepz/HISTORY-AND-BACKEND-CONTRACT.md).
+
+### Current production — Backend switched, React unchanged
+
+At **2026-11-08 13:26:59–13:27:07 UTC / 17:26:59–17:27:07 +04**, the verified
+candidate became `/var/www/mili-current` → `/var/www/mili-release-6f538fc`.
+Its actual Git HEAD is `6f538fc862a7a96ab6ca90ca2a3e76045bb3e64a`.
+Queue/Reverb now run PHP 8.3 from that release; Nginx/FPM/Supervisor/MariaDB are
+active. Public home, React home, Admin login and API config returned 200; protected
+cash status without authentication returned 401. Capability formatting passed
+without a real courier/payment. New-version cash aggregates were zero at the
+switch snapshot, not a permanent assertion about future user activity.
+
+Fresh verified backup: `/var/backups/mili-db-prechange-20261108-map-keepz-131952.sql.gz`,
+865610 bytes, mode 0600, SHA-256
+`e73a6088c26d839577eae72c5c5cbc5db692ed98ae5f95760e8220acd41a4f3a`.
+No migrations or DB restore ran. Previous Backend `ff94f1f` remains intact.
+Do not blindly revert to old settlement code after new version-1 cash payments
+exist: drain/preserve compatible callbacks and inspect current receipt state first.
+
+Deployment used the verified production baseline plus only six reviewed runtime
+PHP paths, not a full upstream/private archive. Installation payload directory
+was excluded; no new activation/licensing logic was introduced. Unchanged
+dependencies/Vite assets were reused. All **3729 tracked application-source files**
+in the declared runtime scopes matched the pushed Git tree (generated bootstrap
+cache excluded), and direct PHP 8.3 FPM candidate probes passed before switching.
+The initial Windows CRLF export was rejected and corrected to exact Git LF bytes.
+Server Git exclusion-pathspec diff crashes were bypassed with independent Git-blob
+hash verification; a fully pristine deployment checkout is not claimed.
+
+React remains production `f6968b346819325797d517f4e2abea68d895baf8`, port 3002;
+only this context document changed on React main, so no web rebuild/deploy was
+needed. Vendor source/app also remains unchanged.
+
+Exact deployment / rollback / source evidence:
+[production rollout](../../reports/production/20261108-map-keepz-deployment.md).
+
+### Mobile release rebuild in progress
+
+New run `20261108-map-keepz-production` builds Customer **4.2.0+56** and Courier
+**4.2.0+42** from the pushed SHAs above, using the SAME Nov 7 new upload keys.
+Work/logs stay under `build-workspace/production/android/20261108-map-keepz-production/`;
+final bundles/manifests under `artifacts/production/android/20261108-map-keepz-production/`.
+The dated entry point is `ops/scripts/Build-MiliMapKeepzRelease20261108.ps1`.
+Vendor does not need a rebuild. No old artifact or key was overwritten.
+
+The currently installed Nov 7 Customer v55 / Courier v41 do **not** yet contain
+these Nov 8 fixes. Final signing/package/hash checks and a data-preserving device
+update remain pending build completion. Use the generalized installer with
+`-UpdateExisting`, selected customer/delivery components and explicit v56/v42;
+do not uninstall or reset data. Google Play signing activation remains pending
+the Nov 9 schedule below; no Play upload/rollout occurred.
 
 ## 2026-11-07 — Play AAB rebuild and new upload keys
 
