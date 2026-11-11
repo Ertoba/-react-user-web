@@ -1,14 +1,61 @@
 # MILI — authoritative final context (V4.2)
 
-> Current context: 2026-11-11. All three new upload keys are verified active.
+> Current context: 2026-11-11. Customer advertising opt-out is pushed to main
+> `097860c`; 781 tests pass. New Customer v57 Production AAB build is RUNNING
+> as `20261111-customer-no-ad-id`, not yet verified/uploaded/submitted.
+> All three new upload keys remain verified active.
 > Vendor v39 (submission 20) and Courier v42 (submission 23) are **In review**.
 > Customer v56 Production release is saved but BLOCKED by its Advertising ID
-> declaration; it has NOT been submitted. Owner's policy/build choice is pending.
+> declaration; it has NOT been submitted. Owner chose opt-out and a new build.
 > Managed publishing is ON for all three. No new release was published, no
 > application source or production runtime changed in this release operation.
 > Nov 8 deployment/device evidence and older snapshots remain explicitly historical.
 
+## 2026-11-11 — Customer owner-selected advertising opt-out; v57 build in progress
+
+The owner confirmed Facebook login is not used and explicitly chose disabling
+collection plus a new build rather than declaring the existing v56 advertising
+behavior. Customer main is now `097860cd0dc5a3b3170e1cda8572d5530c2724c1`.
+The Android-only change removes AD_ID and all four advertising-services
+permissions, disables five Meta automatic-collection flags in the manifest,
+and enforces their false values in `MiliApplication.attachBaseContext` BEFORE
+initialization providers. This also overrides previously cached true SDK
+settings on upgrade; manifest-only defaults would not reliably do that.
+The directly included Meta SDK is pinned to the reviewed **19.0.1**.
+
+The normal Facebook initialization provider is retained because Flutter's auth
+plugin constructs LoginManager even when Facebook's login button is unused.
+This does not claim zero Meta configuration traffic or deletion of historically
+queued events. Phone/Google/Apple auth, Maps, notifications and Keepz code were
+not changed. No iOS/web collection behavior was changed or certified.
+
+Verification before build: **781 full Customer tests passed**, including 14 new
+source-configuration guards; focused test analysis found no issues. The exact
+compiled AAB still needs its independent privacy/package/signer/ABI checks.
+
+Production build started **2026-11-11 18:02:01 UTC / 22:02:01 +04** using the
+existing Nov 7 registered upload key, from clean pushed main. Console maximum
+was freshly checked as 56; the requested override is **4.2.0+57**, not a source
+pubspec bump. Run ID: `20261111-customer-no-ad-id`.
+
+- Work/source/logs: `build-workspace/production/android/20261111-customer-no-ad-id/`.
+- Final AAB/manifest: `artifacts/production/android/20261111-customer-no-ad-id/`.
+- Versioned entry point: `repos/customer-app/scripts/Build-MiliAdvertisingPrivacyRelease20261111.ps1`.
+- VS Code task: `MILI: Customer advertising privacy AAB 20261111`.
+- Debug roots remain `build-workspace/debug/android/<run>/` and `artifacts/debug/android/<run>/`; untouched.
+
+The dated plan runs the maintained production runner and then checks the EXACT
+AAB for all five advertising permissions absent, all five false flags, the
+custom Application and the retained Facebook provider. At this intermediate
+snapshot compilation is running: no finished v57 artifact, Play upload, updated
+declaration or Customer review submission is claimed. The existing prepared
+v56 will be replaced only after v57 passes binary checks. Do not regenerate
+keys, overwrite earlier artifacts, clear device data or publish releases.
+
 ## 2026-11-11 — Production releases created; two in review, Customer blocked
+
+This subsection is the **17:39 UTC snapshot** before the owner's later opt-out
+choice and new build described above. Its review evidence is preserved.
 
 After a read-only check showed that the owner had published older Nov 5 changes,
 not the newly uploaded AABs, the owner explicitly authorized creating Production
