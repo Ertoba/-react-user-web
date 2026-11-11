@@ -1,12 +1,82 @@
 # MILI — authoritative final context (V4.2)
 
 > Current context: 2026-11-11. All three new upload keys are verified active.
-> Google Play accepted Customer v56, Vendor v39 and Courier v42 as **Inactive**
-> app bundles; they are uploaded, NOT published or submitted for review.
-> No application source or production runtime changed in this upload operation.
+> Vendor v39 (submission 20) and Courier v42 (submission 23) are **In review**.
+> Customer v56 Production release is saved but BLOCKED by its Advertising ID
+> declaration; it has NOT been submitted. Owner's policy/build choice is pending.
+> Managed publishing is ON for all three. No new release was published, no
+> application source or production runtime changed in this release operation.
 > Nov 8 deployment/device evidence and older snapshots remain explicitly historical.
 
-## 2026-11-11 — Active upload keys and all three AABs accepted by Google Play
+## 2026-11-11 — Production releases created; two in review, Customer blocked
+
+After a read-only check showed that the owner had published older Nov 5 changes,
+not the newly uploaded AABs, the owner explicitly authorized creating Production
+releases and sending them for review. Each release uses ONLY its exact uploaded
+current-main bundle; the older Production bundle is not included. Georgian
+`ka-GE` release notes describe actual fixes. All three preview pages reported
+**Ready to release**, with zero newly unsupported devices.
+
+At **2026-11-11 17:39 UTC / 21:39 +04**, the verified state was:
+
+| App | Production release | Review outcome |
+|---|---|---|
+| Vendor | `39 (4.2.0)`, release 7 | Submission **20**, **In review**; Console says "Your changes are now in review" |
+| Courier | `42 (4.2.0)`, release 9 | Submission **23**, **In review**; Console says "Your changes are now in review" |
+| Customer | `56 (4.2.0)`, release 9 | Saved in Publishing overview, **not submitted**; blocking policy issue below |
+
+Vendor submission was accepted at 17:27:25 UTC; Courier at 17:35:40 UTC.
+Their initial quick-check queues subsequently completed. Google may still find
+issues during review: no approval or publication is claimed.
+Exact release URLs, notes, submission identifiers and policy evidence:
+[review record](Documentation/operations/play-review-20261111.json).
+
+**Managed publishing ON** was confirmed separately on every app immediately
+before submission/scope review and left unchanged. The existing release-editor
+defaults (100% of already-targeted countries) were retained; Console describes
+the FUTURE requested release action as "Start full rollout". No **Publish
+changes** action was clicked and no live rollout started. Approval will not
+automatically publish while managed publishing remains enabled. Backend, React
+runtime, device apps, signing keys and original AAB bytes were not changed.
+
+### Customer blocker — incomplete Advertising ID declaration
+
+Google's completed pre-review checks explicitly block Customer with
+**Incomplete advertising ID declaration**. Its declaration UI showed **No**
+selected and Save disabled; this operation did not edit/save the declaration.
+The prepared v56 remains saved, not in review. Do not click through or declare
+"No" solely because the app does not display ads.
+
+Read-only inspection of the EXACT uploaded v56 AAB confirms `AD_ID` and
+advertising-services permissions. The
+[built manifest](../../build-workspace/production/android/20261108-map-keepz-production/customer/verification-16kb/base-manifest.xml)
+includes Facebook's auto-initializing provider; the
+[merger report](../../build-workspace/production/android/20261108-map-keepz-production/customer/source/build/app/outputs/logs/manifest-merger-release-report.txt)
+attributes AD_ID to Facebook Core **19.0.1**, brought by resolved
+`flutter_facebook_auth` **7.2.0**. Exact SDK bytecode inspection confirms
+AutoInitEnabled, AutoLogAppEventsEnabled and AdvertiserIDCollectionEnabled default
+to true. No explicit disable/consent overrides were found. Firebase Analytics
+plugin/full analytics SDK was NOT the proven origin. No actual identifier
+transmission was captured, and arbitrary business purposes were not inferred.
+
+[Google's declaration](https://developers.google.com/android-publisher/app-store-review/policy-declarations#2-advertising-id-declaration)
+includes imported SDK usage. Meta's
+[versioned defaults](https://github.com/facebook/facebook-android-sdk/blob/sdk-version-19.0.1/facebook-core/src/main/java/com/facebook/UserSettingsManager.kt),
+[auto-init provider](https://github.com/facebook/facebook-android-sdk/blob/sdk-version-19.0.1/facebook-core/src/main/java/com/facebook/internal/FacebookInitProvider.kt)
+and [SDK behavior](https://github.com/facebook/facebook-android-sdk/blob/sdk-version-19.0.1/facebook-core/src/main/java/com/facebook/FacebookSdk.kt)
+support the technical finding, not an unverified owner privacy declaration.
+
+An owner choice was requested: accurately declare the current SDK's
+analytics/advertising use and submit v56, or explicitly authorize disabling that
+collection and building a HIGHER unused version. No answer had been received at
+this snapshot; neither policy declaration nor app source was changed. Do not
+claim all three submitted until Customer's blocker is genuinely resolved.
+
+## 2026-11-11 — Earlier upload-only snapshot: active keys and accepted AABs
+
+This subsection records the **17:11 UTC upload-only operation**. Later release
+and review status is superseded by the section above; its original upload record
+and artifact provenance remain unchanged.
 
 Under developer account `7565015607548339760`, the authenticated **App signing >
 Upload key** SHA-256 values were copied through the Console UI and exactly matched
