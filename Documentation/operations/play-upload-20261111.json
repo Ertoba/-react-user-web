@@ -1,0 +1,114 @@
+{
+  "schemaVersion": 1,
+  "observedAtUtc": "2026-11-11T17:11:08Z",
+  "signingRunId": "20261107-upload-reset",
+  "developerAccountId": "7565015607548339760",
+  "status": "bundles-uploaded-inactive",
+  "verificationMethod": "Active Console Upload key SHA-256 was copied through the UI and matched to the local public certificate before upload. Google then accepted the exact signed bundle. registrationEvidence.verifiedAtUtc records completion of this combined verification, not the historical activation time.",
+  "uploadMethod": "All app bundles > Upload new version (bundle library only)",
+  "releaseCreatedByThisOperation": false,
+  "releaseSubmittedForReview": false,
+  "rolloutStarted": false,
+  "existingPendingPublishingChangesTouched": false,
+  "appSigningKeysChanged": false,
+  "uploadKeysRegenerated": false,
+  "productionRuntimeTouched": false,
+  "applicationSourceChanged": false,
+  "rebuildPerformed": false,
+  "historicalSnapshotNote": "Nov 7 reset/key metadata and Nov 7/8 build manifests retain their creation-time pending state. This dated record supersedes their operational upload eligibility, not their original binary hashes or provenance.",
+  "apps": [
+    {
+      "component": "customer",
+      "applicationId": "ge.mili.customer",
+      "consoleAppId": "4972346210795739137",
+      "registrationEvidence": {
+        "certificateSha256": "FE:B2:A5:92:67:A9:0F:78:9D:8E:97:C5:48:BB:2A:70:F9:7F:3E:15:0C:EB:74:8B:73:56:D3:65:EA:F4:94:EB",
+        "verifiedAtUtc": "2026-11-11T17:11:08Z",
+        "evidenceReference": "https://play.google.com/console/u/0/developers/7565015607548339760/app/4972346210795739137/keymanagement"
+      },
+      "sourceMainSha": "9afb21cb9de7254e44c5a699e6ab15d9ebfa4e4e",
+      "sourceWasCleanMainMatchingLiveOriginAtPreflight": true,
+      "versionCode": 56,
+      "versionName": "4.2.0",
+      "artifactPath": "artifacts/production/android/20261108-map-keepz-production/mili-customer-main-9afb21c-v56-pending-upload-key-reset.aab",
+      "artifactBytes": 110098923,
+      "artifactSha256": "D6DA5A594C4C067107CA8299FA2AF6E9461AA886C70DF7E2853416E37B9B4539",
+      "maximumVersionCodeBeforeUpload": 50,
+      "consoleBundleStatus": "Inactive",
+      "uploadAccepted": true,
+      "consoleUploadedTimeText": "Nov 11, 2026 5:02 PM",
+      "consoleUploadedTimeTimezone": "Not asserted; literal Console display",
+      "bundleEvidenceUrl": "https://play.google.com/console/u/0/developers/7565015607548339760/app/4972346210795739137/bundle-explorer-selector",
+      "localPreflight": {
+        "jarSignatureVerified": true,
+        "bundletoolValidated": true,
+        "packageAndVersionVerified": true,
+        "releaseNonDebuggable": true,
+        "minSdkVersion": 24,
+        "targetSdkVersion": 36
+      }
+    },
+    {
+      "component": "vendor",
+      "applicationId": "ge.mili.vendor",
+      "consoleAppId": "4973655261640879875",
+      "registrationEvidence": {
+        "certificateSha256": "FB:2E:46:95:5E:EA:C1:6F:51:B3:E1:71:13:8F:4E:34:DE:DF:2B:00:B6:59:B9:27:1D:97:0B:88:AC:A6:41:69",
+        "verifiedAtUtc": "2026-11-11T17:11:08Z",
+        "evidenceReference": "https://play.google.com/console/u/0/developers/7565015607548339760/app/4973655261640879875/keymanagement"
+      },
+      "sourceMainSha": "3d87c5d573b18fca15d9eb8e37ed9695fbf16675",
+      "sourceWasCleanMainMatchingLiveOriginAtPreflight": true,
+      "versionCode": 39,
+      "versionName": "4.2.0",
+      "artifactPath": "artifacts/production/android/20261107-production/mili-vendor-main-3d87c5d-v39-pending-upload-key-reset.aab",
+      "artifactBytes": 87513976,
+      "artifactSha256": "526AA2961E4B474500BA4049D20A53DE5226EAAB4DDD736FF05BD8CD4CE1F9BB",
+      "maximumVersionCodeBeforeUpload": 34,
+      "consoleBundleStatus": "Inactive",
+      "uploadAccepted": true,
+      "consoleUploadedTimeText": "Nov 11, 2026 5:09 PM",
+      "consoleUploadedTimeTimezone": "Not asserted; literal Console display",
+      "bundleEvidenceUrl": "https://play.google.com/console/u/0/developers/7565015607548339760/app/4973655261640879875/bundle-explorer-selector",
+      "localPreflight": {
+        "jarSignatureVerified": true,
+        "bundletoolValidated": true,
+        "packageAndVersionVerified": true,
+        "releaseNonDebuggable": true,
+        "minSdkVersion": 24,
+        "targetSdkVersion": 36
+      }
+    },
+    {
+      "component": "delivery",
+      "applicationId": "ge.mili.delivery",
+      "consoleAppId": "4973452773687353083",
+      "registrationEvidence": {
+        "certificateSha256": "9D:9B:99:B0:46:2C:67:60:70:D2:FE:EA:5E:2D:81:38:49:BF:97:12:4E:F8:CF:6E:88:36:63:AA:57:FC:34:3E",
+        "verifiedAtUtc": "2026-11-11T17:11:08Z",
+        "evidenceReference": "https://play.google.com/console/u/0/developers/7565015607548339760/app/4973452773687353083/keymanagement"
+      },
+      "sourceMainSha": "06662dd2f49a5ec994f41300fd072970a9913605",
+      "sourceWasCleanMainMatchingLiveOriginAtPreflight": true,
+      "versionCode": 42,
+      "versionName": "4.2.0",
+      "artifactPath": "artifacts/production/android/20261108-map-keepz-production/mili-delivery-main-06662dd-v42-pending-upload-key-reset.aab",
+      "artifactBytes": 77483617,
+      "artifactSha256": "403A24391BD29BE903E509FF3F954718A54D497C28C01C41DD2782F864967FA1",
+      "maximumVersionCodeBeforeUpload": 37,
+      "consoleBundleStatus": "Inactive",
+      "uploadAccepted": true,
+      "consoleUploadedTimeText": "Nov 11, 2026 4:59 PM",
+      "consoleUploadedTimeTimezone": "Not asserted; literal Console display",
+      "bundleEvidenceUrl": "https://play.google.com/console/u/0/developers/7565015607548339760/app/4973452773687353083/bundle-explorer-selector",
+      "localPreflight": {
+        "jarSignatureVerified": true,
+        "bundletoolValidated": true,
+        "packageAndVersionVerified": true,
+        "releaseNonDebuggable": true,
+        "minSdkVersion": 24,
+        "targetSdkVersion": 36
+      }
+    }
+  ]
+}

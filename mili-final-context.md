@@ -1,9 +1,65 @@
 # MILI — authoritative final context (V4.2)
 
-> Current context: 2026-11-08. Backend Map/Keepz fixes are deployed at `6f538fc`;
-> Customer v56 / Courier v42 are rebuilt, verified and updated on Pixel 6a
-> without uninstalling or clearing data. All final changes are pushed to main.
-> Historical Nov 7 and Oct 28/29 evidence is retained below with its original date.
+> Current context: 2026-11-11. All three new upload keys are verified active.
+> Google Play accepted Customer v56, Vendor v39 and Courier v42 as **Inactive**
+> app bundles; they are uploaded, NOT published or submitted for review.
+> No application source or production runtime changed in this upload operation.
+> Nov 8 deployment/device evidence and older snapshots remain explicitly historical.
+
+## 2026-11-11 — Active upload keys and all three AABs accepted by Google Play
+
+Under developer account `7565015607548339760`, the authenticated **App signing >
+Upload key** SHA-256 values were copied through the Console UI and exactly matched
+the Nov 7 new public certificates for all three packages. The Nov 9 activation
+schedule has elapsed; the matching signed bundles were actually accepted today.
+The owner also supplied the Vendor reset email with activation Nov 9 08:28 UTC
+and matching SHA-1 `0E:E8:A0:3D:7D:A7:6A:9A:80:BD:2A:EC:48:DF:75:C8:75:D0:CC:8B`.
+No old private key was sought, no new key generated, and no additional reset or
+Google Play app-signing-key upgrade requested.
+
+Combined verification completed at **2026-11-11 17:11:08 UTC / 21:11:08 +04**.
+The exact files, bytes, hashes, source SHAs, active certificate fingerprints and
+Console evidence URLs are in the versioned
+[upload / registration record](Documentation/operations/play-upload-20261111.json).
+This is an operator-observed Console record, not a Google-signed export.
+
+| App / package | Exact current main SHA | Version accepted | Play maximum before upload | Status |
+|---|---|---|---:|---|
+| Customer / `ge.mili.customer` | `9afb21cb9de7254e44c5a699e6ab15d9ebfa4e4e` | `4.2.0+56` | 50 | Inactive |
+| Vendor / `ge.mili.vendor` | `3d87c5d573b18fca15d9eb8e37ed9695fbf16675` | `4.2.0+39` | 34 | Inactive |
+| Courier / `ge.mili.delivery` | `06662dd2f49a5ec994f41300fd072970a9913605` | `4.2.0+42` | 37 | Inactive |
+
+Preflight freshly checked clean app `main` branches against live origin, artifact
+SHA-256/size, JAR signatures and exact new signers, bundletool validation,
+package/version and release/non-debuggable manifest (minSdk 24, targetSdk 36).
+The existing verified Customer/Courier Nov 8 bundles and Vendor Nov 7 bundle were
+already current, so **no rebuild was necessary**. Customer v55 and Courier v41
+from Nov 7 were not selected. Original filenames retain their historical
+`pending-upload-key-reset` suffix; do not rename, overwrite or rebuild solely
+because of that suffix. Existing production/debug directory separation below is
+unchanged. No protected official activation/licensing sources were used.
+
+Uploads used **All app bundles > Upload new version**, not release-track editing.
+Each new row shows the expected version name/code and **Inactive** after processing.
+No release was created, review submitted, publishing changes applied or rollout
+started by this operation. Pre-existing pending publishing changes were left
+untouched. Uploaded does **not** mean available to users, approved for release,
+financial-flow acceptance, or 16KB-device runtime certification.
+
+The old `pending-registration`, `safeToUpload=false` and no-upload statements in
+dated Nov 7/8 key/build records are creation-time historical snapshots, superseded
+by today's observed registration and acceptance. They were not rewritten to
+falsify build-time state. For future production builds, pass the per-app
+`registrationEvidence` from the new record via `-PlayRegistrationEvidence` as an
+outer PowerShell hashtable keyed `customer`, `vendor`, `delivery`; each entry
+requires matching `certificateSha256`, `verifiedAtUtc`, `evidenceReference`.
+Future bundles must use a fresh Console maximum-version check and higher unused
+codes: 56 / 39 / 42 are now consumed, not available for re-upload.
+
+Backend/React deployment and Pixel installation facts below were last verified
+on Nov 8; this Play-only operation did not deploy, restart, reinstall or re-audit
+those systems. This documentation and the public upload record are maintained
+on React `main`; application repository commits remain unchanged.
 
 ## 2026-11-08 — Developer Map / Keepz audit fixes and safe rollout
 
@@ -145,8 +201,9 @@ Temporary password files and staging signing links were removed.
 
 Pixel uses 4096-byte pages; 16KB-device runtime and real bank/3DS/payment acceptance
 are not certified. These are local upload-key signatures, not Google Play's app
-signing identity. Play activation remains pending the Nov 9 schedule below;
-no Play upload/rollout occurred. Preserve the separate debug directories below.
+signing identity. At this Nov 8 snapshot, Play activation was still pending the
+Nov 9 schedule below and no Play upload/rollout had occurred. The Nov 11 section
+supersedes that upload-key/upload status. Preserve the separate debug directories below.
 
 ## 2026-11-07 — Play AAB rebuild and new upload keys
 
@@ -206,8 +263,9 @@ modifying application `main`. The requested release run is `20261107-production`
 using [new key metadata](../../ops/config/android-signing/20261107-upload-reset/upload-keys.json).
 Serial full-ABI signed release compilation started at 12:31 +04 and the final
 resumed run completed successfully at **2026-11-07 17:34:50 +04**. All three signed
-AABs are technically verified; Play upload eligibility remains pending the
-scheduled upload-key activation below. No AAB was uploaded or rolled out.
+AABs were technically verified; at this Nov 7 snapshot, Play upload eligibility
+was pending the scheduled upload-key activation below. No AAB was uploaded or
+rolled out on Nov 7. See Nov 11 for the later activation and selected uploads.
 
 ### Final signed production AABs
 
@@ -270,9 +328,10 @@ APK ZIP alignment, 16KB-device runtime, financial-flow QA or Google Play accepta
 The [production run manifest](../../artifacts/production/android/20261107-production/production-build-manifest.json)
 now has `status=verified-builds-complete` and all three components. Timestamped
 failed-manifest snapshots are historical recovery evidence, not the final result.
-`safeToUploadAllToExistingPlayApps=false` correctly remains until Google activates
-the new upload keys and the registered fingerprints are checked after the scheduled
-times. Filenames retain the explicit `pending-upload-key-reset` qualifier.
+The historical manifest retains `safeToUploadAllToExistingPlayApps=false`, which
+was correct when built before activation. Do not interpret that creation-time
+snapshot as the current Console state; see the Nov 11 verification. Original
+filenames retain the explicit `pending-upload-key-reset` qualifier.
 
 ### New upload keys — not Play app-signing upgrades
 
@@ -289,12 +348,12 @@ a separate secure backup; do not copy outside MILI without an explicit destinati
 | Vendor | `FB:2E:46:95:5E:EA:C1:6F:51:B3:E1:71:13:8F:4E:34:DE:DF:2B:00:B6:59:B9:27:1D:97:0B:88:AC:A6:41:69` |
 | Delivery | `9D:9B:99:B0:46:2C:67:60:70:D2:FE:EA:5E:2D:81:38:49:BF:97:12:4E:F8:CF:6E:88:36:63:AA:57:FC:34:3E` |
 
-Keys remain `pending-registration` until their scheduled activation. Public PEMs
+At this Nov 7 snapshot, keys were `pending-registration`. Public PEMs
 were submitted through **Upload key > Request reset**, not **App signing > Upgrade
 key**; do not submit duplicate resets. Do not publish Console changes or start
 rollout as part of this rebuild request. An acknowledged reset request is not proof
 that the new signer is active; require matching Console certificate and effective
-state before calling AABs upload-ready. Pending candidates retain the
+state before calling AABs upload-ready. The original candidates retain the
 `pending-upload-key-reset.aab` suffix.
 
 All three new PEM certificates were submitted through the authenticated Console
@@ -310,9 +369,11 @@ until then. Use those matching notifications, not the stale banners:
 | Vendor | 2026-11-09 08:28 | **2026-11-09 12:28 +04** |
 | Delivery | 2026-11-09 08:36 | **2026-11-09 12:36 +04** |
 
-All three remain pending on Nov 7. Do not upload before the scheduled times;
-verify the expected active upload fingerprint and processing completion afterward.
-See the [reset-state record](../../ops/config/android-signing/20261107-upload-reset/play-reset-status.json).
+All three were pending on Nov 7. The prohibition on uploading before the scheduled
+times was followed. Expected active upload fingerprints and actual acceptance were
+verified on Nov 11; see the current section above. The
+[Nov 7 reset-state record](../../ops/config/android-signing/20261107-upload-reset/play-reset-status.json)
+is preserved as historical evidence, not a current pending-reset assertion.
 
 Authenticated Console app-signing SHA-256 values remain unchanged:
 
@@ -391,7 +452,8 @@ process after four seconds, and had zero sampled fatal/unhandled/build-during-bu
 exception patterns. This is launch smoke only, not login, payment, order acceptance,
 full feature QA or 16KB-device certification. These locally upload-key-signed APKs
 are **not** Google Play's app-signing identity; provider/App Links configuration
-was not changed. Play upload remains pending the Nov 9 activation schedule above.
+was not changed. Play upload was pending at this Nov 7 device-install snapshot;
+the Nov 11 section records the subsequent activation and uploads.
 
 The verified installer and release runbook were pushed to Backend `main` as
 `3006174d487c0ccce56fac3a8e8f7472fcc33be1`; workstation changes only, no runtime deploy.
