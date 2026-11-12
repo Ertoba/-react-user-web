@@ -1,17 +1,210 @@
 # MILI — authoritative final context (V4.2)
 
-> Current context: 2026-11-11. Customer advertising opt-out is pushed to main
-> `097860c`; 781 tests pass. New Customer v57 Production AAB build is RUNNING
-> as `20261111-customer-no-ad-id`, not yet verified/uploaded/submitted.
-> All three new upload keys remain verified active.
-> Vendor v39 (submission 20) and Courier v42 (submission 23) are **In review**.
-> Customer v56 Production release is saved but BLOCKED by its Advertising ID
-> declaration; it has NOT been submitted. Owner chose opt-out and a new build.
-> Managed publishing is ON for all three. No new release was published, no
-> application source or production runtime changed in this release operation.
-> Nov 8 deployment/device evidence and older snapshots remain explicitly historical.
+> Current context: **2026-11-12**. A fresh read-only Play Console audit confirms
+> Customer **57**, Vendor **39** and Courier **42** are **Available on Google Play**,
+> **Full rollout**. This supersedes the Nov 11 in-review/blocked snapshots below;
+> the publication actor is not determined. Customer v57 advertising opt-out AAB
+> completed binary verification and upload; it is NOT still building.
+> All three genuine Firebase Apple registrations and manual unsigned iOS
+> Codemagic workflows are configured on pushed main branches. All three corrected
+> builds finished; their downloaded unsigned arm64 IPAs and provenance passed
+> independent verification. They are ready for **local Sideloadly re-signing**,
+> not yet signed or installed. Native SwiftPM migration evidence is incomplete;
+> no full dependency-reproducibility or iPhone runtime acceptance is claimed.
+> Backend/React runtime and Nov 8 device-install evidence were not refreshed by
+> this operation. Historical records below remain dated, not current assertions.
 
-## 2026-11-11 — Customer owner-selected advertising opt-out; v57 build in progress
+## 2026-11-12 — Current Android production and verified unsigned iOS artifacts
+
+The machine-readable [mobile/iOS status record](Documentation/operations/mobile-ios-status-20261112.json)
+records the observation scope, exact identities, hashes, commits and build IDs.
+It supersedes status-only claims in the immutable Nov 11 upload/review records;
+those records remain unchanged as evidence of their own earlier operations.
+
+### Android: all three latest releases are now available
+
+Read-only inspection of each **Production > Latest releases** page at
+**2026-11-12 03:07–03:11 UTC / 07:07–07:11 +04** found:
+
+| App / package | Available version | Console state | Last-updated text, literally as displayed |
+|---|---|---|---|
+| Customer / `ge.mili.customer` | `4.2.0+57`, release 11 | Available on Google Play; Full rollout | Nov 11, 2026, 11:54 PM |
+| Vendor / `ge.mili.vendor` | `4.2.0+39` | Available on Google Play; Full rollout | Nov 11, 2026, 9:58 PM |
+| Courier / `ge.mili.delivery` | `4.2.0+42` | Available on Google Play; Full rollout | Nov 11, 2026, 9:58 PM |
+
+The UI's displayed last-updated times are not converted to an assumed timezone.
+This audit did **not** click Publish, start a rollout, change review declarations,
+or establish who published the releases. The earlier **Managed publishing ON**
+observation is historical and must not be used to contradict the current live
+release state. Customer v56 is not the selected current production release.
+
+Customer v57 was built from pushed main
+`097860cd0dc5a3b3170e1cda8572d5530c2724c1`. Compilation completed on Nov 11 at
+approximately **18:31:48 UTC**, after **1752.3 seconds**. Finalization initially
+stopped because four untracked Codemagic preparation files made the original
+source checkout dirty. Those files were preserved by moving them into the
+[dedicated iOS preparation directory](../../build-workspace/production/ios/codemagic-prepared-20261111/customer/),
+not deleted. The supported resume path reused and reverified the same compiled
+AAB; full finalization completed **2026-11-11 18:39:52.9604863 UTC**.
+
+The [final v57 AAB](../../artifacts/production/android/20261111-customer-no-ad-id/mili-customer-main-097860c-v57-release.aab)
+is **110100614 bytes**, SHA-256
+`456C87ABAC7354481A9DEB91025C880EDC1365F05B411F17231EF0108CE10A00`.
+Its [completed build manifest](../../artifacts/production/android/20261111-customer-no-ad-id/production-build-manifest.json)
+records the exact source, registered upload signer, package/version, release
+ABIs and successful bundle validation. The exact binary contains **zero** of the
+five forbidden advertising permissions and **five false** Meta automatic-
+collection flags; the custom `.MiliApplication` and normal Facebook provider
+remain. The [static 16KB report](../../build-workspace/production/android/20261111-customer-no-ad-id/customer/verification-16kb/16kb-static-report.json)
+passed. This is not 16KB-device runtime or zero-network-traffic certification.
+Customer full tests: **781 passed**, including **14** focused privacy guards;
+focused analysis: zero issues. [Exact-commit QA](https://github.com/Ertoba/mart-app/actions/runs/43073736694)
+also passed. Upload was observed on Nov 11 with Console text **6:54 PM**;
+the agent did not finish Customer's review flow before the overnight interruption.
+Today's actual available/full-rollout evidence, not an inferred agent action,
+establishes the current Play state. No v57 installation on the owner's device
+is claimed; the earlier Nov 8 installation is a different snapshot.
+
+### iOS: genuine Firebase registrations and manual Codemagic workflows
+
+The owner explicitly authorized three Apple registrations. Following the
+[official 6amMart Customer setup](https://6ammart.app/documentation/user-application-configuration/mandatory-setup/),
+[Vendor setup](https://6ammart.app/documentation/vendor-application-configuration/vendor-app-mandatory-setup/),
+[Courier setup](https://6ammart.app/documentation/deliveryman-application-configuration/deliveryman-app-mandatory-setup/)
+and [Firebase Apple setup](https://firebase.google.com/docs/ios/setup), all three
+were added under the **existing** `mili-a2a33` project, not separate projects.
+It now has **3 Android + 3 Apple + 1 Web** registrations. Existing Android/Web
+registrations were not replaced or changed.
+
+| App / bundle ID | Genuine Firebase Apple app ID | Current iOS-workflow main |
+|---|---|---|
+| Customer / `ge.mili.customer` | `1:294177416704:ios:0d67b4e977c5587b9e5ae5` | `38d015b5a26ed96ea935e0fd718d0c1ea38b3fcb` |
+| Vendor / `ge.mili.vendor` | `1:294177416704:ios:1d322e9dc37cbb989e5ae5` | `b5df627d3fffdb86b98d1556b88ff13e261e5ccf` |
+| Courier / `ge.mili.delivery` | `1:294177416704:ios:dd089861d2092eee9e5ae5` | `a54f5540dbaa3c2d0530252867a1944b2da4c895` |
+
+The complete official downloaded plists supplied by the owner were validated
+and moved from Downloads into the [MILI iOS configuration directory](../../ops/config/firebase/ios/20261111/).
+All three repository root iOS plists now match their actual registrations;
+Customer's additional Runner copy is byte-identical. No app IDs or OAuth fields
+were fabricated. The official files have no iOS `CLIENT_ID`; Google OAuth setup
+is therefore deferred, not declared ready. A Nov 11 read-only backend snapshot
+showed Google/Facebook/Apple login and Firebase OTP disabled, SMS OTP enabled.
+
+Customer's malformed nested Keepz URL dictionary was lifted into its own valid
+top-level `mili-customer` URL type; its Facebook callback was retained. Stale
+Google/Firebase callbacks were removed. Customer/Courier Firebase phone-auth
+callbacks are derived from each genuine app ID; Vendor has no Firebase Auth
+dependency. All **3 Firebase + 3 URL preflights** pass, as do **14 negative URL**
+and **9 negative provenance** tests. The negative tests are mocked guards, not
+macOS compilation or device acceptance. Android advertising opt-out does **not**
+disable or certify iOS Meta SDK tracking behavior.
+
+Each pushed main contains a manual `ios-sideloadly` Codemagic workflow and
+reviewable helpers/documentation:
+[Customer](../customer-app/docs/ios-sideloadly.md),
+[Vendor](../vendor-app/docs/ios-sideloadly.md),
+[Courier](../delivery-app/docs/ios-sideloadly.md).
+Configuration follows [Codemagic's Flutter YAML guidance](https://docs.codemagic.io/yaml-quick-start/building-a-flutter-app/):
+**Flutter 3.47.5**, **CocoaPods 1.16.2**, `xcode: latest`, **Mac mini M2**, maximum
+**90 minutes**, main only, no automatic triggers, publishing or Apple credentials.
+The first actual Vendor machine reported **Xcode 26.6**; `latest` can move, so
+each artifact's provenance must record the real version and exact source SHA.
+
+The current authenticated Codemagic team is `69f4882fda08a305baf699a0`;
+app IDs are Customer `69f488537c6d9370df65885f`, Vendor
+`69f4889272837a9d1290b6c9`, Courier `69f488a9dca7e0144c8f98a9`.
+Earlier `6af4…` team/app settings are not the current configuration.
+The initial Vendor build `6af52eac9679c85ac0aee780` successfully compiled a
+**65.2 MB Runner.app**, then failed our `lipo` argument order before validated
+IPA delivery. All three mains now use the corrected
+`lipo FILE -verify_arch arm64` form. Initial Customer
+`6af52f3b9679c85ac0aee7ae` and Courier `6af52f7c9679c85ac0aee7b9`
+received cancellation requests because they used that known-bad helper.
+Fresh corrected builds were started from the three corrected main commits:
+[Vendor](https://codemagic.io/app/69f4889272837a9d1290b6c9/build/6af532c59679c85ac0aee88e),
+[Customer](https://codemagic.io/app/69f488537c6d9370df65885f/build/6af5330b9679c85ac0aee89f),
+[Courier](https://codemagic.io/app/69f488a9dca7e0144c8f98a9/build/6af533379679c85ac0aee8ab).
+All three second attempts **finished successfully**: Vendor **5m49s**, Customer
+**8m0s**, Courier **5m16s**. Their IPAs and evidence archives were downloaded into
+the [dedicated final iOS artifact directory](../../artifacts/production/ios/20261112-codemagic-sideloadly/).
+Independent reports completed **03:49:47–03:50:48 UTC** and all returned **passed**:
+
+| App / unsigned IPA | Packaged version / minimum iOS | Exact bytes | Independent proof / CI provenance |
+|---|---|---:|---|
+| [Customer IPA](../../artifacts/production/ios/20261112-codemagic-sideloadly/customer/mili-customer-unsigned-sideloadly.ipa) | `4.2.0+54` / `15.6` | 40888623 | [Verification](../../artifacts/production/ios/20261112-codemagic-sideloadly/customer/independent-verification.json) / [Provenance](../../artifacts/production/ios/20261112-codemagic-sideloadly/customer/evidence/provenance.json) |
+| [Vendor IPA](../../artifacts/production/ios/20261112-codemagic-sideloadly/vendor/mili-vendor-unsigned-sideloadly.ipa) | `4.2.0+38` / `15.0` | 24722168 | [Verification](../../artifacts/production/ios/20261112-codemagic-sideloadly/vendor/independent-verification.json) / [Provenance](../../artifacts/production/ios/20261112-codemagic-sideloadly/vendor/evidence/provenance.json) |
+| [Courier IPA](../../artifacts/production/ios/20261112-codemagic-sideloadly/delivery/mili-delivery-unsigned-sideloadly.ipa) | `4.2.0+40` / `15.0` | 23875167 | [Verification](../../artifacts/production/ios/20261112-codemagic-sideloadly/delivery/independent-verification.json) / [Provenance](../../artifacts/production/ios/20261112-codemagic-sideloadly/delivery/evidence/provenance.json) |
+
+The iOS build numbers are the committed main pubspec values, not Android's
+separate Play override codes. Each provenance matches its exact corrected main
+SHA above. All three used **Flutter 3.47.5 / Dart 3.13.4 / Xcode 26.6 (17F113) /
+CocoaPods 1.16.2**. Independent checks verified SHA-256/bytes against provenance,
+ZIP CRC and safe paths, unsigned arm64 device Mach-O, bundle/version/minimum OS,
+packaged genuine Firebase configuration and URL structure. Root code signatures
+and provisioning profiles are absent as expected. **12 negative verifier tests**
+also passed. The [status record](Documentation/operations/mobile-ios-status-20261112.json)
+contains all exact IPA hashes. These are artifact checks, not signing,
+installation, runtime authentication or payment acceptance.
+The [combined iOS build manifest](../../artifacts/production/ios/20261112-codemagic-sideloadly/ios-build-manifest.json)
+groups the three exact source/build identities, artifacts and verification limits.
+
+Initial configuration QA passed for
+[Customer](https://github.com/Ertoba/mart-app/actions/runs/43082452864),
+[Vendor](https://github.com/Ertoba/vendor-app/actions/runs/43082465880) and
+[Courier](https://github.com/Ertoba/delivery-app/actions/runs/43082477710).
+Courier's first attempt encountered a transient NDK archive-download failure;
+one authorized rerun succeeded on Nov 12 at **03:19:36 UTC**. These are the
+initial configuration commits' checks, not proof of final corrected Mac builds.
+The corrected helper commits also have green exact-commit QA:
+[Customer](https://github.com/Ertoba/mart-app/actions/runs/43147884377),
+[Vendor](https://github.com/Ertoba/vendor-app/actions/runs/43147893787) and
+[Courier](https://github.com/Ertoba/delivery-app/actions/runs/43147901938).
+Their checks completed Nov 12 at 03:37:20, 03:33:35 and 03:34:10 UTC respectively;
+these GitHub checks do not replace Mac IPA or physical-device acceptance.
+
+Native dependency evidence revealed an important limitation: **Flutter 3.47
+automatically migrated supported plugins to Swift Package Manager**, leaving
+CocoaPods for remaining dependencies. This is consistent with
+[Flutter's current SwiftPM guidance](https://docs.flutter.dev/packages-and-plugins/swift-package-manager/for-app-developers).
+The much smaller resolved Pod locks are therefore **not safe to commit alone**
+without the corresponding Xcode/SwiftPM migration files and `Package.resolved`.
+The latter was not captured. All before/resolved Pod locks and diffs are retained
+under each artifact's evidence directory; **no resolved native lock was committed**
+and full native dependency reproducibility is **not** claimed. Before future
+builds, capture and review the complete native migration and SwiftPM resolution
+evidence together. Do not force a CocoaPods rollback, blanket-delete locks, or
+auto-push an isolated reduced Pod lock. The provenance's generic lock-review
+warning is not approval to commit an incomplete migration.
+
+Customer's actual packaged Meta/FBSDK frameworks report **18.1.1**, not the old
+CocoaPods snapshot's **18.0.2**. The compatible native SDK resolved through
+SwiftPM; iOS privacy flag settings were not changed by this work. Android's
+advertising opt-out does not prove those iOS frameworks stop collecting data.
+
+Unsigned IPA archives are for **local Sideloadly re-signing** with the owner's
+Apple account; they are not directly installable, App Store or TestFlight
+releases. No Apple signing certificate/private key was requested. Personal
+account capability/validity restrictions still apply. Physical-device signing,
+installation, APNs, Google/Apple login, Maps and payments are not yet certified.
+This operation did not install apps, make payments, change existing Android
+keys, upload iOS apps to a store, or deploy Backend/React. No protected official
+activation/licensing files were imported.
+
+Production Android paths remain fixed at
+[work/logs](../../build-workspace/production/android/) and
+[final artifacts](../../artifacts/production/android/), separately from
+[debug work/logs](../../build-workspace/debug/android/) and
+[debug artifacts](../../artifacts/debug/android/).
+Local iOS work/verifiers stay in the [dedicated production iOS workspace](../../build-workspace/production/ios/20261112-codemagic-sideloadly/),
+with final IPA/proof files only in the [dedicated production iOS artifacts](../../artifacts/production/ios/20261112-codemagic-sideloadly/).
+Earlier preserved preparation remains under [production iOS work](../../build-workspace/production/ios/).
+No other Desktop directory was created. All project files remain inside MILI.
+
+## 2026-11-11 — Historical advertising opt-out/build-start snapshot (superseded)
+
+The following subsection records an intermediate Nov 11 snapshot before the
+verified build/upload and Nov 12 available-release audit above. Its running,
+pending-verification and future-review statements are **not current status**.
 
 The owner confirmed Facebook login is not used and explicitly chose disabling
 collection plus a new build rather than declaring the existing v56 advertising
