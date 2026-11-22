@@ -22,13 +22,14 @@
     "delivery": 93,
     "backend": 80,
     "backendAssertions": 637,
-    "branding": 21,
+    "branding": 24,
     "reactAssetLinks": 3,
-    "releasePlan": 18
+    "releasePlan": 18,
+    "initialBrandingBeforeLayoutPin": 21
   },
-  "buildStatus": "customer-verified-uploaded-vendor-compiling-courier-queued",
+  "buildStatus": "all-three-aab-only-builds-verified-and-accepted-by-play",
   "productionBackendDeployed": true,
-  "playUploadsPerformed": false,
+  "playUploadsPerformed": true,
   "firstAttempt": {
     "result": "dns-preflight-failure-before-compilation",
     "apkCreated": false,
@@ -45,7 +46,10 @@
     "sourceFixed": true,
     "customerAppSigningSha256": "D0:BA:E5:29:36:57:94:64:2A:45:D8:74:AD:D3:C9:B6:7E:56:82:2A:08:AD:8A:16:A6:8F:14:04:17:94:C5:71",
     "productionJsonUpdated": false,
-    "rolloutTimingChoicePending": true
+    "rolloutTimingChoicePending": true,
+    "currentDisposition": "Corrected association is committed; conservative hold until narrowed v58 is released, unless owner explicitly chooses immediate activation.",
+    "defaultHoldIsOperatorSafetyChoice": true,
+    "ownerTimingAnswerReceived": false
   },
   "backendRollout": {
     "runtimeSha": "d63b10a234e4ff2a68cf64e5de5e1528e5ee2660",
@@ -66,7 +70,8 @@
       "checksumVerified": true,
       "mode": "0600"
     },
-    "realFinancialTestPerformed": false
+    "realFinancialTestPerformed": false,
+    "finalPostSoakAtUtc": "2026-11-22T11:22:41Z"
   },
   "playUploads": {
     "customer": {
@@ -79,6 +84,28 @@
       "submittedForReview": false,
       "published": false,
       "sha256": "1D0EDF85490DDDAC3EA1B830FD5453E20A76BC825ED4918AE589AACCAA388738"
+    },
+    "vendor": {
+      "versionCode": 40,
+      "versionName": "4.2.0",
+      "status": "accepted-inactive",
+      "observedAtUtc": "2026-11-22T10:43:27Z",
+      "consoleUploadedText": "Nov 22, 2026, 10:41 AM",
+      "consoleTimezoneAsserted": false,
+      "submittedForReview": false,
+      "published": false,
+      "sha256": "A816B6D1656DC9270CF13CA692BCF9DF55CD68D00B756264EB2337864C6C33C1"
+    },
+    "delivery": {
+      "versionCode": 43,
+      "versionName": "4.2.0",
+      "status": "accepted-inactive",
+      "observedAtUtc": "2026-11-22T11:13:50Z",
+      "consoleUploadedText": "Nov 22, 2026, 11:09 AM",
+      "consoleTimezoneAsserted": false,
+      "submittedForReview": false,
+      "published": false,
+      "sha256": "73747742CD58B0F57DC9CFDC66AB4DB84AD0FAB5C30A23E1A86FC080EBA3C571"
     }
   },
   "ci": [
@@ -163,7 +190,7 @@
       "isError": false
     }
   ],
-  "pendingCiFollowUp": "Vendor/Courier brand pixel-reproducibility checks differ on Linux's optional caption layout engine; core Production QA passes. Pin deterministic BASIC font layout after all frozen-source builds finish; reverify no packaged asset/code changes.",
+  "pendingCiFollowUp": null,
   "artifacts": {
     "customer": {
       "versionCode": 58,
@@ -173,6 +200,170 @@
       "artifact": "artifacts/production/android/20261122-wallet-locale/mili-customer-main-7dca959-v58-release.aab",
       "preuploadProof": "artifacts/production/android/20261122-wallet-locale/customer-preupload-verification.json",
       "verified": true
+    },
+    "vendor": {
+      "versionCode": 40,
+      "sourceSha": "4de967cde1efd198bcff5b36616f51155ea3f60e",
+      "bytes": 87548724,
+      "sha256": "A816B6D1656DC9270CF13CA692BCF9DF55CD68D00B756264EB2337864C6C33C1",
+      "artifact": "artifacts/production/android/20261122-wallet-locale/mili-vendor-main-4de967c-v40-release.aab",
+      "preuploadProof": "artifacts/production/android/20261122-wallet-locale/vendor-preupload-verification.json",
+      "verified": true
+    },
+    "delivery": {
+      "versionCode": 43,
+      "sourceSha": "669c837eccf057ebfcf7f82c8994999599934eb6",
+      "bytes": 77516791,
+      "sha256": "73747742CD58B0F57DC9CFDC66AB4DB84AD0FAB5C30A23E1A86FC080EBA3C571",
+      "artifact": "artifacts/production/android/20261122-wallet-locale/mili-delivery-main-669c837-v43-release.aab",
+      "preuploadProof": "artifacts/production/android/20261122-wallet-locale/wallet-locale-release-verification.json",
+      "verified": true
     }
-  }
+  },
+  "ciCaptionFixReadOnlyProbe": {
+    "testsPassed": 21,
+    "packagedIconPixelsUnchanged": true,
+    "sourceEditsPerformed": false,
+    "assetWritesPerformed": false,
+    "pendingAfterFrozenBuilds": false
+  },
+  "allThreePlayUploadsAccepted": true,
+  "uploadedComponents": [
+    "customer",
+    "vendor",
+    "delivery"
+  ],
+  "allAabVerification": {
+    "status": "verified-aab-only-builds-complete",
+    "completedAtUtc": "2026-11-22T11:07:03.4399993Z",
+    "safeToUploadAll": true,
+    "report": "artifacts/production/android/20261122-wallet-locale/wallet-locale-release-verification.json",
+    "apkApksOutputCount": 0,
+    "deviceOrRealPaymentTestPerformed": false
+  },
+  "latestMainShas": {
+    "customer": "866f2a9a5fe0c0a841ee69a0449dc48e872ab8ea",
+    "vendor": "8e83ce5d672ab17f3936e2c4f364fbb417b6f05a",
+    "delivery": "bd990367571f90b27cdd526eb8df24ab70d2204e",
+    "backend": "d63b10a234e4ff2a68cf64e5de5e1528e5ee2660"
+  },
+  "postBuildCiOnlyChange": {
+    "reason": "Explicit BASIC font layout removes optional Raqm-dependent caption pixel differences between Windows and Linux.",
+    "changedPaths": [
+      "branding/build_assets.py",
+      "branding/test_branding.py"
+    ],
+    "packagedAppCodeAndAssetsChanged": false,
+    "allOtherGitPathsUnchanged": true,
+    "localStrictBrandingTestsPassed": 24,
+    "assetRegenerationPerformed": false,
+    "sourceHeadOfAabsPreservedInManifest": true
+  },
+  "brandingCiAfterFix": {
+    "customer": [
+      {
+        "name": "Production QA Audit",
+        "status": "completed",
+        "conclusion": "success",
+        "url": "https://github.com/Ertoba/mart-app/actions/runs/45016009922",
+        "sha": "866f2a9a5fe0c0a841ee69a0449dc48e872ab8ea"
+      },
+      {
+        "name": "Validate MILI Brand Assets",
+        "status": "completed",
+        "conclusion": "success",
+        "url": "https://github.com/Ertoba/mart-app/actions/runs/45016009943",
+        "sha": "866f2a9a5fe0c0a841ee69a0449dc48e872ab8ea"
+      }
+    ],
+    "vendor": [
+      {
+        "name": "Validate MILI Brand Assets",
+        "status": "completed",
+        "conclusion": "success",
+        "url": "https://github.com/Ertoba/vendor-app/actions/runs/45016010050",
+        "sha": "8e83ce5d672ab17f3936e2c4f364fbb417b6f05a"
+      },
+      {
+        "name": "Production QA Audit",
+        "status": "completed",
+        "conclusion": "success",
+        "url": "https://github.com/Ertoba/vendor-app/actions/runs/45016010016",
+        "sha": "8e83ce5d672ab17f3936e2c4f364fbb417b6f05a"
+      }
+    ],
+    "delivery": [
+      {
+        "name": "Validate MILI Brand Assets",
+        "status": "completed",
+        "conclusion": "success",
+        "url": "https://github.com/Ertoba/delivery-app/actions/runs/45016010127",
+        "sha": "bd990367571f90b27cdd526eb8df24ab70d2204e"
+      },
+      {
+        "name": "Production QA Audit",
+        "status": "completed",
+        "conclusion": "success",
+        "url": "https://github.com/Ertoba/delivery-app/actions/runs/45016010148",
+        "sha": "bd990367571f90b27cdd526eb8df24ab70d2204e"
+      }
+    ]
+  },
+  "reviewSubmissionPerformed": false,
+  "publicationOrRolloutPerformed": false,
+  "completedAtUtc": "2026-11-22T11:27:00.3743616+00:00",
+  "status": "implementation-backend-and-requested-aab-uploads-complete",
+  "latestMainCi": {
+    "customer": [
+      {
+        "name": "Production QA Audit",
+        "status": "completed",
+        "conclusion": "success",
+        "url": "https://github.com/Ertoba/mart-app/actions/runs/45016009922",
+        "sha": "866f2a9a5fe0c0a841ee69a0449dc48e872ab8ea"
+      },
+      {
+        "name": "Validate MILI Brand Assets",
+        "status": "completed",
+        "conclusion": "success",
+        "url": "https://github.com/Ertoba/mart-app/actions/runs/45016009943",
+        "sha": "866f2a9a5fe0c0a841ee69a0449dc48e872ab8ea"
+      }
+    ],
+    "vendor": [
+      {
+        "name": "Validate MILI Brand Assets",
+        "status": "completed",
+        "conclusion": "success",
+        "url": "https://github.com/Ertoba/vendor-app/actions/runs/45016010050",
+        "sha": "8e83ce5d672ab17f3936e2c4f364fbb417b6f05a"
+      },
+      {
+        "name": "Production QA Audit",
+        "status": "completed",
+        "conclusion": "success",
+        "url": "https://github.com/Ertoba/vendor-app/actions/runs/45016010016",
+        "sha": "8e83ce5d672ab17f3936e2c4f364fbb417b6f05a"
+      }
+    ],
+    "delivery": [
+      {
+        "name": "Validate MILI Brand Assets",
+        "status": "completed",
+        "conclusion": "success",
+        "url": "https://github.com/Ertoba/delivery-app/actions/runs/45016010127",
+        "sha": "bd990367571f90b27cdd526eb8df24ab70d2204e"
+      },
+      {
+        "name": "Production QA Audit",
+        "status": "completed",
+        "conclusion": "success",
+        "url": "https://github.com/Ertoba/delivery-app/actions/runs/45016010148",
+        "sha": "bd990367571f90b27cdd526eb8df24ab70d2204e"
+      }
+    ]
+  },
+  "latestMainCiObservedAtUtc": "2026-11-22T11:22:45Z",
+  "latestMainAllObservedRunsSuccessful": true,
+  "ciRecordIsInitialHistoricalSnapshot": true
 }

@@ -1,22 +1,26 @@
 # MILI — authoritative final context (V4.2)
 
-> Current work: **2026-11-22**, IN PROGRESS: backend deployed, Customer uploaded;
-> Vendor/Courier builds and remaining uploads are not yet complete.
+> Current context: **2026-11-22**. Implementation, backend rollout, AAB-only
+> rebuilds and all three requested Play uploads are complete.
 > Owner requested Customer wallet embedded Keepz, verified Courier X-cancel and
 > fresh retries, consistent role-labelled icons, monthly-cart Georgian text,
 > recipient-language notifications, and approved App Links domain repair.
-> AAB only: no APK builds or installs are authorized for this release.
-> Implementation and local tests passed; pushed mains: Customer `7dca959`,
-> Vendor `4de967c`, Courier `669c837`, Backend `d63b10a`.
+> Customer **58**, Vendor **40**, Courier **43** passed final bundle/static
+> checks and are accepted by Play as **Inactive**. No APK/APKS outputs, device
+> installs, review submission, publication or rollout were performed.
+> AAB app-source snapshots: `7dca959` / `4de967c` / `669c837`. Latest mains add
+> only generator/test font-layout pinning: `866f2a9` / `8e83ce5` / `bd99036`;
+> every packaged app-code/asset path is unchanged by that CI-only follow-up.
 > Full Flutter tests: Customer 822, Vendor 51, Courier 93. Backend focused
 > tests: 80 / 637 assertions (SQLite fixtures, not MySQL concurrency proof).
-> The AAB task's first preflight stopped on a temporary github.com DNS lookup
-> failure BEFORE compilation. The retry passed; Customer v58 completed,
-> Vendor v40 is building and Courier v43 follows. No APK is being constructed.
+> Branding: 24 strict local tests and all three updated branding CI jobs pass.
+> The first task stopped on DNS preflight before compilation; its retry fully
+> completed with `safeToUploadAll=true` at 11:07:03 UTC.
 > Backend `d63b10a` is live and post-switch verified: 3738 runtime-source files,
 > healthy new workers, protected new routes and zero pending migrations.
-> Customer v58 AAB passed independent checks and Play accepted it as Inactive.
-> Vendor v40 / Courier v43 builds and remaining uploads are still pending.
+> The corrected App Links file is committed, but public activation is held
+> for narrowed Customer v58 release timing; owner timing choice remains open.
+> Real card/3DS/payment/push/device acceptance was not exercised.
 > Dedicated run: `20261122-wallet-locale`, under the existing production
 > Android work/artifact roots. Do not mistake the historical Nov 12 release
 > observations and iOS archive acceptance below for current completion.
@@ -38,14 +42,29 @@
 ## 2026-11-22 — Wallet, cancellation, localization, icons and App Links release
 
 The [current release record](Documentation/operations/wallet-locale-release-20261122.json)
-tracks exact pushed sources, tests and pending external gates. Release work is
+tracks exact pushed sources, tests, accepted uploads and remaining rollout gates. Release work is
 under [production Android work](../../build-workspace/production/android/20261122-wallet-locale/)
 and final AABs under [production Android artifacts](../../artifacts/production/android/20261122-wallet-locale/).
 The [dated AAB-only runner](../backend-admin/scripts/workstation/Build-MiliWalletLocaleRelease20261122.ps1)
 requires explicit Play maxima (freshly observed 57/39/42) and builds 58/40/43.
 It preserves existing upload keys, clean pushed-main checks and locked packages,
 rejects APK/APKS outputs, and independently checks compiled privacy/App Links
-plus static native ELF alignment. A build is not ready until final gates pass.
+plus static native ELF alignment. All final gates passed at **11:07:03 UTC**.
+
+| App | Uploaded code | AAB app-source snapshot | Latest main, CI-only follow-up | Final artifact |
+|---|---:|---|---|---|
+| Customer | 58 | `7dca959` | `866f2a9` | [AAB](../../artifacts/production/android/20261122-wallet-locale/mili-customer-main-7dca959-v58-release.aab) |
+| Vendor | 40 | `4de967c` | `8e83ce5` | [AAB](../../artifacts/production/android/20261122-wallet-locale/mili-vendor-main-4de967c-v40-release.aab) |
+| Courier | 43 | `669c837` | `bd99036` | [AAB](../../artifacts/production/android/20261122-wallet-locale/mili-delivery-main-669c837-v43-release.aab) |
+
+The [completed bundle manifest](../../artifacts/production/android/20261122-wallet-locale/production-build-manifest.json)
+and [independent final verification](../../artifacts/production/android/20261122-wallet-locale/wallet-locale-release-verification.json)
+retain exact SHA-256/bytes/signer/package/version/ABI evidence. The build runner
+does not perform backend/device acceptance; separate backend proof is recorded
+below. All three files were accepted in the existing developer account as
+**App bundle / Inactive**, not submitted to review or released to production.
+Console upload text: Customer **Nov 22, 10:18 AM**, Vendor **10:41 AM**, Courier
+**11:09 AM**; the Console display timezone is not asserted.
 
 Implemented: native Customer wallet Keepz payments use the existing owned
 bottom-sheet checkout, with authenticated exact-payment wallet-credit status;
@@ -90,13 +109,24 @@ release. Post-switch source comparison verified all 3738 runtime files; config,
 web/admin routes, authentication barriers and new-worker CWD checks passed.
 See the [Nov 22 deployment record](../../reports/production/20261122-wallet-locale-deployment.md).
 
-Exact-commit Production QA passed for all three mobile apps; Backend Keepz
-integrity and live-OTP entropy checks also passed. Two new Linux branding pixel-
-equality jobs failed against Windows-rendered role captions. Local geometry,
-safe-zone and exact-bitmap tests passed. The post-build follow-up is to pin
-Pillow BASIC caption layout explicitly and keep all strict image comparisons;
-do not change packaged icons or app code or dirty the three frozen source
-checkouts while the current AAB coordinator is running.
+Exact-commit Production QA passed for all three AAB app-source snapshots;
+Backend Keepz integrity and live-OTP entropy checks also passed. Linux branding
+pixel checks exposed optional Raqm-dependent caption layout. After all frozen-
+source AAB checks finished, the generators explicitly pinned Pillow BASIC and
+added a regression test. **24 local strict image tests and all three branding
+CI jobs now pass**, without weakening comparisons or regenerating assets.
+Only [generator](../customer-app/branding/build_assets.py) and
+[test](../customer-app/branding/test_branding.py) paths changed in each follow-up;
+all other Git paths are identical to the AAB source snapshots. Therefore no
+app rebuild or version-code increment is needed for this CI-only correction.
+The latest-main Production QA reruns also finished successfully for all three:
+[Customer](https://github.com/Ertoba/mart-app/actions/runs/45016009922),
+[Vendor](https://github.com/Ertoba/vendor-app/actions/runs/45016010016),
+[Courier](https://github.com/Ertoba/delivery-app/actions/runs/45016010148).
+Final server soak at **11:22:41 UTC** again verified all 3738 source files,
+healthy workers on the new release and zero pending migrations. The queue
+worker's ordinary max-time recycle was observed; it restarted on the correct
+current-release directory. Full AAB/output scans confirmed **zero APK/APKS**.
 
 Historical iOS clarification: the owner reported installing the unsigned IPAs
 through Sideloadly on Nov 13 using a free Apple ID, without paid developer
