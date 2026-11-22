@@ -2,7 +2,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import SmartToyOutlinedIcon from "@mui/icons-material/SmartToyOutlined";
 import { Badge, Box, Fab, Tooltip, Zoom, alpha } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useSelector } from "react-redux";
 import { getToken } from "../../helper-functions/getToken";
@@ -27,6 +27,11 @@ const AiChatBotLauncher = ({
   const { t } = useTranslation();
   const theme = useTheme();
   const [open, setOpen] = useState(false);
+  const openerRef = useRef<HTMLButtonElement>(null);
+  const closeChat = () => {
+    setOpen(false);
+    openerRef.current?.focus();
+  };
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const { profileInfo } = useSelector((state: any) => state.profileInfo);
 
@@ -66,6 +71,8 @@ const AiChatBotLauncher = ({
             anchorOrigin={{ vertical: "top", horizontal: "right" }}
           >
             <Fab
+              ref={openerRef}
+              data-testid="mili-ai-launcher"
               color="primary"
               aria-label={t("AI Assistant") as string}
               onClick={() => setOpen((v) => !v)}
@@ -117,7 +124,7 @@ const AiChatBotLauncher = ({
         </Box>
       </Tooltip>
 
-      <ChatBotPopover open={open} onClose={() => setOpen(false)} />
+      <ChatBotPopover open={open} onClose={closeChat} />
     </>
   );
 };
