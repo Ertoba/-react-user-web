@@ -26,8 +26,8 @@
     "reactAssetLinks": 3,
     "releasePlan": 18
   },
-  "buildStatus": "customer-compiling-after-successful-retry",
-  "productionBackendDeployed": false,
+  "buildStatus": "customer-verified-uploaded-vendor-compiling-courier-queued",
+  "productionBackendDeployed": true,
   "playUploadsPerformed": false,
   "firstAttempt": {
     "result": "dns-preflight-failure-before-compilation",
@@ -46,5 +46,133 @@
     "customerAppSigningSha256": "D0:BA:E5:29:36:57:94:64:2A:45:D8:74:AD:D3:C9:B6:7E:56:82:2A:08:AD:8A:16:A6:8F:14:04:17:94:C5:71",
     "productionJsonUpdated": false,
     "rolloutTimingChoicePending": true
+  },
+  "backendRollout": {
+    "runtimeSha": "d63b10a234e4ff2a68cf64e5de5e1528e5ee2660",
+    "releasePath": "/var/www/mili-release-d63b10a",
+    "deployedAtUtc": "2026-11-22T10:01:37Z",
+    "postSoakAtUtc": "2026-11-22T10:04:14Z",
+    "runtimeFilesVerified": 3738,
+    "differences": 0,
+    "pendingMigrations": 0,
+    "queueJobs": 0,
+    "failedJobs": 0,
+    "backup": {
+      "path": "/var/backups/mili-db-prechange-20261122-wallet-locale-094640.sql.gz",
+      "sha256": "6ce01d945ec7e9d8b3b75052369b6de28d49e4aa708ba5d619131745c7196ccd",
+      "bytes": 1259485,
+      "tables": 217,
+      "gzipVerified": true,
+      "checksumVerified": true,
+      "mode": "0600"
+    },
+    "realFinancialTestPerformed": false
+  },
+  "playUploads": {
+    "customer": {
+      "versionCode": 58,
+      "versionName": "4.2.0",
+      "status": "accepted-inactive",
+      "observedAtUtc": "2026-11-22T10:21:39Z",
+      "consoleUploadedText": "Nov 22, 2026, 10:18 AM",
+      "consoleTimezoneAsserted": false,
+      "submittedForReview": false,
+      "published": false,
+      "sha256": "1D0EDF85490DDDAC3EA1B830FD5453E20A76BC825ED4918AE589AACCAA388738"
+    }
+  },
+  "ci": [
+    {
+      "component": "customer",
+      "runs": [
+        {
+          "name": "Validate MILI Brand Assets",
+          "status": "completed",
+          "conclusion": "success",
+          "url": "https://github.com/Ertoba/mart-app/actions/runs/45008537840",
+          "headSha": "7dca959c3c89164d30e6c56ae7e595feb16917c9"
+        },
+        {
+          "name": "Production QA Audit",
+          "status": "completed",
+          "conclusion": "success",
+          "url": "https://github.com/Ertoba/mart-app/actions/runs/45008537841",
+          "headSha": "7dca959c3c89164d30e6c56ae7e595feb16917c9"
+        }
+      ],
+      "isError": false
+    },
+    {
+      "component": "vendor",
+      "runs": [
+        {
+          "name": "Validate MILI Brand Assets",
+          "status": "completed",
+          "conclusion": "failure",
+          "url": "https://github.com/Ertoba/vendor-app/actions/runs/45008538164",
+          "headSha": "4de967cde1efd198bcff5b36616f51155ea3f60e"
+        },
+        {
+          "name": "Production QA Audit",
+          "status": "completed",
+          "conclusion": "success",
+          "url": "https://github.com/Ertoba/vendor-app/actions/runs/45008538177",
+          "headSha": "4de967cde1efd198bcff5b36616f51155ea3f60e"
+        }
+      ],
+      "isError": false
+    },
+    {
+      "component": "delivery",
+      "runs": [
+        {
+          "name": "Validate MILI Brand Assets",
+          "status": "completed",
+          "conclusion": "failure",
+          "url": "https://github.com/Ertoba/delivery-app/actions/runs/45008538201",
+          "headSha": "669c837eccf057ebfcf7f82c8994999599934eb6"
+        },
+        {
+          "name": "Production QA Audit",
+          "status": "completed",
+          "conclusion": "success",
+          "url": "https://github.com/Ertoba/delivery-app/actions/runs/45008538163",
+          "headSha": "669c837eccf057ebfcf7f82c8994999599934eb6"
+        }
+      ],
+      "isError": false
+    },
+    {
+      "component": "backend",
+      "runs": [
+        {
+          "name": "Keepz Status Integrity",
+          "status": "completed",
+          "conclusion": "success",
+          "url": "https://github.com/Ertoba/portal-backend/actions/runs/45008538734",
+          "headSha": "d63b10a234e4ff2a68cf64e5de5e1528e5ee2660"
+        },
+        {
+          "name": "Live OTP Entropy",
+          "status": "completed",
+          "conclusion": "success",
+          "url": "https://github.com/Ertoba/portal-backend/actions/runs/45008538635",
+          "headSha": "d63b10a234e4ff2a68cf64e5de5e1528e5ee2660"
+        }
+      ],
+      "isError": false
+    }
+  ],
+  "pendingCiFollowUp": "Vendor/Courier brand pixel-reproducibility checks differ on Linux's optional caption layout engine; core Production QA passes. Pin deterministic BASIC font layout after all frozen-source builds finish; reverify no packaged asset/code changes.",
+  "artifacts": {
+    "customer": {
+      "versionCode": 58,
+      "sourceSha": "7dca959c3c89164d30e6c56ae7e595feb16917c9",
+      "bytes": 110191259,
+      "sha256": "1D0EDF85490DDDAC3EA1B830FD5453E20A76BC825ED4918AE589AACCAA388738",
+      "artifact": "artifacts/production/android/20261122-wallet-locale/mili-customer-main-7dca959-v58-release.aab",
+      "preuploadProof": "artifacts/production/android/20261122-wallet-locale/customer-preupload-verification.json",
+      "verified": true
+    }
   }
 }

@@ -1,6 +1,7 @@
 # MILI — authoritative final context (V4.2)
 
-> Current work: **2026-11-22**, IN PROGRESS, not yet built/uploaded/deployed.
+> Current work: **2026-11-22**, IN PROGRESS: backend deployed, Customer uploaded;
+> Vendor/Courier builds and remaining uploads are not yet complete.
 > Owner requested Customer wallet embedded Keepz, verified Courier X-cancel and
 > fresh retries, consistent role-labelled icons, monthly-cart Georgian text,
 > recipient-language notifications, and approved App Links domain repair.
@@ -10,9 +11,12 @@
 > Full Flutter tests: Customer 822, Vendor 51, Courier 93. Backend focused
 > tests: 80 / 637 assertions (SQLite fixtures, not MySQL concurrency proof).
 > The AAB task's first preflight stopped on a temporary github.com DNS lookup
-> failure BEFORE compilation. The retry passed and Customer v58 is building;
-> Vendor v40 and Courier v43 follow sequentially. No APK is being constructed.
-> Safe backend rollout, final AAB verification and Play uploads remain pending.
+> failure BEFORE compilation. The retry passed; Customer v58 completed,
+> Vendor v40 is building and Courier v43 follows. No APK is being constructed.
+> Backend `d63b10a` is live and post-switch verified: 3738 runtime-source files,
+> healthy new workers, protected new routes and zero pending migrations.
+> Customer v58 AAB passed independent checks and Play accepted it as Inactive.
+> Vendor v40 / Courier v43 builds and remaining uploads are still pending.
 > Dedicated run: `20261122-wallet-locale`, under the existing production
 > Android work/artifact roots. Do not mistake the historical Nov 12 release
 > observations and iOS archive acceptance below for current completion.
@@ -80,7 +84,19 @@ SQLite tests are not a real MySQL concurrency stress test. No live payment,
 refund, manual ledger reset, actual order push or device acceptance was run.
 Read-only production preflight on Nov 22 found all services healthy, zero
 pending migrations and all 3729 tracked runtime-scope files matching the Nov 8
-baseline exactly. Production backend has NOT yet been switched for this work.
+baseline exactly. Backend was then switched to `/var/www/mili-release-d63b10a`
+at 10:01:37 UTC, with a fresh checksum/gzip-verified backup and preserved Nov 8
+release. Post-switch source comparison verified all 3738 runtime files; config,
+web/admin routes, authentication barriers and new-worker CWD checks passed.
+See the [Nov 22 deployment record](../../reports/production/20261122-wallet-locale-deployment.md).
+
+Exact-commit Production QA passed for all three mobile apps; Backend Keepz
+integrity and live-OTP entropy checks also passed. Two new Linux branding pixel-
+equality jobs failed against Windows-rendered role captions. Local geometry,
+safe-zone and exact-bitmap tests passed. The post-build follow-up is to pin
+Pillow BASIC caption layout explicitly and keep all strict image comparisons;
+do not change packaged icons or app code or dirty the three frozen source
+checkouts while the current AAB coordinator is running.
 
 Historical iOS clarification: the owner reported installing the unsigned IPAs
 through Sideloadly on Nov 13 using a free Apple ID, without paid developer
