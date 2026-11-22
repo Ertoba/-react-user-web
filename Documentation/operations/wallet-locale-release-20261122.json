@@ -1,0 +1,50 @@
+{
+  "runId": "20261122-wallet-locale",
+  "shas": {
+    "customer": "7dca959c3c89164d30e6c56ae7e595feb16917c9",
+    "vendor": "4de967cde1efd198bcff5b36616f51155ea3f60e",
+    "delivery": "669c837eccf057ebfcf7f82c8994999599934eb6",
+    "backend": "d63b10a234e4ff2a68cf64e5de5e1528e5ee2660"
+  },
+  "versions": {
+    "customer": 58,
+    "vendor": 40,
+    "delivery": 43
+  },
+  "maxima": {
+    "customer": 57,
+    "vendor": 39,
+    "delivery": 42
+  },
+  "tests": {
+    "customer": 822,
+    "vendor": 51,
+    "delivery": 93,
+    "backend": 80,
+    "backendAssertions": 637,
+    "branding": 21,
+    "reactAssetLinks": 3,
+    "releasePlan": 18
+  },
+  "buildStatus": "customer-compiling-after-successful-retry",
+  "productionBackendDeployed": false,
+  "playUploadsPerformed": false,
+  "firstAttempt": {
+    "result": "dns-preflight-failure-before-compilation",
+    "apkCreated": false,
+    "aabCreated": false
+  },
+  "productionBaseline": {
+    "verifiedAtUtc": "2026-11-22T09:44:25Z",
+    "sha": "6f538fc862a7a96ab6ca90ca2a3e76045bb3e64a",
+    "runtimeFilesCompared": 3729,
+    "differences": 0,
+    "pendingMigrations": 0
+  },
+  "deepLinks": {
+    "sourceFixed": true,
+    "customerAppSigningSha256": "D0:BA:E5:29:36:57:94:64:2A:45:D8:74:AD:D3:C9:B6:7E:56:82:2A:08:AD:8A:16:A6:8F:14:04:17:94:C5:71",
+    "productionJsonUpdated": false,
+    "rolloutTimingChoicePending": true
+  }
+}

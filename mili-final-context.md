@@ -1,6 +1,23 @@
 # MILI — authoritative final context (V4.2)
 
-> Current context: **2026-11-12**. A fresh read-only Play Console audit confirms
+> Current work: **2026-11-22**, IN PROGRESS, not yet built/uploaded/deployed.
+> Owner requested Customer wallet embedded Keepz, verified Courier X-cancel and
+> fresh retries, consistent role-labelled icons, monthly-cart Georgian text,
+> recipient-language notifications, and approved App Links domain repair.
+> AAB only: no APK builds or installs are authorized for this release.
+> Implementation and local tests passed; pushed mains: Customer `7dca959`,
+> Vendor `4de967c`, Courier `669c837`, Backend `d63b10a`.
+> Full Flutter tests: Customer 822, Vendor 51, Courier 93. Backend focused
+> tests: 80 / 637 assertions (SQLite fixtures, not MySQL concurrency proof).
+> The AAB task's first preflight stopped on a temporary github.com DNS lookup
+> failure BEFORE compilation. The retry passed and Customer v58 is building;
+> Vendor v40 and Courier v43 follow sequentially. No APK is being constructed.
+> Safe backend rollout, final AAB verification and Play uploads remain pending.
+> Dedicated run: `20261122-wallet-locale`, under the existing production
+> Android work/artifact roots. Do not mistake the historical Nov 12 release
+> observations and iOS archive acceptance below for current completion.
+>
+> Historical context: **2026-11-12**. A fresh read-only Play Console audit confirms
 > Customer **57**, Vendor **39** and Courier **42** are **Available on Google Play**,
 > **Full rollout**. This supersedes the Nov 11 in-review/blocked snapshots below;
 > the publication actor is not determined. Customer v57 advertising opt-out AAB
@@ -14,7 +31,65 @@
 > Backend/React runtime and Nov 8 device-install evidence were not refreshed by
 > this operation. Historical records below remain dated, not current assertions.
 
-## 2026-11-12 — Current Android production and verified unsigned iOS artifacts
+## 2026-11-22 — Wallet, cancellation, localization, icons and App Links release
+
+The [current release record](Documentation/operations/wallet-locale-release-20261122.json)
+tracks exact pushed sources, tests and pending external gates. Release work is
+under [production Android work](../../build-workspace/production/android/20261122-wallet-locale/)
+and final AABs under [production Android artifacts](../../artifacts/production/android/20261122-wallet-locale/).
+The [dated AAB-only runner](../backend-admin/scripts/workstation/Build-MiliWalletLocaleRelease20261122.ps1)
+requires explicit Play maxima (freshly observed 57/39/42) and builds 58/40/43.
+It preserves existing upload keys, clean pushed-main checks and locked packages,
+rejects APK/APKS outputs, and independently checks compiled privacy/App Links
+plus static native ELF alignment. A build is not ready until final gates pass.
+
+Implemented: native Customer wallet Keepz payments use the existing owned
+bottom-sheet checkout, with authenticated exact-payment wallet-credit status;
+legacy/non-Keepz fallback remains. Keepz wallet paid state, exact ledger credit
+and success status commit atomically; repeat callbacks do not re-credit. The
+shared wallet recorder locks before reading the balance, uses that current
+locking read even in a stale outer snapshot, and rechecks spendability.
+Courier X/back waits for authenticated provider cancellation before releasing
+the session. Unknown cancellation retains the existing attempt with a retry
+message; paid+receipt wins a simultaneous cancellation. Provider creation and
+cancellation serialize on the same payment row; a canceled URL cannot recreate
+an attempt. Refund-related states are not treated as unpaid failures.
+
+All three launcher icons use the same untouched MILI vector mark, exact scale,
+safe-zone and white background. Vendor/Courier add the Georgian role captions.
+The [accepted icon preview](../../build-workspace/branding/20261122/mili-three-app-icons.png)
+is retained. Brand CI validates assets without auto-committing during release.
+Customer `monthly_cart_list` is Georgian. Committed app language changes refresh
+the authenticated profile so recipient push language is not stale. System
+customer titles/bodies (including OTP, status, wallet, reminders and PRO) use
+recipient locale with translated missing-template fallback; identifiers and
+disabled-template settings are preserved. Generic broadcast topics, arbitrary
+admin-authored announcements and chat text are not automatically translated.
+
+App Links source now uses the fresh Play APP-signing certificate (not the upload
+certificate) and `ge.mili.customer`; only supported content paths are claimed,
+excluding payment/API/admin URLs. The Apple custom callback is host-scoped;
+Apple login remains disabled. The public association file is not yet changed:
+old v57 claims all paths, so timing must be coordinated with the narrowed v58
+release. No Play patch, new release publication or rollout has been performed.
+
+Validation: full Flutter Customer 822 / Vendor 51 / Courier 93 passed; focused
+backend 80 tests / 637 assertions passed, plus 21 branding tests, 3 React DAL
+tests and 18 release-plan guards. PHP syntax passed all 34 changed PHP files.
+SQLite tests are not a real MySQL concurrency stress test. No live payment,
+refund, manual ledger reset, actual order push or device acceptance was run.
+Read-only production preflight on Nov 22 found all services healthy, zero
+pending migrations and all 3729 tracked runtime-scope files matching the Nov 8
+baseline exactly. Production backend has NOT yet been switched for this work.
+
+Historical iOS clarification: the owner reported installing the unsigned IPAs
+through Sideloadly on Nov 13 using a free Apple ID, without paid developer
+membership. APNs-capable provisioning is unavailable on that Personal Team;
+additional Customer Release entitlements and Vendor swizzling issues were
+diagnosed read-only. This Android AAB release does not certify/fix iOS push,
+request Apple credentials, or create new IPAs.
+
+## 2026-11-12 — Historical Android production and verified unsigned iOS artifacts
 
 The machine-readable [mobile/iOS status record](Documentation/operations/mobile-ios-status-20261112.json)
 records the observation scope, exact identities, hashes, commits and build IDs.
